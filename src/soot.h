@@ -26,7 +26,8 @@ class soot {
 
         int                     nsvar;                  ///< number of soot variables
         vector<double>          sootvar;                ///< main soot quantity (soot moments or sections)
-        vector<double>          gasSootSources;
+        vector<double>          gasSootSources;         ///< gas species sources due to soot reactions (all species)
+        vector<double>          src;                    ///< source terms for soot variables (size nsvar)
 
         //-----------
 
@@ -111,7 +112,7 @@ class soot {
         double set_m_dimer();
         void   set_Ndimer(const vector<double> &mi, const vector<double> &wi);
 
-        void   set_gasSootSources(const double &N1, const double &Cnd1, const double &G1, const double &X1, const int igrd);
+        void   set_gasSootSources(const double &N1, const double &Cnd1, const double &G1, const double &X1);
 
     private:
 
@@ -146,7 +147,7 @@ class soot {
            string         p_nucleation_mech,
            string         p_growth_mech,
            string         p_oxidation_mech,
-           string         coagulation_mech);
+           string         p_coagulation_mech);
 
         virtual ~soot(){}
 

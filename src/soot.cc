@@ -64,10 +64,8 @@ soot::soot(const int  p_nsvar,
     coagulation_mech = p_coagulation_mech;
 
     sootvar = vector<double>(nsvar, 0.0);
-
-    //----------------------------------------
-
     gasSootSources.resize(spNames.size());              
+    src.resize(nsvar);
 
     //-------------- populate list of gas species indices
     
@@ -879,11 +877,10 @@ double soot::get_Kfm() {
  *      @param Cnd1     \input  soot M1 source term (kg/m3*s) from condensation
  *      @param G1       \input  soot M1 source term (kg/m3*s) from growth
  *      @param X1       \input  soot M1 source term (kg/m3*s) from oxidation
- *      @param igrd     \input  grid point
  *
  */
 
-void soot::set_gasSootSources(const double &N1, const double &Cnd1, const double &G1, const double &X1, const int igrd) {
+void soot::set_gasSootSources(const double &N1, const double &Cnd1, const double &G1, const double &X1) {
 
 
     //---nucleation: see soot.cc for rC2H2_rSoot_n, etc.
@@ -910,7 +907,7 @@ void soot::set_gasSootSources(const double &N1, const double &Cnd1, const double
     for(int i=0; i<i_pah.size(); i++)
         gasSootSources[i_pah[i]] += Cnd1 * rPAH_rSoot_ncnd[i] / rho;
 
-    //---coagulation: N/A
+    //---coagulation: Not applicable
 
 }
 
