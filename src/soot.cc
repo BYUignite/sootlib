@@ -30,6 +30,7 @@ int                     soot::i_co;
 int                     soot::i_elem_c;
 int                     soot::i_elem_h;
 vector<int>             soot::i_pah;
+vector<int>             soot::nC_PAH;
 vector<double>          soot::MW_sp;
 vector<string>          soot::spNames;
 
@@ -146,6 +147,7 @@ void soot::set_gas_state_vars(const double   &T_p,
     MW  = MW_p;
     mu  = mu_p;
     yi  = &y_p;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////

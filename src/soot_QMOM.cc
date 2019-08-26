@@ -15,13 +15,8 @@ void adaptive_wheeler(const vector<double> &m, int N, const vector<double> &rmin
 void adaptiveWheelerAlgorithm(const std::vector<double>& moments, std::vector<double>& w, std::vector<double>& x,const double& rMin, const double& eAbs);
 
 ////////////////////////////////////////////////////////////////////////////////
-/*! getSrc function
- *
- *      dv source term part of the rhs function. Uses QMOM. Modeled off of
- *      ygas class.
- *
- *      @param ipt \input optional point to compute source at.
- *
+/*! Sets src: soot moment source terms. Also sets gasSootSources.
+ *  Units: #/(m^3*s), kg-soot/(m^3*s), ..., kg-soot^k/(m^3*s)
  */
 
 void soot_QMOM::setSrc() {
@@ -88,7 +83,7 @@ void soot_QMOM::setSrc() {
     //---------- combinine to make source terms
 
     for (int k=0; k<nsvar; k++)
-        src[k] = (Mnuc[k] + Mcnd[k] + Mgrw[k] + Moxi[k] + Mcoa[k]);  // kg-soot^2/m3*s
+        src[k] = (Mnuc[k] + Mcnd[k] + Mgrw[k] + Moxi[k] + Mcoa[k]);  // kg-soot^k/m3*s
 
     //---------- compute gas source terms
 
@@ -98,14 +93,8 @@ void soot_QMOM::setSrc() {
 
 ////////////////////////////////////////////////////////////////////////////////
 /*! Mk function
- *
  *      Calculates fractional moments from weights and abscissas.
- *
  *      @param exp  \input  fractional moment to compute, corresponds to exponent
- *      @param wts  \input  weights
- *      @param absc \input  abscissas
- *      @param Mk   \output fractional moment value
- *
  */
 
 double soot_QMOM::Mk(double exp) {

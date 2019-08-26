@@ -21,15 +21,13 @@ class soot {
 
     //////////////////// DATA MEMBERS //////////////////////
 
-
-    protected:
-
+    public:
         int                     nsvar;                  ///< number of soot variables
         vector<double>          sootvar;                ///< main soot quantity (soot moments or sections)
         vector<double>          gasSootSources;         ///< gas species sources due to soot reactions (all species)
         vector<double>          src;                    ///< source terms for soot variables (size nsvar)
 
-        //-----------
+    protected:
 
         static constexpr double Na    = 6.02214086E26;  ///< Avogadro's constant: #/kmol
         static constexpr double kb    = 1.38064852E-23; ///< Boltzmann constant = Rg/Na: J/#*K
@@ -93,7 +91,7 @@ class soot {
 
     public:
 
-        virtual void getSrc(const int ipt=-1) = 0;            ///< this class is an abstract base class
+        virtual void setSrc() = 0;            ///< this class is an abstract base class
         void   set_gas_state_vars(const double &T_p, const double &P_p, const double &rho_p, const double &MW_p, const double &mu_p, vector<double> &y_p);
 
     protected:

@@ -9,10 +9,8 @@
 #include <cmath>
 
 ////////////////////////////////////////////////////////////////////////////////
-/*! dv source term part of the rhs function
- *  @param ipt \input optional point to compute source at.
- *
- *    copied from ygas.cc
+/*! Sets src: soot moment source terms. Also sets gasSootSources.
+ *  Units: #/(m^3*s), kg-soot/(m^3*s), kg-soot^2/(m^3*s)
  */
 
 void soot_LOGN::setSrc() {
