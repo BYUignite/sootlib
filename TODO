@@ -1,0 +1,5 @@
+Allow install to arbitrary location
+    Remove the lib folder
+    Make --> create lib and include in correct location,
+    and copy headers from source to include when building.
+
