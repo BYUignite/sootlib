@@ -1,0 +1,9 @@
+#ifndef OXIDATIONMODEL_HACA_H
+#define OXIDATIONMODEL_HACA_H
+
+class OxidationModel_HACA
+{
+
+};
+
+#endif //OXIDATIONMODEL_HACA_H

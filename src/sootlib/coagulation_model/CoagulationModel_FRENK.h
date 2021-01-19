@@ -1,0 +1,9 @@
+#ifndef COAGULATIONMODEL_FRENK_H
+#define COAGULATIONMODEL_FRENK_H
+
+class CoagulationModel_FRENK
+{
+
+};
+
+#endif //COAGULATIONMODEL_FRENK_H

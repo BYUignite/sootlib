@@ -1,0 +1,9 @@
+#ifndef OXIDATIONMODEL_NONE_H
+#define OXIDATIONMODEL_NONE_H
+
+class OxidationModel_NONE
+{
+
+};
+
+#endif //OXIDATIONMODEL_NONE_H
