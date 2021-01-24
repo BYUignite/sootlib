@@ -32,10 +32,10 @@ set(SRC_FILES
         src/sootlib/SootModel_SECT.cpp
         src/sootlib/SootModelFactory.h
         src/sootlib/SootModelFactory.cpp
-        src/sootlib/gas/GasState.h
-        src/sootlib/gas/GasState.cpp
-        src/sootlib/gas/GasStateFactory.h
-        src/sootlib/gas/GasStateFactory.cpp
+        src/sootlib/state/GasState.h
+        src/sootlib/state/GasState.cpp
+        src/sootlib/state/SootState.h
+        src/sootlib/state/SootState.cpp
         src/sootlib/coagulation_model/CoagulationModel.h
         src/sootlib/coagulation_model/CoagulationModel_NONE.h
         src/sootlib/coagulation_model/CoagulationModel_NONE.cpp

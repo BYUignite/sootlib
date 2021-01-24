@@ -13,7 +13,6 @@ static constexpr double Df    = 1.8;            ///< soot fractal dimension
 static constexpr double MW_c  = 12.011;         ///< mw of carbon
 static constexpr double MW_h  = 1.00794;        ///< mw of hydrogen
 
-// TODO add model implementations of the none values
 enum class NucleationMechanism {NONE, LL, LIN, PAH};
 enum class GrowthMechanism {NONE, LL, LIN, HACA};
 enum class OxidationMechanism {NONE, LL, LEE_NEOH, NSC_NEOH, HACA};
