@@ -38,7 +38,6 @@ set(SRC_FILES
         src/sootlib/state/SootState.cpp
         src/sootlib/coagulation_model/CoagulationModel.h
         src/sootlib/coagulation_model/CoagulationModel_NONE.h
-        src/sootlib/coagulation_model/CoagulationModel_NONE.cpp
         src/sootlib/coagulation_model/CoagulationModel_FUCHS.h
         src/sootlib/coagulation_model/CoagulationModel_FUCHS.cpp
         src/sootlib/coagulation_model/CoagulationModel_FRENK.h
@@ -47,7 +46,6 @@ set(SRC_FILES
         src/sootlib/coagulation_model/CoagulationModel_LL.cpp
         src/sootlib/growth_model/GrowthModel.h
         src/sootlib/growth_model/GrowthModel_NONE.h
-        src/sootlib/growth_model/GrowthModel_NONE.cpp
         src/sootlib/growth_model/GrowthModel_LIN.h
         src/sootlib/growth_model/GrowthModel_LIN.cpp
         src/sootlib/growth_model/GrowthModel_LL.h
@@ -56,7 +54,6 @@ set(SRC_FILES
         src/sootlib/growth_model/GrowthModel_HACA.cpp
         src/sootlib/nucleation_model/NucleationModel.h
         src/sootlib/nucleation_model/NucleationModel_NONE.h
-        src/sootlib/nucleation_model/NucleationModel_NONE.cpp
         src/sootlib/nucleation_model/NucleationModel_LIN.h
         src/sootlib/nucleation_model/NucleationModel_LIN.cpp
         src/sootlib/nucleation_model/NucleationModel_LL.h
@@ -65,7 +62,6 @@ set(SRC_FILES
         src/sootlib/nucleation_model/NucleationModel_PAH.cpp
         src/sootlib/oxidation_model/OxidationModel.h
         src/sootlib/oxidation_model/OxidationModel_NONE.h
-        src/sootlib/oxidation_model/OxidationModel_NONE.cpp
         src/sootlib/oxidation_model/OxidationModel_LL.h
         src/sootlib/oxidation_model/OxidationModel_LL.cpp
         src/sootlib/oxidation_model/OxidationModel_LEE_NEOH.h

@@ -10,6 +10,7 @@ namespace soot
 class SootModel
 {
 public:
+	// TODO document this function
 	[[nodiscard]] virtual std::vector<double> getSrc(const GasState& gasState) = 0;
 };
 }

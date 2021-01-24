@@ -1,9 +1,18 @@
 #ifndef GROWTHMODEL_NONE_H
 #define GROWTHMODEL_NONE_H
 
-class GrowthModel_NONE
-{
+#include "sootlib/growth_model/GrowthModel.h"
 
+namespace soot
+{
+class GrowthModel_NONE : public GrowthModel
+{
+public:
+	[[nodiscard]] double getGrowthRate() const override
+	{
+		return 0.0;
+	}
 };
+}
 
 #endif //GROWTHMODEL_NONE_H

@@ -8,7 +8,10 @@ namespace soot
 class CoagulationModel_NONE : public CoagulationModel
 {
 public:
-	[[nodiscard]] double getCoagulationRate() const override;
+	[[nodiscard]] double getCoagulationRate() const override
+	{
+		return 0.0;
+	}
 };
 }
 

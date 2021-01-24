@@ -18,9 +18,6 @@ protected:
 	GrowthModel growthModel;
 	NucleationModel nucleationModel;
 	OxidationModel oxidationModel;
-
-private:
-
 };
 }
 
