@@ -1,6 +1,7 @@
 #ifndef SOOTMODEL_MONO_H
 #define SOOTMODEL_MONO_H
 
+#include <memory>
 #include <vector>
 
 #include "sootlib/state/GasState.h"
@@ -11,12 +12,20 @@ namespace soot
 class SootModel_MONO : public SootModel_Base
 {
 public:
-	[[nodiscard]] static SootModel_MONO getInstance(/*params*/);
+	[[nodiscard]] static SootModel_MONO* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
+	                                                std::unique_ptr<GrowthModel> growthModel,
+	                                                std::unique_ptr<NucleationModel> nucleationModel,
+	                                                std::unique_ptr<OxidationModel> oxidationModel);
 
 	[[nodiscard]] std::vector<double> getSrc(const GasState& gasState) override;
 
+	~SootModel_MONO() override = default;
+
 private:
-	SootModel_MONO() = default;
+	SootModel_MONO(std::unique_ptr<CoagulationModel> coagulationModel,
+				std::unique_ptr<GrowthModel> growthModel,
+				std::unique_ptr<NucleationModel> nucleationModel,
+				std::unique_ptr<OxidationModel> oxidationModel);
 };
 }
 

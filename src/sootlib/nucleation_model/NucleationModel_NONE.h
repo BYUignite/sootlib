@@ -12,6 +12,8 @@ public:
 	{
 		return 0.0;
 	}
+
+	~NucleationModel_NONE() override = default;
 };
 }
 

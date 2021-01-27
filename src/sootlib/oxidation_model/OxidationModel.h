@@ -7,6 +7,8 @@ class OxidationModel
 {
 public:
 	[[nodiscard]] virtual double getOxidationRate() const = 0;
+
+	virtual ~OxidationModel() = 0;
 };
 }
 

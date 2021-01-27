@@ -11,7 +11,10 @@ class SootModel
 {
 public:
 	// TODO document this function
+	// does this need a soot state?
 	[[nodiscard]] virtual std::vector<double> getSrc(const GasState& gasState) = 0;
+
+	virtual ~SootModel() = 0;
 };
 }
 

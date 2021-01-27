@@ -12,6 +12,8 @@ public:
 	{
 		return 0.0;
 	}
+
+	~CoagulationModel_NONE() override = default;
 };
 }
 

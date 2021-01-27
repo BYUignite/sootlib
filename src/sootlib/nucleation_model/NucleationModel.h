@@ -5,7 +5,10 @@ namespace soot
 {
 class NucleationModel
 {
+public:
 	[[nodiscard]] virtual double getNucleationRate() const = 0;
+
+	virtual ~NucleationModel() = 0;
 };
 }
 

@@ -12,6 +12,8 @@ public:
 	{
 		return 0.0;
 	}
+
+	~GrowthModel_NONE() override = default;
 };
 }
 

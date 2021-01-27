@@ -15,6 +15,4 @@ Create some simplified gas model that the soot model factory implements
 This could be implemented with an object that has several parallel vectors (like is currently being used) with setters
 and getters that assert that all the vectors are the same length (which they will not be if they have not been set)
 
-Add LICENSE
-
 Rename tests to be generalized
