@@ -2,10 +2,12 @@
 soot::SootModel_Base::SootModel_Base(std::unique_ptr<CoagulationModel> coagulationModel,
                                      std::unique_ptr<GrowthModel> growthModel,
                                      std::unique_ptr<NucleationModel> nucleationModel,
-                                     std::unique_ptr<OxidationModel> oxidationModel)
+                                     std::unique_ptr<OxidationModel> oxidationModel,
+                                     size_t numSootVars)
 {
 	this->coagulationModel = std::move(coagulationModel);
 	this->growthModel = std::move(growthModel);
 	this->nucleationModel = std::move(nucleationModel);
 	this->oxidationModel = std::move(oxidationModel);
+	this->numSootVars = numSootVars;
 }

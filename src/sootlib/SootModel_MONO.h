@@ -15,7 +15,8 @@ public:
 	[[nodiscard]] static SootModel_MONO* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
 	                                                std::unique_ptr<GrowthModel> growthModel,
 	                                                std::unique_ptr<NucleationModel> nucleationModel,
-	                                                std::unique_ptr<OxidationModel> oxidationModel);
+	                                                std::unique_ptr<OxidationModel> oxidationModel,
+	                                                size_t numSootVars);
 
 	[[nodiscard]] std::vector<double> getSrc(const GasState& gasState) override;
 
@@ -25,7 +26,8 @@ private:
 	SootModel_MONO(std::unique_ptr<CoagulationModel> coagulationModel,
 				std::unique_ptr<GrowthModel> growthModel,
 				std::unique_ptr<NucleationModel> nucleationModel,
-				std::unique_ptr<OxidationModel> oxidationModel);
+				std::unique_ptr<OxidationModel> oxidationModel,
+				size_t numSootVars);
 };
 }
 

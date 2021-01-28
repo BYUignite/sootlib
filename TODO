@@ -1,18 +1,18 @@
-Allow install to arbitrary location
-    Remove the lib folder
-    Make --> create lib and include in correct location,
-    and copy headers from source to include when building.
-
 eispack.h, eispack.cc, pdgen.cc and wheeler.cc are not included in the project but required to build (figure out
 relation with those)
 
 Usage instructions in README.md
 
-Create a soot model factory
-Create an empty soot model interface that is implemented by a base soot model which is inherited by the other solutions
+Configure tests to be generalized in Cmake
 
-Create some simplified gas model that the soot model factory implements
-This could be implemented with an object that has several parallel vectors (like is currently being used) with setters
-and getters that assert that all the vectors are the same length (which they will not be if they have not been set)
+Implement Mono model
 
-Rename tests to be generalized
+Implement other models
+
+Implement other mechanisms
+
+Change to multiple CMake files
+
+Create optional canterra compat compile
+
+Create tests/examples with canterra integration

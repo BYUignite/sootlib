@@ -106,7 +106,11 @@ soot::SootModel* soot::SootModelFactory::getModel() const
 	switch (model)
 	{
 		case Model::MONO:
-			return SootModel_MONO::getInstance(std::move(cm), std::move(gm), std::move(nm), std::move(om));
+			return SootModel_MONO::getInstance(std::move(cm),
+									  std::move(gm),
+									  std::move(nm),
+									  std::move(om),
+									  numSootVars);
 //		case Model::LOGN:
 //			return
 //		case Model::MOMIC:
@@ -126,4 +130,17 @@ std::unique_ptr<soot::SootModel> soot::SootModelFactory::getModelUnique() const
 std::shared_ptr<soot::SootModel> soot::SootModelFactory::getModelShared() const
 {
 	return std::shared_ptr<SootModel>(getModel());
+}
+soot::SootModelFactory::SootModelFactory()
+{
+	model = Model::MONO;
+	nucleationMechanism = NucleationMechanism::NONE;
+	growthMechanism = GrowthMechanism::NONE;
+	oxidationMechanism = OxidationMechanism::NONE;
+	coagulationMechanism = CoagulationMechanism::NONE;
+	numSootVars = 0;
+}
+void soot::SootModelFactory::setNumSootVars(size_t numSootVars)
+{
+	this->numSootVars = numSootVars;
 }

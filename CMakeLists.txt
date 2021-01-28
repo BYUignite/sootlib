@@ -143,7 +143,7 @@ endif()
 if (BUILD_EXAMPLE)
     # ---- list of example source files ----
     set(EXAMPLE_SRC_FILES
-            example/main.cpp)
+            example/standard/main.cpp)
 
     # ---- add example executable target ----
     add_executable(sootlib-example ${EXAMPLE_SRC_FILES})

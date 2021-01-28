@@ -48,7 +48,6 @@ namespace soot
 class SootModelFactory
 {
 public:
-	// TODO
 	SootModelFactory();
 
 	void setModel(Model model);
@@ -56,6 +55,7 @@ public:
 	void setGrowthMechanism(GrowthMechanism mechanism);
 	void setOxidationMechanism(OxidationMechanism mechanism);
 	void setCoagulationMechanism(CoagulationMechanism mechanism);
+	void setNumSootVars(size_t numSootVars);
 
 	[[nodiscard]] SootModel* getModel() const;
 	[[nodiscard]] std::unique_ptr<SootModel> getModelUnique() const;
@@ -67,6 +67,7 @@ private:
 	GrowthMechanism growthMechanism;
 	OxidationMechanism oxidationMechanism;
 	CoagulationMechanism coagulationMechanism;
+	size_t numSootVars;
 };
 }
 
