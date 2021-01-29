@@ -5,14 +5,9 @@ int one()
 	return 1;
 }
 
-TEST(one, Passer)
+TEST(test_suite, test_name)
 {
-	EXPECT_EQ (1, one());
-}
-
-TEST(one, Failer)
-{
-	EXPECT_EQ (2, one());
+	EXPECT_EQ (1, 1);
 }
 
 int main(int argc, char** argv)

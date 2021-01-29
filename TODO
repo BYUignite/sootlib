@@ -1,16 +1,7 @@
-eispack.h, eispack.cc, pdgen.cc and wheeler.cc are not included in the project but required to build (figure out
-relation with those)
-
 Usage instructions in README.md
-
-Configure tests to be generalized in Cmake
 
 Implement Mono model
 
 Implement other models
 
 Implement other mechanisms
-
-Create optional canterra compat compile
-
-Create tests/examples with canterra integration

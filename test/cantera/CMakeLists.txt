@@ -1,21 +1,17 @@
-file(GLOB CANTERA_TEST_SRCS *.cpp)
+# ---- list executable .cpp files without their extension ----
 
-add_executable(sootlib_cantera_test ${CANTERA_TEST_SRCS})
+set(STANDARD_TESTS
+        cantera_test_1;
+        cantera_test_2)
 
-gtest_add_tests(
-        TARGET sootlib-cantera-test
-        TEST_SUFFIX .noArgs
-        TEST_LIST noArgsTests
-)
-set_tests_properties(${noArgsTests} PROPERTIES TIMEOUT 10)
+foreach(TEST ${STANDARD_TESTS})
+    add_executable(${TEST} ${TEST}.cpp)
 
-gtest_add_tests(
-        TARGET sootlib-cantera-test
-        TEST_SUFFIX .withArgs
-        TEST_LIST withArgsTests
-)
-set_tests_properties(${withArgsTests} PROPERTIES TIMEOUT 10)
+    target_link_libraries(${TEST} PRIVATE ${GTEST_LIBS} ${CANTERA} sootlib)
 
-target_link_libraries(sootlib_cantera_test
-        sootlib
-        GTEST_LIBS)
+    gtest_add_tests(
+            TARGET ${TEST}
+            TEST_SUFFIX .cantera
+            TEST_LIST canteraTests
+    )
+endforeach()

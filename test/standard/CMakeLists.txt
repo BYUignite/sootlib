@@ -1,21 +1,16 @@
-file(GLOB STANDARD_TEST_SRCS *.cpp)
+# ---- list executable .cpp files without their extension ----
 
-add_executable(sootlib_standard_test ${STANDARD_TEST_SRCS})
+set(STANDARD_TESTS
+        standard_test_1;
+        standard_test_2)
 
-gtest_add_tests(
-        TARGET sootlib-standard-test
-        TEST_SUFFIX .noArgs
-        TEST_LIST noArgsTests
-)
-set_tests_properties(${noArgsTests} PROPERTIES TIMEOUT 10)
+foreach(TEST ${STANDARD_TESTS})
+    add_executable(${TEST} ${TEST}.cpp)
+    target_link_libraries(${TEST} PRIVATE ${GTEST_LIBS} sootlib)
 
-gtest_add_tests(
-        TARGET sootlib-standard-test
-        TEST_SUFFIX .withArgs
-        TEST_LIST withArgsTests
-)
-set_tests_properties(${withArgsTests} PROPERTIES TIMEOUT 10)
-
-target_link_libraries(sootlib_standard_test
-        sootlib
-        GTEST_LIBS)
+    gtest_add_tests(
+            TARGET ${TEST}
+            TEST_SUFFIX .standard
+            TEST_LIST standardTests
+    )
+endforeach()

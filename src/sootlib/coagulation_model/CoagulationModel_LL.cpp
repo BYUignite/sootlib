@@ -17,7 +17,7 @@ double soot::CoagulationModel_LL::getCoagulationRate() const
 
 	// TODO don't know exactly where these members are coming from
 	//--------- Equivalent L&L form assuming m1 = m2
-	double Dp1 = std::pow(6.0 * std::abs(m1) / M_PI / rhoSoot, 1.0 / 3.0);
-	return 2.0 * Ca * sqrt(Dp1 * 6 * kb * T / rhoSoot);
-
+	// double Dp1 = std::pow(6.0 * std::abs(m1) / M_PI / rhoSoot, 1.0 / 3.0);
+	// return 2.0 * Ca * sqrt(Dp1 * 6 * kb * T / rhoSoot);
+	return 0.0;
 }

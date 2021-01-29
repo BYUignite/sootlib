@@ -23,7 +23,7 @@ soot::SootModel_MONO* soot::SootModel_MONO::getInstance(std::unique_ptr<Coagulat
 	                          std::move(oxidationModel),
 	                          numSootVars);
 }
-std::vector<double> soot::SootModel_MONO::getSrcTerms(const soot::GasState& gasState)
+std::vector<double> soot::SootModel_MONO::getSourceTerms(const soot::GasState& gasState)
 {
 	auto sootMoments = std::vector<double>(numSootVars, 0.0);
 	auto sootSrcTerms = std::vector<double>(numSootVars, 0.0);

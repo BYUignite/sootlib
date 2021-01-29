@@ -1,5 +1,5 @@
-include_directories(standard)
+add_subdirectory(standard)
 
 if (BUILD_CANTERA_COMPAT)
-    include_directories(cantera)
+    add_subdirectory(cantera)
 endif()
