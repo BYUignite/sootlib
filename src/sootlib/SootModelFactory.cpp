@@ -138,6 +138,7 @@ soot::SootModelFactory::SootModelFactory()
 	growthMechanism = GrowthMechanism::NONE;
 	oxidationMechanism = OxidationMechanism::NONE;
 	coagulationMechanism = CoagulationMechanism::NONE;
+	// TODO need a better number to put here
 	numSootVars = 0;
 }
 void soot::SootModelFactory::setNumSootVars(size_t numSootVars)

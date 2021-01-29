@@ -8,11 +8,11 @@
 
 /* soot models */
 #include "sootlib/SootModel.h"
-#include "sootlib/SootModel_LOGN.h"
-#include "sootlib/SootModel_MOMIC.h"
-#include "sootlib/SootModel_MONO.h"
-#include "sootlib/SootModel_QMOM.h"
-#include "sootlib/SootModel_SECT.h"
+#include "sootlib/soot_models/SootModel_LOGN.h"
+#include "sootlib/soot_models/SootModel_MOMIC.h"
+#include "sootlib/soot_models/SootModel_MONO.h"
+#include "sootlib/soot_models/SootModel_QMOM.h"
+#include "sootlib/soot_models/SootModel_SECT.h"
 
 /* coagulation models */
 #include "sootlib/coagulation_model/CoagulationModel.h"

@@ -11,8 +11,6 @@ Implement other models
 
 Implement other mechanisms
 
-Change to multiple CMake files
-
 Create optional canterra compat compile
 
 Create tests/examples with canterra integration

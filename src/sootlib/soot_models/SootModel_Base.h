@@ -5,13 +5,9 @@
 
 #include "sootlib/SootModel.h"
 #include "sootlib/coagulation_model/CoagulationModel.h"
-#include "sootlib/coagulation_model/CoagulationModel_NONE.h"
 #include "sootlib/growth_model/GrowthModel.h"
-#include "sootlib/growth_model/GrowthModel_NONE.h"
 #include "sootlib/nucleation_model/NucleationModel.h"
-#include "sootlib/nucleation_model/NucleationModel_NONE.h"
 #include "sootlib/oxidation_model/OxidationModel.h"
-#include "sootlib/oxidation_model/OxidationModel_NONE.h"
 
 namespace soot
 {
@@ -20,10 +16,10 @@ class SootModel_Base : public SootModel
 protected:
 	/* Calculation Models */
 
-	std::unique_ptr<CoagulationModel> coagulationModel;
-	std::unique_ptr<GrowthModel> growthModel;
-	std::unique_ptr<NucleationModel> nucleationModel;
-	std::unique_ptr<OxidationModel> oxidationModel;
+	const std::unique_ptr<CoagulationModel> coagulationModel;
+	const std::unique_ptr<GrowthModel> growthModel;
+	const std::unique_ptr<NucleationModel> nucleationModel;
+	const std::unique_ptr<OxidationModel> oxidationModel;
 
 	SootModel_Base(std::unique_ptr<CoagulationModel> coagulationModel,
 				std::unique_ptr<GrowthModel> growthModel,
@@ -34,7 +30,7 @@ protected:
 	// TODO should all of these be const
 	// another question might be if every member of this class should be const
 	/* variables */
-	size_t numSootVars;
+	const size_t numSootVars;
 };
 }
 

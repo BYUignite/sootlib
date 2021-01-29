@@ -11,6 +11,7 @@ int main(int argc, char** argv)
 	factory.setGrowthMechanism(soot::GrowthMechanism::LL);
 	factory.setOxidationMechanism(soot::OxidationMechanism::LL);
 	factory.setCoagulationMechanism(soot::CoagulationMechanism::LL);
+	factory.setNumSootVars(3);
 
 	auto sootModel_2 = factory.getModelUnique();
 

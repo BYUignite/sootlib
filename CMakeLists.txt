@@ -8,81 +8,28 @@ set(CMAKE_CXX_STANDARD 17)
 # ---- option to build tests ----
 option(BUILD_TESTS "Build sootlib tests" ON)
 
-# ---- option to build example ----
+# ---- option to build examples ----
 option(BUILD_EXAMPLE "Build sootlib example" ON)
+
+# ---- option to build Cantera compatability ----
+option(BUILD_CANTERA_COMPAT "Build Cantera compatability" ON)
 
 # note: you might have to reset your CMakeCache.txt when changing any options
 
 ############################### SOOTLIB ###############################
 
-# ---- list of sootlib source files ----
-set(SRC_FILES
-        src/sootlib/SootModel.h
-        src/sootlib/SootModel_Base.h
-        src/sootlib/SootModel_Base.cpp
-        src/sootlib/SootModel_LOGN.h
-        src/sootlib/SootModel_LOGN.cpp
-        src/sootlib/SootModel_MOMIC.h
-        src/sootlib/SootModel_MOMIC.cpp
-        src/sootlib/SootModel_MONO.h
-        src/sootlib/SootModel_MONO.cpp
-        src/sootlib/SootModel_QMOM.h
-        src/sootlib/SootModel_QMOM.cpp
-        src/sootlib/SootModel_SECT.h
-        src/sootlib/SootModel_SECT.cpp
-        src/sootlib/SootModelFactory.h
-        src/sootlib/SootModelFactory.cpp
-        src/sootlib/state/GasState.h
-        src/sootlib/state/GasState.cpp
-        src/sootlib/state/SootState.h
-        src/sootlib/state/SootState.cpp
-        src/sootlib/coagulation_model/CoagulationModel.h
-        src/sootlib/coagulation_model/CoagulationModel_NONE.h
-        src/sootlib/coagulation_model/CoagulationModel_FUCHS.h
-        src/sootlib/coagulation_model/CoagulationModel_FUCHS.cpp
-        src/sootlib/coagulation_model/CoagulationModel_FRENK.h
-        src/sootlib/coagulation_model/CoagulationModel_FRENK.cpp
-        src/sootlib/coagulation_model/CoagulationModel_LL.h
-        src/sootlib/coagulation_model/CoagulationModel_LL.cpp
-        src/sootlib/growth_model/GrowthModel.h
-        src/sootlib/growth_model/GrowthModel_NONE.h
-        src/sootlib/growth_model/GrowthModel_LIN.h
-        src/sootlib/growth_model/GrowthModel_LIN.cpp
-        src/sootlib/growth_model/GrowthModel_LL.h
-        src/sootlib/growth_model/GrowthModel_LL.cpp
-        src/sootlib/growth_model/GrowthModel_HACA.h
-        src/sootlib/growth_model/GrowthModel_HACA.cpp
-        src/sootlib/nucleation_model/NucleationModel.h
-        src/sootlib/nucleation_model/NucleationModel_NONE.h
-        src/sootlib/nucleation_model/NucleationModel_LIN.h
-        src/sootlib/nucleation_model/NucleationModel_LIN.cpp
-        src/sootlib/nucleation_model/NucleationModel_LL.h
-        src/sootlib/nucleation_model/NucleationModel_LL.cpp
-        src/sootlib/nucleation_model/NucleationModel_PAH.h
-        src/sootlib/nucleation_model/NucleationModel_PAH.cpp
-        src/sootlib/oxidation_model/OxidationModel.h
-        src/sootlib/oxidation_model/OxidationModel_NONE.h
-        src/sootlib/oxidation_model/OxidationModel_LL.h
-        src/sootlib/oxidation_model/OxidationModel_LL.cpp
-        src/sootlib/oxidation_model/OxidationModel_LEE_NEOH.h
-        src/sootlib/oxidation_model/OxidationModel_LEE_NEOH.cpp
-        src/sootlib/oxidation_model/OxidationModel_NSC_NEOH.h
-        src/sootlib/oxidation_model/OxidationModel_NSC_NEOH.cpp
-        src/sootlib/oxidation_model/OxidationModel_HACA.h
-        src/sootlib/oxidation_model/OxidationModel_HACA.cpp)
-
-# ---- add sootlib library target ----
-add_library(sootlib STATIC ${SRC_FILES})
+add_library(sootlib INTERFACE)
+include_directories(src/sootlib)
 
 # ---- allow sootlib to be used in other targets ----
-target_include_directories(sootlib PUBLIC src)
+target_include_directories(sootlib INTERFACE src)
 
 ############################### TESTS ###############################
 
 if (BUILD_TESTS)
     # ---- list of test source files ----
     set(TEST_SRC_FILES
-            test/main.cpp)
+            test/standard/standard_test_1.cpp)
 
     # ---- add test executable target ----
     add_executable(sootlib-test ${TEST_SRC_FILES})
@@ -143,7 +90,7 @@ endif()
 if (BUILD_EXAMPLE)
     # ---- list of example source files ----
     set(EXAMPLE_SRC_FILES
-            example/standard/main.cpp)
+            example/standard/standard_example_1.cpp)
 
     # ---- add example executable target ----
     add_executable(sootlib-example ${EXAMPLE_SRC_FILES})
