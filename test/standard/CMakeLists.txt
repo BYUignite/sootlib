@@ -1,7 +1,7 @@
 # ---- list executable .cpp files without their extension ----
 
 set(STANDARD_TESTS
-        standard_test_1;
+        standard_test_1
         standard_test_2)
 
 foreach(TEST ${STANDARD_TESTS})
