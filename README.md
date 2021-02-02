@@ -2,6 +2,16 @@ Josh's branch of sootlib
 
 this is not guarenteed to be stable at all and probably won't build sometimes
 
+# Build Requirments
+
+Sootlib can be built without any optional dependencies by turning off Cantera compatability and not building tests.
+
+Google Test: The unit tests in test/ require Google Test to be built. Google Test is currently included in this
+directory. https://github.com/google/googletest
+
+Cantera: To build the Cantera compat components of the library and any tests or examples that require Cantera, you need
+Cantera installed as a system library. https://cantera.org/install/index.html
+
 # Build options
 
 In the top level CMakeLists.txt you can enable/disable BUILD_CANTERA_COMPAT. This will:
