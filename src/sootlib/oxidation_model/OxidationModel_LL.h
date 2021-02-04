@@ -8,10 +8,10 @@ namespace soot
 class OxidationModel_LL : public OxidationModel
 {
 public:
-	[[nodiscard]] double getOxidationRate() const override
-	{
-		return 0.0;
-	}
+	// TODO implement
+	[[nodiscard]] double getOxidationRate() const override;
+
+	~OxidationModel_LL() override = default;
 };
 }
 

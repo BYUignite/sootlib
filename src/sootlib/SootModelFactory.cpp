@@ -33,13 +33,13 @@ soot::SootModel* soot::SootModelFactory::getModel() const
 			cm = std::make_unique<CoagulationModel_NONE>();
 			break;
 		case CoagulationMechanism::LL:
-			// TODO
+			cm = std::make_unique<CoagulationModel_LL>();
 			break;
 		case CoagulationMechanism::FUCHS:
-			// TODO
+			cm = std::make_unique<CoagulationModel_FUCHS>();
 			break;
 		case CoagulationMechanism::FRENK:
-			// TODO
+			cm = std::make_unique<CoagulationModel_FRENK>();
 			break;
 		default:
 			throw std::domain_error("Bad soot coagulation mechanism");
@@ -51,13 +51,13 @@ soot::SootModel* soot::SootModelFactory::getModel() const
 			gm = std::make_unique<GrowthModel_NONE>();
 			break;
 		case GrowthMechanism::LL:
-			// TODO
+			gm = std::make_unique<GrowthModel_LL>();
 			break;
 		case GrowthMechanism::LIN:
-			// TODO
+			gm = std::make_unique<GrowthModel_LIN>();
 			break;
 		case GrowthMechanism::HACA:
-			// TODO
+			gm = std::make_unique<GrowthModel_HACA>();
 			break;
 		default:
 			throw std::domain_error("Bad soot growth mechanism");
@@ -69,13 +69,13 @@ soot::SootModel* soot::SootModelFactory::getModel() const
 			nm = std::make_unique<NucleationModel_NONE>();
 			break;
 		case NucleationMechanism::LL:
-			// TODO
+			nm = std::make_unique<NucleationModel_LL>();
 			break;
 		case NucleationMechanism::LIN:
-			// TODO
+			nm = std::make_unique<NucleationModel_LIN>();
 			break;
 		case NucleationMechanism::PAH:
-			// TODO
+			nm = std::make_unique<NucleationModel_PAH>();
 			break;
 		default:
 			throw std::domain_error("Bad soot nucleation mechanism");
@@ -87,16 +87,16 @@ soot::SootModel* soot::SootModelFactory::getModel() const
 			om = std::make_unique<OxidationModel_NONE>();
 			break;
 		case OxidationMechanism::LL:
-			// TODO
+			om = std::make_unique<OxidationModel_LL>();
 			break;
 		case OxidationMechanism::LEE_NEOH:
-			// TODO
+			om = std::make_unique<OxidationModel_LEE_NEOH>();
 			break;
 		case OxidationMechanism::NSC_NEOH:
-			// TODO
+			om = std::make_unique<OxidationModel_NSC_NEOH>();
 			break;
 		case OxidationMechanism::HACA:
-			// TODO
+			om = std::make_unique<OxidationModel_HACA>();
 			break;
 		default:
 			throw std::domain_error("Bad soot oxidation model");

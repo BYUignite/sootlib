@@ -34,3 +34,40 @@ In the test/ folder you can add .cpp source files to cantera/ and standard/. Fil
 Cantera. Files in test/standard/ and test/cantera will be built with GoogleTest as individual executables. Files in 
 test/standard will be added to the test list standardTests. Files in test/cantera will be added to the test list 
 canteraTests.
+
+# TODO
+
+### Design
+
+* Determine role of a SootState object
+* Determine parameters needed for each chemistry model
+* Optimized higher dimentional models
+
+### Broken
+
+* Bad version of Google Test
+
+### Not Implemented
+
+* CoagulationModel_Frenk
+* CoagulationModel_Fuchs
+* CoagulationModel_LL
+* GrowthModel_HACA
+* GrowthModel_LIN
+* GrowthModel_LL
+* NucleationModel_LIN
+* NucleationModel_LL
+* NucleationModel_PAH
+* OxidationModel_HACA
+* OxidationModel_LEE_NEOH
+* OxidationModel_LL
+* OxidationModel_NSC_NEOH
+* SootModel_MONO
+
+### Missing Features
+
+* SootModel_LOGN
+* SootModel_MOMIC
+* SootModel_QMOM
+* SootModel_SECT
+* cantera_compat

@@ -1,7 +1,7 @@
 #ifndef COAGULATIONMODEL_NONE_H
 #define COAGULATIONMODEL_NONE_H
 
-#include "CoagulationModel.h"
+#include "sootlib/coagulation_model/CoagulationModel.h"
 
 namespace soot
 {

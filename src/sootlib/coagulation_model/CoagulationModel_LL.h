@@ -3,20 +3,17 @@
 
 #include <cmath>
 
-#include "CoagulationModel.h"
+#include "sootlib/coagulation_model/CoagulationModel.h"
 
 namespace soot
 {
 class CoagulationModel_LL : public CoagulationModel
 {
 public:
-	CoagulationModel_LL(double m1, double m2);
-
+	// TODO implement
 	[[nodiscard]] double getCoagulationRate() const override;
 
-private:
-	double m1;
-	double m2;
+	~CoagulationModel_LL() override = default;
 };
 }
 
