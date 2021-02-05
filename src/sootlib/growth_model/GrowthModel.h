@@ -8,7 +8,7 @@ class GrowthModel
 public:
 	[[nodiscard]] virtual double getGrowthRate() const = 0;
 
-	virtual ~GrowthModel() = 0;
+	virtual ~GrowthModel() = default;
 };
 }
 

@@ -14,7 +14,7 @@ public:
 	// does this need a soot state?
 	[[nodiscard]] virtual std::vector<double> getSourceTerms(const GasState& gasState) = 0;
 
-	virtual ~SootModel() = 0;
+	virtual ~SootModel() = default;
 };
 }
 

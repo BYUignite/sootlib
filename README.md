@@ -45,7 +45,7 @@ canteraTests.
 
 ### Broken
 
-* Bad version of Google Test
+* Nothing ATM
 
 ### Not Implemented
 

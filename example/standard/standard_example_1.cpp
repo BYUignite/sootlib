@@ -15,5 +15,9 @@ int main(int argc, char** argv)
 
 	auto sootModel_2 = factory.getModelUnique();
 
+	factory.setCoagulationMechanism(soot::CoagulationMechanism::FRENK);
+
+	auto sootModel_3 = factory.getModelUnique();
+
 	return 0;
 }

@@ -1,7 +1,7 @@
 # ---- initialize google test ----
 enable_testing()
 include(GoogleTest)
-add_subdirectory(googletest)
+include_directories(googletest)
 set(GTEST_LIBS
         gtest
         gtest_main)

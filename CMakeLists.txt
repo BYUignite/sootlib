@@ -21,6 +21,7 @@ option(BUILD_EXAMPLES "Build sootlib example" ON)
 
 if (BUILD_CANTERA_COMPAT)
     find_library(CANTERA cantera REQUIRED)
+    SET(CMAKE_CXX_FLAGS -pthread)
 endif()
 
 ############################### SOOTLIB ###############################
