@@ -4,6 +4,8 @@ this is not guarenteed to be stable at all and probably won't build sometimes
 
 # Build Requirments
 
+Sootlib requires C++17
+
 Sootlib can be built without any optional dependencies by turning off Cantera compatability and not building tests.
 
 Google Test: The unit tests in test/ require Google Test to be built. Google Test is currently included in this
