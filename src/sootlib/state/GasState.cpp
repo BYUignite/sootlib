@@ -75,11 +75,11 @@ void soot::GasState::setH2Frac(double h2Frac)
 {
 	H2_frac = h2Frac;
 }
-double soot::GasState::getOhFrac() const
+double soot::GasState::getOHFrac() const
 {
 	return OH_frac;
 }
-void soot::GasState::setOhFrac(double ohFrac)
+void soot::GasState::setOHFrac(double ohFrac)
 {
 	OH_frac = ohFrac;
 }
@@ -91,11 +91,11 @@ void soot::GasState::setH2OFrac(double h2OFrac)
 {
 	H2O_frac = h2OFrac;
 }
-double soot::GasState::getCoFrac() const
+double soot::GasState::getCOFrac() const
 {
 	return CO_frac;
 }
-void soot::GasState::setCoFrac(double coFrac)
+void soot::GasState::setCOFrac(double coFrac)
 {
 	CO_frac = coFrac;
 }
@@ -135,4 +135,36 @@ soot::GasState::GasState()
 double soot::GasState::getC_C2H2() const
 {
 	return rho * C2H2_frac / MW_C2H2;
+}
+double soot::GasState::getC_O2() const
+{
+	return rho * O2_frac / MW_O2;
+}
+double soot::GasState::getC_H() const
+{
+	return rho * H_frac / MW_H;
+}
+double soot::GasState::getC_H2() const
+{
+	return rho * H2_frac / MW_H2;
+}
+double soot::GasState::getC_OH() const
+{
+	return rho * OH_frac / MW_OH;
+}
+double soot::GasState::getC_H2O() const
+{
+	return rho * H2O_frac / MW_H2O;
+}
+double soot::GasState::getC_CO() const
+{
+	return rho * CO_frac / MW_CO;
+}
+double soot::GasState::getC_elementalC() const
+{
+	return rho * elementalC_frac / MW_C;
+}
+double soot::GasState::getC_elementalH() const
+{
+	return rho * elementalH_frac / MW_H;
 }

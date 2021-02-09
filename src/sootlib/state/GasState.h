@@ -43,18 +43,26 @@ public:
 	void setHFrac(double hFrac);
 	[[nodiscard]] double getH2Frac() const;
 	void setH2Frac(double h2Frac);
-	[[nodiscard]] double getOhFrac() const;
-	void setOhFrac(double ohFrac);
+	[[nodiscard]] double getOHFrac() const;
+	void setOHFrac(double ohFrac);
 	[[nodiscard]] double getH2OFrac() const;
 	void setH2OFrac(double h2OFrac);
-	[[nodiscard]] double getCoFrac() const;
-	void setCoFrac(double coFrac);
+	[[nodiscard]] double getCOFrac() const;
+	void setCOFrac(double coFrac);
 	[[nodiscard]] double getElementalCFrac() const;
 	void setElementalCFrac(double elementalCFrac);
 	[[nodiscard]] double getElementalHFrac() const;
 	void setElementalHFrac(double elementalHFrac);
 
 	[[nodiscard]] double getC_C2H2() const;
+	[[nodiscard]] double getC_O2() const;
+	[[nodiscard]] double getC_H() const;
+	[[nodiscard]] double getC_H2() const;
+	[[nodiscard]] double getC_OH() const;
+	[[nodiscard]] double getC_H2O() const;
+	[[nodiscard]] double getC_CO() const;
+	[[nodiscard]] double getC_elementalC() const;
+	[[nodiscard]] double getC_elementalH() const;
 
 private:
 	/* Overall gas properties */

@@ -9,10 +9,10 @@ project(sootlib)
 set(CMAKE_CXX_STANDARD 17)
 
 # ---- option to build Cantera compatability ----
-option(BUILD_CANTERA_COMPAT "Build Cantera compatability" ON)
+option(BUILD_CANTERA_COMPAT "Build Cantera compatability" OFF)
 
 # ---- option to build tests ----
-option(BUILD_TESTS "Build sootlib tests" ON)
+option(BUILD_TESTS "Build sootlib tests" OFF)
 
 # ---- option to build examples ----
 option(BUILD_EXAMPLES "Build sootlib example" ON)
