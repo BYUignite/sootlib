@@ -56,11 +56,10 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 
 ### Broken
 
-* GoogleTest build on M1 Mac is broken, but this could be for a variety of reasons external to the project 
+* Building tests is broken on Mac (M1 and x86)
 
 ### Untested
 
-* Build on x86 Mac
 * `GasState`
 * `GrowthModel_LIN`
 * `GrowthModel_LL`
