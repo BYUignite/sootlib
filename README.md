@@ -64,14 +64,14 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 * `GrowthModel_LIN`
 * `GrowthModel_LL`
 * `GrowthModel_HACA`
+* `NucleationModel_LIN`
+* `NucleationModel_LL`
 
 ### Not Implemented
 
 * `CoagulationModel_Frenk`
 * `CoagulationModel_Fuchs`
 * `CoagulationModel_LL`
-* `NucleationModel_LIN`
-* `NucleationModel_LL`
 * `NucleationModel_PAH`
 * `OxidationModel_HACA`
 * `OxidationModel_LEE_NEOH`
