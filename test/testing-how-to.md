@@ -63,4 +63,6 @@ int main(int argc, char** argv)
     return RUN_ALL_TESTS();
 }
 ```
-7) Here is a resource with more information: https://developer.ibm.com/technologies/systems/articles/au-googletestingframework/
+7) You can `#include "TestTools"` to do things like generate dummy models
+
+8) Here is a resource with more information: https://developer.ibm.com/technologies/systems/articles/au-googletestingframework/
