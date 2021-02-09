@@ -6,7 +6,7 @@ namespace soot
 class SootState
 {
 public:
-	[[nodiscard]] double getRhoSoot() const;
+	[[nodiscard]] double getRho() const;
 	void setRhoSoot(double rhoSoot);
 	[[nodiscard]] double getCmin() const;
 	void setCmin(double cmin);

@@ -29,25 +29,25 @@ public:
 	void setMw(double mw);
 	[[nodiscard]] double getMu() const;
 	void setMu(double mu);
-	[[nodiscard]] const GasComponent& getC2H2() const;
-	void setC2H2(const GasComponent& c2H2);
-	[[nodiscard]] const GasComponent& getO2() const;
-	void setO2(const GasComponent& o2);
-	[[nodiscard]] const GasComponent& getH() const;
-	void setH(const GasComponent& h);
-	[[nodiscard]] const GasComponent& getH2() const;
-	void setH2(const GasComponent& h2);
-	[[nodiscard]] const GasComponent& getOH() const;
-	void setOH(const GasComponent& oh);
-	[[nodiscard]] const GasComponent& getH2O() const;
-	void setH2O(const GasComponent& h2O);
-	[[nodiscard]] const GasComponent& getCO() const;
-	void setCO(const GasComponent& co);
-	[[nodiscard]] const GasComponent& getElementalC() const;
-	void setElementalC(const GasComponent& elementalC);
-	[[nodiscard]] const GasComponent& getElementalH() const;
-	void setElementalH(const GasComponent& elementalH);
 	GasComponent& PAH(size_t numC);
+	[[nodiscard]] double getC2H2Frac() const;
+	void setC2H2Frac(double c2H2Frac);
+	[[nodiscard]] double getO2Frac() const;
+	void setO2Frac(double o2Frac);
+	[[nodiscard]] double getHFrac() const;
+	void setHFrac(double hFrac);
+	[[nodiscard]] double getH2Frac() const;
+	void setH2Frac(double h2Frac);
+	[[nodiscard]] double getOhFrac() const;
+	void setOhFrac(double ohFrac);
+	[[nodiscard]] double getH2OFrac() const;
+	void setH2OFrac(double h2OFrac);
+	[[nodiscard]] double getCoFrac() const;
+	void setCoFrac(double coFrac);
+	[[nodiscard]] double getElementalCFrac() const;
+	void setElementalCFrac(double elementalCFrac);
+	[[nodiscard]] double getElementalHFrac() const;
+	void setElementalHFrac(double elementalHFrac);
 
 private:
 	/* Total Gas */
@@ -68,15 +68,15 @@ private:
 	double mu;
 
 	/* Gas Species */
-	GasComponent C2H2;
-	GasComponent O2;
-	GasComponent H;
-	GasComponent H2;
-	GasComponent OH;
-	GasComponent H2O;
-	GasComponent CO;
-	GasComponent elementalC;
-	GasComponent elementalH;
+	double C2H2_frac;
+	double O2_frac;
+	double H_frac;
+	double H2_frac;
+	double OH_frac;
+	double H2O_frac;
+	double CO_frac;
+	double elementalC_frac;
+	double elementalH_frac;
 
 	/* Polycyclic Aromatic Hydrocarbons */
 	// key: number of carbons in PAH

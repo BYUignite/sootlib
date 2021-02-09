@@ -18,6 +18,15 @@ enum class NucleationMechanism {NONE, LL, LIN, PAH};
 enum class GrowthMechanism {NONE, LL, LIN, HACA};
 enum class OxidationMechanism {NONE, LL, LEE_NEOH, NSC_NEOH, HACA};
 enum class CoagulationMechanism {NONE, LL, FUCHS, FRENK};
+
+static constexpr double MW_C2H2 = 26.038;
+static constexpr double MW_O2 = 31.998;
+static constexpr double MW_H = 1.008;
+static constexpr double MW_H2 = 2.016;
+static constexpr double MW_OH = 17.007;
+static constexpr double MW_H2O = 18.015;
+static constexpr double MW_CO = 28.010;
+static constexpr double MW_C = 12.011;
 }
 
 #endif //STATIC_H

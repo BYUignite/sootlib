@@ -59,7 +59,7 @@ set(STATE_SRC_FILES
         sootlib/state/GasState.h
         sootlib/state/GasState.cpp
         sootlib/state/SootState.h
-        sootlib/state/SootState.h)
+        sootlib/state/SootState.cpp)
 
 set(SRC_FILES
         sootlib/SootModel.h

@@ -9,7 +9,7 @@ class GrowthModel_LL : public GrowthModel
 {
 public:
 	// TODO implement
-	[[nodiscard]] double getGrowthRate() const override;
+	[[nodiscard]] double getGrowthRate(const GasState& gasState, const SootState& sootState) const override;
 
 	~GrowthModel_LL() override = default;
 };

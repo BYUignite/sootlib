@@ -3,16 +3,15 @@
 
 #include <vector>
 
-#include "sootlib/state/GasState.h"
+#include <sootlib/state/GasState.h>
+#include <sootlib/state/SootState.h>
 
 namespace soot
 {
 class SootModel
 {
 public:
-	// TODO document this function
-	// does this need a soot state?
-	[[nodiscard]] virtual std::vector<double> getSourceTerms(const GasState& gasState) = 0;
+	[[nodiscard]] virtual std::vector<double> getSourceTerms(const GasState& gasState, const SootState& sootState) = 0;
 
 	virtual ~SootModel() = default;
 };

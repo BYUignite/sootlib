@@ -39,79 +39,79 @@ void soot::GasState::setMu(double mu)
 {
 	GasState::mu = mu;
 }
-const soot::GasComponent& soot::GasState::getC2H2() const
-{
-	return C2H2;
-}
-void soot::GasState::setC2H2(const soot::GasComponent& c2H2)
-{
-	C2H2 = c2H2;
-}
-const soot::GasComponent& soot::GasState::getO2() const
-{
-	return O2;
-}
-void soot::GasState::setO2(const soot::GasComponent& o2)
-{
-	O2 = o2;
-}
-const soot::GasComponent& soot::GasState::getH() const
-{
-	return H;
-}
-void soot::GasState::setH(const soot::GasComponent& h)
-{
-	H = h;
-}
-const soot::GasComponent& soot::GasState::getH2() const
-{
-	return H2;
-}
-void soot::GasState::setH2(const soot::GasComponent& h2)
-{
-	H2 = h2;
-}
-const soot::GasComponent& soot::GasState::getOH() const
-{
-	return OH;
-}
-void soot::GasState::setOH(const soot::GasComponent& oh)
-{
-	OH = oh;
-}
-const soot::GasComponent& soot::GasState::getH2O() const
-{
-	return H2O;
-}
-void soot::GasState::setH2O(const soot::GasComponent& h2O)
-{
-	H2O = h2O;
-}
-const soot::GasComponent& soot::GasState::getCO() const
-{
-	return CO;
-}
-void soot::GasState::setCO(const soot::GasComponent& co)
-{
-	CO = co;
-}
-const soot::GasComponent& soot::GasState::getElementalC() const
-{
-	return elementalC;
-}
-void soot::GasState::setElementalC(const soot::GasComponent& elementalC)
-{
-	GasState::elementalC = elementalC;
-}
-const soot::GasComponent& soot::GasState::getElementalH() const
-{
-	return elementalH;
-}
-void soot::GasState::setElementalH(const soot::GasComponent& elementalH)
-{
-	GasState::elementalH = elementalH;
-}
 soot::GasComponent& soot::GasState::PAH(size_t numC)
 {
 	return PAHs[numC];
+}
+double soot::GasState::getC2H2Frac() const
+{
+	return C2H2_frac;
+}
+void soot::GasState::setC2H2Frac(double c2H2Frac)
+{
+	C2H2_frac = c2H2Frac;
+}
+double soot::GasState::getO2Frac() const
+{
+	return O2_frac;
+}
+void soot::GasState::setO2Frac(double o2Frac)
+{
+	O2_frac = o2Frac;
+}
+double soot::GasState::getHFrac() const
+{
+	return H_frac;
+}
+void soot::GasState::setHFrac(double hFrac)
+{
+	H_frac = hFrac;
+}
+double soot::GasState::getH2Frac() const
+{
+	return H2_frac;
+}
+void soot::GasState::setH2Frac(double h2Frac)
+{
+	H2_frac = h2Frac;
+}
+double soot::GasState::getOhFrac() const
+{
+	return OH_frac;
+}
+void soot::GasState::setOhFrac(double ohFrac)
+{
+	OH_frac = ohFrac;
+}
+double soot::GasState::getH2OFrac() const
+{
+	return H2O_frac;
+}
+void soot::GasState::setH2OFrac(double h2OFrac)
+{
+	H2O_frac = h2OFrac;
+}
+double soot::GasState::getCoFrac() const
+{
+	return CO_frac;
+}
+void soot::GasState::setCoFrac(double coFrac)
+{
+	CO_frac = coFrac;
+}
+double soot::GasState::getElementalCFrac() const
+{
+	return elementalC_frac;
+}
+void soot::GasState::setElementalCFrac(double elementalCFrac)
+{
+	elementalC_frac = elementalCFrac;
+}
+double soot::GasState::getElementalHFrac() const
+{
+	return elementalH_frac;
+}
+void soot::GasState::setElementalHFrac(double elementalHFrac)
+{
+	elementalH_frac = elementalHFrac;
 }

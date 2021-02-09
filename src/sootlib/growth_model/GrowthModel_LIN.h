@@ -1,15 +1,19 @@
 #ifndef GROWTHMODEL_LIN_H
 #define GROWTHMODEL_LIN_H
 
-#include "sootlib/growth_model/GrowthModel.h"
+#include <cmath>
+
+#include <sootlib/static.h>
+#include <sootlib/growth_model/GrowthModel.h>
+#include <sootlib/state/GasState.h>
+#include <sootlib/state/SootState.h>
 
 namespace soot
 {
 class GrowthModel_LIN : public GrowthModel
 {
 public:
-	// TODO implement
-	[[nodiscard]] double getGrowthRate() const override;
+	[[nodiscard]] double getGrowthRate(const GasState& gasState, const SootState& sootState) const override;
 
 	~GrowthModel_LIN() override = default;
 };

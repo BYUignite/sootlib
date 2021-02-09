@@ -4,8 +4,9 @@
 #include <memory>
 #include <vector>
 
-#include "sootlib/state/GasState.h"
-#include "SootModel_Base.h"
+#include <sootlib/state/SootState.h>
+#include <sootlib/state/GasState.h>
+#include <sootlib/soot_models/SootModel_Base.h>
 
 namespace soot
 {
@@ -18,7 +19,7 @@ public:
 	                                                std::unique_ptr<OxidationModel> oxidationModel,
 	                                                size_t numSootVars);
 
-	[[nodiscard]] std::vector<double> getSourceTerms(const GasState& gasState) override;
+	[[nodiscard]] std::vector<double> getSourceTerms(const GasState& gasState, const SootState& sootState) override;
 
 	~SootModel_MONO() override = default;
 

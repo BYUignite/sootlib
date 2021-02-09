@@ -1,5 +1,5 @@
 #include "SootState.h"
-double soot::SootState::getRhoSoot() const
+double soot::SootState::getRho() const
 {
 	return rhoSoot;
 }

@@ -46,9 +46,11 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 * Determine desired Cantera compatability features, ex. conversion between IdealGasMix and GasState - IdealGasMix is 
   depreciated and it looks like modern Cantera usage is different than in old examples so desired functionality needs to
   be determined
+* Change include statements to library style <>
   
 ### Long Term Design
 
+* Use static architecture
 * Optimized higher dimentional models
 
 ### Broken
@@ -58,6 +60,7 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 ### Untested
 
 * Build on x86 Mac
+* `GrowthModel_LIN`
 
 ### Not Implemented
 
@@ -65,7 +68,6 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 * `CoagulationModel_Fuchs`
 * `CoagulationModel_LL`
 * `GrowthModel_HACA`
-* `GrowthModel_LIN`
 * `GrowthModel_LL`
 * `NucleationModel_LIN`
 * `NucleationModel_LL`

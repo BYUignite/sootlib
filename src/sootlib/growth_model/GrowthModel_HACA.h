@@ -9,7 +9,7 @@ class GrowthModel_HACA : public GrowthModel
 {
 public:
 	// TODO implement
-	[[nodiscard]] double getGrowthRate() const override;
+	[[nodiscard]] double getGrowthRate(const GasState& gasState, const SootState& sootState) const override;
 
 	~GrowthModel_HACA() override = default;
 };

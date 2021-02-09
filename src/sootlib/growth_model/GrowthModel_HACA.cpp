@@ -1,5 +1,5 @@
 #include "GrowthModel_HACA.h"
-double soot::GrowthModel_HACA::getGrowthRate() const
+double soot::GrowthModel_HACA::getGrowthRate(const soot::GasState& gasState, const soot::SootState& sootState) const
 {
-	return 0.0;
+	return 0;
 }
