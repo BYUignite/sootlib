@@ -1,25 +1,15 @@
 #include <memory>
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
-#include <sootlib/state/GasState.h>
-#include <sootlib/state/SootState.h>
-#include <sootlib/growth_model/GrowthModel_NONE.h>
+#include "TestTools.h"
 
-soot::GasState getBlankGasState()
-{
-	return soot::GasState();
-}
-
-soot::SootState getBlankSootState()
-{
-	return soot::SootState();
-}
+#include "sootlib/growth_model/GrowthModel_NONE.h"
 
 TEST (GrowthModel_NONE_TEST, basic_test)
 {
-	const soot::GasState gasState = getBlankGasState();
-	const soot::SootState sootState = getBlankSootState();
+	const soot::GasState gasState = TestTools::getBlankGasState();
+	const soot::SootState sootState = TestTools::getBlankSootState();
 
 	const double expectedValue = 0.0;
 	std::unique_ptr<soot::GrowthModel> model = std::make_unique<soot::GrowthModel_NONE>();
