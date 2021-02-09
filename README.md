@@ -42,11 +42,9 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 ### Short Term Design
 
 * Determine role of `SootState` object
-* Determine parameters needed for each chemistry model
 * Determine desired Cantera compatability features, ex. conversion between IdealGasMix and GasState - IdealGasMix is 
   depreciated and it looks like modern Cantera usage is different than in old examples so desired functionality needs to
   be determined
-* Create test tools for things like generating classses
   
 ### Long Term Design
 
@@ -55,7 +53,7 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 
 ### Broken
 
-* GoogleTest build on M1 Mac is broken, but this could be for a variety of reasons that are not caused by the project 
+* GoogleTest build on M1 Mac is broken, but this could be for a variety of reasons external to the project 
 
 ### Untested
 
