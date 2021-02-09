@@ -8,7 +8,7 @@ Sootlib requires C++17
 
 Sootlib can be built without any optional dependencies by turning off Cantera compatability and not building tests.
 
-Google Test: The unit tests in test/ require Google Test to be built. Google Test is currently included in this
+Google Test: The unit tests in `test/` require Google Test to be built. Google Test is currently included in this
 directory. https://github.com/google/googletest
 
 Cantera: To build the Cantera compat components of the library and any tests or examples that require Cantera, you need
@@ -41,13 +41,18 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 
 ### Design
 
-* Determine role of a `SootState` object
+* Determine role of `SootState` object
 * Determine parameters needed for each chemistry model
 * Optimized higher dimentional models
 
 ### Broken
 
 * Nothing ATM
+
+### Untested
+
+* In `test/CMakeLists.txt` it seems like `include_directories(googletest)` works on Windows but on Mac
+  `add_subdirectory(googletest)` is working
 
 ### Not Implemented
 
