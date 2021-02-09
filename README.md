@@ -49,7 +49,6 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
   
 ### Long Term Design
 
-* Use static architecture
 * Optimized higher dimentional models
 
 ### Broken
