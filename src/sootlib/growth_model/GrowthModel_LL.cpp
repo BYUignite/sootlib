@@ -15,12 +15,11 @@ double soot::GrowthModel_LL::getGrowthRate(const soot::GasState& gasState, const
 	const double cC2H2 = gasState.getC_C2H2();
 	double rSoot = 0;
 
-	// TODO these are placeholder numbers
-	const double M0 = 0;
-	const double M1 = 0;
+	// TODO I am not sure these are correct
+	const double M0 = sootState.getSootVar(0);
+	const double M1 = sootState.getSootVar(1);
 
 	if (M0 > 0.0)
-		// TODO this needs to be cleaned
 		Am2m3 = M_PI * pow(std::abs(6 / (M_PI * sootState.getRho()) * M1 / M0), 2.0 / 3.0);
 
 	if (Am2m3 > 0.0)

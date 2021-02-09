@@ -1,6 +1,9 @@
 #ifndef SOOTSTATE_H
 #define SOOTSTATE_H
 
+#include <sstream>
+#include <vector>
+
 namespace soot
 {
 class SootState
@@ -18,6 +21,9 @@ public:
 	void setDimer(double dimer);
 	[[nodiscard]] double getMDimer() const;
 	void setMDimer(double mDimer);
+	void setNumSootVars(size_t n);
+	[[nodiscard]] double getSootVar(size_t i) const;
+	void setSootVar(size_t i, double value);
 
 private:
 	/* Soot properties */
@@ -35,6 +41,9 @@ private:
 	// dimer mass
 	// Units: UNKNOWN
 	double m_dimer;
+	// main soot quantity (soot moments or sections)
+	// Units: UNKNOWN
+	std::vector<double> sootVars;
 };
 }
 

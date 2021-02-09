@@ -38,3 +38,27 @@ soot::SootState::SootState()
 	dimer = 0;
 	m_dimer = 0;
 }
+void soot::SootState::setNumSootVars(size_t n)
+{
+	sootVars = std::vector<double>(n, 0.0);
+}
+double soot::SootState::getSootVar(size_t i) const
+{
+	if (i > sootVars.size())
+	{
+		std::stringstream ss;
+		ss << i << " out of bounds for SootState with " << sootVars.size() << " soot vars";
+		throw std::domain_error(ss.str());
+	}
+	return sootVars.at(i);
+}
+void soot::SootState::setSootVar(size_t i, double value)
+{
+	if (i > sootVars.size())
+	{
+		std::stringstream ss;
+		ss << i << " out of bounds for SootState with " << sootVars.size() << " soot vars";
+		throw std::domain_error(ss.str());
+	}
+	sootVars.at(i) = value;
+}
