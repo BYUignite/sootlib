@@ -39,20 +39,25 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 
 # TODO
 
-### Design
+### Short Term Design
 
 * Determine role of `SootState` object
 * Determine parameters needed for each chemistry model
+* Determine desired Cantera compatability features, ex. conversion between IdealGasMix and GasState - IdealGasMix is 
+  depreciated and it looks like modern Cantera usage is different than in old examples so desired functionality needs to
+  be determined
+  
+### Long Term Design
+
 * Optimized higher dimentional models
 
 ### Broken
 
-* Nothing ATM
+* GoogleTest build on M1 Mac is broken, but this could be for a variety of reasons that are not caused by the project 
 
 ### Untested
 
-* In `test/CMakeLists.txt` it seems like `include_directories(googletest)` works on Windows but on Mac
-  `add_subdirectory(googletest)` is working
+* Build on x86 Mac
 
 ### Not Implemented
 

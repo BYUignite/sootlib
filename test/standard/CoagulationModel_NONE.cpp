@@ -3,11 +3,12 @@
 #include "gtest/gtest.h"
 #include "sootlib/coagulation_model/CoagulationModel_NONE.h"
 
-TEST (CoagulationModelNONETEST, basic_test)
+TEST (CoagulationModel_NONE_TEST, basic_test)
 {
-	constexp double expectedValue = 0.0;
-	std::unique_ptr<CoagulationModel> model = std::make_unique<CoagulationModel_NONE>();
+	const double expectedValue = 0.0;
+	std::unique_ptr<soot::CoagulationModel> model = std::make_unique<soot::CoagulationModel_NONE>();
 
+	// Using exact comparison since model should return exactly 0
 	EXPECT_EQ (expectedValue, model->getCoagulationRate());
 }
 
