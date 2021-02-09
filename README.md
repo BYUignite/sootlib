@@ -61,11 +61,16 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 ### Untested
 
 * Build on x86 Mac
+* `GasState`
 * `GrowthModel_LIN`
 * `GrowthModel_LL`
 * `GrowthModel_HACA`
 * `NucleationModel_LIN`
 * `NucleationModel_LL`
+* `OxidationModel_LL`
+* `OxidationModel_LEE_NEOH`
+* `OxidationModel_NSC_NEOH`
+* `OxidationModel_HACA`
 
 ### Not Implemented
 
@@ -73,10 +78,6 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 * `CoagulationModel_Fuchs`
 * `CoagulationModel_LL`
 * `NucleationModel_PAH`
-* `OxidationModel_HACA`
-* `OxidationModel_LEE_NEOH`
-* `OxidationModel_LL`
-* `OxidationModel_NSC_NEOH`
 * `SootModel_MONO`
 
 ### Missing Features

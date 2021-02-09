@@ -168,3 +168,39 @@ double soot::GasState::getC_elementalH() const
 {
 	return rho * elementalH_frac / MW_H;
 }
+double soot::GasState::getP_C2H2() const
+{
+	return C2H2_frac * MW / MW_C2H2 * P;
+}
+double soot::GasState::getP_O2() const
+{
+	return O2_frac * MW / MW_O2 * P;
+}
+double soot::GasState::getP_H() const
+{
+	return H_frac * MW / MW_H * P;
+}
+double soot::GasState::getP_H2() const
+{
+	return H2_frac * MW / MW_H2 * P;
+}
+double soot::GasState::getP_OH() const
+{
+	return OH_frac * MW / MW_OH * P;
+}
+double soot::GasState::getP_H2O() const
+{
+	return H2O_frac * MW / MW_H2O * P;
+}
+double soot::GasState::getP_CO() const
+{
+	return CO_frac * MW / MW_CO * P;
+}
+double soot::GasState::getP_elementalC() const
+{
+	return elementalC_frac * MW / MW_C * P;
+}
+double soot::GasState::getP_elementalH() const
+{
+	return elementalH_frac * MW / MW_H * P;
+}

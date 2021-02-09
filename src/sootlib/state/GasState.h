@@ -64,6 +64,16 @@ public:
 	[[nodiscard]] double getC_elementalC() const;
 	[[nodiscard]] double getC_elementalH() const;
 
+	[[nodiscard]] double getP_C2H2() const;
+	[[nodiscard]] double getP_O2() const;
+	[[nodiscard]] double getP_H() const;
+	[[nodiscard]] double getP_H2() const;
+	[[nodiscard]] double getP_OH() const;
+	[[nodiscard]] double getP_H2O() const;
+	[[nodiscard]] double getP_CO() const;
+	[[nodiscard]] double getP_elementalC() const;
+	[[nodiscard]] double getP_elementalH() const;
+
 private:
 	/* Overall gas properties */
 
