@@ -4,7 +4,7 @@ project(sootlib)
 
 ############################### PROJECT OPTIONS ###############################
 
-# ---- set c++ version to 17 ----
+# ---- set C++ version to 17 ----
 # (this project uses C++17 features)
 set(CMAKE_CXX_STANDARD 17)
 

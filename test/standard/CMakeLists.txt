@@ -2,7 +2,8 @@
 
 set(STANDARD_TESTS
         standard_test_1
-        standard_test_2)
+        standard_test_2
+        CoagulationModel_NONE)
 
 foreach(TEST ${STANDARD_TESTS})
     add_executable(${TEST} ${TEST}.cpp)
