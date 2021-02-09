@@ -6,6 +6,10 @@ namespace soot
 class SootState
 {
 public:
+	/* Constructor sets values to 0 */
+	SootState();
+
+	/* Getters and setters */
 	[[nodiscard]] double getRho() const;
 	void setRhoSoot(double rhoSoot);
 	[[nodiscard]] double getCmin() const;
@@ -16,6 +20,8 @@ public:
 	void setMDimer(double mDimer);
 
 private:
+	/* Soot properties */
+
 	// soot density
 	// Units: kg/m3
 	double rhoSoot;

@@ -18,7 +18,10 @@ struct GasComponent
 class GasState
 {
 public:
-	/* Getters and Setters */
+	/* Constructor sets values to 0 */
+	GasState();
+
+	/* Getters and setters */
 	[[nodiscard]] double getT() const;
 	void setT(double t);
 	[[nodiscard]] double getP() const;
@@ -50,7 +53,8 @@ public:
 	void setElementalHFrac(double elementalHFrac);
 
 private:
-	/* Total Gas */
+	/* Overall gas properties */
+
 	// temperature
 	// Units: K
 	double T;

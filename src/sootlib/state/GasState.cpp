@@ -115,3 +115,20 @@ void soot::GasState::setElementalHFrac(double elementalHFrac)
 {
 	elementalH_frac = elementalHFrac;
 }
+soot::GasState::GasState()
+{
+	T = 0;
+	P = 0;
+	rho = 0;
+	MW = 0;
+	mu = 0;
+	C2H2_frac = 0;
+	O2_frac = 0;
+	H_frac = 0;
+	H2_frac = 0;
+	OH_frac = 0;
+	H2O_frac = 0;
+	CO_frac = 0;
+	elementalC_frac = 0;
+	elementalH_frac = 0;
+}

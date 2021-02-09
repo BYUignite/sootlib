@@ -31,3 +31,10 @@ void soot::SootState::setMDimer(double mDimer)
 {
 	m_dimer = mDimer;
 }
+soot::SootState::SootState()
+{
+	rhoSoot = 0;
+	Cmin = 0;
+	dimer = 0;
+	m_dimer = 0;
+}
