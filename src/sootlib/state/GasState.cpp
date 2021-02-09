@@ -132,3 +132,7 @@ soot::GasState::GasState()
 	elementalC_frac = 0;
 	elementalH_frac = 0;
 }
+double soot::GasState::getC_C2H2() const
+{
+	return rho * C2H2_frac / MW_C2H2;
+}

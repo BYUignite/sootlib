@@ -41,6 +41,7 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 
 ### Short Term Design
 
+* Determine role of `sootvar` object from original code
 * Determine role of `SootState` object
 * Determine desired Cantera compatability features, ex. conversion between IdealGasMix and GasState - IdealGasMix is 
   depreciated and it looks like modern Cantera usage is different than in old examples so desired functionality needs to

@@ -27,6 +27,7 @@ private:
 	double rhoSoot;
 	// number of carbons in soot nucleation size
 	// Units: #
+	// TODO figure out these units
 	double Cmin;
 	// dimer concentration
 	// Units: UNKNOWN

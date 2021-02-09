@@ -3,6 +3,8 @@
 
 #include <map>
 
+#include "sootlib/static.h"
+
 namespace soot
 {
 struct GasComponent
@@ -51,6 +53,8 @@ public:
 	void setElementalCFrac(double elementalCFrac);
 	[[nodiscard]] double getElementalHFrac() const;
 	void setElementalHFrac(double elementalHFrac);
+
+	[[nodiscard]] double getC_C2H2() const;
 
 private:
 	/* Overall gas properties */

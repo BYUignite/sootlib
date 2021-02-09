@@ -1,6 +1,8 @@
 #ifndef GROWTHMODEL_LL_H
 #define GROWTHMODEL_LL_H
 
+#include <cmath>
+
 #include "sootlib/growth_model/GrowthModel.h"
 
 namespace soot
