@@ -1,6 +1,8 @@
 #ifndef OXIDATIONMODEL_NONE_H
 #define OXIDATIONMODEL_NONE_H
 
+#include "sootlib/state/GasState.h"
+#include "sootlib/state/SootState.h"
 #include "sootlib/oxidation_model/OxidationModel.h"
 
 namespace soot
@@ -8,7 +10,7 @@ namespace soot
 class OxidationModel_NONE : public OxidationModel
 {
 public:
-	[[nodiscard]] double getOxidationRate() const override
+	[[nodiscard]] double getOxidationRate(const GasState& gasState, const SootState& sootState) const override
 	{
 		return 0.0;
 	}

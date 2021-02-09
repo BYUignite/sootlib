@@ -1,5 +1,5 @@
 #include "OxidationModel_LL.h"
-double soot::OxidationModel_LL::getOxidationRate() const
+double soot::OxidationModel_LL::getOxidationRate(const soot::GasState& gasState, const soot::SootState& sootState) const
 {
-	return 0.0;
+	return 0;
 }
