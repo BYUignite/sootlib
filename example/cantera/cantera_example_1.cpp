@@ -1,7 +1,7 @@
 #include "cantera/thermo.h"
 #include "cantera/transport.h"
 
-#include "sootlib/SootModelFactory.h"
+#include "sootlib/MomentSootModelFactory.h"
 
 using namespace Cantera;
 

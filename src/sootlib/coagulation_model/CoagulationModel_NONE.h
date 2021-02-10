@@ -1,8 +1,8 @@
 #ifndef COAGULATIONMODEL_NONE_H
 #define COAGULATIONMODEL_NONE_H
 
-#include "sootlib/state/GasState.h"
-#include "sootlib/state/MomentSootState.h"
+#include "sootlib/state/gas/GasState.h"
+#include "sootlib/state/soot/MomentSootState.h"
 #include "sootlib/coagulation_model/CoagulationModel.h"
 
 namespace soot

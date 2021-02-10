@@ -1,8 +1,8 @@
 #ifndef NUCLEATIONMODEL_H
 #define NUCLEATIONMODEL_H
 
-#include "sootlib/state/GasState.h"
-#include "sootlib/state/MomentSootState.h"
+#include "sootlib/state/gas/GasState.h"
+#include "sootlib/state/soot/MomentSootState.h"
 
 namespace soot
 {

@@ -2,11 +2,11 @@
 #define SOOTMODEL_MONO_H
 
 #include <memory>
-#include <vector>
 
-#include <sootlib/state/MomentSootState.h>
-#include <sootlib/state/GasState.h>
-#include <sootlib/soot_models/MomentSootModel_Base.h>
+#include "sootlib/SootSourceTerms.h"
+#include "sootlib/state/soot/MomentSootState.h"
+#include "sootlib/state/gas/GasState.h"
+#include "sootlib/soot_models/moment/MomentSootModel_Base.h"
 
 namespace soot
 {
@@ -19,7 +19,7 @@ public:
 	                                                std::unique_ptr<OxidationModel> oxidationModel,
 	                                                size_t numSootVars);
 
-	[[nodiscard]] std::vector<double> getSourceTerms(const GasState& gasState, const MomentSootState& sootState) override;
+	[[nodiscard]] SootSourceTerms getSourceTerms(const GasState& gasState, const MomentSootState& sootState) override;
 
 	~SootModel_MONO() override = default;
 

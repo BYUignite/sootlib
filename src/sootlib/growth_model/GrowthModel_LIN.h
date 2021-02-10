@@ -5,8 +5,8 @@
 
 #include <sootlib/static.h>
 #include <sootlib/growth_model/GrowthModel.h>
-#include <sootlib/state/GasState.h>
-#include <sootlib/state/MomentSootState.h>
+#include <sootlib/state/gas/GasState.h>
+#include <sootlib/state/soot/MomentSootState.h>
 
 namespace soot
 {

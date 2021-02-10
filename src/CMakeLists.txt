@@ -42,30 +42,35 @@ set(OXIDATION_SRC_FILES
         sootlib/oxidation_model/OxidationModel_NSC_NEOH.cpp)
 
 set(SOOTMODELS_SRC_FILES
-        sootlib/soot_models/MomentSootModel_Base.h
-        sootlib/soot_models/MomentSootModel_Base.cpp
-        sootlib/soot_models/SootModel_LOGN.h
-        sootlib/soot_models/SootModel_LOGN.cpp
-        sootlib/soot_models/SootModel_MOMIC.h
-        sootlib/soot_models/SootModel_MOMIC.cpp
-        sootlib/soot_models/SootModel_MONO.h
-        sootlib/soot_models/SootModel_MONO.cpp
-        sootlib/soot_models/SootModel_QMOM.h
-        sootlib/soot_models/SootModel_QMOM.cpp
-        sootlib/soot_models/SootModel_SECT.h
-        sootlib/soot_models/SootModel_SECT.cpp)
+        sootlib/soot_models/moment/MomentSootModel_Base.h
+        sootlib/soot_models/moment/MomentSootModel_Base.cpp
+        sootlib/soot_models/moment/SootModel_LOGN.h
+        sootlib/soot_models/moment/SootModel_LOGN.cpp
+        sootlib/soot_models/moment/SootModel_MOMIC.h
+        sootlib/soot_models/moment/SootModel_MOMIC.cpp
+        sootlib/soot_models/moment/SootModel_MONO.h
+        sootlib/soot_models/moment/SootModel_MONO.cpp
+        sootlib/soot_models/moment/SootModel_QMOM.h
+        sootlib/soot_models/moment/SootModel_QMOM.cpp
+        sootlib/soot_models/bin/SootModel_SECT.h
+        sootlib/soot_models/bin/SootModel_SECT.cpp)
 
 set(STATE_SRC_FILES
-        sootlib/state/GasState.h
-        sootlib/state/GasState.cpp
-        sootlib/state/MomentSootState.h
-        sootlib/state/MomentSootState.cpp)
+        sootlib/state/gas/GasState.h
+        sootlib/state/gas/GasState.cpp
+        sootlib/state/soot/BaseSootState.h
+        sootlib/state/soot/BaseSootState.cpp
+        sootlib/state/soot/MomentSootState.h
+        sootlib/state/soot/MomentSootState.cpp
+        sootlib/state/soot/BinSootState.h
+        sootlib/state/soot/BinSootState.cpp)
 
 set(SRC_FILES
         sootlib/MomentSootModel.h
-        sootlib/SootModelFactory.h
-        sootlib/SootModelFactory.cpp
-        sootlib/static.h)
+        sootlib/MomentSootModelFactory.h
+        sootlib/MomentSootModelFactory.cpp
+        sootlib/static.h
+        sootlib/SootSourceTerms.h)
 
 # ---- optionally include cantera comaptability files ----
 

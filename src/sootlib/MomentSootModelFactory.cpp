@@ -1,25 +1,25 @@
-#include "SootModelFactory.h"
-void soot::SootModelFactory::setModel(soot::Model model)
+#include "MomentSootModelFactory.h"
+void soot::MomentSootModelFactory::setModel(soot::MomentModel model)
 {
 	this->model = model;
 }
-void soot::SootModelFactory::setNucleationMechanism(soot::NucleationMechanism mechanism)
+void soot::MomentSootModelFactory::setNucleationMechanism(soot::NucleationMechanism mechanism)
 {
 	nucleationMechanism = mechanism;
 }
-void soot::SootModelFactory::setGrowthMechanism(soot::GrowthMechanism mechanism)
+void soot::MomentSootModelFactory::setGrowthMechanism(soot::GrowthMechanism mechanism)
 {
 	growthMechanism = mechanism;
 }
-void soot::SootModelFactory::setOxidationMechanism(soot::OxidationMechanism mechanism)
+void soot::MomentSootModelFactory::setOxidationMechanism(soot::OxidationMechanism mechanism)
 {
 	oxidationMechanism = mechanism;
 }
-void soot::SootModelFactory::setCoagulationMechanism(soot::CoagulationMechanism mechanism)
+void soot::MomentSootModelFactory::setCoagulationMechanism(soot::CoagulationMechanism mechanism)
 {
 	coagulationMechanism = mechanism;
 }
-soot::MomentSootModel* soot::SootModelFactory::getModel() const
+soot::MomentSootModel* soot::MomentSootModelFactory::getModel() const
 {
 	/* create helper models */
 	std::unique_ptr<CoagulationModel> cm;
@@ -105,35 +105,33 @@ soot::MomentSootModel* soot::SootModelFactory::getModel() const
 	/* create and return model ptr */
 	switch (model)
 	{
-		case Model::MONO:
+		case MomentModel::MONO:
 			return SootModel_MONO::getInstance(std::move(cm),
 									  std::move(gm),
 									  std::move(nm),
 									  std::move(om),
 									  numSootVars);
-//		case Model::LOGN:
+//		case MomentModel::LOGN:
 //			return
-//		case Model::MOMIC:
+//		case MomentModel::MOMIC:
 //			return
-//		case Model::QMOM:
-//			return
-//		case Model::SECT:
+//		case MomentModel::QMOM:
 //			return
 		default:
 			throw std::domain_error("Bad soot model type");
 	}
 }
-std::unique_ptr<soot::MomentSootModel> soot::SootModelFactory::getModelUnique() const
+std::unique_ptr<soot::MomentSootModel> soot::MomentSootModelFactory::getModelUnique() const
 {
 	return std::unique_ptr<MomentSootModel>(getModel());
 }
-std::shared_ptr<soot::MomentSootModel> soot::SootModelFactory::getModelShared() const
+std::shared_ptr<soot::MomentSootModel> soot::MomentSootModelFactory::getModelShared() const
 {
 	return std::shared_ptr<MomentSootModel>(getModel());
 }
-soot::SootModelFactory::SootModelFactory()
+soot::MomentSootModelFactory::MomentSootModelFactory()
 {
-	model = Model::MONO;
+	model = MomentModel::MONO;
 	nucleationMechanism = NucleationMechanism::NONE;
 	growthMechanism = GrowthMechanism::NONE;
 	oxidationMechanism = OxidationMechanism::NONE;
@@ -141,7 +139,7 @@ soot::SootModelFactory::SootModelFactory()
 	// TODO need a better number to put here
 	numSootVars = 0;
 }
-void soot::SootModelFactory::setNumSootVars(size_t numSootVars)
+void soot::MomentSootModelFactory::setNumSootVars(size_t numSootVars)
 {
 	this->numSootVars = numSootVars;
 }

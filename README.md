@@ -41,9 +41,7 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 
 ### Short Term Design
 
-* Determine role of `sootvar` object from original code. If it's being used as a random collection of values that needs
-  to change.
-* Determine role of `MomentSootState` object
+* Make sure there are not major efficiency losses with accessing moments and bins from states
 * Determine desired Cantera compatability features, ex. conversion between IdealGasMix and GasState - IdealGasMix is 
   depreciated and it looks like modern Cantera usage is different than in old examples so desired functionality needs to
   be determined

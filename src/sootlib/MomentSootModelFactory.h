@@ -1,5 +1,5 @@
-#ifndef SOOTMODELFACTORY_H
-#define SOOTMODELFACTORY_H
+#ifndef MOMENTSOOTMODELFACTORY_H
+#define MOMENTSOOTMODELFACTORY_H
 
 #include <memory>
 
@@ -8,11 +8,10 @@
 
 /* soot models */
 #include "sootlib/MomentSootModel.h"
-#include "sootlib/soot_models/SootModel_LOGN.h"
-#include "sootlib/soot_models/SootModel_MOMIC.h"
-#include "sootlib/soot_models/SootModel_MONO.h"
-#include "sootlib/soot_models/SootModel_QMOM.h"
-#include "sootlib/soot_models/SootModel_SECT.h"
+#include "sootlib/soot_models/moment/SootModel_LOGN.h"
+#include "sootlib/soot_models/moment/SootModel_MOMIC.h"
+#include "sootlib/soot_models/moment/SootModel_MONO.h"
+#include "sootlib/soot_models/moment/SootModel_QMOM.h"
 
 /* coagulation models */
 #include "sootlib/coagulation_model/CoagulationModel.h"
@@ -45,12 +44,12 @@
 
 namespace soot
 {
-class SootModelFactory
+class MomentSootModelFactory
 {
 public:
-	SootModelFactory();
+	MomentSootModelFactory();
 
-	void setModel(Model model);
+	void setModel(MomentModel model);
 	void setNucleationMechanism(NucleationMechanism mechanism);
 	void setGrowthMechanism(GrowthMechanism mechanism);
 	void setOxidationMechanism(OxidationMechanism mechanism);
@@ -62,7 +61,7 @@ public:
 	[[nodiscard]] std::shared_ptr<MomentSootModel> getModelShared() const;
 
 private:
-	Model model;
+	MomentModel model;
 	NucleationMechanism nucleationMechanism;
 	GrowthMechanism growthMechanism;
 	OxidationMechanism oxidationMechanism;
@@ -71,4 +70,4 @@ private:
 };
 }
 
-#endif //SOOTMODELFACTORY_H
+#endif //MOMENTSOOTMODELFACTORY_H
