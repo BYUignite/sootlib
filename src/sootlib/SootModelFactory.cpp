@@ -19,7 +19,7 @@ void soot::SootModelFactory::setCoagulationMechanism(soot::CoagulationMechanism 
 {
 	coagulationMechanism = mechanism;
 }
-soot::SootModel* soot::SootModelFactory::getModel() const
+soot::MomentSootModel* soot::SootModelFactory::getModel() const
 {
 	/* create helper models */
 	std::unique_ptr<CoagulationModel> cm;
@@ -123,13 +123,13 @@ soot::SootModel* soot::SootModelFactory::getModel() const
 			throw std::domain_error("Bad soot model type");
 	}
 }
-std::unique_ptr<soot::SootModel> soot::SootModelFactory::getModelUnique() const
+std::unique_ptr<soot::MomentSootModel> soot::SootModelFactory::getModelUnique() const
 {
-	return std::unique_ptr<SootModel>(getModel());
+	return std::unique_ptr<MomentSootModel>(getModel());
 }
-std::shared_ptr<soot::SootModel> soot::SootModelFactory::getModelShared() const
+std::shared_ptr<soot::MomentSootModel> soot::SootModelFactory::getModelShared() const
 {
-	return std::shared_ptr<SootModel>(getModel());
+	return std::shared_ptr<MomentSootModel>(getModel());
 }
 soot::SootModelFactory::SootModelFactory()
 {

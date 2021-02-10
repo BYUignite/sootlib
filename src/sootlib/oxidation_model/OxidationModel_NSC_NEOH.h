@@ -2,7 +2,7 @@
 #define OXIDATIONMODEL_NSC_NEOH_H
 
 #include "sootlib/state/GasState.h"
-#include "sootlib/state/SootState.h"
+#include "sootlib/state/MomentSootState.h"
 #include "sootlib/oxidation_model/OxidationModel.h"
 
 namespace soot
@@ -11,7 +11,7 @@ class OxidationModel_NSC_NEOH : public OxidationModel
 {
 public:
 	// TODO implement
-	[[nodiscard]] double getOxidationRate(const GasState& gasState, const SootState& sootState) const override;
+	[[nodiscard]] double getOxidationRate(const GasState& gasState, const MomentSootState& sootState) const override;
 
 	~OxidationModel_NSC_NEOH() override = default;
 };

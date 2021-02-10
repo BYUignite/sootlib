@@ -1,5 +1,5 @@
 #include "GrowthModel_LL.h"
-double soot::GrowthModel_LL::getGrowthRate(const soot::GasState& gasState, const soot::SootState& sootState) const
+double soot::GrowthModel_LL::getGrowthRate(const soot::GasState& gasState, const soot::MomentSootState& sootState) const
 {
 	/**
 	 * Growth by Leung_Lindstedt (1991)
@@ -16,8 +16,8 @@ double soot::GrowthModel_LL::getGrowthRate(const soot::GasState& gasState, const
 	double rSoot = 0;
 
 	// TODO I am not sure these are correct
-	const double M0 = sootState.getSootVar(0);
-	const double M1 = sootState.getSootVar(1);
+	const double M0 = sootState.getMoment(0);
+	const double M1 = sootState.getMoment(1);
 
 	if (M0 > 0.0)
 		Am2m3 = M_PI * pow(std::abs(6 / (M_PI * sootState.getRho()) * M1 / M0), 2.0 / 3.0);

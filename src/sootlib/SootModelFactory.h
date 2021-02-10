@@ -7,7 +7,7 @@
 #include "sootlib/static.h"
 
 /* soot models */
-#include "sootlib/SootModel.h"
+#include "sootlib/MomentSootModel.h"
 #include "sootlib/soot_models/SootModel_LOGN.h"
 #include "sootlib/soot_models/SootModel_MOMIC.h"
 #include "sootlib/soot_models/SootModel_MONO.h"
@@ -57,9 +57,9 @@ public:
 	void setCoagulationMechanism(CoagulationMechanism mechanism);
 	void setNumSootVars(size_t numSootVars);
 
-	[[nodiscard]] SootModel* getModel() const;
-	[[nodiscard]] std::unique_ptr<SootModel> getModelUnique() const;
-	[[nodiscard]] std::shared_ptr<SootModel> getModelShared() const;
+	[[nodiscard]] MomentSootModel* getModel() const;
+	[[nodiscard]] std::unique_ptr<MomentSootModel> getModelUnique() const;
+	[[nodiscard]] std::shared_ptr<MomentSootModel> getModelShared() const;
 
 private:
 	Model model;

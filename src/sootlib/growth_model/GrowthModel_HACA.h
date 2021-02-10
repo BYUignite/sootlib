@@ -8,7 +8,7 @@ namespace soot
 class GrowthModel_HACA : public GrowthModel
 {
 public:
-	[[nodiscard]] double getGrowthRate(const GasState& gasState, const SootState& sootState) const override;
+	[[nodiscard]] double getGrowthRate(const GasState& gasState, const MomentSootState& sootState) const override;
 
 	~GrowthModel_HACA() override = default;
 };

@@ -1,16 +1,16 @@
-#ifndef SOOTSTATE_H
-#define SOOTSTATE_H
+#ifndef MOMENTSOOTSTATE_H
+#define MOMENTSOOTSTATE_H
 
 #include <sstream>
 #include <vector>
 
 namespace soot
 {
-class SootState
+class MomentSootState
 {
 public:
 	/* Constructor sets values to 0 */
-	SootState();
+	MomentSootState();
 
 	/* Getters and setters */
 	[[nodiscard]] double getRho() const;
@@ -21,9 +21,10 @@ public:
 	void setDimer(double dimer);
 	[[nodiscard]] double getMDimer() const;
 	void setMDimer(double mDimer);
-	void setNumSootVars(size_t n);
-	[[nodiscard]] double getSootVar(size_t i) const;
-	void setSootVar(size_t i, double value);
+	[[nodiscard]] size_t getNumMoments() const;
+	void setNumMoments(size_t n);
+	[[nodiscard]] double getMoment(size_t i) const;
+	void setMoment(size_t i, double value);
 
 private:
 	/* Soot properties */
@@ -41,10 +42,10 @@ private:
 	// dimer mass
 	// Units: UNKNOWN
 	double m_dimer;
-	// main soot quantity (soot moments or sections)
+	// soot moments
 	// Units: UNKNOWN
-	std::vector<double> sootVars;
+	std::vector<double> moments;
 };
 }
 
-#endif //SOOTSTATE_H
+#endif //MOMENTSOOTSTATE_H

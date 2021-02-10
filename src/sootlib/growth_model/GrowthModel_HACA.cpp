@@ -1,5 +1,5 @@
 #include "GrowthModel_HACA.h"
-double soot::GrowthModel_HACA::getGrowthRate(const soot::GasState& gasState, const soot::SootState& sootState) const
+double soot::GrowthModel_HACA::getGrowthRate(const soot::GasState& gasState, const soot::MomentSootState& sootState) const
 {
 	/**
 	 * Growth by HACA
@@ -17,8 +17,8 @@ double soot::GrowthModel_HACA::getGrowthRate(const soot::GasState& gasState, con
 	 */
 
 	// TODO these might not be right
-	const double M0 = sootState.getSootVar(0);
-	const double M1 = sootState.getSootVar(1);
+	const double M0 = sootState.getMoment(0);
+	const double M1 = sootState.getMoment(1);
 
 	const double cC2H2 = gasState.getC_C2H2();      // kmol/m3
 	const double cO2   = gasState.getC_O2();        // kmol/m3

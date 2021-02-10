@@ -1,9 +1,9 @@
 #include "OxidationModel_HACA.h"
 double soot::OxidationModel_HACA::getOxidationRate(const soot::GasState& gasState,
-                                                   const soot::SootState& sootState) const
+                                                   const soot::MomentSootState& sootState) const
 {
-	const double M0 = sootState.getSootVar(0);
-	const double M1 = sootState.getSootVar(1);
+	const double M0 = sootState.getMoment(0);
+	const double M1 = sootState.getMoment(1);
 
 	const double cC2H2 = gasState.getC_C2H2();      // kmol/m3
 	const double cO2   = gasState.getC_O2();        // kmol/m3

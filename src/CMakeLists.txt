@@ -42,8 +42,8 @@ set(OXIDATION_SRC_FILES
         sootlib/oxidation_model/OxidationModel_NSC_NEOH.cpp)
 
 set(SOOTMODELS_SRC_FILES
-        sootlib/soot_models/SootModel_Base.h
-        sootlib/soot_models/SootModel_Base.cpp
+        sootlib/soot_models/MomentSootModel_Base.h
+        sootlib/soot_models/MomentSootModel_Base.cpp
         sootlib/soot_models/SootModel_LOGN.h
         sootlib/soot_models/SootModel_LOGN.cpp
         sootlib/soot_models/SootModel_MOMIC.h
@@ -58,11 +58,11 @@ set(SOOTMODELS_SRC_FILES
 set(STATE_SRC_FILES
         sootlib/state/GasState.h
         sootlib/state/GasState.cpp
-        sootlib/state/SootState.h
-        sootlib/state/SootState.cpp)
+        sootlib/state/MomentSootState.h
+        sootlib/state/MomentSootState.cpp)
 
 set(SRC_FILES
-        sootlib/SootModel.h
+        sootlib/MomentSootModel.h
         sootlib/SootModelFactory.h
         sootlib/SootModelFactory.cpp
         sootlib/static.h)

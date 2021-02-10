@@ -2,14 +2,14 @@
 #define NUCLEATIONMODEL_H
 
 #include "sootlib/state/GasState.h"
-#include "sootlib/state/SootState.h"
+#include "sootlib/state/MomentSootState.h"
 
 namespace soot
 {
 class NucleationModel
 {
 public:
-	[[nodiscard]] virtual double getNucleationRate(const GasState& gasState, const SootState& sootState) const = 0;
+	[[nodiscard]] virtual double getNucleationRate(const GasState& gasState, const MomentSootState& sootState) const = 0;
 
 	virtual ~NucleationModel() = default;
 };

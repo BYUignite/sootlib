@@ -2,7 +2,7 @@
 #define TESTTOOLS_H
 
 #include "sootlib/state/GasState.h"
-#include "sootlib/state/SootState.h"
+#include "sootlib/state/MomentSootState.h"
 
 class TestTools
 {

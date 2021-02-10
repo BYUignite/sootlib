@@ -1,6 +1,6 @@
 #include "OxidationModel_NSC_NEOH.h"
 double soot::OxidationModel_NSC_NEOH::getOxidationRate(const soot::GasState& gasState,
-                                                       const soot::SootState& sootState) const
+                                                       const soot::MomentSootState& sootState) const
 {
 	const double pO2_atm = gasState.getP_O2() / 101325.0; // partial pressure of O2 (atm)
 	const double pOH_atm = gasState.getP_OH() / 101325.0; // partial pressure of OH (atm)

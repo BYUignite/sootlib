@@ -1,6 +1,6 @@
 #include "GrowthModel_LIN.h"
 
-double soot::GrowthModel_LIN::getGrowthRate(const GasState& gasState, const SootState& sootState) const
+double soot::GrowthModel_LIN::getGrowthRate(const GasState& gasState, const MomentSootState& sootState) const
 {
 	/**
 	 * Nucleation by Leung_Lindstedt (1991)
