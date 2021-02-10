@@ -4,11 +4,11 @@ soot::SootModel_MONO::SootModel_MONO(std::unique_ptr<CoagulationModel> coagulati
                                      std::unique_ptr<NucleationModel> nucleationModel,
                                      std::unique_ptr<OxidationModel> oxidationModel,
                                      size_t numSootVars)
-	: MomentSootModel_Base(std::move(coagulationModel),
-	                       std::move(growthModel),
-	                       std::move(nucleationModel),
-	                       std::move(oxidationModel),
-	                       numSootVars)
+	: SootModel_Base(std::move(coagulationModel),
+	                 std::move(growthModel),
+	                 std::move(nucleationModel),
+	                 std::move(oxidationModel),
+	                 numSootVars)
 {
 }
 soot::SootModel_MONO* soot::SootModel_MONO::getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
@@ -23,18 +23,7 @@ soot::SootModel_MONO* soot::SootModel_MONO::getInstance(std::unique_ptr<Coagulat
 	                          std::move(oxidationModel),
 	                          numSootVars);
 }
-std::vector<double> soot::SootModel_MONO::getSourceTerms(const soot::GasState& gasState, const MomentSootState& sootState)
+soot::SootSourceTerms soot::SootModel_MONO::getSourceTerms(const soot::GasState& gasState, const MomentSootState& sootState)
 {
-	auto sootMoments = std::vector<double>(numSootVars, 0.0);
-	auto sootSrcTerms = std::vector<double>(numSootVars, 0.0);
-
-	std::vector<double> particleSizeDistributionWeights;
-	std::vector<double> particleSizeDistributionAbscissas;
-
-	if (sootMoments.at(0) < 0.0)
-	{
-
-	}
-
-	return sootSrcTerms;
+	return SootSourceTerms({});
 }

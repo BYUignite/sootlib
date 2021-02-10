@@ -4,13 +4,13 @@
 #include <memory>
 
 #include "sootlib/SootSourceTerms.h"
+#include "sootlib/MomentSootModel.h"
 #include "sootlib/state/soot/MomentSootState.h"
 #include "sootlib/state/gas/GasState.h"
-#include "sootlib/soot_models/moment/MomentSootModel_Base.h"
 
 namespace soot
 {
-class SootModel_MONO : public MomentSootModel_Base
+class SootModel_MONO : public MomentSootModel
 {
 public:
 	[[nodiscard]] static SootModel_MONO* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
