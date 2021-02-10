@@ -18,7 +18,7 @@ public:
 	                                                std::unique_ptr<NucleationModel> nucleationModel,
 	                                                std::unique_ptr<OxidationModel> oxidationModel);
 
-	[[nodiscard]] SootSourceTerms getSourceTerms(const GasState& gasState, const MomentSootState& sootState) override;
+	[[nodiscard]] SootSourceTerms getSourceTerms(const GasState& gasState, const MomentSootState& sootState) const override;
 
 	~SootModel_MONO() override = default;
 

@@ -68,8 +68,12 @@ set(STATE_SRC_FILES
 set(SRC_FILES
         sootlib/MomentSootModel.h
         sootlib/BinSootModel.h
+        sootlib/SootModelFactory.h
+        sootlib/SootModelFactory.cpp
         sootlib/MomentSootModelFactory.h
         sootlib/MomentSootModelFactory.cpp
+        sootlib/BinSootModelFactory.h
+        sootlib/BinSootModelFactory.cpp
         sootlib/static.h
         sootlib/SootSourceTerms.h)
 

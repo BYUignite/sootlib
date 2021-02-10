@@ -17,7 +17,7 @@ public:
 	                std::unique_ptr<OxidationModel> oxidationModel) : SootModel_Base(std::move(coagulationModel), std::move(growthModel), std::move(nucleationModel), std::move(oxidationModel))
 	{}
 
-	[[nodiscard]] virtual SootSourceTerms getSourceTerms(const GasState& gasState, const MomentSootState& sootState) = 0;
+	[[nodiscard]] virtual SootSourceTerms getSourceTerms(const GasState& gasState, const MomentSootState& sootState) const = 0;
 
 	virtual ~MomentSootModel() = default;
 };
