@@ -54,7 +54,6 @@ public:
 	void setGrowthMechanism(GrowthMechanism mechanism);
 	void setOxidationMechanism(OxidationMechanism mechanism);
 	void setCoagulationMechanism(CoagulationMechanism mechanism);
-	void setNumSootVars(size_t numSootVars);
 
 	[[nodiscard]] MomentSootModel* getModel() const;
 	[[nodiscard]] std::unique_ptr<MomentSootModel> getModelUnique() const;
@@ -66,7 +65,6 @@ private:
 	GrowthMechanism growthMechanism;
 	OxidationMechanism oxidationMechanism;
 	CoagulationMechanism coagulationMechanism;
-	size_t numSootVars;
 };
 }
 

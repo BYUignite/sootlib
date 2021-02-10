@@ -109,8 +109,7 @@ soot::MomentSootModel* soot::MomentSootModelFactory::getModel() const
 			return SootModel_MONO::getInstance(std::move(cm),
 									  std::move(gm),
 									  std::move(nm),
-									  std::move(om),
-									  numSootVars);
+									  std::move(om));
 //		case MomentModel::LOGN:
 //			return
 //		case MomentModel::MOMIC:
@@ -136,10 +135,4 @@ soot::MomentSootModelFactory::MomentSootModelFactory()
 	growthMechanism = GrowthMechanism::NONE;
 	oxidationMechanism = OxidationMechanism::NONE;
 	coagulationMechanism = CoagulationMechanism::NONE;
-	// TODO need a better number to put here
-	numSootVars = 0;
-}
-void soot::MomentSootModelFactory::setNumSootVars(size_t numSootVars)
-{
-	this->numSootVars = numSootVars;
 }
