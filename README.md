@@ -59,6 +59,8 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 ### Untested
 
 * `GasState`
+* `BinSootState`
+* `MomentSootState`
 * `GrowthModel_LIN`
 * `GrowthModel_LL`
 * `GrowthModel_HACA`
@@ -76,11 +78,11 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 * `CoagulationModel_LL`
 * `NucleationModel_PAH`
 * `SootModel_MONO`
+* `SootModel_SECT`
 
 ### Missing Features
 
 * `SootModel_LOGN`
 * `SootModel_MOMIC`
 * `SootModel_QMOM`
-* `SootModel_SECT`
 * `cantera_compat`
