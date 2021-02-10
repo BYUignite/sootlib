@@ -23,8 +23,7 @@ protected:
 	SootModel_Base(std::unique_ptr<CoagulationModel> coagulationModel,
 	               std::unique_ptr<GrowthModel> growthModel,
 	               std::unique_ptr<NucleationModel> nucleationModel,
-	               std::unique_ptr<OxidationModel> oxidationModel,
-	               size_t numSootVars);
+	               std::unique_ptr<OxidationModel> oxidationModel);
 };
 }
 
