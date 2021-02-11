@@ -41,6 +41,8 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 
 ### Short Term Design
 
+* There is an issue with sootstates being fed to the models now that they are split into different types. Josh - will
+  evaluate if each model just uses bin or moment or if a general sootstate needs to be created
 * Make sure there are not major efficiency losses with accessing moments and bins from states
 * Determine desired Cantera compatability features, ex. conversion between IdealGasMix and GasState - IdealGasMix is 
   depreciated and it looks like modern Cantera usage is different than in old examples so desired functionality needs to

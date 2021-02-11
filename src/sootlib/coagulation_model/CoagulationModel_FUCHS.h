@@ -11,7 +11,7 @@ class CoagulationModel_FUCHS : public CoagulationModel
 {
 public:
 	// TODO implement
-	[[nodiscard]] double getCoagulationRate(const GasState& gasState, const MomentSootState& sootState) const override;
+	[[nodiscard]] double getCoagulationRate(const GasState& gasState, const MomentSootState& sootState, double m1, double m2) const override;
 
 	~CoagulationModel_FUCHS() override = default;
 };

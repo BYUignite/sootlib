@@ -9,7 +9,7 @@ namespace soot
 class CoagulationModel
 {
 public:
-	[[nodiscard]] virtual double getCoagulationRate(const GasState& gasState, const MomentSootState& sootState) const = 0;
+	[[nodiscard]] virtual double getCoagulationRate(const GasState& gasState, const MomentSootState& sootState, double m1, double m2) const = 0;
 
 	virtual ~CoagulationModel() = default;
 };
