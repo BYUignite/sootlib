@@ -2,6 +2,7 @@
 #define STATIC_H
 
 #include <vector>
+#include <cmath>
 
 namespace soot
 {
