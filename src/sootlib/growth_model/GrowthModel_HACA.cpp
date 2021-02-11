@@ -16,7 +16,6 @@ double soot::GrowthModel_HACA::getGrowthRate(const soot::GasState& gasState, con
 	 * @param M1       /input  local soot mass density (kg/m3)
 	 */
 
-	// TODO these might not be right
 	const double M0 = sootState.getMoment(0);
 	const double M1 = sootState.getMoment(1);
 

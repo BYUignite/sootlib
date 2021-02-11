@@ -72,12 +72,12 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 * `OxidationModel_LEE_NEOH`
 * `OxidationModel_NSC_NEOH`
 * `OxidationModel_HACA`
+* `CoagulationModel_LL`
+* `CoagulationModel_Frenk`
+* `CoagulationModel_Fuchs`
 
 ### Not Implemented
 
-* `CoagulationModel_Frenk`
-* `CoagulationModel_Fuchs`
-* `CoagulationModel_LL`
 * `NucleationModel_PAH`
 * `SootModel_MONO`
 * `SootModel_SECT`

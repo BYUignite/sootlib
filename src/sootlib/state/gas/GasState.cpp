@@ -204,3 +204,7 @@ double soot::GasState::getP_elementalH() const
 {
 	return elementalH_frac * MW / MW_H * P;
 }
+double soot::GasState::getGasMeanFreePath() const
+{
+	return mu / rho * sqrt(M_PI * MW / (2.0 * Rg * T));
+}

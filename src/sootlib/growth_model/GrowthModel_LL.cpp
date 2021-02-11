@@ -15,7 +15,6 @@ double soot::GrowthModel_LL::getGrowthRate(const soot::GasState& gasState, const
 	const double cC2H2 = gasState.getC_C2H2();
 	double rSoot = 0;
 
-	// TODO I am not sure these are correct
 	const double M0 = sootState.getMoment(0);
 	const double M1 = sootState.getMoment(1);
 

@@ -74,6 +74,8 @@ public:
 	[[nodiscard]] double getP_elementalC() const;
 	[[nodiscard]] double getP_elementalH() const;
 
+	[[nodiscard]] double getGasMeanFreePath() const;
+
 private:
 	/* Overall gas properties */
 
