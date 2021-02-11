@@ -1,9 +1,12 @@
 #ifndef NUCLEATIONMODEL_PAH_H
 #define NUCLEATIONMODEL_PAH_H
 
+#include <memory>
+
 #include "sootlib/state/gas/GasState.h"
 #include "sootlib/state/soot/MomentSootState.h"
 #include "sootlib/nucleation_model/NucleationModel.h"
+#include "sootlib/coagulation_model/CoagulationModel_FRENK.h"
 
 namespace soot
 {
