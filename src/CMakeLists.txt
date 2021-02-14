@@ -75,7 +75,7 @@ set(SRC_FILES
         sootlib/BinSootModelFactory.h
         sootlib/BinSootModelFactory.cpp
         sootlib/static.h
-        sootlib/SootSourceTerms.h)
+        sootlib/SourceTerms.h)
 
 # ---- optionally include cantera comaptability files ----
 
