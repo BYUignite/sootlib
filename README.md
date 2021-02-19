@@ -39,6 +39,9 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 
 # TODO
 
+[Here](https://docs.google.com/document/d/1oHtjIDLV2zkGqsUGPKtzTRXVuCF2Cdz00SIotQ4hKZ0/edit?usp=sharing) is a Google Doc
+with a rough timeline for the project
+
 ### Short Term Design
 
 * There is stuff with things like `set_m_dimer()` in the orignial code that is not accounted for here which means
