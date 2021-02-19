@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "sootlib/SootModelGenerator.h"
-#include "sootlib/BinSootModel.h"
+#include "SootModelGenerator.h"
+#include "sootlib/soot_models/bin/BinSootModel.h"
 #include "sootlib/soot_models/bin/SootModel_SECT.h"
 
 namespace soot

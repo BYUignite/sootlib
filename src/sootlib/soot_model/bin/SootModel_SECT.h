@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "sootlib/SourceTerms.h"
-#include "sootlib/BinSootModel.h"
+#include "BinSootModel.h"
 #include "sootlib/state/soot/BinSootState.h"
 #include "sootlib/state/gas/GasState.h"
 

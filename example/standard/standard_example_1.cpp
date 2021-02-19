@@ -1,4 +1,4 @@
-#include "sootlib/MomentSootModelGenerator.h"
+#include "sootlib/soot_model/generator/MomentSootModelGenerator.h"
 
 int main(int argc, char** argv)
 {

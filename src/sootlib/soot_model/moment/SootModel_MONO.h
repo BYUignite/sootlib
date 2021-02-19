@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "sootlib/SourceTerms.h"
-#include "sootlib/MomentSootModel.h"
+#include "MomentSootModel.h"
 #include "sootlib/state/soot/MomentSootState.h"
 #include "sootlib/state/gas/GasState.h"
 

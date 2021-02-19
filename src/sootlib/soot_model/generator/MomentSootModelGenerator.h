@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "sootlib/SootModelGenerator.h"
-#include "sootlib/MomentSootModel.h"
+#include "SootModelGenerator.h"
+#include "sootlib/soot_models/moment/MomentSootModel.h"
 
 namespace soot
 {

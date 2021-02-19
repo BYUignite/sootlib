@@ -42,18 +42,18 @@ set(OXIDATION_SRC_FILES
         sootlib/oxidation_model/OxidationModel_NSC_NEOH.cpp)
 
 set(SOOTMODELS_SRC_FILES
-        sootlib/soot_models/SootModel_Base.h
-        sootlib/soot_models/SootModel_Base.cpp
-        sootlib/soot_models/moment/SootModel_LOGN.h
-        sootlib/soot_models/moment/SootModel_LOGN.cpp
-        sootlib/soot_models/moment/SootModel_MOMIC.h
-        sootlib/soot_models/moment/SootModel_MOMIC.cpp
-        sootlib/soot_models/moment/SootModel_MONO.h
-        sootlib/soot_models/moment/SootModel_MONO.cpp
-        sootlib/soot_models/moment/SootModel_QMOM.h
-        sootlib/soot_models/moment/SootModel_QMOM.cpp
-        sootlib/soot_models/bin/SootModel_SECT.h
-        sootlib/soot_models/bin/SootModel_SECT.cpp)
+        sootlib/soot_model/SootModel_Base.h
+        sootlib/soot_model/SootModel_Base.cpp
+        sootlib/soot_model/moment/SootModel_LOGN.h
+        sootlib/soot_model/moment/SootModel_LOGN.cpp
+        sootlib/soot_model/moment/SootModel_MOMIC.h
+        sootlib/soot_model/moment/SootModel_MOMIC.cpp
+        sootlib/soot_model/moment/SootModel_MONO.h
+        sootlib/soot_model/moment/SootModel_MONO.cpp
+        sootlib/soot_model/moment/SootModel_QMOM.h
+        sootlib/soot_model/moment/SootModel_QMOM.cpp
+        sootlib/soot_model/bin/SootModel_SECT.h
+        sootlib/soot_model/bin/SootModel_SECT.cpp)
 
 set(STATE_SRC_FILES
         sootlib/state/gas/GasState.h
@@ -66,14 +66,14 @@ set(STATE_SRC_FILES
         sootlib/state/soot/BinSootState.cpp)
 
 set(SRC_FILES
-        sootlib/MomentSootModel.h
-        sootlib/BinSootModel.h
-        sootlib/SootModelGenerator.h
-        sootlib/SootModelGenerator.cpp
-        sootlib/MomentSootModelGenerator.h
-        sootlib/MomentSootModelGenerator.cpp
-        sootlib/BinSootModelGenerator.h
-        sootlib/BinSootModelGenerator.cpp
+        sootlib/soot_model/moment/MomentSootModel.h
+        sootlib/soot_model/bin/BinSootModel.h
+        sootlib/soot_model/generator/SootModelGenerator.h
+        sootlib/soot_model/generator/SootModelGenerator.cpp
+        sootlib/soot_model/generator/MomentSootModelGenerator.h
+        sootlib/soot_model/generator/MomentSootModelGenerator.cpp
+        sootlib/soot_model/generator/BinSootModelGenerator.h
+        sootlib/soot_model/generator/BinSootModelGenerator.cpp
         sootlib/static.h
         sootlib/SourceTerms.h)
 

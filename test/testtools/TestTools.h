@@ -6,10 +6,10 @@
 #include "sootlib/state/gas/GasState.h"
 #include "sootlib/state/soot/MomentSootState.h"
 #include "sootlib/state/soot/BinSootState.h"
-#include "sootlib/BinSootModel.h"
-#include "sootlib/BinSootModelGenerator.h"
-#include "sootlib/MomentSootModel.h"
-#include "sootlib/MomentSootModelGenerator.h"
+#include "sootlib/soot_models/bin/BinSootModel.h"
+#include "sootlib/soot_model/generator/BinSootModelGenerator.h"
+#include "sootlib/soot_models/moment/MomentSootModel.h"
+#include "sootlib/soot_model/generator/MomentSootModelGenerator.h"
 
 class TestTools
 {
