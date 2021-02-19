@@ -17,7 +17,10 @@ set(STANDARD_TESTS
         NucleationModel_LIN
         GrowthModel_LL
         GrowthModel_LIN
-        GrowthModel_HACA)
+        GrowthModel_HACA
+        CoagulationModel_FRENK
+        CoagulationModel_FUCHS
+        CoagulationModel_LL)
 
 set(TEST_LIBS
         ${GTEST_LIBS}

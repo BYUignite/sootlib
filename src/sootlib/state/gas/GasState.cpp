@@ -208,3 +208,45 @@ double soot::GasState::getGasMeanFreePath() const
 {
 	return mu / rho * sqrt(M_PI * MW / (2.0 * Rg * T));
 }
+soot::GasComponent soot::GasState::getPAH(size_t n) const
+{
+	if (PAHs.count(n) == 0)
+		return {0, 0};
+	return PAHs.at(n);
+}
+double soot::GasState::getPAHFrac(size_t n) const
+{
+	if (PAHs.count(n) == 0)
+		return 0;
+	return PAHs.at(n).y;
+}
+double soot::GasState::getPAHMW(size_t n) const
+{
+	if (PAHs.count(n) == 0)
+		return 0;
+	return PAHs.at(n).MW;
+}
+double soot::GasState::getC_PAH(size_t n) const
+{
+	if (PAHs.count(n) == 0)
+		return 0;
+	return rho * PAHs.at(n).y / PAHs.at(n).MW;
+}
+double soot::GasState::getP_PAH(size_t n) const
+{
+	if (PAHs.count(n) == 0)
+		return 0;
+	return PAHs.at(n).y * MW / PAHs.at(n).MW * P;
+}
+void soot::GasState::setPAH(size_t n, soot::GasComponent comp)
+{
+	PAHs[n] = comp;
+}
+void soot::GasState::setPAH(size_t n, double frac, double MW)
+{
+	PAHs[n] = {frac, MW};
+}
+size_t soot::GasState::getNumPAH() const
+{
+	return PAHs.size();
+}
