@@ -10,7 +10,7 @@ namespace soot
 class CoagulationModel_NONE : public CoagulationModel
 {
 public:
-	[[nodiscard]] double getCoagulationRate(const GasState& gasState, const MomentSootState& sootState) const override
+	[[nodiscard]] double getCoagulationRate(const GasState& gasState, const MomentSootState& sootState, double m1, double m2) const override
 	{
 		return 0.0;
 	}

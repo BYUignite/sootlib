@@ -4,12 +4,10 @@
 
 #include "TestTools.h"
 
-#include "sootlib/growth_model/GrowthModel_NONE.h"
-
 TEST (GrowthModel_NONE_TEST, basic_test)
 {
 	const soot::GasState gasState = TestTools::getBlankGasState();
-	const soot::SootState sootState = TestTools::getBlankSootState();
+	const soot::MomentSootState sootState = TestTools::getBlankMomentSootState();
 
 	const double expectedValue = 0.0;
 	std::unique_ptr<soot::GrowthModel> model = std::make_unique<soot::GrowthModel_NONE>();
