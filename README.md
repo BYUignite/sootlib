@@ -56,7 +56,7 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 
 ### Broken
 
-* Building tests is broken on Mac (M1 and x86)
+* Nothing ATM
 
 ### Untested
 

@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD 17)
 option(BUILD_CANTERA_COMPAT "Build Cantera compatability" OFF)
 
 # ---- option to build tests ----
-option(BUILD_TESTS "Build sootlib tests" OFF)
+option(BUILD_TESTS "Build sootlib tests" ON)
 
 # ---- option to build examples ----
 option(BUILD_EXAMPLES "Build sootlib example" ON)
