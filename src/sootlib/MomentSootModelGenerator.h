@@ -1,17 +1,17 @@
-#ifndef MOMENTSOOTMODELFACTORY_H
-#define MOMENTSOOTMODELFACTORY_H
+#ifndef MOMENTSOOTMODELGENERATOR_H
+#define MOMENTSOOTMODELGENERATOR_H
 
 #include <memory>
 
-#include "sootlib/SootModelFactory.h"
+#include "sootlib/SootModelGenerator.h"
 #include "sootlib/MomentSootModel.h"
 
 namespace soot
 {
-class MomentSootModelFactory : public SootModelFactory
+class MomentSootModelGenerator : public SootModelGenerator
 {
 public:
-	MomentSootModelFactory();
+	MomentSootModelGenerator();
 
 	void setModel(MomentModel model);
 
@@ -24,4 +24,4 @@ private:
 };
 }
 
-#endif //MOMENTSOOTMODELFACTORY_H
+#endif //MOMENTSOOTMODELGENERATOR_H

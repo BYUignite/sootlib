@@ -1,8 +1,8 @@
-#include "sootlib/MomentSootModelFactory.h"
+#include "sootlib/MomentSootModelGenerator.h"
 
 int main(int argc, char** argv)
 {
-	auto factory = soot::MomentSootModelFactory();
+	auto factory = soot::MomentSootModelGenerator();
 
 	auto sootModel_1 = factory.getModelUnique();
 

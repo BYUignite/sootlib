@@ -41,7 +41,7 @@
 
 namespace soot
 {
-class SootModelFactory
+class SootModelGenerator
 {
 public:
 	void setNucleationMechanism(NucleationMechanism mechanism);
@@ -50,7 +50,7 @@ public:
 	void setCoagulationMechanism(CoagulationMechanism mechanism);
 
 protected:
-	SootModelFactory();
+	SootModelGenerator();
 
 	NucleationMechanism nucleationMechanism;
 	GrowthMechanism growthMechanism;

@@ -1,13 +1,13 @@
-#include "BinSootModelFactory.h"
-soot::BinSootModelFactory::BinSootModelFactory()
+#include "BinSootModelGenerator.h"
+soot::BinSootModelGenerator::BinSootModelGenerator()
 {
 	model = BinModel::SECT;
 }
-void soot::BinSootModelFactory::setModel(soot::BinModel model)
+void soot::BinSootModelGenerator::setModel(soot::BinModel model)
 {
 	this->model = model;
 }
-soot::BinSootModel* soot::BinSootModelFactory::getModel() const
+soot::BinSootModel* soot::BinSootModelGenerator::getModel() const
 {
 	/* create helper models */
 	std::unique_ptr<CoagulationModel> cm;
@@ -26,11 +26,11 @@ soot::BinSootModel* soot::BinSootModelFactory::getModel() const
 			throw std::domain_error("Bad soot model type");
 	}
 }
-std::unique_ptr<soot::BinSootModel> soot::BinSootModelFactory::getModelUnique() const
+std::unique_ptr<soot::BinSootModel> soot::BinSootModelGenerator::getModelUnique() const
 {
 	return std::unique_ptr<BinSootModel>(getModel());
 }
-std::shared_ptr<soot::BinSootModel> soot::BinSootModelFactory::getModelShared() const
+std::shared_ptr<soot::BinSootModel> soot::BinSootModelGenerator::getModelShared() const
 {
 	return std::shared_ptr<BinSootModel>(getModel());
 }

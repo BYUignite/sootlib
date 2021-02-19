@@ -1,18 +1,18 @@
-#ifndef BINSOOTMODELFACTORY_H
-#define BINSOOTMODELFACTORY_H
+#ifndef BINSOOTMODELGENERATOR_H
+#define BINSOOTMODELGENERATOR_H
 
 #include <memory>
 
-#include "sootlib/SootModelFactory.h"
+#include "sootlib/SootModelGenerator.h"
 #include "sootlib/BinSootModel.h"
 #include "sootlib/soot_models/bin/SootModel_SECT.h"
 
 namespace soot
 {
-class BinSootModelFactory : public SootModelFactory
+class BinSootModelGenerator : public SootModelGenerator
 {
 public:
-	BinSootModelFactory();
+	BinSootModelGenerator();
 
 	void setModel(BinModel model);
 
@@ -25,4 +25,4 @@ private:
 };
 }
 
-#endif //BINSOOTMODELFACTORY_H
+#endif //BINSOOTMODELGENERATOR_H
