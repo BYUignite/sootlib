@@ -23,6 +23,7 @@ In the top level `CMakeLists.txt` you can enable/disable `BUILD_CANTERA_COMPAT`.
 
 In the top level `CMakeLists.txt` you can enable/disable `BUILD_TESTS`. This will:
 * Determine if gtest tests are built
+* To build tests on Mac you need Google Test installed system wide
 
 In the top level `CMakeLists.txt` you can enable/disable `BUILD_EXAMPLES`. This will:
 * Determine if examples are built
