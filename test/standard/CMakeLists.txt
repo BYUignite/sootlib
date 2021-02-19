@@ -4,7 +4,20 @@ set(STANDARD_TESTS
         CoagulationModel_NONE
         GrowthModel_NONE
         NucleationModel_NONE
-        OxidationModel_NONE)
+        OxidationModel_NONE
+        OxidationModel_LL
+        OxidationModel_HACA
+        OxidationModel_LEE_NAOH
+        OxidationModel_NSC_NEOH
+        GasState
+        BinSootState
+        MomentSootState
+        NucleationModel_PAH
+        NucleationModel_LL
+        NucleationModel_LIN
+        GrowthModel_LL
+        GrowthModel_LIN
+        GrowthModel_HACA)
 
 set(TEST_LIBS
         ${GTEST_LIBS}

@@ -1,1 +1,0 @@
-Given the arguments for this function are moments, I am going to leave it just using a MomentSootModel as its argument.
