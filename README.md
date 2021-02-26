@@ -45,6 +45,9 @@ with a rough timeline for the project
 
 ### Short Term Design
 
+* For now the gas species in `GasState` and `SourceTerms` are explicitly named. This is the fastest and safest option
+  but it would be best to support unlimited gas species. This would have to be done with some kind of map that would not
+  have very safe access.
 * There is stuff with things like `set_m_dimer()` in the orignial code that is not accounted for here which means
   `NucleationModel_PAH` cannot be implemnted yet
 * Make sure there are not major efficiency losses with accessing moments and bins from states
