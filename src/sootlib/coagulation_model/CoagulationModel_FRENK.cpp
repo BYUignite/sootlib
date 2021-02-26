@@ -4,10 +4,10 @@ double soot::CoagulationModel_FRENK::getCoagulationRate(const soot::GasState& ga
                                                         double m1,
                                                         double m2) const
 {
-	const double Dp1 = pow(6.0 * abs(m1) / M_PI / sootState.getRho(), 1.0 / 3.0);
-	const double Dp2 = pow(6.0 * abs(m2) / M_PI / sootState.getRho(), 1.0 / 3.0);
+	const double Dp1 = pow(6.0 * std::abs(m1) / M_PI / sootState.getRho(), 1.0 / 3.0);
+	const double Dp2 = pow(6.0 * std::abs(m2) / M_PI / sootState.getRho(), 1.0 / 3.0);
 
-	const double m12 = abs(m1 * m2 / (m1 + m2));
+	const double m12 = std::abs(m1 * m2 / (m1 + m2));
 
 	const double beta_12_FM = eps_c * sqrt(M_PI * kb * gasState.getT() * 0.5 / m12) * pow(Dp1 + Dp2, 2.0);
 

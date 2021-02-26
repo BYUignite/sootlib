@@ -10,7 +10,6 @@ namespace soot
 class CoagulationModel_FRENK : public CoagulationModel
 {
 public:
-	// TODO implement
 	[[nodiscard]] double getCoagulationRate(const GasState& gasState, const MomentSootState& sootState, double m1, double m2) const override;
 
 	~CoagulationModel_FRENK() override = default;
