@@ -1,5 +1,5 @@
 #include "CoagulationModel_FRENK.h"
-double soot::CoagulationModel_FRENK::getCoagulationRate(const soot::GasState& gasState,
+double soot::CoagulationModel_FRENK::getCoagulationRate(const soot::State& gasState,
                                                         const soot::MomentSootState& sootState,
                                                         double m1,
                                                         double m2) const

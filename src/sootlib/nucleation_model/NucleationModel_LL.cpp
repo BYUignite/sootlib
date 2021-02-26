@@ -1,5 +1,5 @@
 #include "NucleationModel_LL.h"
-double soot::NucleationModel_LL::getNucleationRate(const soot::GasState& gasState,
+double soot::NucleationModel_LL::getNucleationRate(const soot::State& gasState,
                                                    const soot::MomentSootState& sootState,
                                                    const std::vector<double>& particleSizes,
                                                    const std::vector<double>& particleWeights) const

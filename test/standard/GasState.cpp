@@ -6,13 +6,13 @@
 
 TEST (GasState_TEST, init_test)
 {
-	auto gasState = soot::GasState();
+	auto gasState = soot::State();
 
 	const double expected_value = 0;
 
 	ASSERT_EQ (expected_value, gasState.getT());
 	ASSERT_EQ (expected_value, gasState.getP());
-	ASSERT_EQ (expected_value, gasState.getRho());
+	ASSERT_EQ (expected_value, gasState.getGasRho());
 	ASSERT_EQ (expected_value, gasState.getMw());
 	ASSERT_EQ (expected_value, gasState.getMu());
 

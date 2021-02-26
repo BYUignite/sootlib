@@ -1,5 +1,5 @@
 #include "GrowthModel_LL.h"
-double soot::GrowthModel_LL::getGrowthRate(const soot::GasState& gasState, const soot::MomentSootState& sootState) const
+double soot::GrowthModel_LL::getGrowthRate(const soot::State& gasState, const soot::MomentSootState& sootState) const
 {
 	/**
 	 * Growth by Leung_Lindstedt (1991)

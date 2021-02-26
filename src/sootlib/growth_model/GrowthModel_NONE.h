@@ -8,7 +8,7 @@ namespace soot
 class GrowthModel_NONE : public GrowthModel
 {
 public:
-	[[nodiscard]] double getGrowthRate(const GasState& gasState, const MomentSootState& sootState) const override
+	[[nodiscard]] double getGrowthRate(const State& gasState, const MomentSootState& sootState) const override
 	{
 		return 0.0;
 	}

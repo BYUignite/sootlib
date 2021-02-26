@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "sootlib/state/gas/GasState.h"
+#include "sootlib/state/gas/State.h"
 #include "sootlib/state/soot/MomentSootState.h"
 #include "sootlib/state/soot/BinSootState.h"
 #include "sootlib/soot_models/bin/BinSootModel.h"
@@ -14,9 +14,9 @@
 class TestTools
 {
 public:
-	[[nodiscard]] static soot::GasState getBlankGasState()
+	[[nodiscard]] static soot::State getBlankGasState()
 	{
-		return soot::GasState();
+		return soot::State();
 	}
 
 	[[nodiscard]] static soot::MomentSootState getBlankMomentSootState()

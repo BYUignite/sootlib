@@ -6,7 +6,7 @@
 
 TEST (OxidationModel_NONE_TEST, basic_test)
 {
-	const soot::GasState gasState = TestTools::getBlankGasState();
+	const soot::State gasState = TestTools::getBlankGasState();
 	const soot::MomentSootState sootState = TestTools::getBlankMomentSootState();
 
 	const double expectedValue = 0.0;

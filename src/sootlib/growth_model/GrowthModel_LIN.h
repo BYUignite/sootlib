@@ -5,7 +5,7 @@
 
 #include <sootlib/static.h>
 #include <sootlib/growth_model/GrowthModel.h>
-#include <sootlib/state/gas/GasState.h>
+#include <sootlib/state/gas/State.h>
 #include <sootlib/state/soot/MomentSootState.h>
 
 namespace soot
@@ -13,7 +13,7 @@ namespace soot
 class GrowthModel_LIN : public GrowthModel
 {
 public:
-	[[nodiscard]] double getGrowthRate(const GasState& gasState, const MomentSootState& sootState) const override;
+	[[nodiscard]] double getGrowthRate(const State& gasState, const MomentSootState& sootState) const override;
 
 	~GrowthModel_LIN() override = default;
 };

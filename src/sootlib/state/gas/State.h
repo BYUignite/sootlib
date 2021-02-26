@@ -1,7 +1,8 @@
-#ifndef GASSTATE_H
-#define GASSTATE_H
+#ifndef STATE_H
+#define STATE_H
 
 #include <map>
+#include <set>
 
 #include "sootlib/static.h"
 
@@ -17,19 +18,18 @@ struct GasComponent
 	double MW;
 };
 
-class GasState
+class State
 {
 public:
-	/* Constructor sets values to 0 */
-	GasState();
+	State() = default;
 
 	/* Getters and setters */
 	[[nodiscard]] double getT() const;
 	void setT(double t);
 	[[nodiscard]] double getP() const;
 	void setP(double p);
-	[[nodiscard]] double getRho() const;
-	void setRho(double rho);
+	[[nodiscard]] double getGasRho() const;
+	void setGasRho(double rho);
 	[[nodiscard]] double getMw() const;
 	void setMw(double mw);
 	[[nodiscard]] double getMu() const;
@@ -81,45 +81,67 @@ public:
 	[[nodiscard]] double getPAHMW(size_t n, double def=0) const;
 	[[nodiscard]] double getC_PAH(size_t n, double def=0) const;
 	[[nodiscard]] double getP_PAH(size_t n, double def=0) const;
+	[[nodiscard]] double getM_PAH(size_t n, double def=0) const;
+	[[nodiscard]] double getGammai(size_t n, double def=0) const;
+	[[nodiscard]] double getNi(size_t n, double def=0) const;
 	void setPAH(size_t n, GasComponent comp);
 	void setPAH(size_t n, double frac, double MW);
 	[[nodiscard]] size_t getNumPAH() const;
+	[[nodiscard]] const std::set<size_t>& getPAHSpecies() const;
 
 private:
 	/* Overall gas properties */
 
 	// temperature
 	// Units: K
-	double T;
+	double T = 0;
 	// pressure
 	// Units: Pa
-	double P;
+	double P = 0;
 	// density
 	// Units: kg/m3
-	double rho;
+	double gasRho = 0;
 	// mean molecular weight
 	// Units: kg/mol
-	double MW;
+	double MW = 0;
 	// coefficient of friction
 	// Units: kg/m*s
-	double mu;
+	double mu = 0;
 
 	/* Gas Species */
-	double C2H2_frac;
-	double O2_frac;
-	double H_frac;
-	double H2_frac;
-	double OH_frac;
-	double H2O_frac;
-	double CO_frac;
-	double elementalC_frac;
-	double elementalH_frac;
+	double C2H2_frac = 0;
+	double O2_frac = 0;
+	double H_frac = 0;
+	double H2_frac = 0;
+	double OH_frac = 0;
+	double H2O_frac = 0;
+	double CO_frac = 0;
+	double elementalC_frac = 0;
+	double elementalH_frac = 0;
 
 	/* Polycyclic Aromatic Hydrocarbons */
 	// key: number of carbons in PAH
 	// value: GasState of that species
-	std::map<size_t, GasComponent> PAHs;
+	std::map<size_t, GasComponent> PAHdata;
+	std::set<size_t> PAHspecies;
+
+	double sootRho = 0;
+	double cMin = 0;
+	double dimer = 0;
+	double mDimer = 0;
+	double wdotD = 0;
+	bool goodMDimerValue = true;
+	bool goodDimerValue = true;
+	void calculateDimer();
+
+	// TODO these don't quite replicate the functionality in set_m_dimer and set_Ndimer yet
+	[[nodiscard]] double getSootRho() const;
+	void setSootRho(double rho);
+	[[nodiscard]] double getCMin() const;
+	[[nodiscard]] double getDimer() const;
+	[[nodiscard]] double getMDimer();
+	[[nodiscard]] double getWDotD();
 };
 }
 
-#endif //GASSTATE_H
+#endif //STATE_H

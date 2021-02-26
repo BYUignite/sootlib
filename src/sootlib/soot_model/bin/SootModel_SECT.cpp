@@ -9,7 +9,7 @@ soot::SootModel_SECT* soot::SootModel_SECT::getInstance(std::unique_ptr<Coagulat
 	                          std::move(nucleationModel),
 	                          std::move(oxidationModel));
 }
-soot::SourceTerms soot::SootModel_SECT::getSourceTerms(const soot::GasState& gasState,
+soot::SourceTerms soot::SootModel_SECT::getSourceTerms(const soot::State& gasState,
                                                        const soot::BinSootState& binSootState) const
 {
 	return SourceTerms({}, {});

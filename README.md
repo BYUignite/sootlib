@@ -45,13 +45,13 @@ with a rough timeline for the project
 
 ### Short Term Design
 
-* For now the gas species in `GasState` and `SourceTerms` are explicitly named. This is the fastest and safest option
+* For now the gas species in `State` and `SourceTerms` are explicitly named. This is the fastest and safest option
   but it would be best to support unlimited gas species. This would have to be done with some kind of map that would not
   have very safe access.
 * There is stuff with things like `set_m_dimer()` in the orignial code that is not accounted for here which means
   `NucleationModel_PAH` cannot be implemnted yet
 * Make sure there are not major efficiency losses with accessing moments and bins from states
-* Determine desired Cantera compatability features, ex. conversion between IdealGasMix and GasState - IdealGasMix is 
+* Determine desired Cantera compatability features, ex. conversion between IdealGasMix and State - IdealGasMix is 
   depreciated and it looks like modern Cantera usage is different than in old examples so desired functionality needs to
   be determined
 * Write script/guide for running tests once they're built
@@ -67,7 +67,7 @@ with a rough timeline for the project
 
 ### Untested
 
-* `GasState`
+* `State`
 * `BinSootState`
 * `MomentSootState`
 * `GrowthModel_LIN`

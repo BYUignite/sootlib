@@ -1,7 +1,7 @@
 #ifndef OXIDATIONMODEL_HACA_H
 #define OXIDATIONMODEL_HACA_H
 
-#include "sootlib/state/gas/GasState.h"
+#include "sootlib/state/gas/State.h"
 #include "sootlib/state/soot/MomentSootState.h"
 #include "sootlib/oxidation_model/OxidationModel.h"
 
@@ -11,7 +11,7 @@ class OxidationModel_HACA : public OxidationModel
 {
 public:
 	// TODO implement
-	[[nodiscard]] double getOxidationRate(const GasState& gasState, const MomentSootState& sootState) const override;
+	[[nodiscard]] double getOxidationRate(const State& gasState, const MomentSootState& sootState) const override;
 
 	~OxidationModel_HACA() override = default;
 };

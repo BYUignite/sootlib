@@ -6,7 +6,7 @@
 #include "sootlib/SourceTerms.h"
 #include "MomentSootModel.h"
 #include "sootlib/state/soot/MomentSootState.h"
-#include "sootlib/state/gas/GasState.h"
+#include "sootlib/state/gas/State.h"
 
 namespace soot
 {
@@ -18,7 +18,7 @@ public:
 	                                                std::unique_ptr<NucleationModel> nucleationModel,
 	                                                std::unique_ptr<OxidationModel> oxidationModel);
 
-	[[nodiscard]] SourceTerms getSourceTerms(const GasState& gasState, const MomentSootState& sootState) const override;
+	[[nodiscard]] SourceTerms getSourceTerms(const State& gasState, const MomentSootState& sootState) const override;
 
 	~SootModel_MONO() override = default;
 

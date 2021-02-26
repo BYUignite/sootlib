@@ -57,8 +57,8 @@ set(SOOTMODELS_SRC_FILES
         sootlib/soot_model/bin/SootModel_SECT.cpp)
 
 set(STATE_SRC_FILES
-        sootlib/state/gas/GasState.h
-        sootlib/state/gas/GasState.cpp
+        sootlib/state/gas/State.h
+        sootlib/state/gas/State.cpp
         sootlib/state/soot/BaseSootState.h
         sootlib/state/soot/BaseSootState.cpp
         sootlib/state/soot/MomentSootState.h

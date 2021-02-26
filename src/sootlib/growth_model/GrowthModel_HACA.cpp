@@ -1,5 +1,5 @@
 #include "GrowthModel_HACA.h"
-double soot::GrowthModel_HACA::getGrowthRate(const soot::GasState& gasState, const soot::MomentSootState& sootState) const
+double soot::GrowthModel_HACA::getGrowthRate(const soot::State& gasState, const soot::MomentSootState& sootState) const
 {
 	/**
 	 * Growth by HACA
@@ -40,7 +40,7 @@ double soot::GrowthModel_HACA::getGrowthRate(const soot::GasState& gasState, con
 	const double fR3 = 2.0E13 * cH / 1000;
 	const double fR4 = 8.00E7 * pow(gasState.getT(), 1.56) * exp(-3.8 / RT) * cC2H2 / 1000;
 	const double fR5 = 2.2E12 * exp(-7.5 / RT) * cO2 / 1000;
-	const double fR6 = 1290.0 * 0.13 * gasState.getP() * (cOH / gasState.getRho() * MW_OH) / sqrt(gasState.getT());    // gamma = 0.13 from Neoh et al.
+	const double fR6 = 1290.0 * 0.13 * gasState.getP() * (cOH / gasState.getGasRho() * MW_OH) / sqrt(gasState.getT());    // gamma = 0.13 from Neoh et al.
 
 	//---------- Steady state calculation of chi for soot radical; see Frenklach 1990 pg. 1561
 	const double denom = rR1 + rR2 + fR3 + fR4 + fR5;

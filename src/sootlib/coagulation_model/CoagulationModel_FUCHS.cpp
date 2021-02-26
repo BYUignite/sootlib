@@ -1,5 +1,5 @@
 #include "CoagulationModel_FUCHS.h"
-double soot::CoagulationModel_FUCHS::getCoagulationRate(const soot::GasState& gasState,
+double soot::CoagulationModel_FUCHS::getCoagulationRate(const soot::State& gasState,
                                                         const soot::MomentSootState& sootState,
                                                         double m1,
                                                         double m2) const
