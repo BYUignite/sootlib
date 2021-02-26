@@ -11,10 +11,9 @@ class SourceTerms
 public:
 	/* Constructor */
 
-	explicit SourceTerms(std::vector<double> sootSourceTerms, std::vector<double> gasSourceTerms)
+	explicit SourceTerms(std::vector<double> sootSourceTerms = {})
 	{
 		this->sootSourceTerms = std::move(sootSourceTerms);
-		this->gasSourceTerms = std::move(gasSourceTerms);
 	}
 
 	/* Getters and setters */
@@ -109,15 +108,15 @@ private:
 	std::vector<double> sootSourceTerms;
 
 	/* Gas Source Terms */
-	double C2H2_src;
-	double O2_src;
-	double H_src;
-	double H2_src;
-	double OH_src;
-	double H2O_src;
-	double CO_src;
-	double elementalC_src;
-	double elementalH_src;
+	double C2H2_src = 0;
+	double O2_src = 0;
+	double H_src = 0;
+	double H2_src = 0;
+	double OH_src = 0;
+	double H2O_src = 0;
+	double CO_src = 0;
+	double elementalC_src = 0;
+	double elementalH_src = 0;
 };
 }
 
