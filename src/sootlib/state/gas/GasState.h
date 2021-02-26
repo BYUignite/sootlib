@@ -76,11 +76,11 @@ public:
 
 	[[nodiscard]] double getGasMeanFreePath() const;
 
-	[[nodiscard]] GasComponent getPAH(size_t n) const;
-	[[nodiscard]] double getPAHFrac(size_t n) const;
-	[[nodiscard]] double getPAHMW(size_t n) const;
-	[[nodiscard]] double getC_PAH(size_t n) const;
-	[[nodiscard]] double getP_PAH(size_t n) const;
+	[[nodiscard]] GasComponent getPAH(size_t n, GasComponent def={0, 0}) const;
+	[[nodiscard]] double getPAHFrac(size_t n, double def=0) const;
+	[[nodiscard]] double getPAHMW(size_t n, double def=0) const;
+	[[nodiscard]] double getC_PAH(size_t n, double def=0) const;
+	[[nodiscard]] double getP_PAH(size_t n, double def=0) const;
 	void setPAH(size_t n, GasComponent comp);
 	void setPAH(size_t n, double frac, double MW);
 	[[nodiscard]] size_t getNumPAH() const;

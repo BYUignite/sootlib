@@ -20,6 +20,7 @@ set(GROWTH_SRC_FILES
         sootlib/growth_model/GrowthModel_NONE.h)
 
 set(NUCLEATION_SRC_FILES
+        sootlib/nucleation_model/DimerFunctions.h
         sootlib/nucleation_model/NucleationModel.h
         sootlib/nucleation_model/NucleationModel_LIN.h
         sootlib/nucleation_model/NucleationModel_LIN.cpp

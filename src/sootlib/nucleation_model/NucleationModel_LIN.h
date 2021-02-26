@@ -10,7 +10,6 @@ namespace soot
 class NucleationModel_LIN : public NucleationModel
 {
 public:
-	// TODO implement
 	[[nodiscard]] double getNucleationRate(const GasState& gasState, const MomentSootState& sootState, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights) const override;
 
 	~NucleationModel_LIN() override = default;

@@ -208,34 +208,34 @@ double soot::GasState::getGasMeanFreePath() const
 {
 	return mu / rho * sqrt(M_PI * MW / (2.0 * Rg * T));
 }
-soot::GasComponent soot::GasState::getPAH(size_t n) const
+soot::GasComponent soot::GasState::getPAH(size_t n, GasComponent def) const
 {
 	if (PAHs.count(n) == 0)
-		return {0, 0};
+		return def;
 	return PAHs.at(n);
 }
-double soot::GasState::getPAHFrac(size_t n) const
+double soot::GasState::getPAHFrac(size_t n, double def) const
 {
 	if (PAHs.count(n) == 0)
-		return 0;
+		return def;
 	return PAHs.at(n).y;
 }
-double soot::GasState::getPAHMW(size_t n) const
+double soot::GasState::getPAHMW(size_t n, double def) const
 {
 	if (PAHs.count(n) == 0)
-		return 0;
+		return def;
 	return PAHs.at(n).MW;
 }
-double soot::GasState::getC_PAH(size_t n) const
+double soot::GasState::getC_PAH(size_t n, double def) const
 {
 	if (PAHs.count(n) == 0)
-		return 0;
+		return def;
 	return rho * PAHs.at(n).y / PAHs.at(n).MW;
 }
-double soot::GasState::getP_PAH(size_t n) const
+double soot::GasState::getP_PAH(size_t n, double def) const
 {
 	if (PAHs.count(n) == 0)
-		return 0;
+		return def;
 	return PAHs.at(n).y * MW / PAHs.at(n).MW * P;
 }
 void soot::GasState::setPAH(size_t n, soot::GasComponent comp)
