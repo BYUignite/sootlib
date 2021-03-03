@@ -12,11 +12,14 @@ namespace soot
 class SourceTerms
 {
 public:
-	/* Constructor */
+	/* Constructors */
 
-	explicit SourceTerms(std::vector<double> sootSourceTerms = {})
+	SourceTerms() = default;
+
+	explicit SourceTerms(std::vector<double> sootSourceTerms, std::map<GasSpecies, double> gasSourceTerms)
 	{
 		this->sootSourceTerms = std::move(sootSourceTerms);
+		this->gasSourceTerms = std::move(gasSourceTerms);
 	}
 
 	/* Getters and setters */
