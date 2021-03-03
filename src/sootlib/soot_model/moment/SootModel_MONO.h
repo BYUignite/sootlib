@@ -1,12 +1,7 @@
 #ifndef SOOTMODEL_MONO_H
 #define SOOTMODEL_MONO_H
 
-#include <memory>
-
-#include "sootlib/SourceTerms.h"
-#include "MomentSootModel.h"
-#include "sootlib/state/soot/MomentSootState.h"
-#include "sootlib/state/gas/State.h"
+#include "sootlib/soot_model/moment/MomentSootModel.h"
 
 namespace soot
 {
@@ -18,7 +13,7 @@ public:
 	                                                std::unique_ptr<NucleationModel> nucleationModel,
 	                                                std::unique_ptr<OxidationModel> oxidationModel);
 
-	[[nodiscard]] SourceTerms getSourceTerms(const State& gasState, const MomentSootState& sootState) const override;
+	[[nodiscard]] SourceTerms getSourceTerms(const MomentState& state) const override;
 
 	~SootModel_MONO() override = default;
 

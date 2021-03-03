@@ -1,23 +1,22 @@
 #include "CoagulationModel_FUCHS.h"
-double soot::CoagulationModel_FUCHS::getCoagulationRate(const soot::State& gasState,
-                                                        const soot::MomentSootState& sootState,
+double soot::CoagulationModel_FUCHS::getCoagulationRate(const MomentState& state,
                                                         double m1,
                                                         double m2) const
 {
-	const double Dp1 = pow(6.0 * abs(m1) / M_PI / sootState.getRho(), 1.0 / 3.0);
-	const double Dp2 = pow(6.0 * abs(m2) / M_PI / sootState.getRho(), 1.0 / 3.0);
+	const double Dp1 = pow(6.0 * std::abs(m1) / M_PI / state.getRhoSoot(), 1.0 / 3.0);
+	const double Dp2 = pow(6.0 * std::abs(m2) / M_PI / state.getRhoSoot(), 1.0 / 3.0);
 
-	const double c1 = sqrt(8.0 * kb * gasState.getT() / M_PI / m1);
-	const double c2 = sqrt(8.0 * kb * gasState.getT() / M_PI / m2);
+	const double c1 = sqrt(8.0 * kb * state.getT() / M_PI / m1);
+	const double c2 = sqrt(8.0 * kb * state.getT() / M_PI / m2);
 
-	const double Kn1 = 2.0 * gasState.getGasMeanFreePath() / Dp1;
-	const double Kn2 = 2.0 * gasState.getGasMeanFreePath() / Dp2;
+	const double Kn1 = 2.0 * state.getGasMeanFreePath() / Dp1;
+	const double Kn2 = 2.0 * state.getGasMeanFreePath() / Dp2;
 
 	const double Cc1 = 1 + Kn1 * (1.257 + 0.4 * exp(-1.1 / Kn1));
 	const double Cc2 = 1 + Kn2 * (1.257 + 0.4 * exp(-1.1 / Kn2));
 
-	const double D1 = kb * gasState.getT() * Cc1 / (3.0 * M_PI * gasState.getMu() * Dp1);
-	const double D2 = kb * gasState.getT() * Cc2 / (3.0 * M_PI * gasState.getMu() * Dp2);
+	const double D1 = kb * state.getT() * Cc1 / (3.0 * M_PI * state.getMuGas() * Dp1);
+	const double D2 = kb * state.getT() * Cc2 / (3.0 * M_PI * state.getMuGas() * Dp2);
 
 	const double l1 = 8.0 * D1 / M_PI / c1;
 	const double l2 = 8.0 * D2 / M_PI / c2;

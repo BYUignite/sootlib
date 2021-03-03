@@ -1,11 +1,10 @@
 #ifndef BINSOOTMODELGENERATOR_H
 #define BINSOOTMODELGENERATOR_H
 
-#include <memory>
-
 #include "SootModelGenerator.h"
-#include "sootlib/soot_models/bin/BinSootModel.h"
-#include "sootlib/soot_models/bin/SootModel_SECT.h"
+
+/* soot models */
+#include "sootlib/soot_model/bin/SootModel_SECT.h"
 
 namespace soot
 {

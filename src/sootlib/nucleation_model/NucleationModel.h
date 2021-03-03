@@ -3,15 +3,14 @@
 
 #include <vector>
 
-#include "sootlib/state/gas/State.h"
-#include "sootlib/state/soot/MomentSootState.h"
+#include "sootlib/state/MomentState.h"
 
 namespace soot
 {
 class NucleationModel
 {
 public:
-	[[nodiscard]] virtual double getNucleationRate(const State& gasState, const MomentSootState& sootState, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights) const = 0;
+	[[nodiscard]] virtual double getNucleationRate(MomentState& state, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights) const = 0;
 
 	virtual ~NucleationModel() = default;
 };

@@ -1,8 +1,11 @@
 #ifndef SOURCETERMS_H
 #define SOURCETERMS_H
 
+#include <map>
 #include <utility>
 #include <vector>
+
+#include "sootlib/static.h"
 
 namespace soot
 {
@@ -31,92 +34,43 @@ public:
 		return sootSourceTerms.size();
 	}
 
-	[[nodiscard]] double getC2H2Src() const
+	[[nodiscard]] double getGasSourceTerm(GasSpecies species, double def=0)
 	{
-		return C2H2_src;
+		if (gasSourceTerms.count(species) == 0)
+			return def;
+		return gasSourceTerms.at(species);
 	}
-	void setC2H2Src(double c2H2Src)
+	void setGasSourceTerm(GasSpecies species, double value)
 	{
-		C2H2_src = c2H2Src;
+		gasSourceTerms[species] = value;
 	}
-	[[nodiscard]] double getO2Src() const
+	[[nodiscard]] size_t getNumGasSourceTerms() const
 	{
-		return O2_src;
+		return gasSourceTerms.size();
 	}
-	void setO2Src(double o2Src)
+
+	/* Const iterators */
+
+	[[nodiscard]] std::vector<double>::const_iterator sootTermsBegin() const
 	{
-		O2_src = o2Src;
+		return sootSourceTerms.begin();
 	}
-	[[nodiscard]] double getHSrc() const
+	[[nodiscard]] std::vector<double>::const_iterator sootTermsEnd() const
 	{
-		return H_src;
+		return sootSourceTerms.end();
 	}
-	void setHSrc(double hSrc)
+	[[nodiscard]] std::map<GasSpecies, double>::const_iterator gasTermsBegin() const
 	{
-		H_src = hSrc;
+		return gasSourceTerms.begin();
 	}
-	[[nodiscard]] double getH2Src() const
+	[[nodiscard]] std::map<GasSpecies, double>::const_iterator gasTermsEnd() const
 	{
-		return H2_src;
-	}
-	void setH2Src(double h2Src)
-	{
-		H2_src = h2Src;
-	}
-	[[nodiscard]] double getOhSrc() const
-	{
-		return OH_src;
-	}
-	void setOhSrc(double ohSrc)
-	{
-		OH_src = ohSrc;
-	}
-	[[nodiscard]] double getH2OSrc() const
-	{
-		return H2O_src;
-	}
-	void setH2OSrc(double h2OSrc)
-	{
-		H2O_src = h2OSrc;
-	}
-	[[nodiscard]] double getCoSrc() const
-	{
-		return CO_src;
-	}
-	void setCoSrc(double coSrc)
-	{
-		CO_src = coSrc;
-	}
-	[[nodiscard]] double getElementalCSrc() const
-	{
-		return elementalC_src;
-	}
-	void setElementalCSrc(double elementalCSrc)
-	{
-		elementalC_src = elementalCSrc;
-	}
-	[[nodiscard]] double getElementalHSrc() const
-	{
-		return elementalH_src;
-	}
-	void setElementalHSrc(double elementalHSrc)
-	{
-		elementalH_src = elementalHSrc;
+		return gasSourceTerms.end();
 	}
 
 private:
 	std::vector<double> sootSourceTerms;
-
-	/* Gas Source Terms */
-	double C2H2_src = 0;
-	double O2_src = 0;
-	double H_src = 0;
-	double H2_src = 0;
-	double OH_src = 0;
-	double H2O_src = 0;
-	double CO_src = 0;
-	double elementalC_src = 0;
-	double elementalH_src = 0;
+	std::map<GasSpecies, double> gasSourceTerms;
 };
 }
 

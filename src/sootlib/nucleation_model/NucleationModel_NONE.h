@@ -1,8 +1,6 @@
 #ifndef NUCLEATIONMODEL_NONE_H
 #define NUCLEATIONMODEL_NONE_H
 
-#include "sootlib/state/gas/State.h"
-#include "sootlib/state/soot/MomentSootState.h"
 #include "sootlib/nucleation_model/NucleationModel.h"
 
 namespace soot
@@ -10,9 +8,9 @@ namespace soot
 class NucleationModel_NONE : public NucleationModel
 {
 public:
-	[[nodiscard]] double getNucleationRate(const State& gasState, const MomentSootState& sootState, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights) const override
+	[[nodiscard]] double getNucleationRate(MomentState& state, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights) const override
 	{
-		return 0.0;
+		return 0;
 	}
 
 	~NucleationModel_NONE() override = default;

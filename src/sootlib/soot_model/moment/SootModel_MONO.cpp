@@ -19,7 +19,7 @@ soot::SootModel_MONO* soot::SootModel_MONO::getInstance(std::unique_ptr<Coagulat
 	                          std::move(nucleationModel),
 	                          std::move(oxidationModel));
 }
-soot::SourceTerms soot::SootModel_MONO::getSourceTerms(const soot::State& gasState, const MomentSootState& sootState) const
+soot::SourceTerms soot::SootModel_MONO::getSourceTerms(const MomentState& state) const
 {
-	return SourceTerms({}, {});
+	return SourceTerms();
 }

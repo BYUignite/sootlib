@@ -4,12 +4,6 @@
 /* static variables */
 #include "sootlib/static.h"
 
-/* soot models */
-#include "sootlib/soot_models/moment/SootModel_LOGN.h"
-#include "sootlib/soot_models/moment/SootModel_MOMIC.h"
-#include "sootlib/soot_models/moment/SootModel_MONO.h"
-#include "sootlib/soot_models/moment/SootModel_QMOM.h"
-
 /* coagulation models */
 #include "sootlib/coagulation_model/CoagulationModel.h"
 #include "sootlib/coagulation_model/CoagulationModel_FRENK.h"

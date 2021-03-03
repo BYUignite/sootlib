@@ -1,15 +1,14 @@
 #ifndef GROWTHMODEL_H
 #define GROWTHMODEL_H
 
-#include <sootlib/state/gas/State.h>
-#include <sootlib/state/soot/MomentSootState.h>
+#include "sootlib/state/MomentState.h"
 
 namespace soot
 {
 class GrowthModel
 {
 public:
-	[[nodiscard]] virtual double getGrowthRate(const State& gasState, const MomentSootState& sootState) const = 0;
+	[[nodiscard]] virtual double getGrowthRate(const MomentState& state) const = 0;
 
 	virtual ~GrowthModel() = default;
 };

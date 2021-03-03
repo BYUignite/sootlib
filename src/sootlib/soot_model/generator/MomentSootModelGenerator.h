@@ -1,10 +1,13 @@
 #ifndef MOMENTSOOTMODELGENERATOR_H
 #define MOMENTSOOTMODELGENERATOR_H
 
-#include <memory>
-
 #include "SootModelGenerator.h"
-#include "sootlib/soot_models/moment/MomentSootModel.h"
+
+/* soot models */
+#include "sootlib/soot_model/moment/SootModel_LOGN.h"
+#include "sootlib/soot_model/moment/SootModel_MOMIC.h"
+#include "sootlib/soot_model/moment/SootModel_MONO.h"
+#include "sootlib/soot_model/moment/SootModel_QMOM.h"
 
 namespace soot
 {

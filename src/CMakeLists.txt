@@ -20,7 +20,6 @@ set(GROWTH_SRC_FILES
         sootlib/growth_model/GrowthModel_NONE.h)
 
 set(NUCLEATION_SRC_FILES
-        sootlib/nucleation_model/DimerFunctions.h
         sootlib/nucleation_model/NucleationModel.h
         sootlib/nucleation_model/NucleationModel_LIN.h
         sootlib/nucleation_model/NucleationModel_LIN.cpp
@@ -57,14 +56,12 @@ set(SOOTMODELS_SRC_FILES
         sootlib/soot_model/bin/SootModel_SECT.cpp)
 
 set(STATE_SRC_FILES
-        sootlib/state/gas/State.h
-        sootlib/state/gas/State.cpp
-        sootlib/state/soot/BaseSootState.h
-        sootlib/state/soot/BaseSootState.cpp
-        sootlib/state/soot/MomentSootState.h
-        sootlib/state/soot/MomentSootState.cpp
-        sootlib/state/soot/BinSootState.h
-        sootlib/state/soot/BinSootState.cpp)
+        sootlib/state/BaseState.h
+        sootlib/state/BaseState.cpp
+        sootlib/state/BinState.h
+        sootlib/state/BinState.cpp
+        sootlib/state/MomentState.h
+        sootlib/state/MomentState.cpp)
 
 set(SRC_FILES
         sootlib/soot_model/moment/MomentSootModel.h

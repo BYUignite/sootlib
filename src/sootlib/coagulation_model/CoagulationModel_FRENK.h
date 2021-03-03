@@ -1,8 +1,6 @@
 #ifndef COAGULATIONMODEL_FRENK_H
 #define COAGULATIONMODEL_FRENK_H
 
-#include "sootlib/state/gas/State.h"
-#include "sootlib/state/soot/MomentSootState.h"
 #include "sootlib/coagulation_model/CoagulationModel.h"
 
 namespace soot
@@ -10,7 +8,7 @@ namespace soot
 class CoagulationModel_FRENK : public CoagulationModel
 {
 public:
-	[[nodiscard]] double getCoagulationRate(const State& gasState, const MomentSootState& sootState, double m1, double m2) const override;
+	[[nodiscard]] double getCoagulationRate(const MomentState& state, double m1, double m2) const override;
 
 	~CoagulationModel_FRENK() override = default;
 };

@@ -1,8 +1,6 @@
 #ifndef OXIDATIONMODEL_LEE_NEOH_H
 #define OXIDATIONMODEL_LEE_NEOH_H
 
-#include "sootlib/state/gas/State.h"
-#include "sootlib/state/soot/MomentSootState.h"
 #include "sootlib/oxidation_model/OxidationModel.h"
 
 namespace soot
@@ -10,8 +8,7 @@ namespace soot
 class OxidationModel_LEE_NEOH : public OxidationModel
 {
 public:
-	// TODO implement
-	[[nodiscard]] double getOxidationRate(const State& gasState, const MomentSootState& sootState) const override;
+	[[nodiscard]] double getOxidationRate(const MomentState& state) const override;
 
 	~OxidationModel_LEE_NEOH() override = default;
 };

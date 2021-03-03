@@ -1,5 +1,5 @@
 #include "GrowthModel_LL.h"
-double soot::GrowthModel_LL::getGrowthRate(const soot::State& gasState, const soot::MomentSootState& sootState) const
+double soot::GrowthModel_LL::getGrowthRate(const MomentState& state) const
 {
 	/**
 	 * Growth by Leung_Lindstedt (1991)
@@ -14,11 +14,11 @@ double soot::GrowthModel_LL::getGrowthRate(const soot::State& gasState, const so
 	double Am2m3 = 0;
 	double rSoot = 0;
 
-	if (sootState.getMoment(0) > 0.0)
-		Am2m3 = M_PI * pow(std::abs(6 / (M_PI * sootState.getRho()) * sootState.getMoment(1) / sootState.getMoment(0)), 2.0 / 3.0);
+	if (state.getMoment(0) > 0.0)
+		Am2m3 = M_PI * pow(std::abs(6 / (M_PI * state.getRhoSoot()) * state.getMoment(1) / state.getMoment(0)), 2.0 / 3.0);
 
 	if (Am2m3 > 0.0)
-		rSoot = 0.6E4 * exp(-12100.0 / gasState.getT()) * gasState.getC_C2H2() / sqrt(Am2m3) * 2.0 * MW_C;
+		rSoot = 0.6E4 * exp(-12100.0 / state.getT()) * state.getGasSpeciesC(GasSpecies::C2H2) / sqrt(Am2m3) * 2.0 * MW_C;
 
 	return rSoot;
 }

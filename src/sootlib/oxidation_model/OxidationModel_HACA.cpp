@@ -1,32 +1,31 @@
 #include "OxidationModel_HACA.h"
-double soot::OxidationModel_HACA::getOxidationRate(const soot::State& gasState,
-                                                   const soot::MomentSootState& sootState) const
+double soot::OxidationModel_HACA::getOxidationRate(const MomentState& state) const
 {
-	const double M0 = sootState.getMoment(0);
-	const double M1 = sootState.getMoment(1);
+	const double M0 = state.getMoment(0);
+	const double M1 = state.getMoment(1);
 
-	const double cC2H2 = gasState.getC_C2H2();      // kmol/m3
-	const double cO2   = gasState.getC_O2();        // kmol/m3
-	const double cH    = gasState.getC_H();         // kmol/m3
-	const double cH2   = gasState.getC_H2();        // kmol/m3
-	const double cOH   = gasState.getC_OH();        // kmol/m3
-	const double cH2O  = gasState.getC_H2O();       // kmol/m3
+	const double cC2H2 = state.getGasSpeciesC(GasSpecies::C2H2);      // kmol/m3
+	const double cO2   = state.getGasSpeciesC(GasSpecies::O2);        // kmol/m3
+	const double cH    = state.getGasSpeciesC(GasSpecies::H);         // kmol/m3
+	const double cH2   = state.getGasSpeciesC(GasSpecies::H2);        // kmol/m3
+	const double cOH   = state.getGasSpeciesC(GasSpecies::OH);        // kmol/m3
+	const double cH2O  = state.getGasSpeciesC(GasSpecies::H2O);       // kmol/m3
 
 	//---------- calculate alpha, other constants
-	const double RT       = 1.9872036E-3 * gasState.getT();         // R (=) kcal/mol
+	const double RT       = 1.9872036E-3 * state.getT();         // R (=) kcal/mol
 	const double chi_soot = 2.3E15;                   // (=) sites/cm^2
-	const double a_param  = 33.167 - 0.0154 * gasState.getT();      // a parameter for calculating alpha
-	const double b_param  = -2.5786 + 0.00112 * gasState.getT();    // b parameter for calculating alpha
+	const double a_param  = 33.167 - 0.0154 * state.getT();      // a parameter for calculating alpha
+	const double b_param  = -2.5786 + 0.00112 * state.getT();    // b parameter for calculating alpha
 
 	//---------- calculate raw HACA reaction rates
 	const double fR1 = 4.2E13 * exp(-13.0 / RT) * cH / 1000;
 	const double rR1 = 3.9E12 * exp(-11.0 / RT) * cH2 / 1000;
-	const double fR2 = 1.0E10 * pow(gasState.getT(), 0.734) * exp(-1.43 / RT) * cOH / 1000;
-	const double rR2 = 3.68E8 * pow(gasState.getT(), 1.139) * exp(-17.1 / RT) * cH2O /1000;
+	const double fR2 = 1.0E10 * pow(state.getT(), 0.734) * exp(-1.43 / RT) * cOH / 1000;
+	const double rR2 = 3.68E8 * pow(state.getT(), 1.139) * exp(-17.1 / RT) * cH2O /1000;
 	const double fR3 = 2.0E13 * cH / 1000;
-	const double fR4 = 8.00E7 * pow(gasState.getT(), 1.56) * exp(-3.8 / RT) * cC2H2 / 1000;
+	const double fR4 = 8.00E7 * pow(state.getT(), 1.56) * exp(-3.8 / RT) * cC2H2 / 1000;
 	const double fR5 = 2.2E12 * exp(-7.5 / RT) * cO2 / 1000;
-	const double fR6 = 1290.0 * 0.13 * gasState.getP() * (cOH / gasState.getGasRho() * MW_OH) / sqrt(gasState.getT());    // gamma = 0.13 from Neoh et al.
+	const double fR6 = 1290.0 * 0.13 * state.getP() * (cOH / state.getRhoGas() * MW_OH) / sqrt(state.getT());    // gamma = 0.13 from Neoh et al.
 
 	//---------- Steady state calculation of chi for soot radical; see Frenklach 1990 pg. 1561
 	const double denom = rR1 + rR2 + fR3 + fR4 + fR5;
