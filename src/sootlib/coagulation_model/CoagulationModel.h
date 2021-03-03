@@ -3,7 +3,6 @@
 
 #include "sootlib/state/MomentState.h"
 
-
 namespace soot
 {
 class CoagulationModel

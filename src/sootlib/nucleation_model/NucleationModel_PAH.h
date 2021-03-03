@@ -11,7 +11,6 @@ namespace soot
 class NucleationModel_PAH : public NucleationModel
 {
 public:
-	// TODO implement
 	[[nodiscard]] double getNucleationRate(MomentState& state, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights) const override;
 
 	~NucleationModel_PAH() override = default;
