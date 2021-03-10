@@ -16,10 +16,13 @@ public:
 
 	SourceTerms() = default;
 
-	explicit SourceTerms(std::vector<double> sootSourceTerms, std::map<GasSpecies, double> gasSourceTerms)
+	explicit SourceTerms(std::vector<double> sootSourceTerms,
+					  std::map<GasSpecies, double> gasSourceTerms,
+					  std::map<size_t, double> PAHSourceTerms)
 	{
 		this->sootSourceTerms = std::move(sootSourceTerms);
 		this->gasSourceTerms = std::move(gasSourceTerms);
+		this->PAHSourceTerms = std::move(PAHSourceTerms);
 	}
 
 	/* Getters and setters */
@@ -52,6 +55,21 @@ public:
 		return gasSourceTerms.size();
 	}
 
+	[[nodiscard]] double getPAHSourceTerm(size_t n, double def=0)
+	{
+		if (PAHSourceTerms.count(n) == 0)
+			return def;
+		return PAHSourceTerms.at(n);
+	}
+	void setPAHSourceTerm(size_t n, double value)
+	{
+		PAHSourceTerms[n] = value;
+	}
+	[[nodiscard]] double getNumPAHSourceTerms()
+	{
+		return PAHSourceTerms.size();
+	}
+
 	/* Const iterators */
 
 	[[nodiscard]] std::vector<double>::const_iterator sootTermsBegin() const
@@ -70,10 +88,19 @@ public:
 	{
 		return gasSourceTerms.end();
 	}
+	[[nodiscard]] std::map<size_t, double>::const_iterator PAHTermsBegin() const
+	{
+		return PAHSourceTerms.begin();
+	}
+	[[nodiscard]] std::map<size_t, double>::const_iterator PAHTermsEnd() const
+	{
+		return PAHSourceTerms.end();
+	}
 
 private:
 	std::vector<double> sootSourceTerms;
 	std::map<GasSpecies, double> gasSourceTerms;
+	std::map<size_t, double> PAHSourceTerms;
 };
 }
 
