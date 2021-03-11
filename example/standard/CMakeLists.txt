@@ -2,7 +2,8 @@
 
 set(STANDARD_EXAMPLES
         simple_moment_example
-        simple_bin_example)
+        simple_bin_example
+        generator_example)
 
 foreach(EXAMPLE ${STANDARD_EXAMPLES})
     add_executable(${EXAMPLE} ${EXAMPLE}.cpp)
