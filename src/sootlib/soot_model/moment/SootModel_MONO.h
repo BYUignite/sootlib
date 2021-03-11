@@ -1,8 +1,6 @@
 #ifndef SOOTMODEL_MONO_H
 #define SOOTMODEL_MONO_H
 
-#include <vector>
-
 #include "sootlib/soot_model/moment/MomentSootModel.h"
 #include "sootlib/MassRateRatio.h"
 
@@ -15,10 +13,10 @@ public:
 	                                                std::unique_ptr<GrowthModel> growthModel,
 	                                                std::unique_ptr<NucleationModel> nucleationModel,
 	                                                std::unique_ptr<OxidationModel> oxidationModel,
-	                                                 CoagulationMechanism coagulationMechanism,
-	                                                 GrowthMechanism growthMechanism,
-	                                                 NucleationMechanism nucleationMechanism,
-	                                                 OxidationMechanism oxidationMechanism);
+	                                                CoagulationMechanism coagulationMechanism,
+	                                                GrowthMechanism growthMechanism,
+	                                                NucleationMechanism nucleationMechanism,
+	                                                OxidationMechanism oxidationMechanism);
 
 	[[nodiscard]] SourceTerms getSourceTerms(MomentState& state) const override;
 
@@ -29,10 +27,10 @@ private:
 				std::unique_ptr<GrowthModel> growthModel,
 				std::unique_ptr<NucleationModel> nucleationModel,
 				std::unique_ptr<OxidationModel> oxidationModel,
-				   CoagulationMechanism coagulationMechanism,
-				   GrowthMechanism growthMechanism,
-				   NucleationMechanism nucleationMechanism,
-				   OxidationMechanism oxidationMechanism);
+				CoagulationMechanism coagulationMechanism,
+				GrowthMechanism growthMechanism,
+				NucleationMechanism nucleationMechanism,
+				OxidationMechanism oxidationMechanism);
 };
 }
 

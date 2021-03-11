@@ -16,19 +16,40 @@ soot::MomentSootModel* soot::MomentSootModelGenerator::getModel() const
 	{
 		case MomentModel::MONO:
 			return SootModel_MONO::getInstance(std::move(cm),
-									  std::move(gm),
-									  std::move(nm),
-									  std::move(om),
-									  coagulationMechanism,
-									  growthMechanism,
-									  nucleationMechanism,
-									  oxidationMechanism);
-//		case MomentModel::LOGN:
-//			return
-//		case MomentModel::MOMIC:
-//			return
-//		case MomentModel::QMOM:
-//			return
+			                                   std::move(gm),
+			                                   std::move(nm),
+			                                   std::move(om),
+			                                   coagulationMechanism,
+			                                   growthMechanism,
+			                                   nucleationMechanism,
+			                                   oxidationMechanism);
+		case MomentModel::LOGN:
+			return SootModel_LOGN::getInstance(std::move(cm),
+			                                   std::move(gm),
+			                                   std::move(nm),
+			                                   std::move(om),
+			                                   coagulationMechanism,
+			                                   growthMechanism,
+			                                   nucleationMechanism,
+			                                   oxidationMechanism);
+		case MomentModel::MOMIC:
+			return SootModel_MOMIC::getInstance(std::move(cm),
+			                                    std::move(gm),
+			                                    std::move(nm),
+			                                    std::move(om),
+			                                    coagulationMechanism,
+			                                    growthMechanism,
+			                                    nucleationMechanism,
+			                                    oxidationMechanism);
+		case MomentModel::QMOM:
+			return SootModel_QMOM::getInstance(std::move(cm),
+			                                   std::move(gm),
+			                                   std::move(nm),
+			                                   std::move(om),
+			                                   coagulationMechanism,
+			                                   growthMechanism,
+			                                   nucleationMechanism,
+			                                   oxidationMechanism);
 		default:
 			throw std::domain_error("Bad soot model type");
 	}
