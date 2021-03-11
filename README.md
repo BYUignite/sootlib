@@ -1,7 +1,3 @@
-Josh's branch of sootlib
-
-this is not guarenteed to be stable at all and probably won't build sometimes
-
 # Build Requirments
 
 Sootlib requires C++17
@@ -45,36 +41,27 @@ with a rough timeline for the project
 
 ### Short Term Design
 
-* For now the gas species in `State` and `SourceTerms` are explicitly named. This is the fastest and safest option
-  but it would be best to support unlimited gas species. This would have to be done with some kind of map that would not
-  have very safe access.
-* There is stuff with things like `set_m_dimer()` in the orignial code that is not accounted for here which means
-  `NucleationModel_PAH` cannot be implemnted yet
-* Make sure there are not major efficiency losses with accessing moments and bins from states
-* Determine desired Cantera compatability features, ex. conversion between IdealGasMix and State - IdealGasMix is 
-  depreciated and it looks like modern Cantera usage is different than in old examples so desired functionality needs to
-  be determined
-* Write script/guide for running tests once they're built
+* The data structures should be in place for all of the models to be implemented
   
 ### Long Term Design
 
-* Docstrings are going to need to be updated
 * Optimized higher dimentional models
+* Determine needed state constructor / generator features
+* Determine needed cantera interface features
 
-### Broken
+### Broken / Not Building
 
 * Nothing ATM
 
 ### Untested
 
-* `State`
-* `BinSootState`
-* `MomentSootState`
+* `BaseState`
 * `GrowthModel_LIN`
 * `GrowthModel_LL`
 * `GrowthModel_HACA`
 * `NucleationModel_LIN`
 * `NucleationModel_LL`
+* `NucleationModel_PAH`
 * `OxidationModel_LL`
 * `OxidationModel_LEE_NEOH`
 * `OxidationModel_NSC_NEOH`
@@ -82,16 +69,15 @@ with a rough timeline for the project
 * `CoagulationModel_LL`
 * `CoagulationModel_Frenk`
 * `CoagulationModel_Fuchs`
+* `SootModel_MONO`
 
 ### Not Implemented
 
-* `NucleationModel_PAH`
-* `SootModel_MONO`
 * `SootModel_SECT`
-
-### Missing Features
-
 * `SootModel_LOGN`
 * `SootModel_MOMIC`
 * `SootModel_QMOM`
+
+### Missing Features
+
 * `cantera_compat`
