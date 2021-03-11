@@ -9,6 +9,8 @@ namespace soot
 class CoagulationModel_NONE : public CoagulationModel
 {
 public:
+	CoagulationModel_NONE() : CoagulationModel(CoagulationMechanism::NONE) {}
+
 	[[nodiscard]] double getCoagulationRate(const MomentState& state, double m1, double m2) const override
 	{
 		return 0;

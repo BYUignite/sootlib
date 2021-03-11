@@ -8,6 +8,8 @@ namespace soot
 class GrowthModel_LL : public GrowthModel
 {
 public:
+	GrowthModel_LL() : GrowthModel(GrowthMechanism::LL) {}
+
 	[[nodiscard]] double getGrowthRate(const MomentState& state) const override;
 
 	~GrowthModel_LL() override = default;

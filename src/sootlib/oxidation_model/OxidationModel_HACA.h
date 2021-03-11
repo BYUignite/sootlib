@@ -8,6 +8,8 @@ namespace soot
 class OxidationModel_HACA : public OxidationModel
 {
 public:
+	OxidationModel_HACA() : OxidationModel(OxidationMechanism::HACA) {}
+
 	[[nodiscard]] double getOxidationRate(const MomentState& state, MassRateRatio& ratio) const override;
 
 	~OxidationModel_HACA() override = default;

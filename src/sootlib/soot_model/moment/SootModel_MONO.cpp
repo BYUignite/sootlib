@@ -2,38 +2,22 @@
 soot::SootModel_MONO::SootModel_MONO(std::unique_ptr<CoagulationModel> coagulationModel,
                                      std::unique_ptr<GrowthModel> growthModel,
                                      std::unique_ptr<NucleationModel> nucleationModel,
-                                     std::unique_ptr<OxidationModel> oxidationModel,
-                                     CoagulationMechanism coagulationMechanism,
-                                     GrowthMechanism growthMechanism,
-                                     NucleationMechanism nucleationMechanism,
-                                     OxidationMechanism oxidationMechanism)
+                                     std::unique_ptr<OxidationModel> oxidationModel)
 	: MomentSootModel(std::move(coagulationModel),
 	                 std::move(growthModel),
 	                 std::move(nucleationModel),
-	                 std::move(oxidationModel),
-	                 coagulationMechanism,
-	                 growthMechanism,
-	                 nucleationMechanism,
-	                 oxidationMechanism)
+	                 std::move(oxidationModel))
 {
 }
 soot::SootModel_MONO* soot::SootModel_MONO::getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
                                                         std::unique_ptr<GrowthModel> growthModel,
                                                         std::unique_ptr<NucleationModel> nucleationModel,
-                                                        std::unique_ptr<OxidationModel> oxidationModel,
-                                                        CoagulationMechanism coagulationMechanism,
-                                                        GrowthMechanism growthMechanism,
-                                                        NucleationMechanism nucleationMechanism,
-                                                        OxidationMechanism oxidationMechanism)
+                                                        std::unique_ptr<OxidationModel> oxidationModel)
 {
 	return new SootModel_MONO(std::move(coagulationModel),
 	                          std::move(growthModel),
 	                          std::move(nucleationModel),
-	                          std::move(oxidationModel),
-	                          coagulationMechanism,
-	                          growthMechanism,
-	                          nucleationMechanism,
-	                          oxidationMechanism);
+	                          std::move(oxidationModel));
 }
 soot::SourceTerms soot::SootModel_MONO::getSourceTerms(MomentState& state) const
 {
@@ -64,7 +48,7 @@ soot::SourceTerms soot::SootModel_MONO::getSourceTerms(MomentState& state) const
 	const double N1 = jNuc * state.getCMin() * MW_C / Na;
 
 	const double Cnd0 = 0;
-	const double Cnd1 = nucleationMechanism == NucleationMechanism::PAH ? state.getDimer() * state.getMDimer() * coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(0)) * weights.at(0) : 0;
+	const double Cnd1 = nucleationModel->getMechanism() == NucleationMechanism::PAH ? state.getDimer() * state.getMDimer() * coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(0)) * weights.at(0) : 0;
 
 	const double Am2m3 = M0 > 0 ? M_PI * pow(std::abs(6.0 / (M_PI * state.getRhoSoot()) * M1 / M0), 2.0 / 3.0) * std::abs(M0) : 0;
 

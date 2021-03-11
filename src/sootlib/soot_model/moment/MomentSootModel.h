@@ -13,18 +13,10 @@ public:
 	MomentSootModel(std::unique_ptr<CoagulationModel> coagulationModel,
 	                std::unique_ptr<GrowthModel> growthModel,
 	                std::unique_ptr<NucleationModel> nucleationModel,
-	                std::unique_ptr<OxidationModel> oxidationModel,
-	                CoagulationMechanism coagulationMechanism,
-	                GrowthMechanism growthMechanism,
-	                NucleationMechanism nucleationMechanism,
-	                OxidationMechanism oxidationMechanism) : SootModel_Base(std::move(coagulationModel),
+	                std::unique_ptr<OxidationModel> oxidationModel) : SootModel_Base(std::move(coagulationModel),
 																		 std::move(growthModel),
 																		 std::move(nucleationModel),
-																		 std::move(oxidationModel),
-																		 coagulationMechanism,
-																		 growthMechanism,
-																		 nucleationMechanism,
-																		 oxidationMechanism)
+																		 std::move(oxidationModel))
 	{}
 
 	[[nodiscard]] virtual SourceTerms getSourceTerms(MomentState& state) const = 0;

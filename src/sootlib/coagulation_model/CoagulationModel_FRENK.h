@@ -8,6 +8,8 @@ namespace soot
 class CoagulationModel_FRENK : public CoagulationModel
 {
 public:
+	CoagulationModel_FRENK() : CoagulationModel(CoagulationMechanism::FRENK) {}
+
 	[[nodiscard]] double getCoagulationRate(const MomentState& state, double m1, double m2) const override;
 
 	~CoagulationModel_FRENK() override = default;

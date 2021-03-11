@@ -21,11 +21,7 @@ soot::BinSootModel* soot::BinSootModelGenerator::getModel() const
 			return SootModel_SECT::getInstance(std::move(cm),
 									  std::move(gm),
 									  std::move(nm),
-									  std::move(om),
-									  coagulationMechanism,
-									  growthMechanism,
-									  nucleationMechanism,
-									  oxidationMechanism);
+									  std::move(om));
 		default:
 			throw std::domain_error("Bad soot model type");
 	}

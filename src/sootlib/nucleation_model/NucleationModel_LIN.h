@@ -8,6 +8,8 @@ namespace soot
 class NucleationModel_LIN : public NucleationModel
 {
 public:
+	NucleationModel_LIN() : NucleationModel(NucleationMechanism::LIN) {}
+
 	[[nodiscard]] double getNucleationRate(MomentState& state, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights, MassRateRatio& ratio) const override;
 
 	~NucleationModel_LIN() override = default;

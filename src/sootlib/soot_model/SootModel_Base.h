@@ -21,19 +21,10 @@ protected:
 	const std::unique_ptr<NucleationModel> nucleationModel;
 	const std::unique_ptr<OxidationModel> oxidationModel;
 
-	const CoagulationMechanism coagulationMechanism;
-	const GrowthMechanism growthMechanism;
-	const NucleationMechanism nucleationMechanism;
-	const OxidationMechanism oxidationMechanism;
-
 	SootModel_Base(std::unique_ptr<CoagulationModel> coagulationModel,
 	               std::unique_ptr<GrowthModel> growthModel,
 	               std::unique_ptr<NucleationModel> nucleationModel,
-	               std::unique_ptr<OxidationModel> oxidationModel,
-	               CoagulationMechanism coagulationMechanism,
-	               GrowthMechanism growthMechanism,
-	               NucleationMechanism nucleationMechanism,
-	               OxidationMechanism oxidationMechanism);
+	               std::unique_ptr<OxidationModel> oxidationModel);
 
 	static void initializeGasSpecies(std::map<GasSpecies, double>& gasSourceTerms, std::map<size_t, double>& PAHSourceTerms, const MassRateRatio& ratio);
 };

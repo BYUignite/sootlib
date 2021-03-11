@@ -12,11 +12,7 @@ public:
 	[[nodiscard]] static SootModel_MONO* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
 	                                                std::unique_ptr<GrowthModel> growthModel,
 	                                                std::unique_ptr<NucleationModel> nucleationModel,
-	                                                std::unique_ptr<OxidationModel> oxidationModel,
-	                                                CoagulationMechanism coagulationMechanism,
-	                                                GrowthMechanism growthMechanism,
-	                                                NucleationMechanism nucleationMechanism,
-	                                                OxidationMechanism oxidationMechanism);
+	                                                std::unique_ptr<OxidationModel> oxidationModel);
 
 	[[nodiscard]] SourceTerms getSourceTerms(MomentState& state) const override;
 
@@ -26,11 +22,7 @@ private:
 	SootModel_MONO(std::unique_ptr<CoagulationModel> coagulationModel,
 				std::unique_ptr<GrowthModel> growthModel,
 				std::unique_ptr<NucleationModel> nucleationModel,
-				std::unique_ptr<OxidationModel> oxidationModel,
-				CoagulationMechanism coagulationMechanism,
-				GrowthMechanism growthMechanism,
-				NucleationMechanism nucleationMechanism,
-				OxidationMechanism oxidationMechanism);
+				std::unique_ptr<OxidationModel> oxidationModel);
 };
 }
 

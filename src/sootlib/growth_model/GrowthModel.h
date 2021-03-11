@@ -8,9 +8,22 @@ namespace soot
 class GrowthModel
 {
 public:
+	explicit GrowthModel(GrowthMechanism mechanism)
+	{
+		this->mechanism = mechanism;
+	}
+
 	[[nodiscard]] virtual double getGrowthRate(const MomentState& state) const = 0;
 
 	virtual ~GrowthModel() = default;
+
+	[[nodiscard]] GrowthMechanism getMechanism() const
+	{
+		return mechanism;
+	}
+
+private:
+	GrowthMechanism mechanism;
 };
 }
 
