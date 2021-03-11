@@ -38,7 +38,6 @@ soot::SootModel_MONO* soot::SootModel_MONO::getInstance(std::unique_ptr<Coagulat
 soot::SourceTerms soot::SootModel_MONO::getSourceTerms(MomentState& state) const
 {
 	MassRateRatio nucleationRateRatios;
-	MassRateRatio growthRateRatios;
 	MassRateRatio oxidationRateRatios;
 
 	std::vector<double> weights = {0};
@@ -84,7 +83,6 @@ soot::SourceTerms soot::SootModel_MONO::getSourceTerms(MomentState& state) const
 
 	// initialize all gas sources to 0
 	initializeGasSpecies(gasSourceTerms, PAHSourceTerms, nucleationRateRatios);
-	initializeGasSpecies(gasSourceTerms, PAHSourceTerms, growthRateRatios);
 	initializeGasSpecies(gasSourceTerms, PAHSourceTerms, oxidationRateRatios);
 
 	// Nucleation
@@ -92,12 +90,6 @@ soot::SourceTerms soot::SootModel_MONO::getSourceTerms(MomentState& state) const
 		gasSourceTerms[it->first] += N1 * it->second / state.getRhoGas();
 	for (auto it = nucleationRateRatios.PAHBegin(); it != nucleationRateRatios.PAHEnd(); it++)
 		PAHSourceTerms[it->first] += N1 * it->second / state.getRhoGas();
-
-	// Growth
-	for (auto it = growthRateRatios.gasSpeciesBegin(); it != growthRateRatios.gasSpeciesEnd(); it++)
-		gasSourceTerms[it->first] += G1 * it->second / state.getRhoGas();
-	for (auto it = growthRateRatios.PAHBegin(); it != growthRateRatios.PAHEnd(); it++)
-		PAHSourceTerms[it->first] += G1 * it->second / state.getRhoGas();
 
 	// Oxidation
 	for (auto it = oxidationRateRatios.gasSpeciesBegin(); it != oxidationRateRatios.gasSpeciesEnd(); it++)
