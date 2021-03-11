@@ -8,7 +8,7 @@ namespace soot
 class OxidationModel_LEE_NEOH : public OxidationModel
 {
 public:
-	[[nodiscard]] double getOxidationRate(const MomentState& state) const override;
+	[[nodiscard]] double getOxidationRate(const MomentState& state, MassRateRatio& ratio) const override;
 
 	~OxidationModel_LEE_NEOH() override = default;
 };

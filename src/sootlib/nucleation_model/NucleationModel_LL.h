@@ -8,7 +8,7 @@ namespace soot
 class NucleationModel_LL : public NucleationModel
 {
 public:
-	[[nodiscard]] double getNucleationRate(MomentState& state, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights) const override;
+	[[nodiscard]] double getNucleationRate(MomentState& state, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights, MassRateRatio& ratio) const override;
 
 	~NucleationModel_LL() override = default;
 };

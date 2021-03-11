@@ -109,13 +109,13 @@ void soot::BaseState::setDimer(double dimer)
 {
 	BaseState::dimer = dimer;
 }
-void soot::BaseState::calculateMDimer()
+void soot::BaseState::calculateMDimer(MassRateRatio* ratio)
 {
 	const double preFac = sqrt(4 * M_PI * kb * T) * pow(6.0 / (M_PI * rhoSoot), 2.0 / 3.0);
 
 	wdotD = 0;
 	mDimer = 0;
-	// TODO this was not in the original code but it really looks like it's correct
+	// FIXME this was not in the original code but it really looks like it's correct
 	cMin = 0;
 
 	double wDotI;
@@ -130,10 +130,26 @@ void soot::BaseState::calculateMDimer()
 		wdotD += wDotI;
 		mDimer += wDotI * MPAHn;
 		cMin += wDotI * MPAHn;
+
+		if (ratio != nullptr)
+			ratio->PAHSpeciesRatio(n) = wDotI * MPAHn;
+	}
+
+	if (ratio != nullptr)
+	{
+		for (const auto& [n, frac] : PAHFractions)
+			ratio->PAHSpeciesRatio(n) /= mDimer;
 	}
 
 	mDimer += 2 / wdotD;
 	cMin *= 4 / wdotD;
+
+	if (ratio != nullptr)
+	{
+		for (const auto& [n, frac] : PAHFractions)
+			ratio->PAHSpeciesRatio(n) *= -2 * mDimer / (cMin * MW_C / Na);
+	}
+	ratio->gasSpeciesRatio(GasSpecies::H2) = 2 * mDimer / (cMin * MW_C / Na) - 1;
 
 	mDimerValid = true;
 }

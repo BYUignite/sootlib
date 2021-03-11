@@ -15,7 +15,7 @@
 
 #include "OxidationModel_NSC_NEOH.h"
 
-double soot::OxidationModel_NSC_NEOH::getOxidationRate(const MomentState& state) const {
+double soot::OxidationModel_NSC_NEOH::getOxidationRate(const MomentState& state, MassRateRatio& ratio) const {
 
 	const double pO2_atm = state.getGasSpeciesP(GasSpecies::O2) / 101325.0; // partial pressure of O2 (atm)
 	const double pOH_atm = state.getGasSpeciesP(GasSpecies::OH) / 101325.0; // partial pressure of OH (atm)
@@ -29,6 +29,11 @@ double soot::OxidationModel_NSC_NEOH::getOxidationRate(const MomentState& state)
 	const double NSC_rate = kA * pO2_atm * x / (1.0 + kz * pO2_atm) + kB * pO2_atm * (1.0 - x);   // kmol/m^2*s
 	const double rSootO2 = NSC_rate * state.getRhoSoot();                   // kg/m2*s
 	const double rSootOH = 1290.0 * 0.13 * pOH_atm / sqrt(state.getT());    // kg/m2*s
+
+	ratio.gasSpeciesRatio(GasSpecies::O2) = -0.5 * MW_O2 / MW_C * rSootO2 / (rSootO2 + rSootOH);
+	ratio.gasSpeciesRatio(GasSpecies::OH) = -MW_OH / MW_C * rSootOH / (rSootO2 + rSootOH);
+	ratio.gasSpeciesRatio(GasSpecies::H) = MW_H / MW_C * rSootOH / (rSootO2 + rSootOH);
+	ratio.gasSpeciesRatio(GasSpecies::CO) = MW_CO / MW_C;
 
 	return rSootO2 + rSootOH;                                               // kg/m2*s
 

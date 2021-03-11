@@ -37,8 +37,15 @@ soot::SootModel_MONO* soot::SootModel_MONO::getInstance(std::unique_ptr<Coagulat
 }
 soot::SourceTerms soot::SootModel_MONO::getSourceTerms(MomentState& state) const
 {
+	MassRateRatio nucleationRateRatios;
+	MassRateRatio growthRateRatios;
+	MassRateRatio oxidationRateRatios;
+
 	std::vector<double> weights = {0};
 	std::vector<double> abscissas = {0};
+
+	if (state.getNumMoments() < 2)
+		throw std::runtime_error("MONO soot model requries at least 2 soot moments");
 
 	const double M0 = state.getMoment(0);
 	const double M1 = state.getMoment(1);
@@ -49,9 +56,9 @@ soot::SourceTerms soot::SootModel_MONO::getSourceTerms(MomentState& state) const
 		abscissas.at(0) = M1 / M0;
 	}
 
-	const double jNuc = nucleationModel->getNucleationRate(state, abscissas, weights);
+	const double jNuc = nucleationModel->getNucleationRate(state, abscissas, weights, nucleationRateRatios);
 	const double kGrw = growthModel->getGrowthRate(state);
-	const double kOxi = oxidationModel->getOxidationRate(state);
+	const double kOxi = oxidationModel->getOxidationRate(state, oxidationRateRatios);
 	const double coag = coagulationModel->getCoagulationRate(state, abscissas.at(0), abscissas.at(0));
 
 	const double N0 = jNuc;
@@ -75,29 +82,28 @@ soot::SourceTerms soot::SootModel_MONO::getSourceTerms(MomentState& state) const
 	std::map<GasSpecies, double> gasSourceTerms;
 	std::map<size_t, double> PAHSourceTerms;
 
-	// FIXME there are rate ratios that are not being kept track of
-	// they probably need to go in the state somewhere but the state is getting a little bloated
+	// initialize all gas sources to 0
+	initializeGasSpecies(gasSourceTerms, PAHSourceTerms, nucleationRateRatios);
+	initializeGasSpecies(gasSourceTerms, PAHSourceTerms, growthRateRatios);
+	initializeGasSpecies(gasSourceTerms, PAHSourceTerms, oxidationRateRatios);
 
 	// Nucleation
-	gasSourceTerms[GasSpecies::C2H2] = N1 * 0000000000 / state.getRhoGas();
-	gasSourceTerms[GasSpecies::H2] = N1 * 00000000000 / state.getRhoGas();
-	for (auto it = state.PAHFractionsBegin(); it != state.PAHFractionsEnd(); it++)
-		PAHSourceTerms[it->first] = N1 * 00000000000 / state.getRhoGas();
+	for (auto it = nucleationRateRatios.gasSpeciesBegin(); it != nucleationRateRatios.gasSpeciesEnd(); it++)
+		gasSourceTerms[it->first] += N1 * it->second / state.getRhoGas();
+	for (auto it = nucleationRateRatios.PAHBegin(); it != nucleationRateRatios.PAHEnd(); it++)
+		PAHSourceTerms[it->first] += N1 * it->second / state.getRhoGas();
 
 	// Growth
-	gasSourceTerms[GasSpecies::C2H2] += G1 * 000000000 / state.getRhoGas();
-	gasSourceTerms[GasSpecies::H2] += G1 * 00000000000 / state.getRhoGas();
+	for (auto it = growthRateRatios.gasSpeciesBegin(); it != growthRateRatios.gasSpeciesEnd(); it++)
+		gasSourceTerms[it->first] += G1 * it->second / state.getRhoGas();
+	for (auto it = growthRateRatios.PAHBegin(); it != growthRateRatios.PAHEnd(); it++)
+		PAHSourceTerms[it->first] += G1 * it->second / state.getRhoGas();
 
 	// Oxidation
-	gasSourceTerms[GasSpecies::O2] = X1 * 0000000000 / state.getRhoGas();
-	gasSourceTerms[GasSpecies::OH] = X1 * 0000000000 / state.getRhoGas();
-	gasSourceTerms[GasSpecies::H] = X1 * 0000000000 / state.getRhoGas();
-	gasSourceTerms[GasSpecies::CO] = X1 * 0000000000 / state.getRhoGas();
-
-	// PAH Condensation
-	gasSourceTerms[GasSpecies::H2] += Cnd1 * 00000000000 / state.getRhoGas();
-	for (auto it = state.PAHFractionsBegin(); it != state.PAHFractionsEnd(); it++)
-		PAHSourceTerms[it->first] += Cnd1 * 0000000000 / state.getRhoGas();
+	for (auto it = oxidationRateRatios.gasSpeciesBegin(); it != oxidationRateRatios.gasSpeciesEnd(); it++)
+		gasSourceTerms[it->first] += X1 * it->second / state.getRhoGas();
+	for (auto it = oxidationRateRatios.PAHBegin(); it != oxidationRateRatios.PAHEnd(); it++)
+		PAHSourceTerms[it->first] += X1 * it->second / state.getRhoGas();
 
 	// Coagulation - n/a
 

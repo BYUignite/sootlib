@@ -7,6 +7,7 @@
 #include "sootlib/growth_model/GrowthModel.h"
 #include "sootlib/nucleation_model/NucleationModel.h"
 #include "sootlib/oxidation_model/OxidationModel.h"
+#include "sootlib/MassRateRatio.h"
 
 namespace soot
 {
@@ -33,6 +34,8 @@ protected:
 	               GrowthMechanism growthMechanism,
 	               NucleationMechanism nucleationMechanism,
 	               OxidationMechanism oxidationMechanism);
+
+	static void initializeGasSpecies(std::map<GasSpecies, double>& gasSourceTerms, std::map<size_t, double>& PAHSourceTerms, const MassRateRatio& ratio);
 };
 }
 

@@ -1,8 +1,8 @@
 # ---- list executable .cpp files without their extension ----
 
 set(STANDARD_EXAMPLES
-        standard_example_1
-        standard_example_2)
+        simple_moment_example
+        simple_bin_example)
 
 foreach(EXAMPLE ${STANDARD_EXAMPLES})
     add_executable(${EXAMPLE} ${EXAMPLE}.cpp)

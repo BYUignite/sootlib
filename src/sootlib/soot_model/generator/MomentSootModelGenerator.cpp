@@ -18,7 +18,11 @@ soot::MomentSootModel* soot::MomentSootModelGenerator::getModel() const
 			return SootModel_MONO::getInstance(std::move(cm),
 									  std::move(gm),
 									  std::move(nm),
-									  std::move(om));
+									  std::move(om),
+									  coagulationMechanism,
+									  growthMechanism,
+									  nucleationMechanism,
+									  oxidationMechanism);
 //		case MomentModel::LOGN:
 //			return
 //		case MomentModel::MOMIC:

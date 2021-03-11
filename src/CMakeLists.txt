@@ -73,7 +73,8 @@ set(SRC_FILES
         sootlib/soot_model/generator/BinSootModelGenerator.h
         sootlib/soot_model/generator/BinSootModelGenerator.cpp
         sootlib/static.h
-        sootlib/SourceTerms.h)
+        sootlib/SourceTerms.h
+        sootlib/MassRateRatio.h)
 
 # ---- optionally include cantera comaptability files ----
 

@@ -5,6 +5,7 @@
 #include <map>
 
 #include "sootlib/static.h"
+#include "sootlib/MassRateRatio.h"
 
 namespace soot
 {
@@ -42,6 +43,8 @@ public:
 	[[nodiscard]] double getMDimer();
 	[[nodiscard]] double getWDotD();
 
+	void calculateMDimer(MassRateRatio* ratio=nullptr);
+
 	[[nodiscard]] std::map<GasSpecies, double>::const_iterator gasFractionsBegin() const;
 	[[nodiscard]] std::map<GasSpecies, double>::const_iterator gasFractionsEnd() const;
 	[[nodiscard]] std::map<size_t, double>::const_iterator PAHFractionsBegin() const;
@@ -67,7 +70,6 @@ private:
 	double wdotD = 0;
 
 	bool mDimerValid = true;
-	void calculateMDimer();
 	[[nodiscard]] double getNi(size_t i) const;
 	[[nodiscard]] double getGammai(size_t i) const;
 };

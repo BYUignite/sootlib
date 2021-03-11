@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "sootlib/soot_model/moment/MomentSootModel.h"
+#include "sootlib/MassRateRatio.h"
 
 namespace soot
 {
