@@ -4,26 +4,33 @@
 #include "sootlib/soot_model/moment/MomentSootModel.h"
 #include "sootlib/MassRateRatio.h"
 
-namespace soot
-{
-class SootModel_QMOM : public MomentSootModel
-{
-public:
-	[[nodiscard]] static SootModel_QMOM* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
-	                                                 std::unique_ptr<GrowthModel> growthModel,
-	                                                 std::unique_ptr<NucleationModel> nucleationModel,
-	                                                 std::unique_ptr<OxidationModel> oxidationModel);
+namespace soot {
 
-	[[nodiscard]] SourceTerms getSourceTerms(MomentState& state) const override;
+    class SootModel_QMOM : public MomentSootModel {
+        
+        public:
+	        
+            [[nodiscard]] static SootModel_QMOM* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
+	                                                         std::unique_ptr<GrowthModel> growthModel,
+	                                                         std::unique_ptr<NucleationModel> nucleationModel,
+	                                                         std::unique_ptr<OxidationModel> oxidationModel);
 
-	~SootModel_QMOM() override = default;
+	        [[nodiscard]] SourceTerms getSourceTerms(MomentState& state) const override;
 
-private:
-	SootModel_QMOM(std::unique_ptr<CoagulationModel> coagulationModel,
-	               std::unique_ptr<GrowthModel> growthModel,
-	               std::unique_ptr<NucleationModel> nucleationModel,
-	               std::unique_ptr<OxidationModel> oxidationModel);
-};
+	        ~SootModel_QMOM() override = default;
+
+        private:
+	        
+            SootModel_QMOM(std::unique_ptr<CoagulationModel> coagulationModel,
+	                       std::unique_ptr<GrowthModel> growthModel,
+	                       std::unique_ptr<NucleationModel> nucleationModel,
+	                       std::unique_ptr<OxidationModel> oxidationModel);
+    
+            void getWtsAbs(vector<double> M, vector<double> &wts, vector<double> &abs);
+    
+            void wheeler(const vector<double> &m, int N, vector<double> &w, vector<double> &x);
+
+    };
 }
 
 #endif //SOOTMODEL_QMOM_H
