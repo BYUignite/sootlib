@@ -25,8 +25,6 @@ protected:
 	               std::unique_ptr<GrowthModel> growthModel,
 	               std::unique_ptr<NucleationModel> nucleationModel,
 	               std::unique_ptr<OxidationModel> oxidationModel);
-
-	static void initializeGasSpecies(std::map<GasSpecies, double>& gasSourceTerms, std::map<size_t, double>& PAHSourceTerms, const MassRateRatio& ratio);
 };
 }
 
