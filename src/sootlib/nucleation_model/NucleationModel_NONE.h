@@ -8,11 +8,13 @@ namespace soot
 class NucleationModel_NONE : public NucleationModel
 {
 public:
-	NucleationModel_NONE() : NucleationModel(NucleationMechanism::NONE) {}
-
 	[[nodiscard]] double getNucleationRate(MomentState& state, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights, MassRateRatio& ratio) const override
 	{
 		return 0;
+	}
+	[[nodiscard]] NucleationMechanism getMechanism() const override
+	{
+		return NucleationMechanism::NONE;
 	}
 
 	~NucleationModel_NONE() override = default;

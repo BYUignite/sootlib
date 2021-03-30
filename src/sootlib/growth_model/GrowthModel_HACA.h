@@ -8,9 +8,11 @@ namespace soot
 class GrowthModel_HACA : public GrowthModel
 {
 public:
-	GrowthModel_HACA() : GrowthModel(GrowthMechanism::HACA) {}
-
 	[[nodiscard]] double getGrowthRate(const MomentState& state) const override;
+	[[nodiscard]] GrowthMechanism getMechanism() const override
+	{
+		return GrowthMechanism::HACA;
+	}
 
 	~GrowthModel_HACA() override = default;
 };

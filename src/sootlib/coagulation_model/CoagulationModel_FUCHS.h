@@ -8,9 +8,11 @@ namespace soot
 class CoagulationModel_FUCHS : public CoagulationModel
 {
 public:
-	CoagulationModel_FUCHS() : CoagulationModel(CoagulationMechanism::FUCHS) {}
-
 	[[nodiscard]] double getCoagulationRate(const MomentState& state, double m1, double m2) const override;
+	[[nodiscard]] CoagulationMechanism getMechanism() const override
+	{
+		return CoagulationMechanism::FUCHS;
+	}
 
 	~CoagulationModel_FUCHS() override = default;
 };

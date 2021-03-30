@@ -8,11 +8,13 @@ namespace soot
 class OxidationModel_NONE : public OxidationModel
 {
 public:
-	OxidationModel_NONE() : OxidationModel(OxidationMechanism::NONE) {}
-
 	[[nodiscard]] double getOxidationRate(const MomentState& state, MassRateRatio& ratio) const override
 	{
 		return 0;
+	}
+	[[nodiscard]] OxidationMechanism getMechanism() const override
+	{
+		return OxidationMechanism::NONE;
 	}
 
 	~OxidationModel_NONE() override = default;

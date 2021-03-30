@@ -62,7 +62,8 @@ soot::SourceTerms soot::SootModel_MONO::getSourceTerms(MomentState& state) const
     //---------- get chemical rates
 	
     const double jNuc = nucleationModel->getNucleationRate(state, abscissas, weights, nucleationRateRatios);
-	const double kGrw = growthModel->getGrowthRate(state, growthRateRatios);
+//	const double kGrw = growthModel->getGrowthRate(state, growthRateRatios); // TODO need to make something to deal with growth rate ratios
+	const double kGrw = growthModel->getGrowthRate(state);
 	const double kOxi = oxidationModel->getOxidationRate(state, oxidationRateRatios);
 	const double coag = coagulationModel->getCoagulationRate(state, abscissas.at(0), abscissas.at(0));
 
@@ -95,16 +96,12 @@ soot::SourceTerms soot::SootModel_MONO::getSourceTerms(MomentState& state) const
 
     //---------- combinine to make soot source terms
 	
-    std::vector<double> sootSourceTerms = {(N0 + Cnd0 + G0 + X0 + C0)/state.getRho, (N1 + Cnd1 + G1 + X1 + C1)/state.getRho};
+    std::vector<double> sootSourceTerms = {(N0 + Cnd0 + G0 + X0 + C0)/state.getRhoGas(), (N1 + Cnd1 + G1 + X1 + C1)/state.getRhoGas()};
 
     //---------- get gas source terms
 	
     std::map<GasSpecies, double> gasSourceTerms;
 	std::map<size_t, double> PAHSourceTerms;
-
-	initializeGasSpecies(gasSourceTerms, PAHSourceTerms, nucleationRateRatios);
-	initializeGasSpecies(gasSourceTerms, PAHSourceTerms, growthRateRatios);
-	initializeGasSpecies(gasSourceTerms, PAHSourceTerms, oxidationRateRatios);
 
 	// Nucleation
 	for (auto it = nucleationRateRatios.gasSpeciesBegin(); it != nucleationRateRatios.gasSpeciesEnd(); it++)

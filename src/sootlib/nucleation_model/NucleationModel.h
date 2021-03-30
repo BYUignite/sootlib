@@ -11,22 +11,10 @@ namespace soot
 class NucleationModel
 {
 public:
-	explicit NucleationModel(NucleationMechanism mechanism)
-	{
-		this->mechanism = mechanism;
-	}
-
 	[[nodiscard]] virtual double getNucleationRate(MomentState& state, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights, MassRateRatio& ratio) const = 0;
+	[[nodiscard]] virtual NucleationMechanism getMechanism() const = 0;
 
 	virtual ~NucleationModel() = default;
-
-	[[nodiscard]] NucleationMechanism getMechanism() const
-	{
-		return mechanism;
-	}
-
-private:
-	NucleationMechanism mechanism;
 };
 }
 
