@@ -12,7 +12,7 @@ soot::SootModel_SECT* soot::SootModel_SECT::getInstance(std::unique_ptr<Coagulat
 soot::SootModel_SECT::SootModel_SECT(std::unique_ptr<CoagulationModel> coagulationModel,
                                      std::unique_ptr<GrowthModel> growthModel,
                                      std::unique_ptr<NucleationModel> nucleationModel,
-                                     std::unique_ptr<OxidationModel> oxidationModel) : BinSootModel(std::move(coagulationModel),
+                                     std::unique_ptr<OxidationModel> oxidationModel) : SootModel_Base(std::move(coagulationModel),
                                                                                                     std::move(growthModel),
                                                                                                     std::move(nucleationModel),
                                                                                                     std::move(oxidationModel))

@@ -9,7 +9,7 @@ soot::SootModel_MONO::SootModel_MONO(std::unique_ptr<CoagulationModel> coagulati
                                      std::unique_ptr<GrowthModel> growthModel,
                                      std::unique_ptr<NucleationModel> nucleationModel,
                                      std::unique_ptr<OxidationModel> oxidationModel)
-	                :MomentSootModel(std::move(coagulationModel),
+	                : SootModel_Base(std::move(coagulationModel),
 	                                 std::move(growthModel),
 	                                 std::move(nucleationModel),
 	                                 std::move(oxidationModel)) {}

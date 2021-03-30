@@ -3,10 +3,11 @@
 
 #include "sootlib/soot_model/moment/MomentSootModel.h"
 #include "sootlib/MassRateRatio.h"
+#include "sootlib/soot_model/SootModel_Base.h"
 
 namespace soot
 {
-class SootModel_LOGN : public MomentSootModel
+class SootModel_LOGN : public MomentSootModel, public SootModel_Base
 {
 public:
 	[[nodiscard]] static SootModel_LOGN* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,

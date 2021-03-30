@@ -43,7 +43,6 @@ set(OXIDATION_SRC_FILES
 
 set(SOOTMODELS_SRC_FILES
         sootlib/soot_model/SootModel_Base.h
-        sootlib/soot_model/SootModel_Base.cpp
         sootlib/soot_model/moment/SootModel_LOGN.h
         sootlib/soot_model/moment/SootModel_LOGN.cpp
         sootlib/soot_model/moment/SootModel_MOMIC.h

@@ -2,10 +2,11 @@
 #define SOOTMODEL_SECT_H
 
 #include "sootlib/soot_model/bin/BinSootModel.h"
+#include "sootlib/soot_model/SootModel_Base.h"
 
 namespace soot
 {
-class SootModel_SECT : public BinSootModel
+class SootModel_SECT : public BinSootModel, public SootModel_Base
 {
 public:
 	[[nodiscard]] static SootModel_SECT* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
