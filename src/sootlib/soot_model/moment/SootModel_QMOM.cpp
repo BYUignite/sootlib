@@ -1,29 +1,33 @@
 /**
- * @file SootModel_QMOM.h
- * Source file for class SootModel_QMOM.h
+ * @file SootModel_QMOM.cpp
+ * Source file for class SootModel_QMOM
  */
 
 #include "SootModel_QMOM.h"
-//#include "eispack.h"
+#include "eispack.h"
 
-soot::SootModel_QMOM::SootModel_QMOM(std::unique_ptr<CoagulationModel>  coagulationModel,
-                                     std::unique_ptr<GrowthModel>       growthModel,
-                                     std::unique_ptr<NucleationModel>   nucleationModel,
-                                     std::unique_ptr<OxidationModel>    oxidationModel) 
-                    :SootModel_Base(std::move(coagulationModel),
-                                     std::move(growthModel),
-                                     std::move(nucleationModel),
-                                     std::move(oxidationModel)) {}
+using namespace std;
 
-soot::SootModel_QMOM* soot::SootModel_QMOM::getInstance(std::unique_ptr<CoagulationModel>   coagulationModel,
-                                                        std::unique_ptr<GrowthModel>        growthModel,
-                                                        std::unique_ptr<NucleationModel>    nucleationModel,
-                                                        std::unique_ptr<OxidationModel>     oxidationModel) {
+namespace soot {
+    
+SootModel_QMOM::SootModel_QMOM(unique_ptr<CoagulationModel>  coagulationModel,
+                                     unique_ptr<GrowthModel>       growthModel,
+                                     unique_ptr<NucleationModel>   nucleationModel,
+                                     unique_ptr<OxidationModel>    oxidationModel) 
+               :SootModel_Base(move(coagulationModel),
+                               move(growthModel),
+                               move(nucleationModel),
+                               move(oxidationModel)) {}
 
-	return new SootModel_QMOM(std::move(coagulationModel),
-	                          std::move(growthModel),
-	                          std::move(nucleationModel),
-	                          std::move(oxidationModel));
+SootModel_QMOM* SootModel_QMOM::getInstance(unique_ptr<CoagulationModel>   coagulationModel,
+                                            unique_ptr<GrowthModel>        growthModel,
+                                            unique_ptr<NucleationModel>    nucleationModel,
+                                            unique_ptr<OxidationModel>     oxidationModel) {
+
+    return new SootModel_QMOM(move(coagulationModel),
+	                          move(growthModel),
+	                          move(nucleationModel),
+	                          move(oxidationModel));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -36,16 +40,16 @@ soot::SootModel_QMOM* soot::SootModel_QMOM::getInstance(std::unique_ptr<Coagulat
  *
  */
 
-soot::SourceTerms soot::SootModel_QMOM::getSourceTerms(soot::MomentState& state) const {
+SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
 
     MassRateRatio nucleationRateRatios;
 	MassRateRatio oxidationRateRatios;
 	MassRateRatio growthRateRatios;
 
     int nMom = state.getNumMoments();
-    std::vector<double> M(nMom,0.0);
-	std::vector<double> weights = {0};
-	std::vector<double> abscissas = {0};
+    vector<double> M(nMom,0.0);
+	vector<double> weights = {0};
+    vector<double> abscissas = {0};
 
     //---------- get moments
 
@@ -58,7 +62,7 @@ soot::SourceTerms soot::SootModel_QMOM::getSourceTerms(soot::MomentState& state)
 
     getWtsAbs(M, weights, abscissas);           // wheeler algorithms applied here
 
-    for(int i=0; i<wts.size();i++){
+    for(int i=0; i<weights.size();i++){
         if(weights[i] < 0.0)    weights[i]   = 0.0;
         if(abscissas[i] < 0.0)  abscissas[i] = 0.0;
     }
@@ -66,14 +70,15 @@ soot::SourceTerms soot::SootModel_QMOM::getSourceTerms(soot::MomentState& state)
     //---------- get chemical rates
 
     const double jNuc = nucleationModel ->getNucleationRate(state, abscissas, weights, nucleationRateRatios);
-	const double kGrw = growthModel     ->getGrowthRate(state, oxidationRateRatios);
-	const double kOxi = oxidationModel  ->getOxidationRate(state, oxidationRateRatios);
+	const double kGrw = growthModel     ->getGrowthRate(state);
+ // const double kGrw = growthModel     ->getGrowthRate(state, growthRateRatios);
+    const double kOxi = oxidationModel  ->getOxidationRate(state, oxidationRateRatios);
 	const double coag = coagulationModel->getCoagulationRate(state, abscissas.at(0), abscissas.at(0));
 
     //---------- nucleation terms
 
-    std::vector<double> nucleationSourceM(nMom,0.0);                        // nucleation source terms for moments
-    double mNuc = state.getCmin() * MW_C / Na;                              // mass of a nucleated particle
+    vector<double> nucleationSourceM(nMom,0.0);                        // nucleation source terms for moments
+    double mNuc = state.getCMin() * MW_C / Na;                              // mass of a nucleated particle
     for (int k=0; k<nMom; k++)
         nucleationSourceM[k] = pow(mNuc,k) * jNuc;                          // Nuc_rate = m_nuc^r * jNuc
 
@@ -84,22 +89,22 @@ soot::SourceTerms soot::SootModel_QMOM::getSourceTerms(soot::MomentState& state)
         for (int k=1; k<nMom; k++) {                                         // M0 = 0.0 for condensation by definition
             for (int ii=0; ii<abscissas.size(); ii++)
                 condensationSourceM.at(k) += coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(ii))*pow(abscissas.at(ii),k-1)*weights.at(ii);
-            condensationSourceM.at(k) *= state.getDimer * state.getMDimer * k;
+            condensationSourceM.at(k) *= state.getDimer() * state.getMDimer() * k;
         }
     }
 
     //---------- growth terms
 
     vector<double> growthSourceM(nMom,0.0);                                      // growth source terms for moments
-    double Acoef = M_PI * pow(std::abs(6.0/M_PI/state.getRhoSoot()), 2.0/3.0);   // Acoef (=) kmol^2/3 / kg^2/3
+    double Acoef = M_PI * pow(abs(6.0/M_PI/state.getRhoSoot()), 2.0/3.0);   // Acoef (=) kmol^2/3 / kg^2/3
     for (int k=1; k<nMom; k++)                                                   // M0 = 0.0 for growth by definition
-        growthSourceM.at(k) = kGrw * Acoef * k * Mk(k-1.0/3.0);                  // kg^k/m3*s
+        growthSourceM.at(k) = kGrw * Acoef * k * Mk(k-1.0/3.0,weights,abscissas);                  // kg^k/m3*s
 
     //---------- oxidation terms
 
     vector<double> oxidationSourceM(nMom,0.0);                                   // oxidation source terms
     for (int k=1; k<nMom; k++)                                                   // M0 = 0.0 for oxidation by definition
-        oxidationSourceM.at(k) = -kOxi * Acoef * k * Mk(k-1.0/3.0);              // kg^k/m3*s
+        oxidationSourceM.at(k) = -kOxi * Acoef * k * Mk(k-1.0/3.0,weights,abscissas);              // kg^k/m3*s
 
     //---------- coagulation terms
 
@@ -108,42 +113,38 @@ soot::SourceTerms soot::SootModel_QMOM::getSourceTerms(soot::MomentState& state)
         if(k==1) continue;                                                       // M1 = 0.0 for coagulation by definition
         for(int ii=1; ii<abscissas.size(); ii++)                                 // off-diagonal terms (looping half of them) with *2 incorporated
             for(int j=0; j<ii; j++)
-                coagulationSourceM.at(k) += coagulationModel->getCoagulationRate(abscissas[ii], abscissas[j])*weights[ii]*weights[j] * (k==0 ? -1.0 : (pow(abscissas[ii]+abscissas[j],k)) - pow(abscissas[ii],k) - pow(abscissas[j],k) );
-        for(int ii=0; ii<absc.size(); ii++)                                      // diagonal terms
-            coagulationSourceM.at(k) += coagulationModel->getCoagulationRate(abscissas[ii], abscissas[ii])*weights[ii]*weights[ii] * (k==0 ? -0.5 : pow(abscissas[ii],k) * (pow(2,k-1)-1) );
+                coagulationSourceM.at(k) += coagulationModel->getCoagulationRate(state,abscissas[ii], abscissas[j])*weights[ii]*weights[j] * (k==0 ? -1.0 : (pow(abscissas[ii]+abscissas[j],k)) - pow(abscissas[ii],k) - pow(abscissas[j],k) );
+        for(int ii=0; ii<abscissas.size(); ii++)                                      // diagonal terms
+            coagulationSourceM.at(k) += coagulationModel->getCoagulationRate(state,abscissas[ii], abscissas[ii])*weights[ii]*weights[ii] * (k==0 ? -0.5 : pow(abscissas[ii],k) * (pow(2,k-1)-1) );
      }
 
     //---------- combinine to make source terms
 
-    std::vector<double> sootSourceTerms(nMom,0.0);
+    vector<double> sootSourceTerms(nMom,0.0);
 
     for (int k=0; k<nMom; k++)
-        sootSourceTerms.at(k) = (nucleationSourceM[k] + condensationSourceM[k] + growthSourceM[k] + oxidationSourceM[k] + coagulationSourceM[k]) / state.getRho;
+        sootSourceTerms.at(k) = (nucleationSourceM[k] + condensationSourceM[k] + growthSourceM[k] + oxidationSourceM[k] + coagulationSourceM[k]) / state.getRhoGas();
 
     //---------- get gas source terms
 
-    std::map<GasSpecies, double> gasSourceTerms;
-	std::map<size_t, double> PAHSourceTerms;
-
-	initializeGasSpecies(gasSourceTerms, PAHSourceTerms, nucleationRateRatios);
-	initializeGasSpecies(gasSourceTerms, PAHSourceTerms, growthRateRatios);
-	initializeGasSpecies(gasSourceTerms, PAHSourceTerms, oxidationRateRatios);
+    map<GasSpecies, double> gasSourceTerms;
+	map<size_t, double> PAHSourceTerms;
 
 	// Nucleation
 	for (auto it = nucleationRateRatios.gasSpeciesBegin(); it != nucleationRateRatios.gasSpeciesEnd(); it++)
-		gasSourceTerms[it->first] += N1 * it->second / state.getRhoGas();
+		gasSourceTerms[it->first] += nucleationSourceM[1] * it->second / state.getRhoGas();
 	for (auto it = nucleationRateRatios.PAHBegin(); it != nucleationRateRatios.PAHEnd(); it++)
-		PAHSourceTerms[it->first] += N1 * it->second / state.getRhoGas();
+		PAHSourceTerms[it->first] += nucleationSourceM[1] * it->second / state.getRhoGas();
 
     // Growth
 	for (auto it = growthRateRatios.gasSpeciesBegin(); it != growthRateRatios.gasSpeciesEnd(); it++)
-		gasSourceTerms[it->first] += G1 * it->second / state.getRhoGas();
+		gasSourceTerms[it->first] += growthSourceM[1] * it->second / state.getRhoGas();
 
 	// Oxidation
 	for (auto it = oxidationRateRatios.gasSpeciesBegin(); it != oxidationRateRatios.gasSpeciesEnd(); it++)
-		gasSourceTerms[it->first] += X1 * it->second / state.getRhoGas();
+		gasSourceTerms[it->first] += oxidationSourceM[1] * it->second / state.getRhoGas();
 	for (auto it = oxidationRateRatios.PAHBegin(); it != oxidationRateRatios.PAHEnd(); it++)
-		PAHSourceTerms[it->first] += X1 * it->second / state.getRhoGas();
+		PAHSourceTerms[it->first] += oxidationSourceM[1] * it->second / state.getRhoGas();
 
 	// Coagulation - n/a
 
@@ -169,9 +170,9 @@ soot::SourceTerms soot::SootModel_QMOM::getSourceTerms(soot::MomentState& state)
  *      moment source terms.
  */
 
-void soot::SootModel_QMOM::getWtsAbs(vector<double> M, vector<double> &wts, vector<double> &absc) {
+void SootModel_QMOM::getWtsAbs(vector<double> M, vector<double> &weights, vector<double> &abscissas) const {
 
-    int N = state.getNumMoments();              // local nMom; may change with moment deselection
+    int N = M.size();              // local nMom; may change with moment deselection
 
     for (int k=0; k<N; k++) {                // if any moments are zero, return with zero wts and absc
         if (M[k] <= 0.0)
@@ -180,8 +181,8 @@ void soot::SootModel_QMOM::getWtsAbs(vector<double> M, vector<double> &wts, vect
 
     bool negs = false;                          // flag for downselecting if there are negative wts/abs
 
-    std::vector<double> w_temp(N/2,0.0);
-    std::vector<double> a_temp(N/2,0.0);
+    vector<double> w_temp(N/2,0.0);
+    vector<double> a_temp(N/2,0.0);
 
     do {                                        // downselection loop
 
@@ -193,8 +194,8 @@ void soot::SootModel_QMOM::getWtsAbs(vector<double> M, vector<double> &wts, vect
         }
 
         if (N == 2) {                           // in 2 moment case, return monodisperse output
-           wts[0]  = M[0];
-           absc[0] = M[1]/M[0];
+           weights[0]   = M[0];
+           abscissas[0] = M[1]/M[0];
            return;
         }
 
@@ -215,8 +216,8 @@ void soot::SootModel_QMOM::getWtsAbs(vector<double> M, vector<double> &wts, vect
     } while (negs == true);                     // end of downselection loop
 
     for (int k = 0; k < w_temp.size(); k++) {   // assign temporary variables to output
-        wts[k]  = w_temp[k];
-        absc[k] = a_temp[k];
+        weights[k]   = w_temp[k];
+        abscissas[k] = a_temp[k];
     }
 
 }
@@ -237,7 +238,7 @@ void soot::SootModel_QMOM::getWtsAbs(vector<double> M, vector<double> &wts, vect
  *      @param x    \output    abscissas
  */
 
-void wheeler(const vector<double> &m, int N, vector<double> &w, vector<double> &x ) {
+void SootModel_QMOM::wheeler(const vector<double> &m, int N, vector<double> &w, vector<double> &x) const {
 
     int                     N2 = N*2;
     vector<vector<double> > sigma(N+1,vector<double>(N2, 0.0));
@@ -282,3 +283,30 @@ void wheeler(const vector<double> &m, int N, vector<double> &w, vector<double> &
         w[j] = pow(evec[0+j*N],2.0)*m[0];
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
+/** Mk function
+*  
+*  calculates fractional moments from weights and abscissas.
+*
+*  @param exp  \input  fractional moment to compute, corresponds to exponent
+*  @param wts  \input  weights
+*  @param absc \input  abscissas
+*  @param Mk   \output fractional moment value
+*/
+
+double SootModel_QMOM::Mk(double exp, vector<double> wts, vector<double> absc) const {
+
+    double Mk = 0;
+
+    for(int k=0; k<wts.size()/2; k++) {
+        if (wts[k] == 0 || absc[k] == 0)
+            return 0;
+        else
+            Mk += wts[k] * pow(absc[k],exp);
+    }
+    
+    return Mk;
+}
+
+} // end namespace soot

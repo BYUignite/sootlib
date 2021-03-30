@@ -1,3 +1,8 @@
+/**
+ * @file SootModel_QMOM.h
+ * Header file for class SootModel_QMOM
+ */
+
 #ifndef SOOTMODEL_QMOM_H
 #define SOOTMODEL_QMOM_H
 
@@ -27,9 +32,10 @@ namespace soot {
 	                       std::unique_ptr<NucleationModel> nucleationModel,
 	                       std::unique_ptr<OxidationModel> oxidationModel);
     
-            void getWtsAbs(vector<double> M, vector<double> &wts, vector<double> &abs);
-    
-            void wheeler(const vector<double> &m, int N, vector<double> &w, vector<double> &x);
+            void getWtsAbs(std::vector<double> M, std::vector<double> &weights, std::vector<double> &abscissas) const;
+            double Mk(double exp, std::vector<double> wts, std::vector<double> absc) const;
+            void wheeler(const std::vector<double> &m, int N, std::vector<double> &w, std::vector<double> &x) const;
+
 
     };
 }
