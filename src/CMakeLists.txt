@@ -51,6 +51,8 @@ set(SOOTMODELS_SRC_FILES
         sootlib/soot_model/moment/SootModel_MONO.cpp
         sootlib/soot_model/moment/SootModel_QMOM.h
         sootlib/soot_model/moment/SootModel_QMOM.cpp
+        sootlib/soot_model/moment/eispack.cc
+        sootlib/soot_model/moment/eispack.h
         sootlib/soot_model/bin/SootModel_SECT.h
         sootlib/soot_model/bin/SootModel_SECT.cpp)
 
