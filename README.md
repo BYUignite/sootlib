@@ -34,15 +34,16 @@ You can add .cpp source files to `test/standard` and `test/cantera`. Add these f
 `test/standard/` will be added to the test list `standardTests`. Files in `test/cantera` will be added to the test list
 `canteraTests`.
 
-# TODO
+We should roughly (or closely) follow the [Cantera contributions stype guide](https://github.com/Cantera/cantera/blob/main/CONTRIBUTING.md)
+in this project.
 
-[Here](https://docs.google.com/document/d/1oHtjIDLV2zkGqsUGPKtzTRXVuCF2Cdz00SIotQ4hKZ0/edit?usp=sharing) is a Google Doc
-with a rough timeline for the project
+# TODO
 
 ### Short Term Design
 
 * Change SootModels to use multiple inheritance rather than have the interface inherit the base soot model
 * Fix QMOM file
+* Perhaps add warnings when running into 0 or having illegal calculations to guide people in NAN situations
   
 ### Long Term Design
 
@@ -52,7 +53,7 @@ with a rough timeline for the project
 
 ### Broken / Not Building
 
-* QMOM file - old code largely pasted into new file
+* QMOM file - old code in new file
 
 ### Untested
 
