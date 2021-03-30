@@ -41,7 +41,8 @@ with a rough timeline for the project
 
 ### Short Term Design
 
-* The data structures should be in place for all of the models to be implemented
+* Change SootModels to use multiple inheritance rather than have the interface inherit the base soot model
+* Fix QMOM file
   
 ### Long Term Design
 
@@ -51,7 +52,7 @@ with a rough timeline for the project
 
 ### Broken / Not Building
 
-* Nothing ATM
+* QMOM file - old code largely pasted into new file
 
 ### Untested
 
