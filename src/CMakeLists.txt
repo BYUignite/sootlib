@@ -51,8 +51,6 @@ set(SOOTMODELS_SRC_FILES
         sootlib/soot_model/moment/SootModel_MONO.cpp
         sootlib/soot_model/moment/SootModel_QMOM.h
         sootlib/soot_model/moment/SootModel_QMOM.cpp
-        sootlib/soot_model/moment/eispack.cc
-        sootlib/soot_model/moment/eispack.h
         sootlib/soot_model/bin/SootModel_SECT.h
         sootlib/soot_model/bin/SootModel_SECT.cpp)
 
@@ -77,6 +75,10 @@ set(SRC_FILES
         sootlib/SourceTerms.h
         sootlib/MassRateRatio.h)
 
+set(LIB_FILES
+        lib/eispack/eispack.h
+        lib/eispack/eispack.cpp)
+
 # ---- optionally include cantera comaptability files ----
 
 set(CANTERACOMPAT_SRC_FILES
@@ -99,6 +101,7 @@ set(ALL_SRC_FILES
         ${SOOTMODELS_SRC_FILES}
         ${STATE_SRC_FILES}
         ${SRC_FILES}
-        ${CANTERACOMPAT_SRC_FILES})
+        ${CANTERACOMPAT_SRC_FILES}
+        ${LIB_FILES})
 
 add_library(sootlib STATIC ${ALL_SRC_FILES})

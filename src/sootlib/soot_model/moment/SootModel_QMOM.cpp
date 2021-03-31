@@ -4,7 +4,7 @@
  */
 
 #include "SootModel_QMOM.h"
-#include "eispack.h"
+#include "lib/eispack/eispack.h"
 
 using namespace std;
 
