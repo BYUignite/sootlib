@@ -4,15 +4,13 @@
 #include "sootlib/state/MomentState.h"
 #include "sootlib/MassRateRatio.h"
 
-namespace soot
-{
-class OxidationModel
-{
+namespace soot {
+class OxidationModel {
 public:
-	[[nodiscard]] virtual double getOxidationRate(const MomentState& state, MassRateRatio& ratio) const = 0;
-	[[nodiscard]] virtual OxidationMechanism getMechanism() const = 0;
+    [[nodiscard]] virtual double getOxidationRate(const MomentState& state, MassRateRatio& ratio) const = 0;
+    [[nodiscard]] virtual OxidationMechanism getMechanism() const = 0;
 
-	virtual ~OxidationModel() = default;
+    virtual ~OxidationModel() = default;
 };
 }
 

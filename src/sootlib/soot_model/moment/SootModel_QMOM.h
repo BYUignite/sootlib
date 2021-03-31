@@ -12,32 +12,31 @@
 
 namespace soot {
 
-    class SootModel_QMOM : public MomentSootModel, public SootModel_Base {
-        
-        public:
-	        
-            [[nodiscard]] static SootModel_QMOM* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
-	                                                         std::unique_ptr<GrowthModel> growthModel,
-	                                                         std::unique_ptr<NucleationModel> nucleationModel,
-	                                                         std::unique_ptr<OxidationModel> oxidationModel);
+class SootModel_QMOM : public MomentSootModel, public SootModel_Base {
 
-	        [[nodiscard]] SourceTerms getSourceTerms(MomentState& state) const override;
+public:
 
-	        ~SootModel_QMOM() override = default;
+    [[nodiscard]] static SootModel_QMOM* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
+                                                     std::unique_ptr<GrowthModel> growthModel,
+                                                     std::unique_ptr<NucleationModel> nucleationModel,
+                                                     std::unique_ptr<OxidationModel> oxidationModel);
 
-        private:
-	        
-            SootModel_QMOM(std::unique_ptr<CoagulationModel> coagulationModel,
-	                       std::unique_ptr<GrowthModel> growthModel,
-	                       std::unique_ptr<NucleationModel> nucleationModel,
-	                       std::unique_ptr<OxidationModel> oxidationModel);
-    
-            void getWtsAbs(std::vector<double> M, std::vector<double> &weights, std::vector<double> &abscissas) const;
-            double Mk(double exp, std::vector<double> wts, std::vector<double> absc) const;
-            void wheeler(const std::vector<double> &m, int N, std::vector<double> &w, std::vector<double> &x) const;
+    [[nodiscard]] SourceTerms getSourceTerms(MomentState& state) const override;
 
+    ~SootModel_QMOM() override = default;
 
-    };
+private:
+
+    SootModel_QMOM(std::unique_ptr<CoagulationModel> coagulationModel,
+                   std::unique_ptr<GrowthModel> growthModel,
+                   std::unique_ptr<NucleationModel> nucleationModel,
+                   std::unique_ptr<OxidationModel> oxidationModel);
+
+    void getWtsAbs(std::vector<double> M, std::vector<double>& weights, std::vector<double>& abscissas) const;
+    double Mk(double exp, std::vector<double> wts, std::vector<double> absc) const;
+    void wheeler(const std::vector<double>& m, int N, std::vector<double>& w, std::vector<double>& x) const;
+
+};
 }
 
 #endif //SOOTMODEL_QMOM_H

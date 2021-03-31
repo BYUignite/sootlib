@@ -5,25 +5,23 @@
 #include "sootlib/MassRateRatio.h"
 #include "sootlib/soot_model/SootModel_Base.h"
 
-namespace soot
-{
-class SootModel_LOGN : public MomentSootModel, public SootModel_Base
-{
+namespace soot {
+class SootModel_LOGN : public MomentSootModel, public SootModel_Base {
 public:
-	[[nodiscard]] static SootModel_LOGN* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
-	                                                 std::unique_ptr<GrowthModel> growthModel,
-	                                                 std::unique_ptr<NucleationModel> nucleationModel,
-	                                                 std::unique_ptr<OxidationModel> oxidationModel);
+    [[nodiscard]] static SootModel_LOGN* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
+                                                     std::unique_ptr<GrowthModel> growthModel,
+                                                     std::unique_ptr<NucleationModel> nucleationModel,
+                                                     std::unique_ptr<OxidationModel> oxidationModel);
 
-	[[nodiscard]] SourceTerms getSourceTerms(MomentState& state) const override;
+    [[nodiscard]] SourceTerms getSourceTerms(MomentState& state) const override;
 
-	~SootModel_LOGN() override = default;
+    ~SootModel_LOGN() override = default;
 
 private:
-	SootModel_LOGN(std::unique_ptr<CoagulationModel> coagulationModel,
-	               std::unique_ptr<GrowthModel> growthModel,
-	               std::unique_ptr<NucleationModel> nucleationModel,
-	               std::unique_ptr<OxidationModel> oxidationModel);
+    SootModel_LOGN(std::unique_ptr<CoagulationModel> coagulationModel,
+                   std::unique_ptr<GrowthModel> growthModel,
+                   std::unique_ptr<NucleationModel> nucleationModel,
+                   std::unique_ptr<OxidationModel> oxidationModel);
 };
 }
 

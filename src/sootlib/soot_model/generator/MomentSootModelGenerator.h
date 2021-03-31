@@ -9,21 +9,19 @@
 #include "sootlib/soot_model/moment/SootModel_MONO.h"
 #include "sootlib/soot_model/moment/SootModel_QMOM.h"
 
-namespace soot
-{
-class MomentSootModelGenerator : public SootModelGenerator
-{
+namespace soot {
+class MomentSootModelGenerator : public SootModelGenerator {
 public:
-	MomentSootModelGenerator();
+    MomentSootModelGenerator();
 
-	void setModel(MomentModel model);
+    void setModel(MomentModel model);
 
-	[[nodiscard]] MomentSootModel* getModel() const;
-	[[nodiscard]] std::unique_ptr<MomentSootModel> getModelUnique() const;
-	[[nodiscard]] std::shared_ptr<MomentSootModel> getModelShared() const;
+    [[nodiscard]] MomentSootModel* getModel() const;
+    [[nodiscard]] std::unique_ptr<MomentSootModel> getModelUnique() const;
+    [[nodiscard]] std::shared_ptr<MomentSootModel> getModelShared() const;
 
 private:
-	MomentModel model;
+    MomentModel model;
 };
 }
 

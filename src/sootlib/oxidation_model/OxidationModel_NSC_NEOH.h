@@ -3,18 +3,15 @@
 
 #include "sootlib/oxidation_model/OxidationModel.h"
 
-namespace soot
-{
-class OxidationModel_NSC_NEOH : public OxidationModel
-{
+namespace soot {
+class OxidationModel_NSC_NEOH : public OxidationModel {
 public:
-	[[nodiscard]] double getOxidationRate(const MomentState& state, MassRateRatio& ratio) const override;
-	[[nodiscard]] OxidationMechanism getMechanism() const override
-	{
-		return OxidationMechanism::NSC_NEOH;
-	}
+    [[nodiscard]] double getOxidationRate(const MomentState& state, MassRateRatio& ratio) const override;
+    [[nodiscard]] OxidationMechanism getMechanism() const override {
+        return OxidationMechanism::NSC_NEOH;
+    }
 
-	~OxidationModel_NSC_NEOH() override = default;
+    ~OxidationModel_NSC_NEOH() override = default;
 };
 }
 

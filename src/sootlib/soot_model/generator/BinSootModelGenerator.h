@@ -6,21 +6,19 @@
 /* soot models */
 #include "sootlib/soot_model/bin/SootModel_SECT.h"
 
-namespace soot
-{
-class BinSootModelGenerator : public SootModelGenerator
-{
+namespace soot {
+class BinSootModelGenerator : public SootModelGenerator {
 public:
-	BinSootModelGenerator();
+    BinSootModelGenerator();
 
-	void setModel(BinModel model);
+    void setModel(BinModel model);
 
-	[[nodiscard]] BinSootModel* getModel() const;
-	[[nodiscard]] std::unique_ptr<BinSootModel> getModelUnique() const;
-	[[nodiscard]] std::shared_ptr<BinSootModel> getModelShared() const;
+    [[nodiscard]] BinSootModel* getModel() const;
+    [[nodiscard]] std::unique_ptr<BinSootModel> getModelUnique() const;
+    [[nodiscard]] std::shared_ptr<BinSootModel> getModelShared() const;
 
 private:
-	BinModel model;
+    BinModel model;
 };
 }
 

@@ -3,18 +3,15 @@
 
 #include "sootlib/oxidation_model/OxidationModel.h"
 
-namespace soot
-{
-class OxidationModel_HACA : public OxidationModel
-{
+namespace soot {
+class OxidationModel_HACA : public OxidationModel {
 public:
-	[[nodiscard]] double getOxidationRate(const MomentState& state, MassRateRatio& ratio) const override;
-	[[nodiscard]] OxidationMechanism getMechanism() const override
-	{
-		return OxidationMechanism::HACA;
-	}
+    [[nodiscard]] double getOxidationRate(const MomentState& state, MassRateRatio& ratio) const override;
+    [[nodiscard]] OxidationMechanism getMechanism() const override {
+        return OxidationMechanism::HACA;
+    }
 
-	~OxidationModel_HACA() override = default;
+    ~OxidationModel_HACA() override = default;
 };
 }
 

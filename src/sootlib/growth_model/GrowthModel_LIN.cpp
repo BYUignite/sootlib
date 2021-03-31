@@ -13,9 +13,10 @@
 using namespace soot;
 
 double GrowthModel_LIN::getGrowthRate(const MomentState& state) const {
-	
-	const double rSoot = 750.0 * exp(-12100.0 / state.getT()) * state.getGasSpeciesC(GasSpecies::C2H2) * 2.0 * MW_C;     // kg/m2*s
 
-	return rSoot;       // kg/m2*s
+    const double rSoot =
+        750.0 * exp(-12100.0 / state.getT()) * state.getGasSpeciesC(GasSpecies::C2H2) * 2.0 * MW_C;     // kg/m2*s
+
+    return rSoot;       // kg/m2*s
 
 }

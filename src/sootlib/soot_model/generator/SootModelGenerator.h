@@ -33,28 +33,26 @@
 #include "sootlib/oxidation_model/OxidationModel_NONE.h"
 #include "sootlib/oxidation_model/OxidationModel_NSC_NEOH.h"
 
-namespace soot
-{
-class SootModelGenerator
-{
+namespace soot {
+class SootModelGenerator {
 public:
-	void setNucleationMechanism(NucleationMechanism mechanism);
-	void setGrowthMechanism(GrowthMechanism mechanism);
-	void setOxidationMechanism(OxidationMechanism mechanism);
-	void setCoagulationMechanism(CoagulationMechanism mechanism);
+    void setNucleationMechanism(NucleationMechanism mechanism);
+    void setGrowthMechanism(GrowthMechanism mechanism);
+    void setOxidationMechanism(OxidationMechanism mechanism);
+    void setCoagulationMechanism(CoagulationMechanism mechanism);
 
 protected:
-	SootModelGenerator();
+    SootModelGenerator();
 
-	NucleationMechanism nucleationMechanism;
-	GrowthMechanism growthMechanism;
-	OxidationMechanism oxidationMechanism;
-	CoagulationMechanism coagulationMechanism;
+    NucleationMechanism nucleationMechanism;
+    GrowthMechanism growthMechanism;
+    OxidationMechanism oxidationMechanism;
+    CoagulationMechanism coagulationMechanism;
 
-	[[nodiscard]] std::unique_ptr<CoagulationModel> getCoagulationModel() const;
-	[[nodiscard]] std::unique_ptr<GrowthModel> getGrowthModel() const;
-	[[nodiscard]] std::unique_ptr<NucleationModel> getNucleationModel() const;
-	[[nodiscard]] std::unique_ptr<OxidationModel> getOxidationModel() const;
+    [[nodiscard]] std::unique_ptr<CoagulationModel> getCoagulationModel() const;
+    [[nodiscard]] std::unique_ptr<GrowthModel> getGrowthModel() const;
+    [[nodiscard]] std::unique_ptr<NucleationModel> getNucleationModel() const;
+    [[nodiscard]] std::unique_ptr<OxidationModel> getOxidationModel() const;
 };
 }
 

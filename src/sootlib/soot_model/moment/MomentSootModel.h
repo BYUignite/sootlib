@@ -4,14 +4,12 @@
 #include "sootlib/SourceTerms.h"
 #include "sootlib/state/MomentState.h"
 
-namespace soot
-{
-class MomentSootModel
-{
+namespace soot {
+class MomentSootModel {
 public:
-	[[nodiscard]] virtual SourceTerms getSourceTerms(MomentState& state) const = 0;
+    [[nodiscard]] virtual SourceTerms getSourceTerms(MomentState& state) const = 0;
 
-	virtual ~MomentSootModel() = default;
+    virtual ~MomentSootModel() = default;
 };
 }
 

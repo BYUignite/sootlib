@@ -3,18 +3,18 @@
 
 #include "sootlib/nucleation_model/NucleationModel.h"
 
-namespace soot
-{
-class NucleationModel_LIN : public NucleationModel
-{
+namespace soot {
+class NucleationModel_LIN : public NucleationModel {
 public:
-	[[nodiscard]] double getNucleationRate(MomentState& state, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights, MassRateRatio& ratio) const override;
-	[[nodiscard]] NucleationMechanism getMechanism() const override
-	{
-		return NucleationMechanism::LIN;
-	}
+    [[nodiscard]] double getNucleationRate(MomentState& state,
+                                           const std::vector<double>& particleSizes,
+                                           const std::vector<double>& particleWeights,
+                                           MassRateRatio& ratio) const override;
+    [[nodiscard]] NucleationMechanism getMechanism() const override {
+        return NucleationMechanism::LIN;
+    }
 
-	~NucleationModel_LIN() override = default;
+    ~NucleationModel_LIN() override = default;
 };
 }
 

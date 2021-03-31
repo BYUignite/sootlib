@@ -6,15 +6,16 @@
 #include "sootlib/state/MomentState.h"
 #include "sootlib/MassRateRatio.h"
 
-namespace soot
-{
-class NucleationModel
-{
+namespace soot {
+class NucleationModel {
 public:
-	[[nodiscard]] virtual double getNucleationRate(MomentState& state, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights, MassRateRatio& ratio) const = 0;
-	[[nodiscard]] virtual NucleationMechanism getMechanism() const = 0;
+    [[nodiscard]] virtual double getNucleationRate(MomentState& state,
+                                                   const std::vector<double>& particleSizes,
+                                                   const std::vector<double>& particleWeights,
+                                                   MassRateRatio& ratio) const = 0;
+    [[nodiscard]] virtual NucleationMechanism getMechanism() const = 0;
 
-	virtual ~NucleationModel() = default;
+    virtual ~NucleationModel() = default;
 };
 }
 

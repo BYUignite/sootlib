@@ -4,14 +4,12 @@
 #include "sootlib/SourceTerms.h"
 #include "sootlib/state/BinState.h"
 
-namespace soot
-{
-class BinSootModel
-{
+namespace soot {
+class BinSootModel {
 public:
-	[[nodiscard]] virtual SourceTerms getSourceTerms(const BinState& state) const = 0;
+    [[nodiscard]] virtual SourceTerms getSourceTerms(const BinState& state) const = 0;
 
-	virtual ~BinSootModel() = default;
+    virtual ~BinSootModel() = default;
 };
 }
 

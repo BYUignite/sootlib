@@ -3,18 +3,15 @@
 
 #include "sootlib/coagulation_model/CoagulationModel.h"
 
-namespace soot
-{
-class CoagulationModel_LL : public CoagulationModel
-{
+namespace soot {
+class CoagulationModel_LL : public CoagulationModel {
 public:
-	[[nodiscard]] double getCoagulationRate(const MomentState& state, double m1, double m2) const override;
-	[[nodiscard]] CoagulationMechanism getMechanism() const override
-	{
-		return CoagulationMechanism::LL;
-	}
+    [[nodiscard]] double getCoagulationRate(const MomentState& state, double m1, double m2) const override;
+    [[nodiscard]] CoagulationMechanism getMechanism() const override {
+        return CoagulationMechanism::LL;
+    }
 
-	~CoagulationModel_LL() override = default;
+    ~CoagulationModel_LL() override = default;
 };
 }
 

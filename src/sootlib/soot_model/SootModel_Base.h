@@ -13,27 +13,24 @@
  * Contains supporting models that all soot models will need for calculations
  */
 
-namespace soot
-{
-class SootModel_Base
-{
+namespace soot {
+class SootModel_Base {
 protected:
-	SootModel_Base(std::unique_ptr<CoagulationModel> coagulationModel,
-				std::unique_ptr<GrowthModel> growthModel,
-				std::unique_ptr<NucleationModel> nucleationModel,
-				std::unique_ptr<OxidationModel> oxidationModel)
-				: coagulationModel(std::move(coagulationModel)),
-				growthModel(std::move(growthModel)),
-				nucleationModel(std::move(nucleationModel)),
-				oxidationModel(std::move(oxidationModel))
-	{}
+    SootModel_Base(std::unique_ptr<CoagulationModel> coagulationModel,
+                   std::unique_ptr<GrowthModel> growthModel,
+                   std::unique_ptr<NucleationModel> nucleationModel,
+                   std::unique_ptr<OxidationModel> oxidationModel)
+        : coagulationModel(std::move(coagulationModel)),
+          growthModel(std::move(growthModel)),
+          nucleationModel(std::move(nucleationModel)),
+          oxidationModel(std::move(oxidationModel)) {}
 
-	/* Calculation Models */
+    /* Calculation Models */
 
-	const std::unique_ptr<CoagulationModel> coagulationModel;
-	const std::unique_ptr<GrowthModel> growthModel;
-	const std::unique_ptr<NucleationModel> nucleationModel;
-	const std::unique_ptr<OxidationModel> oxidationModel;
+    const std::unique_ptr<CoagulationModel> coagulationModel;
+    const std::unique_ptr<GrowthModel> growthModel;
+    const std::unique_ptr<NucleationModel> nucleationModel;
+    const std::unique_ptr<OxidationModel> oxidationModel;
 };
 }
 

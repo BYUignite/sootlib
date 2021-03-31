@@ -3,18 +3,15 @@
 
 #include "sootlib/growth_model/GrowthModel.h"
 
-namespace soot
-{
-class GrowthModel_LL : public GrowthModel
-{
+namespace soot {
+class GrowthModel_LL : public GrowthModel {
 public:
-	[[nodiscard]] double getGrowthRate(const MomentState& state) const override;
-	[[nodiscard]] GrowthMechanism getMechanism() const override
-	{
-		return GrowthMechanism::LL;
-	}
+    [[nodiscard]] double getGrowthRate(const MomentState& state) const override;
+    [[nodiscard]] GrowthMechanism getMechanism() const override {
+        return GrowthMechanism::LL;
+    }
 
-	~GrowthModel_LL() override = default;
+    ~GrowthModel_LL() override = default;
 };
 }
 

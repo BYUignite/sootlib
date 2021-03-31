@@ -6,18 +6,18 @@
 #include "sootlib/nucleation_model/NucleationModel.h"
 #include "sootlib/coagulation_model/CoagulationModel_FRENK.h"
 
-namespace soot
-{
-class NucleationModel_PAH : public NucleationModel
-{
+namespace soot {
+class NucleationModel_PAH : public NucleationModel {
 public:
-	[[nodiscard]] double getNucleationRate(MomentState& state, const std::vector<double>& particleSizes, const std::vector<double>& particleWeights, MassRateRatio& ratio) const override;
-	[[nodiscard]] NucleationMechanism getMechanism() const override
-	{
-		return NucleationMechanism::PAH;
-	}
+    [[nodiscard]] double getNucleationRate(MomentState& state,
+                                           const std::vector<double>& particleSizes,
+                                           const std::vector<double>& particleWeights,
+                                           MassRateRatio& ratio) const override;
+    [[nodiscard]] NucleationMechanism getMechanism() const override {
+        return NucleationMechanism::PAH;
+    }
 
-	~NucleationModel_PAH() override = default;
+    ~NucleationModel_PAH() override = default;
 };
 }
 
