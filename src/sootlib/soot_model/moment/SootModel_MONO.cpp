@@ -5,26 +5,27 @@
 
 #include "SootModel_MONO.h"
 
+using namespace std;
 using namespace soot;
 
-SootModel_MONO::SootModel_MONO(std::unique_ptr<CoagulationModel> coagulationModel,
-                                     std::unique_ptr<GrowthModel> growthModel,
-                                     std::unique_ptr<NucleationModel> nucleationModel,
-                                     std::unique_ptr<OxidationModel> oxidationModel)
-	                : SootModel_Base(std::move(coagulationModel),
-	                                 std::move(growthModel),
-	                                 std::move(nucleationModel),
-	                                 std::move(oxidationModel)) {}
+SootModel_MONO::SootModel_MONO(unique_ptr<CoagulationModel> coagulationModel,
+                                     unique_ptr<GrowthModel> growthModel,
+                                     unique_ptr<NucleationModel> nucleationModel,
+                                     unique_ptr<OxidationModel> oxidationModel)
+	                : SootModel_Base(move(coagulationModel),
+	                                 move(growthModel),
+	                                 move(nucleationModel),
+	                                 move(oxidationModel)) {}
 
-SootModel_MONO* SootModel_MONO::getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
-                                                        std::unique_ptr<GrowthModel> growthModel,
-                                                        std::unique_ptr<NucleationModel> nucleationModel,
-                                                        std::unique_ptr<OxidationModel> oxidationModel)
+SootModel_MONO* SootModel_MONO::getInstance(unique_ptr<CoagulationModel> coagulationModel,
+                                                        unique_ptr<GrowthModel> growthModel,
+                                                        unique_ptr<NucleationModel> nucleationModel,
+                                                        unique_ptr<OxidationModel> oxidationModel)
 {
-	return new SootModel_MONO(std::move(coagulationModel),
-	                          std::move(growthModel),
-	                          std::move(nucleationModel),
-	                          std::move(oxidationModel));
+	return new SootModel_MONO(move(coagulationModel),
+	                          move(growthModel),
+	                          move(nucleationModel),
+	                          move(oxidationModel));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,13 +44,13 @@ SourceTerms SootModel_MONO::getSourceTerms(MomentState& state) const {
 	MassRateRatio oxidationRateRatios;
 	MassRateRatio growthRateRatios;
 
-	std::vector<double> weights = {0};
-	std::vector<double> abscissas = {0};
+	vector<double> weights = {0};
+	vector<double> abscissas = {0};
 
     //---------- get moments 
 	
     if (state.getNumMoments() < 2)
-		throw std::runtime_error("MONO soot model requires 2 soot moments");
+		throw runtime_error("MONO soot model requires 2 soot moments");
 
 	const double M0 = state.getMoment(0);
 	const double M1 = state.getMoment(1);
@@ -81,7 +82,7 @@ SourceTerms SootModel_MONO::getSourceTerms(MomentState& state) const {
 
     //---------- growth terms
 
-	const double Am2m3 = M0 > 0 ? M_PI * pow(std::abs(6.0 / (M_PI * state.getRhoSoot()) * M1 / M0), 2.0 / 3.0) * std::abs(M0) : 0;
+	const double Am2m3 = M0 > 0 ? M_PI * pow(abs(6.0 / (M_PI * state.getRhoSoot()) * M1 / M0), 2.0 / 3.0) * abs(M0) : 0;
 
 	const double G0 = 0;
 	const double G1 = kGrw * Am2m3;
@@ -98,12 +99,12 @@ SourceTerms SootModel_MONO::getSourceTerms(MomentState& state) const {
 
     //---------- combinine to make soot source terms
 	
-    std::vector<double> sootSourceTerms = {(N0 + Cnd0 + G0 + X0 + C0)/state.getRhoGas(), (N1 + Cnd1 + G1 + X1 + C1)/state.getRhoGas()};
+    vector<double> sootSourceTerms = {(N0 + Cnd0 + G0 + X0 + C0)/state.getRhoGas(), (N1 + Cnd1 + G1 + X1 + C1)/state.getRhoGas()};
 
     //---------- get gas source terms
 	
-    std::map<GasSpecies, double> gasSourceTerms;
-	std::map<size_t, double> PAHSourceTerms;
+    map<GasSpecies, double> gasSourceTerms;
+	map<size_t, double> PAHSourceTerms;
 
 	// Nucleation
 	for (auto it = nucleationRateRatios.gasSpeciesBegin(); it != nucleationRateRatios.gasSpeciesEnd(); it++)

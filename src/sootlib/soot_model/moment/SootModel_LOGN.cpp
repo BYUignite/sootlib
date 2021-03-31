@@ -1,24 +1,25 @@
 #include "SootModel_LOGN.h"
 
+using namespace std;
 using namespace soot;
 
-SootModel_LOGN* SootModel_LOGN::getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
-                                                        std::unique_ptr<GrowthModel> growthModel,
-                                                        std::unique_ptr<NucleationModel> nucleationModel,
-                                                        std::unique_ptr<OxidationModel> oxidationModel)
+SootModel_LOGN* SootModel_LOGN::getInstance(unique_ptr<CoagulationModel> coagulationModel,
+                                                        unique_ptr<GrowthModel> growthModel,
+                                                        unique_ptr<NucleationModel> nucleationModel,
+                                                        unique_ptr<OxidationModel> oxidationModel)
 {
-	return new SootModel_LOGN(std::move(coagulationModel),
-						   std::move(growthModel),
-						   std::move(nucleationModel),
-						   std::move(oxidationModel));
+	return new SootModel_LOGN(move(coagulationModel),
+						   move(growthModel),
+						   move(nucleationModel),
+						   move(oxidationModel));
 }
-SootModel_LOGN::SootModel_LOGN(std::unique_ptr<CoagulationModel> coagulationModel,
-                                     std::unique_ptr<GrowthModel> growthModel,
-                                     std::unique_ptr<NucleationModel> nucleationModel,
-                                     std::unique_ptr<OxidationModel> oxidationModel) : SootModel_Base(std::move(coagulationModel),
-                                                                                                    std::move(growthModel),
-                                                                                                    std::move(nucleationModel),
-                                                                                                    std::move(oxidationModel))
+SootModel_LOGN::SootModel_LOGN(unique_ptr<CoagulationModel> coagulationModel,
+                                     unique_ptr<GrowthModel> growthModel,
+                                     unique_ptr<NucleationModel> nucleationModel,
+                                     unique_ptr<OxidationModel> oxidationModel) : SootModel_Base(move(coagulationModel),
+                                                                                                    move(growthModel),
+                                                                                                    move(nucleationModel),
+                                                                                                    move(oxidationModel))
 {
 }
 SourceTerms SootModel_LOGN::getSourceTerms(MomentState& state) const

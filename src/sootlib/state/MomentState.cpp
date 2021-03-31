@@ -1,5 +1,6 @@
 #include "MomentState.h"
 
+using namespace std;
 using namespace soot;
 
 MomentState::MomentState(size_t numMoments)
@@ -13,7 +14,7 @@ size_t MomentState::getNumMoments() const
 }
 void MomentState::resetMoments(size_t numMoments)
 {
-	moments = std::vector<double>(numMoments, 0);
+	moments = vector<double>(numMoments, 0);
 }
 double MomentState::getMoment(size_t i) const
 {

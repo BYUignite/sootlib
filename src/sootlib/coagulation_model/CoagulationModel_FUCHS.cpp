@@ -18,14 +18,15 @@
 
 #include "CoagulationModel_FUCHS.h"
 
+using namespace std;
 using namespace soot;
 
 double CoagulationModel_FUCHS::getCoagulationRate(const  MomentState& state,
                                                         double m1,
                                                         double m2) const {
     
-	const double Dp1 = pow(6.0 * std::abs(m1) / M_PI / state.getRhoSoot(), 1.0 / 3.0);
-	const double Dp2 = pow(6.0 * std::abs(m2) / M_PI / state.getRhoSoot(), 1.0 / 3.0);
+	const double Dp1 = pow(6.0 * abs(m1) / M_PI / state.getRhoSoot(), 1.0 / 3.0);
+	const double Dp2 = pow(6.0 * abs(m2) / M_PI / state.getRhoSoot(), 1.0 / 3.0);
 
 	const double c1 = sqrt(8.0 * kb * state.getT() / M_PI / m1);
 	const double c2 = sqrt(8.0 * kb * state.getT() / M_PI / m2);

@@ -1,5 +1,6 @@
 #include "BinState.h"
 
+using namespace std;
 using namespace soot;
 
 BinState::BinState(size_t numBins)
@@ -13,7 +14,7 @@ size_t BinState::getNumBins() const
 }
 void BinState::resetBins(size_t numBins)
 {
-	bins = std::vector<double>(numBins, 0);
+	bins = vector<double>(numBins, 0);
 }
 double BinState::getBin(size_t i) const
 {

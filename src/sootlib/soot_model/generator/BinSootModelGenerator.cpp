@@ -1,5 +1,6 @@
 #include "BinSootModelGenerator.h"
 
+using namespace std;
 using namespace soot;
 
 BinSootModelGenerator::BinSootModelGenerator()
@@ -13,27 +14,27 @@ void BinSootModelGenerator::setModel(soot::BinModel model)
 BinSootModel* BinSootModelGenerator::getModel() const
 {
 	/* create helper models */
-	std::unique_ptr<CoagulationModel> cm;
-	std::unique_ptr<GrowthModel> gm;
-	std::unique_ptr<NucleationModel> nm;
-	std::unique_ptr<OxidationModel> om;
+	unique_ptr<CoagulationModel> cm;
+	unique_ptr<GrowthModel> gm;
+	unique_ptr<NucleationModel> nm;
+	unique_ptr<OxidationModel> om;
 
 	switch (model)
 	{
 		case BinModel::SECT:
-			return SootModel_SECT::getInstance(std::move(cm),
-									  std::move(gm),
-									  std::move(nm),
-									  std::move(om));
+			return SootModel_SECT::getInstance(move(cm),
+									  move(gm),
+									  move(nm),
+									  move(om));
 		default:
-			throw std::domain_error("Bad soot model type");
+			throw domain_error("Bad soot model type");
 	}
 }
-std::unique_ptr<BinSootModel> BinSootModelGenerator::getModelUnique() const
+unique_ptr<BinSootModel> BinSootModelGenerator::getModelUnique() const
 {
-	return std::unique_ptr<BinSootModel>(getModel());
+	return unique_ptr<BinSootModel>(getModel());
 }
-std::shared_ptr<BinSootModel> BinSootModelGenerator::getModelShared() const
+shared_ptr<BinSootModel> BinSootModelGenerator::getModelShared() const
 {
-	return std::shared_ptr<BinSootModel>(getModel());
+	return shared_ptr<BinSootModel>(getModel());
 }

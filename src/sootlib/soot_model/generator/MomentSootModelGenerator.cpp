@@ -1,5 +1,6 @@
 #include "MomentSootModelGenerator.h"
 
+using namespace std;
 using namespace soot;
 
 void MomentSootModelGenerator::setModel(MomentModel model)
@@ -9,45 +10,45 @@ void MomentSootModelGenerator::setModel(MomentModel model)
 MomentSootModel* MomentSootModelGenerator::getModel() const
 {
 	/* create helper models */
-	std::unique_ptr<CoagulationModel> cm = getCoagulationModel();
-	std::unique_ptr<GrowthModel> gm = getGrowthModel();
-	std::unique_ptr<NucleationModel> nm = getNucleationModel();
-	std::unique_ptr<OxidationModel> om = getOxidationModel();
+	unique_ptr<CoagulationModel> cm = getCoagulationModel();
+	unique_ptr<GrowthModel> gm = getGrowthModel();
+	unique_ptr<NucleationModel> nm = getNucleationModel();
+	unique_ptr<OxidationModel> om = getOxidationModel();
 
 	/* create and return model ptr */
 	switch (model)
 	{
 		case MomentModel::MONO:
-			return SootModel_MONO::getInstance(std::move(cm),
-			                                   std::move(gm),
-			                                   std::move(nm),
-			                                   std::move(om));
+			return SootModel_MONO::getInstance(move(cm),
+			                                   move(gm),
+			                                   move(nm),
+			                                   move(om));
 		case MomentModel::LOGN:
-			return SootModel_LOGN::getInstance(std::move(cm),
-			                                   std::move(gm),
-			                                   std::move(nm),
-			                                   std::move(om));
+			return SootModel_LOGN::getInstance(move(cm),
+			                                   move(gm),
+			                                   move(nm),
+			                                   move(om));
 		case MomentModel::MOMIC:
-			return SootModel_MOMIC::getInstance(std::move(cm),
-			                                    std::move(gm),
-			                                    std::move(nm),
-			                                    std::move(om));
+			return SootModel_MOMIC::getInstance(move(cm),
+			                                    move(gm),
+			                                    move(nm),
+			                                    move(om));
 		case MomentModel::QMOM:
-			return SootModel_QMOM::getInstance(std::move(cm),
-			                                   std::move(gm),
-			                                   std::move(nm),
-			                                   std::move(om));
+			return SootModel_QMOM::getInstance(move(cm),
+			                                   move(gm),
+			                                   move(nm),
+			                                   move(om));
 		default:
-			throw std::domain_error("Bad soot model type");
+			throw domain_error("Bad soot model type");
 	}
 }
-std::unique_ptr<MomentSootModel> MomentSootModelGenerator::getModelUnique() const
+unique_ptr<MomentSootModel> MomentSootModelGenerator::getModelUnique() const
 {
-	return std::unique_ptr<MomentSootModel>(getModel());
+	return unique_ptr<MomentSootModel>(getModel());
 }
-std::shared_ptr<MomentSootModel> MomentSootModelGenerator::getModelShared() const
+shared_ptr<MomentSootModel> MomentSootModelGenerator::getModelShared() const
 {
-	return std::shared_ptr<MomentSootModel>(getModel());
+	return shared_ptr<MomentSootModel>(getModel());
 }
 MomentSootModelGenerator::MomentSootModelGenerator()
 {

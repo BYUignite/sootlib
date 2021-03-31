@@ -14,16 +14,17 @@
 
 #include "NucleationModel_PAH.h"
 
+using namespace std;
 using namespace soot;
 
 double NucleationModel_PAH::getNucleationRate(MomentState& state,
-                                                    const std::vector<double>& particleSizes,
-                                                    const std::vector<double>& particleWeights,
+                                                    const vector<double>& particleSizes,
+                                                    const vector<double>& particleWeights,
                                                     MassRateRatio& ratio) const
 {
     // get dimer self-collision rate
     state.calculateMDimer(&ratio);
-	std::unique_ptr<CoagulationModel> coagModel = std::make_unique<CoagulationModel_FRENK>();
+	unique_ptr<CoagulationModel> coagModel = make_unique<CoagulationModel_FRENK>();
 	const double beta_DD = coagModel->getCoagulationRate(state, state.getMDimer(), state.getMDimer());
 
 	return 0.5 * beta_DD * state.getDimer() * state.getDimer();     // #/m3*s

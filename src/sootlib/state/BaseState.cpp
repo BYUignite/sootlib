@@ -1,5 +1,6 @@
 #include "BaseState.h"
 
+using namespace std;
 using namespace soot;
 
 double BaseState::getT() const
@@ -129,7 +130,7 @@ void BaseState::calculateMDimer(MassRateRatio* ratio)
 	{
 		MPAHn = PAH_MW(n) / Na;
 		N_n = getNi(n);
-		wDotI = std::abs(getGammai(n) * preFac * pow(MPAHn, exp) * N_n * N_n);
+		wDotI = abs(getGammai(n) * preFac * pow(MPAHn, exp) * N_n * N_n);
 		wdotD += wDotI;
 		mDimer += wDotI * MPAHn;
 		cMin += wDotI * MPAHn;
@@ -177,19 +178,19 @@ double BaseState::getWDotD()
 		calculateMDimer();
 	return wdotD;
 }
-std::map<GasSpecies, double>::const_iterator BaseState::gasFractionsBegin() const
+map<GasSpecies, double>::const_iterator BaseState::gasFractionsBegin() const
 {
 	return gasFractions.begin();
 }
-std::map<GasSpecies, double>::const_iterator BaseState::gasFractionsEnd() const
+map<GasSpecies, double>::const_iterator BaseState::gasFractionsEnd() const
 {
 	return gasFractions.end();
 }
-std::map<size_t, double>::const_iterator BaseState::PAHFractionsBegin() const
+map<size_t, double>::const_iterator BaseState::PAHFractionsBegin() const
 {
 	return PAHFractions.begin();
 }
-std::map<size_t, double>::const_iterator BaseState::PAHFractionsEnd() const
+map<size_t, double>::const_iterator BaseState::PAHFractionsEnd() const
 {
 	return PAHFractions.end();
 }

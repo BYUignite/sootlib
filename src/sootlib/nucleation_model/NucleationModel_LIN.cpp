@@ -8,11 +8,12 @@
 
 #include "NucleationModel_LIN.h"
 
+using namespace std;
 using namespace soot;
 
 double NucleationModel_LIN::getNucleationRate(MomentState& state,
-                                                    const std::vector<double>& particleSizes,
-                                                    const std::vector<double>& particleWeights,
+                                                    const vector<double>& particleSizes,
+                                                    const vector<double>& particleWeights,
                                                     MassRateRatio& ratio) const
 {
 	ratio.gasSpeciesRatio(GasSpecies::C2H2) = -MW_C2H2 / (2 * MW_C);
