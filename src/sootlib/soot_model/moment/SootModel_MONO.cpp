@@ -5,7 +5,9 @@
 
 #include "SootModel_MONO.h"
 
-soot::SootModel_MONO::SootModel_MONO(std::unique_ptr<CoagulationModel> coagulationModel,
+using namespace soot;
+
+SootModel_MONO::SootModel_MONO(std::unique_ptr<CoagulationModel> coagulationModel,
                                      std::unique_ptr<GrowthModel> growthModel,
                                      std::unique_ptr<NucleationModel> nucleationModel,
                                      std::unique_ptr<OxidationModel> oxidationModel)
@@ -14,7 +16,7 @@ soot::SootModel_MONO::SootModel_MONO(std::unique_ptr<CoagulationModel> coagulati
 	                                 std::move(nucleationModel),
 	                                 std::move(oxidationModel)) {}
 
-soot::SootModel_MONO* soot::SootModel_MONO::getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
+SootModel_MONO* SootModel_MONO::getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
                                                         std::unique_ptr<GrowthModel> growthModel,
                                                         std::unique_ptr<NucleationModel> nucleationModel,
                                                         std::unique_ptr<OxidationModel> oxidationModel)
@@ -35,7 +37,7 @@ soot::SootModel_MONO* soot::SootModel_MONO::getInstance(std::unique_ptr<Coagulat
  *
  */
 
-soot::SourceTerms soot::SootModel_MONO::getSourceTerms(MomentState& state) const {
+SourceTerms SootModel_MONO::getSourceTerms(MomentState& state) const {
 
 	MassRateRatio nucleationRateRatios;
 	MassRateRatio oxidationRateRatios;

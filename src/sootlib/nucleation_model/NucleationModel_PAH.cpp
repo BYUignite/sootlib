@@ -13,7 +13,10 @@
  */
 
 #include "NucleationModel_PAH.h"
-double soot::NucleationModel_PAH::getNucleationRate(MomentState& state,
+
+using namespace soot;
+
+double NucleationModel_PAH::getNucleationRate(MomentState& state,
                                                     const std::vector<double>& particleSizes,
                                                     const std::vector<double>& particleWeights,
                                                     MassRateRatio& ratio) const

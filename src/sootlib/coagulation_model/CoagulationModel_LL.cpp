@@ -16,7 +16,9 @@
 
 #include "CoagulationModel_LL.h"
 
-double soot::CoagulationModel_LL::getCoagulationRate(const MomentState& state,
+using namespace soot;
+
+double CoagulationModel_LL::getCoagulationRate(const MomentState& state,
                                                      double m1,
                                                      double m2) const {
 	const double Ca = 9.0;

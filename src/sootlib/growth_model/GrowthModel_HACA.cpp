@@ -15,7 +15,9 @@
 
 #include "GrowthModel_HACA.h"
 
-double soot::GrowthModel_HACA::getGrowthRate(const MomentState& state) const {
+using namespace soot;
+
+double GrowthModel_HACA::getGrowthRate(const MomentState& state) const {
 
 	const double M0 = state.getMoment(0);                           // #/m3
 	const double M1 = state.getMoment(1);                           // kg/m3

@@ -1,28 +1,31 @@
 #include "SootModelGenerator.h"
-soot::SootModelGenerator::SootModelGenerator()
+
+using namespace soot;
+
+SootModelGenerator::SootModelGenerator()
 {
 	nucleationMechanism = NucleationMechanism::NONE;
 	growthMechanism = GrowthMechanism::NONE;
 	oxidationMechanism = OxidationMechanism::NONE;
 	coagulationMechanism = CoagulationMechanism::NONE;
 }
-void soot::SootModelGenerator::setNucleationMechanism(soot::NucleationMechanism mechanism)
+void SootModelGenerator::setNucleationMechanism(NucleationMechanism mechanism)
 {
 	nucleationMechanism = mechanism;
 }
-void soot::SootModelGenerator::setGrowthMechanism(soot::GrowthMechanism mechanism)
+void SootModelGenerator::setGrowthMechanism(GrowthMechanism mechanism)
 {
 	growthMechanism = mechanism;
 }
-void soot::SootModelGenerator::setOxidationMechanism(soot::OxidationMechanism mechanism)
+void SootModelGenerator::setOxidationMechanism(OxidationMechanism mechanism)
 {
 	oxidationMechanism = mechanism;
 }
-void soot::SootModelGenerator::setCoagulationMechanism(soot::CoagulationMechanism mechanism)
+void SootModelGenerator::setCoagulationMechanism(CoagulationMechanism mechanism)
 {
 	coagulationMechanism = mechanism;
 }
-std::unique_ptr<soot::CoagulationModel> soot::SootModelGenerator::getCoagulationModel() const
+std::unique_ptr<CoagulationModel> SootModelGenerator::getCoagulationModel() const
 {
 	switch (coagulationMechanism)
 	{
@@ -38,7 +41,7 @@ std::unique_ptr<soot::CoagulationModel> soot::SootModelGenerator::getCoagulation
 			throw std::domain_error("Bad soot coagulation mechanism");
 	}
 }
-std::unique_ptr<soot::GrowthModel> soot::SootModelGenerator::getGrowthModel() const
+std::unique_ptr<GrowthModel> SootModelGenerator::getGrowthModel() const
 {
 	switch (growthMechanism)
 	{
@@ -54,7 +57,7 @@ std::unique_ptr<soot::GrowthModel> soot::SootModelGenerator::getGrowthModel() co
 			throw std::domain_error("Bad soot growth mechanism");
 	}
 }
-std::unique_ptr<soot::NucleationModel> soot::SootModelGenerator::getNucleationModel() const
+std::unique_ptr<NucleationModel> SootModelGenerator::getNucleationModel() const
 {
 	switch (nucleationMechanism)
 	{
@@ -70,7 +73,7 @@ std::unique_ptr<soot::NucleationModel> soot::SootModelGenerator::getNucleationMo
 			throw std::domain_error("Bad soot nucleation mechanism");
 	}
 }
-std::unique_ptr<soot::OxidationModel> soot::SootModelGenerator::getOxidationModel() const
+std::unique_ptr<OxidationModel> SootModelGenerator::getOxidationModel() const
 {
 	switch (oxidationMechanism)
 	{

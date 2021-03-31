@@ -12,7 +12,9 @@
 
 #include "OxidationModel_LL.h"
 
-double soot::OxidationModel_LL::getOxidationRate(const MomentState& state, MassRateRatio& ratio) const {
+using namespace soot;
+
+double OxidationModel_LL::getOxidationRate(const MomentState& state, MassRateRatio& ratio) const {
 
 	ratio.gasSpeciesRatio(GasSpecies::O2) = -0.5 * MW_O2 / MW_C;
 	ratio.gasSpeciesRatio(GasSpecies::CO) = MW_CO / MW_C;

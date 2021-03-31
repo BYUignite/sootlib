@@ -7,8 +7,7 @@
 #include "lib/eispack/eispack.h"
 
 using namespace std;
-
-namespace soot {
+using namespace soot;
     
 SootModel_QMOM::SootModel_QMOM(unique_ptr<CoagulationModel>  coagulationModel,
                                      unique_ptr<GrowthModel>       growthModel,
@@ -207,13 +206,13 @@ void SootModel_QMOM::getWtsAbs(vector<double> M, vector<double> &weights, vector
                 negs = true;
         }
 
-        if (negs == true) {                     // if we found negative values
+        if (negs) {                     // if we found negative values
             N = N - 2;                          // downselect to two fewer moments and try again
             w_temp.resize(N/2);
             a_temp.resize(N/2);
         }
 
-    } while (negs == true);                     // end of downselection loop
+    } while (negs);                     // end of downselection loop
 
     for (int k = 0; k < w_temp.size(); k++) {   // assign temporary variables to output
         weights[k]   = w_temp[k];
@@ -308,5 +307,3 @@ double SootModel_QMOM::Mk(double exp, vector<double> wts, vector<double> absc) c
     
     return Mk;
 }
-
-} // end namespace soot

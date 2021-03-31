@@ -8,7 +8,9 @@
 
 #include "NucleationModel_LIN.h"
 
-double soot::NucleationModel_LIN::getNucleationRate(MomentState& state,
+using namespace soot;
+
+double NucleationModel_LIN::getNucleationRate(MomentState& state,
                                                     const std::vector<double>& particleSizes,
                                                     const std::vector<double>& particleWeights,
                                                     MassRateRatio& ratio) const

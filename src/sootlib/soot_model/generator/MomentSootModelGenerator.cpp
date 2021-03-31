@@ -1,9 +1,12 @@
 #include "MomentSootModelGenerator.h"
-void soot::MomentSootModelGenerator::setModel(soot::MomentModel model)
+
+using namespace soot;
+
+void MomentSootModelGenerator::setModel(MomentModel model)
 {
 	this->model = model;
 }
-soot::MomentSootModel* soot::MomentSootModelGenerator::getModel() const
+MomentSootModel* MomentSootModelGenerator::getModel() const
 {
 	/* create helper models */
 	std::unique_ptr<CoagulationModel> cm = getCoagulationModel();
@@ -38,15 +41,15 @@ soot::MomentSootModel* soot::MomentSootModelGenerator::getModel() const
 			throw std::domain_error("Bad soot model type");
 	}
 }
-std::unique_ptr<soot::MomentSootModel> soot::MomentSootModelGenerator::getModelUnique() const
+std::unique_ptr<MomentSootModel> MomentSootModelGenerator::getModelUnique() const
 {
 	return std::unique_ptr<MomentSootModel>(getModel());
 }
-std::shared_ptr<soot::MomentSootModel> soot::MomentSootModelGenerator::getModelShared() const
+std::shared_ptr<MomentSootModel> MomentSootModelGenerator::getModelShared() const
 {
 	return std::shared_ptr<MomentSootModel>(getModel());
 }
-soot::MomentSootModelGenerator::MomentSootModelGenerator()
+MomentSootModelGenerator::MomentSootModelGenerator()
 {
 	model = MomentModel::MONO;
 }

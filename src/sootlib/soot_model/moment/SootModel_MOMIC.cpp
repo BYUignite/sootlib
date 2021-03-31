@@ -1,5 +1,8 @@
 #include "SootModel_MOMIC.h"
-soot::SootModel_MOMIC* soot::SootModel_MOMIC::getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
+
+using namespace soot;
+
+SootModel_MOMIC* SootModel_MOMIC::getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
                                                           std::unique_ptr<GrowthModel> growthModel,
                                                           std::unique_ptr<NucleationModel> nucleationModel,
                                                           std::unique_ptr<OxidationModel> oxidationModel)
@@ -9,7 +12,7 @@ soot::SootModel_MOMIC* soot::SootModel_MOMIC::getInstance(std::unique_ptr<Coagul
 	                           std::move(nucleationModel),
 	                           std::move(oxidationModel));
 }
-soot::SootModel_MOMIC::SootModel_MOMIC(std::unique_ptr<CoagulationModel> coagulationModel,
+SootModel_MOMIC::SootModel_MOMIC(std::unique_ptr<CoagulationModel> coagulationModel,
                                        std::unique_ptr<GrowthModel> growthModel,
                                        std::unique_ptr<NucleationModel> nucleationModel,
                                        std::unique_ptr<OxidationModel> oxidationModel) : SootModel_Base(std::move(coagulationModel),
@@ -18,7 +21,7 @@ soot::SootModel_MOMIC::SootModel_MOMIC(std::unique_ptr<CoagulationModel> coagula
                                                                                                       std::move(oxidationModel))
 {
 }
-soot::SourceTerms soot::SootModel_MOMIC::getSourceTerms(soot::MomentState& state) const
+SourceTerms SootModel_MOMIC::getSourceTerms(MomentState& state) const
 {
 	// TODO implement
 	return SourceTerms();

@@ -15,7 +15,9 @@
 
 #include "OxidationModel_NSC_NEOH.h"
 
-double soot::OxidationModel_NSC_NEOH::getOxidationRate(const MomentState& state, MassRateRatio& ratio) const {
+using namespace soot;
+
+double OxidationModel_NSC_NEOH::getOxidationRate(const MomentState& state, MassRateRatio& ratio) const {
 
 	const double pO2_atm = state.getGasSpeciesP(GasSpecies::O2) / 101325.0; // partial pressure of O2 (atm)
 	const double pOH_atm = state.getGasSpeciesP(GasSpecies::OH) / 101325.0; // partial pressure of OH (atm)

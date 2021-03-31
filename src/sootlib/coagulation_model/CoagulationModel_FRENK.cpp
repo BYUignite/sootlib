@@ -11,7 +11,9 @@
 
 #include "CoagulationModel_FRENK.h"
 
-double soot::CoagulationModel_FRENK::getCoagulationRate(const  MomentState& state,
+using namespace soot;
+
+double CoagulationModel_FRENK::getCoagulationRate(const  MomentState& state,
                                                         double m1,
                                                         double m2) const {
 
