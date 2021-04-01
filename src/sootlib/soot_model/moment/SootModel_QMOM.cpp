@@ -45,7 +45,7 @@ SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
     MassRateRatios massRateRatios;
 
     int nMom = state.getNumMoments();
-    vector<double> M(nMom, 0.0);
+    vector<double> M(nMom, 0);
     vector<double> weights = {0};
     vector<double> abscissas = {0};
 
@@ -64,8 +64,10 @@ SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
     getWtsAbs(M, weights, abscissas);           // wheeler algorithms applied here
 
     for (int i = 0; i < weights.size(); i++) {
-        if (weights.at(i) < 0.0) weights.at(i) = 0.0;
-        if (abscissas.at(i) < 0.0) abscissas.at(i) = 0.0;
+        if (weights.at(i) < 0.0)
+            weights.at(i) = 0.0;
+        if (abscissas.at(i) < 0.0)
+            abscissas.at(i) = 0.0;
     }
 
     //---------- get chemical rates
@@ -90,9 +92,7 @@ SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
         for (int k = 1; k < nMom;
              k++) {                                         // M0 = 0.0 for condensation by definition
             for (int ii = 0; ii < abscissas.size(); ii++)
-                condensationSourceM.at(k) +=
-                    coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(ii))
-                        * pow(abscissas.at(ii), k - 1) * weights.at(ii);
+                condensationSourceM.at(k) += coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(ii)) * pow(abscissas.at(ii), k - 1) * weights.at(ii);
             condensationSourceM.at(k) *= state.getDimer() * state.getMDimer() * k;
         }
     }
@@ -101,15 +101,13 @@ SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
 
     vector<double> growthSourceM(nMom, 0.0);                                      // growth source terms for moments
     double Acoef = M_PI * pow(abs(6.0 / M_PI / state.getRhoSoot()), 2.0 / 3.0);   // Acoef (=) kmol^2/3 / kg^2/3
-    for (int k = 1; k < nMom;
-         k++)                                                   // M0 = 0.0 for growth by definition
+    for (int k = 1; k < nMom; k++)                                                   // M0 = 0.0 for growth by definition
         growthSourceM.at(k) = kGrw * Acoef * k * Mk(k - 1.0 / 3.0, weights, abscissas);                  // kg^k/m3*s
 
     //---------- oxidation terms
 
     vector<double> oxidationSourceM(nMom, 0.0);                                   // oxidation source terms
-    for (int k = 1; k < nMom;
-         k++)                                                   // M0 = 0.0 for oxidation by definition
+    for (int k = 1; k < nMom; k++)                                                   // M0 = 0.0 for oxidation by definition
         oxidationSourceM.at(k) = -kOxi * Acoef * k * Mk(k - 1.0 / 3.0, weights, abscissas);              // kg^k/m3*s
 
     //---------- coagulation terms
@@ -119,17 +117,11 @@ SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
     for (int k = 0; k < nMom; k++) {
         if (k == 1)
             continue;                                                       // M1 = 0.0 for coagulation by definition
-        for (int ii = 1; ii < abscissas.size();
-             ii++)                                 // off-diagonal terms (looping half of them) with *2 incorporated
+        for (int ii = 1; ii < abscissas.size(); ii++)                                 // off-diagonal terms (looping half of them) with *2 incorporated
             for (int j = 0; j < ii; j++)
-                coagulationSourceM.at(k) +=
-                    coagulationModel->getCoagulationRate(state, abscissas.at(ii), abscissas.at(j)) * weights.at(ii) * weights.at(j)
-                        * (k == 0 ? -1.0 : (pow(abscissas.at(ii) + abscissas.at(j), k)) - pow(abscissas.at(ii), k)
-                            - pow(abscissas.at(j), k));
+                coagulationSourceM.at(k) += coagulationModel->getCoagulationRate(state, abscissas.at(ii), abscissas.at(j)) * weights.at(ii) * weights.at(j) * (k == 0 ? -1.0 : (pow(abscissas.at(ii) + abscissas.at(j), k)) - pow(abscissas.at(ii), k) - pow(abscissas.at(j), k));
         for (int ii = 0; ii < abscissas.size(); ii++)                                      // diagonal terms
-            coagulationSourceM.at(k) +=
-                coagulationModel->getCoagulationRate(state, abscissas.at(ii), abscissas.at(ii)) * weights.at(ii) * weights.at(ii)
-                    * (k == 0 ? -0.5 : pow(abscissas.at(ii), k) * (pow(2, k - 1) - 1));
+            coagulationSourceM.at(k) += coagulationModel->getCoagulationRate(state, abscissas.at(ii), abscissas.at(ii)) * weights.at(ii) * weights.at(ii) * (k == 0 ? -0.5 : pow(abscissas.at(ii), k) * (pow(2, k - 1) - 1));
     }
 
     //---------- combinine to make source terms
@@ -137,8 +129,7 @@ SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
     vector<double> sootSourceTerms(nMom, 0.0);
 
     for (int k = 0; k < nMom; k++)
-        sootSourceTerms.at(k) = (nucleationSourceM.at(k) + condensationSourceM.at(k) + growthSourceM.at(k) + oxidationSourceM.at(k)
-            + coagulationSourceM.at(k)) / state.getRhoGas();
+        sootSourceTerms.at(k) = (nucleationSourceM.at(k) + condensationSourceM.at(k) + growthSourceM.at(k) + oxidationSourceM.at(k) + coagulationSourceM.at(k)) / state.getRhoGas();
 
     //---------- get gas source terms
 
