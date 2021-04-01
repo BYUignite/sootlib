@@ -2,8 +2,32 @@
 #define STATIC_H_
 
 #include <vector>
+#include <algorithm>
 
 namespace soot {
+/* Downselect if needed */
+// TODO this function has been tweaked and needs a slightly updated description
+size_t downselectIfNeeded(std::vector<double>& M, size_t N) {
+    if (M.at(0) <= 0)
+        return 0;
+
+    if (M.at(1) <= 0) {
+        const double M0 = 1;
+        const double sigL = 3;
+        const double mavg = 1.0E-21;
+        M.at(1) = M0 * mavg * exp(0.5 * pow(sigL, 2));
+    }
+
+    bool zeros = true;
+    while (N <= 2 && zeros) {
+        zeros = std::find(M.begin(), M.begin() + N, 0) != M.end();
+        N -= 1;
+    }
+
+    M.resize(N);
+    return N;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /*! Wheeler algorithm for computing weights and abscissas from moments
  *
