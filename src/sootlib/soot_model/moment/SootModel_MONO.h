@@ -10,7 +10,6 @@ namespace soot {
 class SootModel_MONO : public MomentSootModel, public SootModel_Base {
 
 public:
-
     [[nodiscard]] static SootModel_MONO* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
                                                      std::unique_ptr<GrowthModel> growthModel,
                                                      std::unique_ptr<NucleationModel> nucleationModel,

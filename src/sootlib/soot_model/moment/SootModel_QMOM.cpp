@@ -51,7 +51,10 @@ SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
 
     //---------- get moments
 
-    //TODO throw error if number of moments is not an even number and at least 2
+    if (nMom % 2 == 1)
+        throw runtime_error("QMOM soot model requires even number of moments");
+    if (nMom < 2)
+        throw runtime_error("QMOM soot model requries at least 2 moments");
 
     for (int k = 0; k < nMom; k++)
         M.at(k) = state.getMoment(k);
