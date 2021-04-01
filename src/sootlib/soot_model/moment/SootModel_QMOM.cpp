@@ -64,8 +64,8 @@ SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
     getWtsAbs(M, weights, abscissas);           // wheeler algorithms applied here
 
     for (int i = 0; i < weights.size(); i++) {
-        if (weights[i] < 0.0) weights[i] = 0.0;
-        if (abscissas[i] < 0.0) abscissas[i] = 0.0;
+        if (weights.at(i) < 0.0) weights.at(i) = 0.0;
+        if (abscissas.at(i) < 0.0) abscissas.at(i) = 0.0;
     }
 
     //---------- get chemical rates
@@ -80,7 +80,7 @@ SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
     vector<double> nucleationSourceM(nMom, 0.0);                        // nucleation source terms for moments
     double mNuc = state.getCMin() * MW_C / Na;                              // mass of a nucleated particle
     for (int k = 0; k < nMom; k++)
-        nucleationSourceM[k] = pow(mNuc, k) * jNuc;                          // Nuc_rate = m_nuc^r * jNuc
+        nucleationSourceM.at(k) = pow(mNuc, k) * jNuc;                          // Nuc_rate = m_nuc^r * jNuc
 
     //---------- PAH condensation terms
 
@@ -123,13 +123,13 @@ SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
              ii++)                                 // off-diagonal terms (looping half of them) with *2 incorporated
             for (int j = 0; j < ii; j++)
                 coagulationSourceM.at(k) +=
-                    coagulationModel->getCoagulationRate(state, abscissas[ii], abscissas[j]) * weights[ii] * weights[j]
-                        * (k == 0 ? -1.0 : (pow(abscissas[ii] + abscissas[j], k)) - pow(abscissas[ii], k)
-                            - pow(abscissas[j], k));
+                    coagulationModel->getCoagulationRate(state, abscissas.at(ii), abscissas.at(j)) * weights.at(ii) * weights.at(j)
+                        * (k == 0 ? -1.0 : (pow(abscissas.at(ii) + abscissas.at(j), k)) - pow(abscissas.at(ii), k)
+                            - pow(abscissas.at(j), k));
         for (int ii = 0; ii < abscissas.size(); ii++)                                      // diagonal terms
             coagulationSourceM.at(k) +=
-                coagulationModel->getCoagulationRate(state, abscissas[ii], abscissas[ii]) * weights[ii] * weights[ii]
-                    * (k == 0 ? -0.5 : pow(abscissas[ii], k) * (pow(2, k - 1) - 1));
+                coagulationModel->getCoagulationRate(state, abscissas.at(ii), abscissas.at(ii)) * weights.at(ii) * weights.at(ii)
+                    * (k == 0 ? -0.5 : pow(abscissas.at(ii), k) * (pow(2, k - 1) - 1));
     }
 
     //---------- combinine to make source terms
@@ -137,8 +137,8 @@ SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
     vector<double> sootSourceTerms(nMom, 0.0);
 
     for (int k = 0; k < nMom; k++)
-        sootSourceTerms.at(k) = (nucleationSourceM[k] + condensationSourceM[k] + growthSourceM[k] + oxidationSourceM[k]
-            + coagulationSourceM[k]) / state.getRhoGas();
+        sootSourceTerms.at(k) = (nucleationSourceM.at(k) + condensationSourceM.at(k) + growthSourceM.at(k) + oxidationSourceM.at(k)
+            + coagulationSourceM.at(k)) / state.getRhoGas();
 
     //---------- get gas source terms
 
@@ -147,19 +147,19 @@ SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
 
     // Nucleation
     for (auto it = massRateRatios.nucCond().gasSpeciesBegin(); it != massRateRatios.nucCond().gasSpeciesEnd(); it++)
-        gasSourceTerms[it->first] += nucleationSourceM[1] * it->second / state.getRhoGas();
+        gasSourceTerms.at(it->first) += nucleationSourceM.at(1) * it->second / state.getRhoGas();
     for (auto it = massRateRatios.nucCond().PAHBegin(); it != massRateRatios.nucCond().PAHEnd(); it++)
-        PAHSourceTerms[it->first] += nucleationSourceM[1] * it->second / state.getRhoGas();
+        PAHSourceTerms.at(it->first) += nucleationSourceM.at(1) * it->second / state.getRhoGas();
 
     // Growth
     for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
-        gasSourceTerms[it->first] += growthSourceM[1] * it->second / state.getRhoGas();
+        gasSourceTerms.at(it->first) += growthSourceM.at(1) * it->second / state.getRhoGas();
 
     // Oxidation
     for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
-        gasSourceTerms[it->first] += oxidationSourceM[1] * it->second / state.getRhoGas();
+        gasSourceTerms.at(it->first) += oxidationSourceM.at(1) * it->second / state.getRhoGas();
     for (auto it = massRateRatios.groOxi().PAHBegin(); it != massRateRatios.groOxi().PAHEnd(); it++)
-        PAHSourceTerms[it->first] += oxidationSourceM[1] * it->second / state.getRhoGas();
+        PAHSourceTerms.at(it->first) += oxidationSourceM.at(1) * it->second / state.getRhoGas();
 
     // Coagulation - n/a
 
