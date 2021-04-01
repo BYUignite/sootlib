@@ -52,7 +52,8 @@ set(SOOTMODELS_SRC_FILES
         sootlib/soot_model/moment/SootModel_QMOM.h
         sootlib/soot_model/moment/SootModel_QMOM.cpp
         sootlib/soot_model/bin/SootModel_SECT.h
-        sootlib/soot_model/bin/SootModel_SECT.cpp)
+        sootlib/soot_model/bin/SootModel_SECT.cpp
+        sootlib/soot_model/static.h)
 
 set(STATE_SRC_FILES
         sootlib/state/BaseState.h

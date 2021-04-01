@@ -31,11 +31,6 @@ private:
                    std::unique_ptr<GrowthModel> growthModel,
                    std::unique_ptr<NucleationModel> nucleationModel,
                    std::unique_ptr<OxidationModel> oxidationModel);
-
-    void getWtsAbs(std::vector<double> M, std::vector<double>& weights, std::vector<double>& abscissas) const;
-    double Mk(double exp, std::vector<double> wts, std::vector<double> absc) const;
-    void wheeler(const std::vector<double>& m, int N, std::vector<double>& w, std::vector<double>& x) const;
-
 };
 }
 
