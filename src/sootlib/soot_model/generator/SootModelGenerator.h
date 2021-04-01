@@ -1,49 +1,40 @@
 #ifndef BASESOOTMODELFACTORY_H
 #define BASESOOTMODELFACTORY_H
 
-/* static variables */
-#include "sootlib/static.h"
+#include <memory>
 
-/* coagulation models */
+/* Soot model */
+#include "sootlib/soot_model/SootModel.h"
+
+/* coagulation model */
 #include "sootlib/coagulation_model/CoagulationModel.h"
-#include "sootlib/coagulation_model/CoagulationModel_FRENK.h"
-#include "sootlib/coagulation_model/CoagulationModel_FUCHS.h"
-#include "sootlib/coagulation_model/CoagulationModel_LL.h"
-#include "sootlib/coagulation_model/CoagulationModel_NONE.h"
 
-/* growth models */
+/* growth model */
 #include "sootlib/growth_model/GrowthModel.h"
-#include "sootlib/growth_model/GrowthModel_HACA.h"
-#include "sootlib/growth_model/GrowthModel_LIN.h"
-#include "sootlib/growth_model/GrowthModel_LL.h"
-#include "sootlib/growth_model/GrowthModel_NONE.h"
 
-/* nucleation models */
+/* nucleation model */
 #include "sootlib/nucleation_model/NucleationModel.h"
-#include "sootlib/nucleation_model/NucleationModel_LIN.h"
-#include "sootlib/nucleation_model/NucleationModel_LL.h"
-#include "sootlib/nucleation_model/NucleationModel_NONE.h"
-#include "sootlib/nucleation_model/NucleationModel_PAH.h"
 
-/* oxidation models */
+/* oxidation model */
 #include "sootlib/oxidation_model/OxidationModel.h"
-#include "sootlib/oxidation_model/OxidationModel_HACA.h"
-#include "sootlib/oxidation_model/OxidationModel_LEE_NEOH.h"
-#include "sootlib/oxidation_model/OxidationModel_LL.h"
-#include "sootlib/oxidation_model/OxidationModel_NONE.h"
-#include "sootlib/oxidation_model/OxidationModel_NSC_NEOH.h"
 
 namespace soot {
 class SootModelGenerator {
 public:
+    SootModelGenerator();
+
+    void setModel(SootModelType modelType);
     void setNucleationMechanism(NucleationMechanism mechanism);
     void setGrowthMechanism(GrowthMechanism mechanism);
     void setOxidationMechanism(OxidationMechanism mechanism);
     void setCoagulationMechanism(CoagulationMechanism mechanism);
 
-protected:
-    SootModelGenerator();
+    [[nodiscard]] SootModel* getModel() const;
+    [[nodiscard]] std::unique_ptr<SootModel> getModelUnique() const;
+    [[nodiscard]] std::shared_ptr<SootModel> getModelShared() const;
 
+private:
+    SootModelType modelType;
     NucleationMechanism nucleationMechanism;
     GrowthMechanism growthMechanism;
     OxidationMechanism oxidationMechanism;

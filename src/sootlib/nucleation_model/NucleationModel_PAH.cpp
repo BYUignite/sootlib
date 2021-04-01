@@ -14,10 +14,13 @@
 
 #include "NucleationModel_PAH.h"
 
+#include <memory>
+#include "sootlib/coagulation_model/CoagulationModel_FRENK.h"
+
 using namespace std;
 using namespace soot;
 
-double NucleationModel_PAH::getNucleationRate(MomentState& state,
+double NucleationModel_PAH::getNucleationRate(InputState& state,
                                               const vector<double>& particleSizes,
                                               const vector<double>& particleWeights,
                                               MassRateRatios& ratio) const {

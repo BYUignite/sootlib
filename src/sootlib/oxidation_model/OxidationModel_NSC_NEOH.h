@@ -6,7 +6,7 @@
 namespace soot {
 class OxidationModel_NSC_NEOH : public OxidationModel {
 public:
-    [[nodiscard]] double getOxidationRate(const MomentState& state, MassRateRatios& ratio) const override;
+    [[nodiscard]] double getOxidationRate(const InputState& state, MassRateRatios& ratio) const override;
     [[nodiscard]] OxidationMechanism getMechanism() const override {
         return OxidationMechanism::NSC_NEOH;
     }

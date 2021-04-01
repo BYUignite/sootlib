@@ -40,7 +40,7 @@ SootModel_QMOM* SootModel_QMOM::getInstance(unique_ptr<CoagulationModel> coagula
  *
  */
 
-SourceTerms SootModel_QMOM::getSourceTerms(MomentState& state) const {
+SourceTerms SootModel_QMOM::getSourceTerms(InputState& state) const {
 
     MassRateRatios massRateRatios;
 

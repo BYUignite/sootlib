@@ -1,12 +1,12 @@
 #include <iostream>
 
-#include "sootlib/soot_model/generator/MomentSootModelGenerator.h"
+#include "sootlib/soot_model/generator/SootModelGenerator.h"
 
 int main(int argc, char** argv) {
     /* Create a soot model generator */
 
     // this generator can make moment based soot models
-    auto generator = soot::MomentSootModelGenerator();
+    auto generator = soot::SootModelGenerator();
 
     /* Create a default soot model */
 
@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
 
     /* Get source terms given a state */
 
-    auto state = soot::MomentState();
+    auto state = soot::InputState();
 
     // set the values of the moments to what we want
     state.resetMoments(2);

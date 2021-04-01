@@ -14,7 +14,7 @@
 using namespace std;
 using namespace soot;
 
-double CoagulationModel_FRENK::getCoagulationRate(const MomentState& state,
+double CoagulationModel_FRENK::getCoagulationRate(const InputState& state,
                                                   double m1,
                                                   double m2) const {
 

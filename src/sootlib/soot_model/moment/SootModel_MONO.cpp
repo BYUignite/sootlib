@@ -37,7 +37,7 @@ SootModel_MONO* SootModel_MONO::getInstance(unique_ptr<CoagulationModel> coagula
  *
  */
 
-SourceTerms SootModel_MONO::getSourceTerms(MomentState& state) const {
+SourceTerms SootModel_MONO::getSourceTerms(InputState& state) const {
 
     MassRateRatios massRateRatios;
 

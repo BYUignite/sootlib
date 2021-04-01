@@ -7,7 +7,6 @@
 #include "sootlib/growth_model/GrowthModel.h"
 #include "sootlib/nucleation_model/NucleationModel.h"
 #include "sootlib/oxidation_model/OxidationModel.h"
-#include "sootlib/MassRateRatio.h"
 
 /*
  * Contains supporting models that all soot models will need for calculations

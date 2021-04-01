@@ -17,7 +17,7 @@
 
 using namespace soot;
 
-double OxidationModel_LEE_NEOH::getOxidationRate(const MomentState& state, MassRateRatios& ratio) const {
+double OxidationModel_LEE_NEOH::getOxidationRate(const InputState& state, MassRateRatios& ratio) const {
 
     const double pO2_atm = state.getGasSpeciesP(GasSpecies::O2)
         / 101325.0;                                     // partial pressure of O2 (atm)

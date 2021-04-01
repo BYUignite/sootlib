@@ -20,7 +20,7 @@ SootModel_LOGN::SootModel_LOGN(unique_ptr<CoagulationModel> coagulationModel,
                                                                                            move(nucleationModel),
                                                                                            move(oxidationModel)) {
 }
-SourceTerms SootModel_LOGN::getSourceTerms(MomentState& state) const {
+SourceTerms SootModel_LOGN::getSourceTerms(InputState& state) const {
     // TODO implement
     return SourceTerms();
 }

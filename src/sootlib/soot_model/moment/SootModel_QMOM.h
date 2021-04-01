@@ -6,13 +6,12 @@
 #ifndef SOOTMODEL_QMOM_H
 #define SOOTMODEL_QMOM_H
 
-#include "sootlib/soot_model/moment/MomentSootModel.h"
-#include "sootlib/MassRateRatios.h"
+#include "sootlib/soot_model/SootModel.h"
 #include "sootlib/soot_model/SootModel_Base.h"
 
 namespace soot {
 
-class SootModel_QMOM : public MomentSootModel, public SootModel_Base {
+class SootModel_QMOM : public SootModel, public SootModel_Base {
 
 public:
 
@@ -21,7 +20,7 @@ public:
                                                      std::unique_ptr<NucleationModel> nucleationModel,
                                                      std::unique_ptr<OxidationModel> oxidationModel);
 
-    [[nodiscard]] SourceTerms getSourceTerms(MomentState& state) const override;
+    [[nodiscard]] SourceTerms getSourceTerms(InputState& state) const override;
 
     ~SootModel_QMOM() override = default;
 

@@ -57,7 +57,7 @@ in this project.
 
 ### Untested
 
-* `BaseState`
+* `InputState`
 * `GrowthModel_LIN`
 * `GrowthModel_LL`
 * `GrowthModel_HACA`

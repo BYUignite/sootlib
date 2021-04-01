@@ -56,22 +56,14 @@ set(SOOTMODELS_SRC_FILES
         sootlib/soot_model/static.h)
 
 set(STATE_SRC_FILES
-        sootlib/state/BaseState.h
-        sootlib/state/BaseState.cpp
-        sootlib/state/BinState.h
-        sootlib/state/BinState.cpp
-        sootlib/state/MomentState.h
-        sootlib/state/MomentState.cpp)
+        sootlib/state/InputState.h
+        sootlib/state/InputState.cpp
+        )
 
 set(SRC_FILES
-        sootlib/soot_model/moment/MomentSootModel.h
-        sootlib/soot_model/bin/BinSootModel.h
+        sootlib/soot_model/SootModel.h
         sootlib/soot_model/generator/SootModelGenerator.h
         sootlib/soot_model/generator/SootModelGenerator.cpp
-        sootlib/soot_model/generator/MomentSootModelGenerator.h
-        sootlib/soot_model/generator/MomentSootModelGenerator.cpp
-        sootlib/soot_model/generator/BinSootModelGenerator.h
-        sootlib/soot_model/generator/BinSootModelGenerator.cpp
         sootlib/static.h
         sootlib/SourceTerms.h
         sootlib/MassRateRatio.h

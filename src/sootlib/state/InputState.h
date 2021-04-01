@@ -8,7 +8,7 @@
 #include "sootlib/MassRateRatios.h"
 
 namespace soot {
-class BaseState {
+class InputState {
 public:
     [[nodiscard]] double getT() const;
     void setT(double t);
@@ -48,8 +48,17 @@ public:
     [[nodiscard]] std::map<size_t, double>::const_iterator PAHFractionsBegin() const;
     [[nodiscard]] std::map<size_t, double>::const_iterator PAHFractionsEnd() const;
 
-protected:
-    BaseState() = default;
+    [[nodiscard]] size_t getNumBins() const;
+    void resetBins(size_t numBins);
+    [[nodiscard]] double getBin(size_t i) const;
+    void setBin(size_t i, double value);
+    std::vector<double>& getBins();
+
+    [[nodiscard]] size_t getNumMoments() const;
+    void resetMoments(size_t numMoments);
+    [[nodiscard]] double getMoment(size_t i) const;
+    void setMoment(size_t i, double value);
+    std::vector<double>& getMoments();
 
 private:
     double T = 0;
@@ -70,6 +79,9 @@ private:
     bool mDimerValid = true;
     [[nodiscard]] double getNi(size_t i) const;
     [[nodiscard]] double getGammai(size_t i) const;
+
+    std::vector<double> bins;
+    std::vector<double> moments;
 };
 }
 

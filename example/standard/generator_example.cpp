@@ -1,5 +1,4 @@
-#include "sootlib/soot_model/generator/MomentSootModelGenerator.h"
-#include "sootlib/soot_model/generator/BinSootModelGenerator.h"
+#include "sootlib/soot_model/generator/SootModelGenerator.h"
 
 int main(int argc, char** argv) {
     /*
@@ -7,8 +6,7 @@ int main(int argc, char** argv) {
      * There is a generator for each kind
      */
 
-    soot::MomentSootModelGenerator momentModelGenerator = soot::MomentSootModelGenerator();
-    soot::BinSootModelGenerator binModelGenerator = soot::BinSootModelGenerator();
+    soot::SootModelGenerator momentModelGenerator = soot::SootModelGenerator();
 
     /*
      * At any time you can get a soot model from a generator as either a:
@@ -17,13 +15,9 @@ int main(int argc, char** argv) {
      * smart shared pointer
      */
 
-    soot::MomentSootModel* rawMomentModel = momentModelGenerator.getModel();
-    std::unique_ptr<soot::MomentSootModel> uniqueMomentModel = momentModelGenerator.getModelUnique();
-    std::shared_ptr<soot::MomentSootModel> sharedMomentModel = momentModelGenerator.getModelShared();
-
-    soot::BinSootModel* rawBinModel = binModelGenerator.getModel();
-    std::unique_ptr<soot::BinSootModel> uniqueBinModel = binModelGenerator.getModelUnique();
-    std::shared_ptr<soot::BinSootModel> sharedBinModel = binModelGenerator.getModelShared();
+    soot::SootModel* rawMomentModel = momentModelGenerator.getModel();
+    std::unique_ptr<soot::SootModel> uniqueMomentModel = momentModelGenerator.getModelUnique();
+    std::shared_ptr<soot::SootModel> sharedMomentModel = momentModelGenerator.getModelShared();
 
     /*
      * Any soot model is going to have a coagultion model, growth model, nucleation model, and oxidation model
@@ -40,10 +34,6 @@ int main(int argc, char** argv) {
     // new model is using these supporting models
     rawMomentModel = momentModelGenerator.getModel();
 
-    binModelGenerator.setNucleationMechanism(soot::NucleationMechanism::LIN);
-
-    uniqueBinModel = binModelGenerator.getModelUnique();
-
     /*
      * There are different kinds of bin and moment soot models
      * This can also be set in the generator
@@ -52,7 +42,7 @@ int main(int argc, char** argv) {
      * The current default bin based model is SECT
      */
 
-    momentModelGenerator.setModel(soot::MomentModel::QMOM);
+    momentModelGenerator.setModel(soot::SootModelType::QMOM);
 
     rawMomentModel = momentModelGenerator.getModel();
 

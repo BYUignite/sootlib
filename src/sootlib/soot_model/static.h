@@ -7,7 +7,7 @@
 namespace soot {
 /* Downselect if needed */
 // TODO this function has been tweaked and needs a slightly updated description
-size_t downselectIfNeeded(std::vector<double>& M, size_t N) {
+static size_t downselectIfNeeded(std::vector<double>& M) {
     if (M.at(0) <= 0)
         return 0;
 
@@ -18,6 +18,7 @@ size_t downselectIfNeeded(std::vector<double>& M, size_t N) {
         M.at(1) = M0 * mavg * exp(0.5 * pow(sigL, 2));
     }
 
+    size_t N = M.size();
     bool zeros = true;
     while (N <= 2 && zeros) {
         zeros = std::find(M.begin(), M.begin() + N, 0) != M.end();
@@ -43,7 +44,7 @@ size_t downselectIfNeeded(std::vector<double>& M, size_t N) {
  *      @param w    \output    weights
  *      @param x    \output    abscissas
  */
-void wheeler(const std::vector<double>& m, int N, std::vector<double>& w, std::vector<double>& x) {
+static void wheeler(const std::vector<double>& m, int N, std::vector<double>& w, std::vector<double>& x) {
     int N2 = N * 2;
     std::vector<std::vector<double> > sigma(N + 1, std::vector<double>(N2, 0.0));
     std::vector<double> a(N, 0.0);
@@ -103,7 +104,7 @@ void wheeler(const std::vector<double>& m, int N, std::vector<double>& w, std::v
  *      which is more convenient when wts and absc are used to reconstitute
  *      moment source terms.
  */
- void getWtsAbs(const std::vector<double>& M, std::vector<double>& weights, std::vector<double>& abscissas) {
+static void getWtsAbs(const std::vector<double>& M, std::vector<double>& weights, std::vector<double>& abscissas) {
     int N = M.size();              // local nMom; may change with moment deselection
 
     for (int k = 0; k < N; k++) {                // if any moments are zero, return with zero wts and absc
@@ -165,7 +166,7 @@ void wheeler(const std::vector<double>& m, int N, std::vector<double>& w, std::v
 *  @param absc \input  abscissas
 *  @param Mk   \output fractional moment value
 */
-[[nodiscard]] double Mk(double exp, const std::vector<double>& wts, const std::vector<double>& absc) {
+static double Mk(double exp, const std::vector<double>& wts, const std::vector<double>& absc) {
     double Mk = 0;
 
     for (int k = 0; k < wts.size() / 2; k++) {

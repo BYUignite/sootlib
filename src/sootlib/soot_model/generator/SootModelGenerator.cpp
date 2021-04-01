@@ -1,9 +1,44 @@
 #include "SootModelGenerator.h"
 
+/* Moment models */
+#include "sootlib/soot_model/moment/SootModel_LOGN.h"
+#include "sootlib/soot_model/moment/SootModel_MOMIC.h"
+#include "sootlib/soot_model/moment/SootModel_MONO.h"
+#include "sootlib/soot_model/moment/SootModel_QMOM.h"
+
+/* Bin models */
+#include "sootlib/soot_model/bin/SootModel_SECT.h"
+
+/* coagulation models */
+#include "sootlib/coagulation_model/CoagulationModel_FRENK.h"
+#include "sootlib/coagulation_model/CoagulationModel_FUCHS.h"
+#include "sootlib/coagulation_model/CoagulationModel_LL.h"
+#include "sootlib/coagulation_model/CoagulationModel_NONE.h"
+
+/* growth models */
+#include "sootlib/growth_model/GrowthModel_HACA.h"
+#include "sootlib/growth_model/GrowthModel_LIN.h"
+#include "sootlib/growth_model/GrowthModel_LL.h"
+#include "sootlib/growth_model/GrowthModel_NONE.h"
+
+/* nucleation models */
+#include "sootlib/nucleation_model/NucleationModel_LIN.h"
+#include "sootlib/nucleation_model/NucleationModel_LL.h"
+#include "sootlib/nucleation_model/NucleationModel_NONE.h"
+#include "sootlib/nucleation_model/NucleationModel_PAH.h"
+
+/* oxidation models */
+#include "sootlib/oxidation_model/OxidationModel_HACA.h"
+#include "sootlib/oxidation_model/OxidationModel_LEE_NEOH.h"
+#include "sootlib/oxidation_model/OxidationModel_LL.h"
+#include "sootlib/oxidation_model/OxidationModel_NONE.h"
+#include "sootlib/oxidation_model/OxidationModel_NSC_NEOH.h"
+
 using namespace std;
 using namespace soot;
 
 SootModelGenerator::SootModelGenerator() {
+    modelType = SootModelType::MONO;
     nucleationMechanism = NucleationMechanism::NONE;
     growthMechanism = GrowthMechanism::NONE;
     oxidationMechanism = OxidationMechanism::NONE;
@@ -57,4 +92,50 @@ unique_ptr<OxidationModel> SootModelGenerator::getOxidationModel() const {
         case OxidationMechanism::HACA: return make_unique<OxidationModel_HACA>();
         default: throw domain_error("Bad soot oxidation model");
     }
+}
+void SootModelGenerator::setModel(SootModelType modelType) {
+    this->modelType = modelType;
+}
+SootModel* SootModelGenerator::getModel() const {
+    /* create helper models */
+    unique_ptr<CoagulationModel> cm = getCoagulationModel();
+    unique_ptr<GrowthModel> gm = getGrowthModel();
+    unique_ptr<NucleationModel> nm = getNucleationModel();
+    unique_ptr<OxidationModel> om = getOxidationModel();
+
+    /* create and return model ptr */
+    switch (modelType) {
+        case SootModelType::MONO:
+            return SootModel_MONO::getInstance(move(cm),
+                                               move(gm),
+                                               move(nm),
+                                               move(om));
+        case SootModelType::LOGN:
+            return SootModel_LOGN::getInstance(move(cm),
+                                               move(gm),
+                                               move(nm),
+                                               move(om));
+        case SootModelType::MOMIC:
+            return SootModel_MOMIC::getInstance(move(cm),
+                                                move(gm),
+                                                move(nm),
+                                                move(om));
+        case SootModelType::QMOM:
+            return SootModel_QMOM::getInstance(move(cm),
+                                               move(gm),
+                                               move(nm),
+                                               move(om));
+        case SootModelType::SECT:
+            return SootModel_SECT::getInstance(move(cm),
+                                               move(gm),
+                                               move(nm),
+                                               move(om));
+        default: throw domain_error("Bad soot model type");
+    }
+}
+std::unique_ptr<SootModel> SootModelGenerator::getModelUnique() const {
+    return unique_ptr<SootModel>(getModel());
+}
+std::shared_ptr<SootModel> SootModelGenerator::getModelShared() const {
+    return shared_ptr<SootModel>(getModel());
 }

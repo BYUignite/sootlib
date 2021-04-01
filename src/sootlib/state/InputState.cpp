@@ -1,95 +1,95 @@
-#include "BaseState.h"
+#include "InputState.h"
 
 using namespace std;
 using namespace soot;
 
-double BaseState::getT() const {
+double InputState::getT() const {
     return T;
 }
-void BaseState::setT(double t) {
+void InputState::setT(double t) {
     T = t;
 }
-double BaseState::getP() const {
+double InputState::getP() const {
     return P;
 }
-void BaseState::setP(double p) {
+void InputState::setP(double p) {
     P = p;
 }
-double BaseState::getRhoGas() const {
+double InputState::getRhoGas() const {
     return rhoGas;
 }
-void BaseState::setRhoGas(double rhoGas) {
-    BaseState::rhoGas = rhoGas;
+void InputState::setRhoGas(double rhoGas) {
+    InputState::rhoGas = rhoGas;
 }
-double BaseState::getMwGas() const {
+double InputState::getMwGas() const {
     return MWGas;
 }
-void BaseState::setMwGas(double mwGas) {
+void InputState::setMwGas(double mwGas) {
     MWGas = mwGas;
 }
-double BaseState::getMuGas() const {
+double InputState::getMuGas() const {
     return muGas;
 }
-void BaseState::setMuGas(double muGas) {
-    BaseState::muGas = muGas;
+void InputState::setMuGas(double muGas) {
+    InputState::muGas = muGas;
 }
-double BaseState::getGasSpeciesFrac(GasSpecies species, double def) const {
+double InputState::getGasSpeciesFrac(GasSpecies species, double def) const {
     if (gasFractions.count(species) == 0)
         return def;
     return gasFractions.at(species);
 }
-void BaseState::setGasSpeciesFrac(GasSpecies species, double frac) {
+void InputState::setGasSpeciesFrac(GasSpecies species, double frac) {
     gasFractions[species] = frac;
 }
-double BaseState::getGasSpeciesC(GasSpecies species, double def) const {
+double InputState::getGasSpeciesC(GasSpecies species, double def) const {
     if (gasFractions.count(species) == 0)
         return def;
     return rhoGas * gasFractions.at(species) / gasSpeciesMW.at(species);
 }
-double BaseState::getGasSpeciesP(GasSpecies species, double def) const {
+double InputState::getGasSpeciesP(GasSpecies species, double def) const {
     if (gasFractions.count(species) == 0)
         return def;
     return gasFractions.at(species) * MWGas / gasSpeciesMW.at(species) * P;
 }
-double BaseState::getPAHFrac(size_t n, double def) const {
+double InputState::getPAHFrac(size_t n, double def) const {
     if (PAHFractions.count(n) == 0)
         return def;
     return PAHFractions.at(n);
 }
-void BaseState::setPAHFrac(size_t n, double frac) {
+void InputState::setPAHFrac(size_t n, double frac) {
     PAHFractions[n] = frac;
 }
-double BaseState::getPAHC(size_t n, double def) const {
+double InputState::getPAHC(size_t n, double def) const {
     if (PAHFractions.count(n) == 0)
         return def;
     return rhoGas * PAHFractions.at(n) / PAH_MW(n);
 }
-double BaseState::getPAHP(size_t n, double def) const {
+double InputState::getPAHP(size_t n, double def) const {
     if (PAHFractions.count(n) == 0)
         return def;
     return PAHFractions.at(n) * MWGas / PAH_MW(n) * P;
 }
-double BaseState::getGasMeanFreePath() const {
+double InputState::getGasMeanFreePath() const {
     return muGas / rhoGas * sqrt(M_PI * MWGas / (2.0 * Rg * T));
 }
-double BaseState::getRhoSoot() const {
+double InputState::getRhoSoot() const {
     return rhoSoot;
 }
-void BaseState::setRhoSoot(double rho) {
+void InputState::setRhoSoot(double rho) {
     rhoSoot = rho;
 }
-double BaseState::getCMin() {
+double InputState::getCMin() {
     if (!mDimerValid)
         calculateMDimer();
     return cMin;
 }
-double BaseState::getDimer() const {
+double InputState::getDimer() const {
     return dimer;
 }
-void BaseState::setDimer(double dimer) {
-    BaseState::dimer = dimer;
+void InputState::setDimer(double dimer) {
+    InputState::dimer = dimer;
 }
-void BaseState::calculateMDimer(MassRateRatios* ratio) {
+void InputState::calculateMDimer(MassRateRatios* ratio) {
     const double preFac = sqrt(4 * M_PI * kb * T) * pow(6.0 / (M_PI * rhoSoot), 2.0 / 3.0);
 
     wdotD = 0;
@@ -129,32 +129,62 @@ void BaseState::calculateMDimer(MassRateRatios* ratio) {
 
     mDimerValid = true;
 }
-double BaseState::getNi(size_t i) const {
+double InputState::getNi(size_t i) const {
     return rhoGas * PAHFractions.at(i) / PAH_MW(i) * Na;
 }
-double BaseState::getGammai(size_t i) const {
+double InputState::getGammai(size_t i) const {
     const double m_PAH = PAH_MW(i) / Na;
     return m_PAH > 153 ? 1.501E-11 * pow(m_PAH, 4) : 1.501E-11 * pow(m_PAH, 4) / 3.0;
 }
-double BaseState::getMDimer() {
+double InputState::getMDimer() {
     if (!mDimerValid)
         calculateMDimer();
     return mDimer;
 }
-double BaseState::getWDotD() {
+double InputState::getWDotD() {
     if (!mDimerValid)
         calculateMDimer();
     return wdotD;
 }
-map<GasSpecies, double>::const_iterator BaseState::gasFractionsBegin() const {
+map<GasSpecies, double>::const_iterator InputState::gasFractionsBegin() const {
     return gasFractions.begin();
 }
-map<GasSpecies, double>::const_iterator BaseState::gasFractionsEnd() const {
+map<GasSpecies, double>::const_iterator InputState::gasFractionsEnd() const {
     return gasFractions.end();
 }
-map<size_t, double>::const_iterator BaseState::PAHFractionsBegin() const {
+map<size_t, double>::const_iterator InputState::PAHFractionsBegin() const {
     return PAHFractions.begin();
 }
-map<size_t, double>::const_iterator BaseState::PAHFractionsEnd() const {
+map<size_t, double>::const_iterator InputState::PAHFractionsEnd() const {
     return PAHFractions.end();
+}
+size_t InputState::getNumBins() const {
+    return bins.size();
+}
+void InputState::resetBins(size_t numBins) {
+    bins = vector<double>(numBins, 0);
+}
+double InputState::getBin(size_t i) const {
+    return bins.at(i);
+}
+void InputState::setBin(size_t i, double value) {
+    bins.at(i) = value;
+}
+std::vector<double>& InputState::getBins() {
+    return bins;
+}
+size_t InputState::getNumMoments() const {
+    return moments.size();
+}
+void InputState::resetMoments(size_t numMoments) {
+    moments = vector<double>(numMoments, 0);
+}
+double InputState::getMoment(size_t i) const {
+    return moments.at(i);
+}
+void InputState::setMoment(size_t i, double value) {
+    moments.at(i) = value;
+}
+std::vector<double>& InputState::getMoments() {
+    return moments;
 }

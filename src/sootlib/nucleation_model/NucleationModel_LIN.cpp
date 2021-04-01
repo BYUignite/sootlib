@@ -11,7 +11,7 @@
 using namespace std;
 using namespace soot;
 
-double NucleationModel_LIN::getNucleationRate(MomentState& state,
+double NucleationModel_LIN::getNucleationRate(InputState& state,
                                               const vector<double>& particleSizes,
                                               const vector<double>& particleWeights,
                                               MassRateRatios& ratio) const {

@@ -13,7 +13,7 @@
 using namespace std;
 using namespace soot;
 
-double GrowthModel_LL::getGrowthRate(const MomentState& state, MassRateRatios& ratio) const {
+double GrowthModel_LL::getGrowthRate(const InputState& state, MassRateRatios& ratio) const {
 
     double Am2m3 = 0;           // soot surface area available for reaction (m2_soot/m3_total)
     double rSoot = 0;           // rate soot growth (kg/m2*s)

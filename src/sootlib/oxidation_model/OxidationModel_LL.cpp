@@ -14,7 +14,7 @@
 
 using namespace soot;
 
-double OxidationModel_LL::getOxidationRate(const MomentState& state, MassRateRatios& ratio) const {
+double OxidationModel_LL::getOxidationRate(const InputState& state, MassRateRatios& ratio) const {
 
     ratio.groOxi().gasSpeciesRatio(GasSpecies::O2) = -0.5 * MW_O2 / MW_C;
     ratio.groOxi().gasSpeciesRatio(GasSpecies::CO) = MW_CO / MW_C;

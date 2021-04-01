@@ -47,19 +47,19 @@ public:
 		return generator.getModelShared();
 	}
 
-	[[nodiscard]] static soot::MomentSootModel* getDefaultMomentSootModel()
+	[[nodiscard]] static soot::SootModel* getDefaultMomentSootModel()
 	{
 		auto generator = soot::MomentSootModelGenerator();
 		return generator.getModel();
 	}
 
-	[[nodiscard]] static std::unique_ptr<soot::MomentSootModel> getDefaultMomentSootModelUnique()
+	[[nodiscard]] static std::unique_ptr<soot::SootModel> getDefaultMomentSootModelUnique()
 	{
 		auto generator = soot::MomentSootModelGenerator();
 		return generator.getModelUnique();
 	}
 
-	[[nodiscard]] static std::shared_ptr<soot::MomentSootModel> getDefaultMomentSootModelShared()
+	[[nodiscard]] static std::shared_ptr<soot::SootModel> getDefaultMomentSootModelShared()
 	{
 		auto generator = soot::MomentSootModelGenerator();
 		return generator.getModelShared();

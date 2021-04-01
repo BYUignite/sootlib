@@ -19,7 +19,7 @@ SootModel_SECT::SootModel_SECT(unique_ptr<CoagulationModel> coagulationModel,
                                                                                            move(growthModel),
                                                                                            move(nucleationModel),
                                                                                            move(oxidationModel)) {}
-SourceTerms SootModel_SECT::getSourceTerms(const soot::BinState& state) const {
+SourceTerms SootModel_SECT::getSourceTerms(InputState& state) const {
     // TODO implement
 
     return SourceTerms();

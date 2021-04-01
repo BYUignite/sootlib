@@ -1,5 +1,4 @@
 #include <string>
-using std::string;
 
 int bakvec ( int n, double t[], double e[], int m, double z[] );
 void cbabk2 ( int n, int low, int igh, double scale[], int m, double zr[],
@@ -17,11 +16,11 @@ double r8_min ( double x, double y );
 double r8_sign ( double x );
 void r8mat_identity  ( int n, double a[] );
 double *r8mat_mm_new ( int n1, int n2, int n3, double a[], double b[] );
-void r8mat_print ( int m, int n, double a[], string title );
+void r8mat_print ( int m, int n, double a[], std::string title );
 void r8mat_print_some ( int m, int n, double a[], int ilo, int jlo, int ihi,
-  int jhi, string title );
+  int jhi, std::string title );
 double *r8mat_uniform_01_new ( int m, int n, int &seed );
-void r8vec_print ( int n, double a[], string title );
+void r8vec_print ( int n, double a[], std::string title );
 int rs ( int n, double a[], double w[], int matz, double z[] );
 int rsb ( int n, int mb, double a[], double w[], int matz, double z[] );
 void timestamp ( );
