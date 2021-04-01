@@ -39,9 +39,7 @@ SootModel_MONO* SootModel_MONO::getInstance(unique_ptr<CoagulationModel> coagula
 
 SourceTerms SootModel_MONO::getSourceTerms(MomentState& state) const {
 
-    MassRateRatio nucleationRateRatios;
-    MassRateRatio oxidationRateRatios;
-    MassRateRatio growthRateRatios;
+    MassRateRatios massRateRatios;
 
     vector<double> weights = {0};
     vector<double> abscissas = {0};
@@ -63,10 +61,9 @@ SourceTerms SootModel_MONO::getSourceTerms(MomentState& state) const {
 
     //---------- get chemical rates
 
-    const double jNuc = nucleationModel->getNucleationRate(state, abscissas, weights, nucleationRateRatios);
-//	const double kGrw = growthModel->getGrowthRate(state, growthRateRatios); // TODO need to make something to deal with growth rate ratios
-    const double kGrw = growthModel->getGrowthRate(state);
-    const double kOxi = oxidationModel->getOxidationRate(state, oxidationRateRatios);
+    const double jNuc = nucleationModel->getNucleationRate(state, abscissas, weights, massRateRatios);
+    const double kGrw = growthModel->getGrowthRate(state, massRateRatios);
+    const double kOxi = oxidationModel->getOxidationRate(state, massRateRatios);
     const double coag = coagulationModel->getCoagulationRate(state, abscissas.at(0), abscissas.at(0));
 
     //---------- nucleation terms
@@ -109,19 +106,19 @@ SourceTerms SootModel_MONO::getSourceTerms(MomentState& state) const {
     map<size_t, double> PAHSourceTerms;
 
     // Nucleation
-    for (auto it = nucleationRateRatios.gasSpeciesBegin(); it != nucleationRateRatios.gasSpeciesEnd(); it++)
+    for (auto it = massRateRatios.nucCond().gasSpeciesBegin(); it != massRateRatios.nucCond().gasSpeciesEnd(); it++)
         gasSourceTerms[it->first] += N1 * it->second / state.getRhoGas();
-    for (auto it = nucleationRateRatios.PAHBegin(); it != nucleationRateRatios.PAHEnd(); it++)
+    for (auto it = massRateRatios.nucCond().PAHBegin(); it != massRateRatios.nucCond().PAHEnd(); it++)
         PAHSourceTerms[it->first] += N1 * it->second / state.getRhoGas();
 
     // Growth
-    for (auto it = growthRateRatios.gasSpeciesBegin(); it != growthRateRatios.gasSpeciesEnd(); it++)
+    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
         gasSourceTerms[it->first] += G1 * it->second / state.getRhoGas();
 
     // Oxidation
-    for (auto it = oxidationRateRatios.gasSpeciesBegin(); it != oxidationRateRatios.gasSpeciesEnd(); it++)
+    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
         gasSourceTerms[it->first] += X1 * it->second / state.getRhoGas();
-    for (auto it = oxidationRateRatios.PAHBegin(); it != oxidationRateRatios.PAHEnd(); it++)
+    for (auto it = massRateRatios.groOxi().PAHBegin(); it != massRateRatios.groOxi().PAHEnd(); it++)
         PAHSourceTerms[it->first] += X1 * it->second / state.getRhoGas();
 
     // Coagulation - n/a

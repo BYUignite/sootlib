@@ -89,7 +89,7 @@ double BaseState::getDimer() const {
 void BaseState::setDimer(double dimer) {
     BaseState::dimer = dimer;
 }
-void BaseState::calculateMDimer(MassRateRatio* ratio) {
+void BaseState::calculateMDimer(MassRateRatios* ratio) {
     const double preFac = sqrt(4 * M_PI * kb * T) * pow(6.0 / (M_PI * rhoSoot), 2.0 / 3.0);
 
     wdotD = 0;
@@ -110,12 +110,12 @@ void BaseState::calculateMDimer(MassRateRatio* ratio) {
         cMin += wDotI * MPAHn;
 
         if (ratio != nullptr)
-            ratio->PAHSpeciesRatio(n) = wDotI * MPAHn;
+            ratio->nucCond().PAHSpeciesRatio(n) = wDotI * MPAHn;
     }
 
     if (ratio != nullptr) {
         for (const auto&[n, frac] : PAHFractions)
-            ratio->PAHSpeciesRatio(n) /= mDimer;
+            ratio->nucCond().PAHSpeciesRatio(n) /= mDimer;
     }
 
     mDimer += 2 / wdotD;
@@ -123,9 +123,9 @@ void BaseState::calculateMDimer(MassRateRatio* ratio) {
 
     if (ratio != nullptr) {
         for (const auto&[n, frac] : PAHFractions)
-            ratio->PAHSpeciesRatio(n) *= -2 * mDimer / (cMin * MW_C / Na);
+            ratio->nucCond().PAHSpeciesRatio(n) *= -2 * mDimer / (cMin * MW_C / Na);
     }
-    ratio->gasSpeciesRatio(GasSpecies::H2) = 2 * mDimer / (cMin * MW_C / Na) - 1;
+    ratio->nucCond().gasSpeciesRatio(GasSpecies::H2) = 2 * mDimer / (cMin * MW_C / Na) - 1;
 
     mDimerValid = true;
 }

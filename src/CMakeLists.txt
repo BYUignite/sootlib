@@ -73,7 +73,8 @@ set(SRC_FILES
         sootlib/soot_model/generator/BinSootModelGenerator.cpp
         sootlib/static.h
         sootlib/SourceTerms.h
-        sootlib/MassRateRatio.h)
+        sootlib/MassRateRatio.h
+        sootlib/MassRateRatios.h)
 
 set(LIB_FILES
         lib/eispack/eispack.h

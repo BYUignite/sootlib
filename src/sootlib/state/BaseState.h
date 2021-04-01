@@ -5,7 +5,7 @@
 #include <map>
 
 #include "sootlib/static.h"
-#include "sootlib/MassRateRatio.h"
+#include "sootlib/MassRateRatios.h"
 
 namespace soot {
 class BaseState {
@@ -41,7 +41,7 @@ public:
     [[nodiscard]] double getMDimer();
     [[nodiscard]] double getWDotD();
 
-    void calculateMDimer(MassRateRatio* ratio = nullptr);
+    void calculateMDimer(MassRateRatios* ratio = nullptr);
 
     [[nodiscard]] std::map<GasSpecies, double>::const_iterator gasFractionsBegin() const;
     [[nodiscard]] std::map<GasSpecies, double>::const_iterator gasFractionsEnd() const;

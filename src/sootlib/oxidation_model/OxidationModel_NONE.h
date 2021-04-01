@@ -6,7 +6,7 @@
 namespace soot {
 class OxidationModel_NONE : public OxidationModel {
 public:
-    [[nodiscard]] double getOxidationRate(const MomentState& state, MassRateRatio& ratio) const override {
+    [[nodiscard]] double getOxidationRate(const MomentState& state, MassRateRatios& ratio) const override {
         return 0;
     }
     [[nodiscard]] OxidationMechanism getMechanism() const override {

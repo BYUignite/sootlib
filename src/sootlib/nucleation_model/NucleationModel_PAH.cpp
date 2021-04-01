@@ -20,7 +20,7 @@ using namespace soot;
 double NucleationModel_PAH::getNucleationRate(MomentState& state,
                                               const vector<double>& particleSizes,
                                               const vector<double>& particleWeights,
-                                              MassRateRatio& ratio) const {
+                                              MassRateRatios& ratio) const {
     // get dimer self-collision rate
     state.calculateMDimer(&ratio);
     unique_ptr<CoagulationModel> coagModel = make_unique<CoagulationModel_FRENK>();

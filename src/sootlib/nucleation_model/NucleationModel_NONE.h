@@ -9,7 +9,7 @@ public:
     [[nodiscard]] double getNucleationRate(MomentState& state,
                                            const std::vector<double>& particleSizes,
                                            const std::vector<double>& particleWeights,
-                                           MassRateRatio& ratio) const override {
+                                           MassRateRatios& ratio) const override {
         return 0;
     }
     [[nodiscard]] NucleationMechanism getMechanism() const override {

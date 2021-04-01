@@ -17,7 +17,7 @@
 
 using namespace soot;
 
-double OxidationModel_HACA::getOxidationRate(const MomentState& state, MassRateRatio& ratio) const {
+double OxidationModel_HACA::getOxidationRate(const MomentState& state, MassRateRatios& ratio) const {
 
     const double M0 = state.getMoment(0);                           // #/m3
     const double M1 = state.getMoment(1);                           // kg/m3

@@ -7,7 +7,7 @@
 #define SOOTMODEL_QMOM_H
 
 #include "sootlib/soot_model/moment/MomentSootModel.h"
-#include "sootlib/MassRateRatio.h"
+#include "sootlib/MassRateRatios.h"
 #include "sootlib/soot_model/SootModel_Base.h"
 
 namespace soot {

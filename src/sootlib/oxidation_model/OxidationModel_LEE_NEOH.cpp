@@ -17,7 +17,7 @@
 
 using namespace soot;
 
-double OxidationModel_LEE_NEOH::getOxidationRate(const MomentState& state, MassRateRatio& ratio) const {
+double OxidationModel_LEE_NEOH::getOxidationRate(const MomentState& state, MassRateRatios& ratio) const {
 
     const double pO2_atm = state.getGasSpeciesP(GasSpecies::O2)
         / 101325.0;                                     // partial pressure of O2 (atm)
@@ -29,10 +29,10 @@ double OxidationModel_LEE_NEOH::getOxidationRate(const MomentState& state, MassR
     const double
         rSootOH = 1290.0 * 0.13 * pOH_atm / sqrt(state.getT());                                        // kg/m^2*s
 
-    ratio.gasSpeciesRatio(GasSpecies::O2) = -0.5 * MW_O2 / MW_C * rSootO2 / (rSootO2 + rSootOH);
-    ratio.gasSpeciesRatio(GasSpecies::OH) = -MW_OH / MW_C * rSootOH / (rSootO2 + rSootOH);
-    ratio.gasSpeciesRatio(GasSpecies::H) = MW_H / MW_C * rSootOH / (rSootO2 + rSootOH);
-    ratio.gasSpeciesRatio(GasSpecies::CO) = MW_CO / MW_C;
+    ratio.groOxi().gasSpeciesRatio(GasSpecies::O2) = -0.5 * MW_O2 / MW_C * rSootO2 / (rSootO2 + rSootOH);
+    ratio.groOxi().gasSpeciesRatio(GasSpecies::OH) = -MW_OH / MW_C * rSootOH / (rSootO2 + rSootOH);
+    ratio.groOxi().gasSpeciesRatio(GasSpecies::H) = MW_H / MW_C * rSootOH / (rSootO2 + rSootOH);
+    ratio.groOxi().gasSpeciesRatio(GasSpecies::CO) = MW_CO / MW_C;
 
     return rSootO2 + rSootOH;
 }
