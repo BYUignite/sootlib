@@ -83,6 +83,9 @@ double InputState::getCMin() {
         calculateMDimer();
     return cMin;
 }
+void InputState::setCMin(double CMin) {
+    cMin = CMin;
+}
 double InputState::getDimer() const {
     return dimer;
 }
@@ -94,7 +97,6 @@ void InputState::calculateMDimer(MassRateRatios* ratio) {
 
     wdotD = 0;
     mDimer = 0;
-    // FIXME this was not in the original code but it really looks like it's correct
     cMin = 0;
 
     double wDotI;

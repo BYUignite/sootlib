@@ -36,6 +36,7 @@ public:
     [[nodiscard]] double getRhoSoot() const;
     void setRhoSoot(double rho);
     [[nodiscard]] double getCMin();
+    void setCMin(double CMin);
     [[nodiscard]] double getDimer() const;
     void setDimer(double dimer);
     [[nodiscard]] double getMDimer();
@@ -70,8 +71,8 @@ private:
     std::map<GasSpecies, double> gasFractions;
     std::map<size_t, double> PAHFractions;
 
-    double rhoSoot = 0;
-    double cMin = 0;
+    double rhoSoot = 1850;
+    double cMin = 100;
     double dimer = 0;
     double mDimer = 0;
     double wdotD = 0;
