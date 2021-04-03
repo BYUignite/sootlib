@@ -11,8 +11,6 @@ static const double Rg = 8314.46;        ///< Universal gas constant
 static const double eps_c = 2.2;            ///< coagulation constant
 static const double Df = 1.8;            ///< soot fractal dimension
 
-enum class MomentModel { MONO, LOGN, MOMIC, QMOM };
-enum class BinModel { SECT };
 enum class NucleationMechanism { NONE, LL, LIN, PAH };
 enum class GrowthMechanism { NONE, LL, LIN, HACA };
 enum class OxidationMechanism { NONE, LL, LEE_NEOH, NSC_NEOH, HACA };
