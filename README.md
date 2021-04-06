@@ -81,13 +81,13 @@ in this project.
 * `CoagulationModel_Frenk`
 * `CoagulationModel_Fuchs`
 * `SootModel_MONO`
+* `SootModel_MOMIC`
+* `SootModel_QMOM`
 
 ### Not Implemented
 
 * `SootModel_SECT`
 * `SootModel_LOGN`
-* `SootModel_MOMIC`
-* `SootModel_QMOM`
 
 ### Missing Features
 
