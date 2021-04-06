@@ -9,9 +9,6 @@ set(STANDARD_TESTS
         OxidationModel_HACA
         OxidationModel_LEE_NAOH
         OxidationModel_NSC_NEOH
-        GasState
-        BinSootState
-        MomentSootState
         NucleationModel_PAH
         NucleationModel_LL
         NucleationModel_LIN
