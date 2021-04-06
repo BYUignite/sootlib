@@ -50,7 +50,7 @@ in this project.
 
 ### Short Term Design
 
-* Optimize MOMIC model by saving intermediate calculations
+* Optimize all models by saving intermediate calculations
 * Change SootModels to use multiple inheritance rather than have the interface inherit the base soot model
 * Perhaps add warnings when running into 0 or having illegal calculations to guide people in NAN situations
   
