@@ -43,16 +43,16 @@ set(OXIDATION_SRC_FILES
 
 set(SOOTMODELS_SRC_FILES
         sootlib/soot_model/SootModel_Base.h
-        sootlib/soot_model/moment/SootModel_LOGN.h
-        sootlib/soot_model/moment/SootModel_LOGN.cpp
-        sootlib/soot_model/moment/SootModel_MOMIC.h
-        sootlib/soot_model/moment/SootModel_MOMIC.cpp
-        sootlib/soot_model/moment/SootModel_MONO.h
-        sootlib/soot_model/moment/SootModel_MONO.cpp
-        sootlib/soot_model/moment/SootModel_QMOM.h
-        sootlib/soot_model/moment/SootModel_QMOM.cpp
-        sootlib/soot_model/bin/SootModel_SECT.h
-        sootlib/soot_model/bin/SootModel_SECT.cpp
+        sootlib/soot_model/models/SootModel_LOGN.h
+        sootlib/soot_model/models/SootModel_LOGN.cpp
+        sootlib/soot_model/models/SootModel_MOMIC.h
+        sootlib/soot_model/models/SootModel_MOMIC.cpp
+        sootlib/soot_model/models/SootModel_MONO.h
+        sootlib/soot_model/models/SootModel_MONO.cpp
+        sootlib/soot_model/models/SootModel_QMOM.h
+        sootlib/soot_model/models/SootModel_QMOM.cpp
+        sootlib/soot_model/models/SootModel_SECT.h
+        sootlib/soot_model/models/SootModel_SECT.cpp
         sootlib/soot_model/static.h)
 
 set(STATE_SRC_FILES

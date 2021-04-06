@@ -1,13 +1,13 @@
 #include "SootModelGenerator.h"
 
 /* Moment models */
-#include "sootlib/soot_model/moment/SootModel_LOGN.h"
-#include "sootlib/soot_model/moment/SootModel_MOMIC.h"
-#include "sootlib/soot_model/moment/SootModel_MONO.h"
-#include "sootlib/soot_model/moment/SootModel_QMOM.h"
+#include "sootlib/soot_model/models/SootModel_LOGN.h"
+#include "sootlib/soot_model/models/SootModel_MOMIC.h"
+#include "sootlib/soot_model/models/SootModel_MONO.h"
+#include "sootlib/soot_model/models/SootModel_QMOM.h"
 
 /* Bin models */
-#include "sootlib/soot_model/bin/SootModel_SECT.h"
+#include "sootlib/soot_model/models/SootModel_SECT.h"
 
 /* coagulation models */
 #include "sootlib/coagulation_model/CoagulationModel_FRENK.h"
