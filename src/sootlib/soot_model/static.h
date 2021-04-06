@@ -251,6 +251,7 @@ static double Mk(double exp, const std::vector<double>& wts, const std::vector<d
  *
  */
  static double f_grid(int x, int y, const std::vector<double>& M) {
+     // TODO save duplicate calculations in this function
     const double f1_0 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x - 1.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
     const double f1_1 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 2.0 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 1.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2.0 * MOMIC(x + 5.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 7.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
 
