@@ -62,7 +62,7 @@ in this project.
 
 ### Broken / Not Building
 
-* QMOM file - old code in new file
+* Nothing atm
 
 ### Untested
 
