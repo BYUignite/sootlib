@@ -1,5 +1,6 @@
 #include "SootModel_MOMIC.h"
 #include "sootlib/soot_model/static.h"
+#include "sootlib/coagulation_model/CoagulationModel_MOMIC.h"
 
 using namespace std;
 using namespace soot;
@@ -39,13 +40,62 @@ SourceTerms SootModel_MOMIC::getSourceTerms(InputState& state) const {
 
     vector<double> Mcnd(state.getNumMoments(), 0);
 
+    CoagulationModel_MOMIC coag = CoagulationModel_MOMIC();
     if (nucleationModel->getMechanism() == NucleationMechanism::PAH) {
-        for (size_t k = 1; k < N; k++) {
-            // TODO add this
-            // Mcnd.at(k) = getCoag(k);
-            Mcnd.at(k) *= state.getDimer() * state.getMDimer() * k;
-        }
+        for (size_t k = 1; k < N; k++)
+            Mcnd.at(k) = coag.getCoagulationRate(state, k) * state.getDimer() * state.getMDimer() * k;
     }
 
-    return SourceTerms();
+    vector<double> Mgrw(state.getNumMoments(), 0);
+
+    const double Acoef = M_PI * pow(abs(6.0 / M_PI / state.getRhoSoot()), 2.0 / 3);
+    for (int k = 1; k < N; k++)
+        Mgrw.at(k) = Kgrw * Acoef * k * MOMIC(k - 1.0 / 3, state.getMomentsConst());
+
+    vector<double> Moxi(state.getNumMoments(), 0);
+
+    for (int k = 1; k < N; k++)
+        Moxi.at(k) = Koxi * Acoef * k * MOMIC(k - 1.0 / 3, state.getMomentsConst());
+
+    vector<double> Mcoa(state.getNumMoments(), 0);
+
+    if (coagulationModel->getMechanism() != CoagulationMechanism::NONE) {
+        for (int k = 0; k < N; k++)
+            Mcoa.at(k) = coag.getCoagulationRate(state, k);
+    }
+
+    vector<double> sootSourceTerms(state.getNumMoments(), 0);
+    for (size_t k = 0; k < state.getNumMoments(); k++)
+        sootSourceTerms.at(k) = Mnuc.at(k) + Mcnd.at(k) + Mgrw.at(k) + Moxi.at(k) + Mcoa.at(k);
+
+    //---------- get gas source terms
+
+    map<GasSpecies, double> gasSourceTerms;
+    map<size_t, double> PAHSourceTerms;
+
+    // Nucleation
+    for (auto it = massRateRatios.nucCond().gasSpeciesBegin(); it != massRateRatios.nucCond().gasSpeciesEnd(); it++)
+        gasSourceTerms[it->first] += Mnuc.at(1) * it->second / state.getRhoGas();
+    for (auto it = massRateRatios.nucCond().PAHBegin(); it != massRateRatios.nucCond().PAHEnd(); it++)
+        PAHSourceTerms[it->first] += Mnuc.at(1) * it->second / state.getRhoGas();
+
+    // Growth
+    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
+        gasSourceTerms[it->first] += Mgrw.at(1) * it->second / state.getRhoGas();
+
+    // Oxidation
+    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
+        gasSourceTerms[it->first] += Moxi.at(1) * it->second / state.getRhoGas();
+    for (auto it = massRateRatios.groOxi().PAHBegin(); it != massRateRatios.groOxi().PAHEnd(); it++)
+        PAHSourceTerms[it->first] += Moxi.at(1) * it->second / state.getRhoGas();
+
+    // PAH condensation
+    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
+        gasSourceTerms[it->first] += Mcnd.at(1) * it->second / state.getRhoGas();
+    for (auto it = massRateRatios.nucCond().PAHBegin(); it != massRateRatios.nucCond().PAHEnd(); it++)
+        PAHSourceTerms[it->first] += Mcnd.at(1) * it->second / state.getRhoGas();
+
+    // Coagulation - n/a
+
+    return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }

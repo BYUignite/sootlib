@@ -178,6 +178,110 @@ static double Mk(double exp, const std::vector<double>& wts, const std::vector<d
 
     return Mk;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+/*! lagrangeInterp function
+ *
+ *      Calculates the Lagrange interpolated value from whole order moments.
+ *
+ *      @param x_i  \input      x value of desired interpolation
+ *      @param x    \input      vector of x values to interpolate amongst
+ *      @param y    \input      vector of y values to interpolate amongst
+ *      @param y_i  \output     interpolated y value
+ *
+ */
+ static double lagrangeInterp(double x_i, const std::vector<double>& x, const std::vector<double>& y) {
+     double y_i = 0;
+
+     double L;
+     for (size_t j = 0; j < x.size(); j++) {
+         L = 1;
+         for (size_t m = 0; m < x.size(); m++) {
+             if (m != j) {
+                 L *= (x_i - x.at(m)) / (x.at(j) - x.at(m));
+             }
+         }
+         y_i += y.at(j) * L;
+     }
+
+     return y_i;
+ }
+
+////////////////////////////////////////////////////////////////////////////////
+/*! MOMIC function
+ *
+ *      Calculates the desired fractional moment by lagrange interpolation
+ *      between whole order moments. Because it uses log moments, it will crash
+ *      if any moment is less than or equal to zero.
+ *
+ *      @param p     \input     desired interpolation value
+ *      @param M     \input     vector of whole order moments
+ *
+ */
+ static double MOMIC(double p, const std::vector<double>& M) {
+     if (p == 0)
+         return M.at(0);
+
+     size_t size = M.size();
+     if (p < 0 && M.size() != 2)
+         size = 3;
+
+     std::vector<double> log_mu(size, 0);
+     std::vector<double> x(size, 0);
+
+     for (size_t i = 0; i < size; i++) {
+         log_mu.at(i) = log10(M.at(i) / M.at(0));
+         x.at(i) = i;
+     }
+
+     const double log_mu_p = lagrangeInterp(p, x, log_mu);
+
+     return pow(10.0, log_mu_p) * M.at(0);
+ }
+
+////////////////////////////////////////////////////////////////////////////////
+/*! f_grid function
+ *
+ *      Calculates the grid function described in Frenklach 2002 MOMIC paper
+ *      using lagrange interpolation between whole order moments
+ *
+ *      @param x     \input x grid point
+ *      @param y     \input y grid point
+ *      @param M     \input vector of whole order moments
+ *
+ */
+ static double f_grid(int x, int y, const std::vector<double>& M) {
+    const double f1_0 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x - 1.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
+    const double f1_1 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 2.0 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 1.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2.0 * MOMIC(x + 5.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 7.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
+
+    if (y >= 4) {
+        const std::vector<double> temp_x = {0, 1};
+        const std::vector<double> temp_y = {log10(f1_0), log10(f1_1)};
+
+        const double value = lagrangeInterp(1.0 / 2, temp_x, temp_y);
+        return pow(10.0, value);
+    }
+
+    double f1_2 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 13.0 / 6, M) + 2.0 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 11.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 3.0 / 2, M) + 2.0 * MOMIC(x + 1.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 4 * MOMIC(x + 5.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + 2 * MOMIC(x + 7.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 3.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x + 11.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 13.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
+
+    if (y >= 3) {
+        const std::vector<double> temp_x = {0, 1, 2};
+        const std::vector<double> temp_y = {log10(f1_0), log10(f1_1), log10(f1_2)};
+
+        const double value = lagrangeInterp(1.0 / 2, temp_x, temp_y);
+
+        return pow(10.0, value);
+    }
+
+    double f1_3 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 19.0 / 6, M) + 2.0 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 17.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 5.0 / 2, M) + 3.0 * MOMIC(x + 1.0 / 2, M) * MOMIC(y + 13.0 / 6, M) + 6.0 * MOMIC(x + 5.0 / 6, M) * MOMIC(y + 11.0 / 6, M) + 3 * MOMIC(x + 7.0 / 6, M) * MOMIC(y + 3.0 / 2, M) + 3 *MOMIC(x + 3.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 6 * MOMIC(x + 11.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + 3 * MOMIC(x + 13.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 5.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x + 17.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 19.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
+
+    const std::vector<double> temp_x = {0, 1, 2, 3};
+    const std::vector<double> temp_y = {log10(f1_0), log10(f1_1), log10(f1_2), log10(f1_3)};
+
+    const double value = lagrangeInterp(1.0 / 2, temp_x, temp_y);
+
+    return pow(10.0, value);
+ }
 }
 
 #endif //STATIC_H_

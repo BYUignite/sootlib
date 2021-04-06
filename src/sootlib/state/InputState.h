@@ -54,12 +54,14 @@ public:
     [[nodiscard]] double getBin(size_t i) const;
     void setBin(size_t i, double value);
     std::vector<double>& getBins();
+    const std::vector<double>& getBinsConst() const;
 
     [[nodiscard]] size_t getNumMoments() const;
     void resetMoments(size_t numMoments);
     [[nodiscard]] double getMoment(size_t i) const;
     void setMoment(size_t i, double value);
     std::vector<double>& getMoments();
+    const std::vector<double>& getMomentsConst() const;
 
 private:
     double T = 0;

@@ -190,3 +190,9 @@ void InputState::setMoment(size_t i, double value) {
 std::vector<double>& InputState::getMoments() {
     return moments;
 }
+const std::vector<double>& InputState::getBinsConst() const {
+    return bins;
+}
+const std::vector<double>& InputState::getMomentsConst() const {
+    return moments;
+}
