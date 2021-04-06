@@ -283,6 +283,33 @@ static double Mk(double exp, const std::vector<double>& wts, const std::vector<d
 
     return pow(10.0, value);
  }
+
+////////////////////////////////////////////////////////////////////////////////
+/*! Kfm
+ *      Returns continuum coagulation coefficient Kc prime
+ *      Call set_gas_state_vars first.
+ */
+ static double get_Kfm(const InputState& state) {
+     return eps_c * sqrt(M_PI * kb * state.getT() / 2) * pow(6 / M_PI / state.getRhoSoot(), 2 / 3.0);
+ }
+
+////////////////////////////////////////////////////////////////////////////////
+/*! Kc
+ *      Returns continuum coagulation coefficient Kc
+ *      Call set_gas_state_vars first.
+ */
+ static double get_Kc(const InputState& state) {
+     return 2 * kb * state.getT() / (3 / state.getMuGas());
+ }
+
+////////////////////////////////////////////////////////////////////////////////
+/*! Kcp
+ *      Returns continuum coagulation coefficient Kc prime
+ *      Call set_gas_state_vars first.
+ */
+ static double get_Kcp(const InputState& state) {
+     return 2 * 1.657 * state.getGasMeanFreePath() * pow(M_PI / 6 * state.getRhoSoot(), 1.0 / 3);
+ }
 }
 
 #endif //STATIC_H_

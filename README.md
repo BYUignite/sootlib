@@ -83,11 +83,11 @@ in this project.
 * `SootModel_MONO`
 * `SootModel_MOMIC`
 * `SootModel_QMOM`
+* `SootModel_LOGN`
 
 ### Not Implemented
 
 * `SootModel_SECT`
-* `SootModel_LOGN`
 
 ### Missing Features
 
