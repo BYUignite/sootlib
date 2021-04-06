@@ -10,6 +10,15 @@ directory. https://github.com/google/googletest
 Cantera: To build the Cantera compat components of the library and any tests or examples that require Cantera, you need
 Cantera installed as a system library. https://cantera.org/install/index.html
 
+# Build Instructions
+
+Run `cmake .` to generate the sootlib build files in the current directory while inside of the top level sootlib directory.
+
+This will generate the necessary Makefiles and you can now run `make` to build the project.
+
+Use the options described below to customize your build. If you run `cmake .` and then change your build options, you will
+need to either delete `CMakeCache.txt` or ensure that you have removed the cached values you changed.
+
 # Build options
 
 In the top level `CMakeLists.txt` you can enable/disable `BUILD_CANTERA_COMPAT`. This will:
