@@ -4,16 +4,16 @@
 
 #include "TestTools.h"
 
+#include "sootlib/oxidation_model/OxidationModel_NONE.h"
+
 TEST (OxidationModel_NONE_TEST, basic_test)
 {
-	const soot::State gasState = TestTools::getBlankGasState();
-	const soot::MomentSootState sootState = TestTools::getBlankMomentSootState();
-
-	const double expectedValue = 0.0;
-	std::unique_ptr<soot::OxidationModel> model = std::make_unique<soot::OxidationModel_NONE>();
+    const InputState inputState = TestTools::getBlankState();
+	unique_ptr<OxidationModel> model = make_unique<OxidationModel_NONE>();
 
 	// Using exact comparison since model should return exactly 0
-	EXPECT_EQ (expectedValue, model->getOxidationRate(gasState, sootState));
+    const double expectedValue = 0;
+    EXPECT_EQ (expectedValue, model->getOxidationRate(inputState));
 }
 
 int main(int argc, char** argv)

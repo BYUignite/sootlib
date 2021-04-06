@@ -12,7 +12,7 @@ TEST (CoagulationModel_NONE_TEST, basic_test)
 	unique_ptr<CoagulationModel> model = make_unique<CoagulationModel_NONE>();
 
 	// Using exact comparison since model should return exactly 0
-    const double expectedValue = 0.0;
+    const double expectedValue = 0;
     EXPECT_EQ (expectedValue, model->getCoagulationRate(inputState, 0, 0));
 }
 

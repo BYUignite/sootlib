@@ -4,16 +4,17 @@
 
 #include "TestTools.h"
 
+#include "sootlib/growth_model/GrowthModel_NONE.h"
+
 TEST (GrowthModel_NONE_TEST, basic_test)
 {
-	const soot::State gasState = TestTools::getBlankGasState();
-	const soot::MomentSootState sootState = TestTools::getBlankMomentSootState();
+    const InputState inputState = TestTools::getBlankState();
 
-	const double expectedValue = 0.0;
-	std::unique_ptr<soot::GrowthModel> model = std::make_unique<soot::GrowthModel_NONE>();
+	unique_ptr<GrowthModel> model = make_unique<GrowthModel_NONE>();
 
 	// Using exact comparison since model should return exactly 0
-	EXPECT_EQ (expectedValue, model->getGrowthRate(gasState, sootState));
+    const double expectedValue = 0;
+    EXPECT_EQ (expectedValue, model->getGrowthRate(inputState));
 }
 
 int main(int argc, char** argv)

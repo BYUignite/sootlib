@@ -2,11 +2,14 @@
 
 #include "sootlib/soot_model/generator/SootModelGenerator.h"
 
+using namespace soot;
+using namespace std;
+
 int main(int argc, char** argv) {
     /* Create a soot model generator */
 
     // this generator can make moment based soot models
-    auto generator = soot::SootModelGenerator();
+    auto generator = SootModelGenerator();
 
     /* Create a default soot model */
 
@@ -15,14 +18,14 @@ int main(int argc, char** argv) {
 
     /* Get source terms given a state */
 
-    auto state = soot::InputState();
+    auto state = InputState();
 
     // set the values of the moments to what we want
     state.resetMoments(2);
     state.setMoment(0, 100);
     state.setMoment(1, 55.5);
     state.setMwGas(200.1);
-    state.setGasSpeciesFrac(soot::GasSpecies::O2, 1.0);
+    state.setGasSpeciesFrac(GasSpecies::O2, 1.0);
     state.setP(21);
     state.setT(100);
 
@@ -30,13 +33,13 @@ int main(int argc, char** argv) {
 
     // TODO it looks like there is some value in the state that needs to be set not to 0 becuase we are getting NAN
     /* Print the values we got */
-    std::cout << "Soot source terms:" << std::endl;
+    cout << "Soot source terms:" << endl;
     for (auto it = sourceTerms.sootTermsBegin(); it != sourceTerms.sootTermsEnd(); it++)
-        std::cout << *it << std::endl;
+        cout << *it << endl;
 
-    std::cout << std::endl << "Gas source terms:" << std::endl;
+    cout << endl << "Gas source terms:" << endl;
     for (auto it = sourceTerms.gasTermsBegin(); it != sourceTerms.gasTermsEnd(); it++)
-        std::cout << "Gas species (code): " << int(it->first) << " Term: " << it->second << std::endl;
+        cout << "Gas species (code): " << int(it->first) << " Term: " << it->second << endl;
 
     return 0;
 }
