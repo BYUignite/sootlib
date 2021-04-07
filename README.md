@@ -33,13 +33,13 @@ In the top level `CMakeLists.txt` you can enable/disable `BUILD_TESTS`. This wil
 In the top level `CMakeLists.txt` you can enable/disable `BUILD_EXAMPLES`. This will:
 * Determine if examples are built
 
-You can add .cpp source files to `example/standard/` and `example/cantera/`. Add these files to either
+You can add .cc source files to `example/standard/` and `example/cantera/`. Add these files to either
 `example/standard/CMakeLists.txt` or `example/cantera/CMakeLists.txt` depending on if they require Cantera. Add
-`example_src.cpp` as `example_src`. These files will be built as standalone executables.
+`example_src.cc` as `example_src`. These files will be built as standalone executables.
 
-You can add .cpp source files to `test/standard` and `test/cantera`. Add these files to either
+You can add .cc source files to `test/standard` and `test/cantera`. Add these files to either
 `test/standard/CMakeLists.txt` or `test/cantera/CMakeLists.txt` depngind on if they required Cantera. Add
-`example_test.cpp` as `example_test`. These files will be built as standalone executables with Google Test. Files in
+`example_test.cc` as `example_test`. These files will be built as standalone executables with Google Test. Files in
 `test/standard/` will be added to the test list `standardTests`. Files in `test/cantera` will be added to the test list
 `canteraTests`.
 

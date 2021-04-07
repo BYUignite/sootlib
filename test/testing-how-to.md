@@ -1,9 +1,9 @@
 To write a test
 
-1) Create `your_test.cpp` in either the standard or cantera folder, depending on if this test is going
+1) Create `your_test.cc` in either the standard or cantera folder, depending on if this test is going
 to include cantera components. Include `your_test` in the list of tests in the appropiate `CMakeLists.txt`
 
-2) In your_test.cpp, `#include "gtest/gtest.h"`
+2) In your_test.cc, `#include "gtest/gtest.h"`
 
 3) Create a main method as follows:
 ```

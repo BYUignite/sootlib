@@ -1,4 +1,4 @@
-# ---- list executable .cpp files without their extension ----
+# ---- list executable .cc files without their extension ----
 
 set(STANDARD_TESTS
         cantera_test_1
@@ -11,7 +11,7 @@ set(CANTERA_TEST_LIBS
         testtools)
 
 foreach(TEST ${STANDARD_TESTS})
-    add_executable(${TEST} ${TEST}.cpp)
+    add_executable(${TEST} ${TEST}.cc)
 
     target_link_libraries(${TEST} PRIVATE ${CANTERA_TEST_LIBS})
 

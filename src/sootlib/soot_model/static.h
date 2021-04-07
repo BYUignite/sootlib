@@ -35,7 +35,7 @@ static size_t downselectIfNeeded(std::vector<double>& M) {
  *      From Marchisio and Fox (2013) Computational Models for Polydisperse and
  *      Multiphase Systems. Uses eispack function tql2 for eigenvalues and
  *      eigenvectors of a symmetric tridiagonal matrix. If eispack version tql2
- *      is desired, download eispack.hpp and eispack.cpp. LApack's dstev
+ *      is desired, download eispack.hpp and eispack.cc. LApack's dstev
  *      function to compute eigenvalues and eigenvectors of symmetrical
  *      tridiagonal matrix.
  *

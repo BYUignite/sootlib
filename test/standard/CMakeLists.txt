@@ -1,4 +1,4 @@
-# ---- list executable .cpp files without their extension ----
+# ---- list executable .cc files without their extension ----
 
 set(STANDARD_TESTS
         CoagulationModel_NONE
@@ -25,7 +25,7 @@ set(TEST_LIBS
         testtools)
 
 foreach(TEST ${STANDARD_TESTS})
-    add_executable(${TEST} ${TEST}.cpp)
+    add_executable(${TEST} ${TEST}.cc)
     target_link_libraries(${TEST} PRIVATE ${TEST_LIBS})
 
     gtest_add_tests(

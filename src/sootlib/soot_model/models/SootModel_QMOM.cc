@@ -1,5 +1,5 @@
 /**
- * @file SootModel_QMOM.cpp
+ * @file SootModel_QMOM.cc
  * Source file for class SootModel_QMOM
  */
 
