@@ -21,6 +21,8 @@ private:
                    std::unique_ptr<GrowthModel> growthModel,
                    std::unique_ptr<NucleationModel> nucleationModel,
                    std::unique_ptr<OxidationModel> oxidationModel);
+
+    static std::vector<double> getDivision(double mass, double num, const std::vector<double>& absc);
 };
 }
 

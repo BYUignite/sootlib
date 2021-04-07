@@ -50,8 +50,8 @@ in this project.
 
 ### Short Term Design
 
+* Create some common code for duplicate gas source term code
 * Optimize all models by saving intermediate calculations
-* Change SootModels to use multiple inheritance rather than have the interface inherit the base soot model
 * Perhaps add warnings when running into 0 or having illegal calculations to guide people in NAN situations
   
 ### Long Term Design
@@ -62,7 +62,7 @@ in this project.
 
 ### Broken / Not Building
 
-* Nothing atm
+* SECT model was highly broken in old code so current interpretation is probably not accurate
 
 ### Untested
 
@@ -84,10 +84,11 @@ in this project.
 * `SootModel_MOMIC`
 * `SootModel_QMOM`
 * `SootModel_LOGN`
+* `SootModel_SECT`
 
 ### Not Implemented
 
-* `SootModel_SECT`
+*
 
 ### Missing Features
 

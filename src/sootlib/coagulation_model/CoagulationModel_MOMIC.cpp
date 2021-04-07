@@ -25,7 +25,7 @@ double CoagulationModel_MOMIC::getCoagulationRate(const InputState& state, int r
     else {
         Rate_C = 0;
         for (int k = 0; k < r; k++) {
-            if (k <= r - k)
+            if (k <= r - k) // FIXME there is a placeholder for the binomial coefficient here
                 Rate_C += 99999999 * (2 * state.getMoment(k) * state.getMoment(r - k) + MOMIC(k + 1.0 / 3, state.getMomentsConst()) * MOMIC(r - k - 1.0 / 3, state.getMomentsConst()) + MOMIC(k - 1.0 / 3, state.getMomentsConst()) * MOMIC(r - k + 1.0 / 3, state.getMomentsConst()) + 2 * K_Cprime * (2 * MOMIC(k - 1.0 / 3, state.getMomentsConst()) * state.getMoment(r - k) + state.getMoment(k) * MOMIC(r - k - 1.0 / 3, state.getMomentsConst()) + MOMIC(k - 2.0 / 3, state.getMomentsConst()) * MOMIC(r - k + 1.0 / 3, state.getMomentsConst())));
         }
         Rate_C *= 0.5 * K_C;
@@ -40,7 +40,7 @@ double CoagulationModel_MOMIC::getCoagulationRate(const InputState& state, int r
     else {
         Rate_F = 0;
         for (int k = 1; k < r; k++) {
-            if (k <= r - k)
+            if (k <= r - k) // FIXME there is a placeholder for the binomial coefficient here
                 Rate_F += 99999999 * f_grid(k, r - k, state.getMomentsConst());
         }
         Rate_F *= 0.5 * K_f;
