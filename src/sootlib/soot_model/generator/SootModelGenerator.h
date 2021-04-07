@@ -7,16 +7,16 @@
 #include "sootlib/soot_model/SootModel.h"
 
 /* coagulation model */
-#include "sootlib/coagulation_model/CoagulationModel.h"
+#include "sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel.h"
 
 /* growth model */
-#include "sootlib/growth_model/GrowthModel.h"
+#include "sootlib/soot_model/soot_chemistry/growth_model/GrowthModel.h"
 
 /* nucleation model */
-#include "sootlib/nucleation_model/NucleationModel.h"
+#include "sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel.h"
 
 /* oxidation model */
-#include "sootlib/oxidation_model/OxidationModel.h"
+#include "sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel.h"
 
 namespace soot {
 class SootModelGenerator {

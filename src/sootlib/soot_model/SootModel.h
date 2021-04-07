@@ -2,13 +2,13 @@
 #define MOMENTSOOTMODEL_H
 
 #include "sootlib/SourceTerms.h"
-#include "sootlib/state/InputState.h"
+#include "sootlib/state/State.h"
 
 namespace soot {
 enum class SootModelType { MONO, LOGN, MOMIC, QMOM, SECT };
 class SootModel {
 public:
-    [[nodiscard]] virtual SourceTerms getSourceTerms(InputState& state) const = 0;
+    [[nodiscard]] virtual SourceTerms getSourceTerms(State& state) const = 0;
 
     virtual ~SootModel() = default;
 };

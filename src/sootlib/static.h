@@ -14,7 +14,7 @@ const double Df = 1.8;            ///< soot fractal dimension
 enum class NucleationMechanism { NONE, LL, LIN, PAH };
 enum class GrowthMechanism { NONE, LL, LIN, HACA };
 enum class OxidationMechanism { NONE, LL, LEE_NEOH, NSC_NEOH, HACA };
-enum class CoagulationMechanism { NONE, LL, FUCHS, FRENK, MOMIC };
+enum class CoagulationMechanism { NONE, LL, FUCHS, FRENK };
 
 const double MW_C2H2 = 26.038;
 const double MW_O2 = 31.998;

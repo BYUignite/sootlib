@@ -1,66 +1,75 @@
 # ---- set each batch of files ----
 
 set(COAGULATION_SRC_FILES
-        sootlib/coagulation_model/CoagulationModel.h
-        sootlib/coagulation_model/CoagulationModel_FRENK.h
-        sootlib/coagulation_model/CoagulationModel_FRENK.cc
-        sootlib/coagulation_model/CoagulationModel_FUCHS.h
-        sootlib/coagulation_model/CoagulationModel_FUCHS.cc
-        sootlib/coagulation_model/CoagulationModel_LL.h
-        sootlib/coagulation_model/CoagulationModel_LL.cc
-        sootlib/coagulation_model/CoagulationModel_MOMIC.h
-        sootlib/coagulation_model/CoagulationModel_MOMIC.cc)
+        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel.h
+        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FRENK.h
+        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FRENK.cc
+        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FUCHS.h
+        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FUCHS.cc
+        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_LL.h
+        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_LL.cc
+        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_MOMIC.h
+        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_MOMIC.cc)
 
 set(GROWTH_SRC_FILES
-        sootlib/growth_model/GrowthModel.h
-        sootlib/growth_model/GrowthModel_HACA.h
-        sootlib/growth_model/GrowthModel_HACA.cc
-        sootlib/growth_model/GrowthModel_LIN.h
-        sootlib/growth_model/GrowthModel_LIN.cc
-        sootlib/growth_model/GrowthModel_LL.h
-        sootlib/growth_model/GrowthModel_LL.cc
-        sootlib/growth_model/GrowthModel_NONE.h)
+        sootlib/soot_model/soot_chemistry/growth_model/GrowthModel.h
+        sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_HACA.h
+        sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_HACA.cc
+        sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_LIN.h
+        sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_LIN.cc
+        sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_LL.h
+        sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_LL.cc
+        sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_NONE.h)
 
 set(NUCLEATION_SRC_FILES
-        sootlib/nucleation_model/NucleationModel.h
-        sootlib/nucleation_model/NucleationModel_LIN.h
-        sootlib/nucleation_model/NucleationModel_LIN.cc
-        sootlib/nucleation_model/NucleationModel_LL.h
-        sootlib/nucleation_model/NucleationModel_LL.cc
-        sootlib/nucleation_model/NucleationModel_NONE.h
-        sootlib/nucleation_model/NucleationModel_PAH.h
-        sootlib/nucleation_model/NucleationModel_PAH.cc)
+        sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel.h
+        sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_LIN.h
+        sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_LIN.cc
+        sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_LL.h
+        sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_LL.cc
+        sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_NONE.h
+        sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_PAH.h
+        sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_PAH.cc)
 
 set(OXIDATION_SRC_FILES
-        sootlib/oxidation_model/OxidationModel.h
-        sootlib/oxidation_model/OxidationModel_HACA.h
-        sootlib/oxidation_model/OxidationModel_HACA.cc
-        sootlib/oxidation_model/OxidationModel_LEE_NEOH.h
-        sootlib/oxidation_model/OxidationModel_LEE_NEOH.cc
-        sootlib/oxidation_model/OxidationModel_LL.h
-        sootlib/oxidation_model/OxidationModel_LL.cc
-        sootlib/oxidation_model/OxidationModel_NONE.h
-        sootlib/oxidation_model/OxidationModel_NSC_NEOH.h
-        sootlib/oxidation_model/OxidationModel_NSC_NEOH.cc)
+        sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel.h
+        sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_HACA.h
+        sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_HACA.cc
+        sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_LEE_NEOH.h
+        sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_LEE_NEOH.cc
+        sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_LL.h
+        sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_LL.cc
+        sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_NONE.h
+        sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_NSC_NEOH.h
+        sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_NSC_NEOH.cc)
 
 set(SOOTMODELS_SRC_FILES
-        sootlib/soot_model/SootModel_Base.h
-        sootlib/soot_model/models/SootModel_LOGN.h
-        sootlib/soot_model/models/SootModel_LOGN.cc
-        sootlib/soot_model/models/SootModel_MOMIC.h
-        sootlib/soot_model/models/SootModel_MOMIC.cc
-        sootlib/soot_model/models/SootModel_MONO.h
-        sootlib/soot_model/models/SootModel_MONO.cc
-        sootlib/soot_model/models/SootModel_QMOM.h
-        sootlib/soot_model/models/SootModel_QMOM.cc
-        sootlib/soot_model/models/SootModel_SECT.h
-        sootlib/soot_model/models/SootModel_SECT.cc
+        sootlib/soot_model/SootChemistry.h
+        sootlib/soot_model/psd_models/moment_models/logn/SootModel_LOGN.h
+        sootlib/soot_model/psd_models/moment_models/logn/SootModel_LOGN.cc
+        sootlib/soot_model/psd_models/moment_models/momic/SootModel_MOMIC.h
+        sootlib/soot_model/psd_models/moment_models/momic/SootModel_MOMIC.cc
+        sootlib/soot_model/psd_models/moment_models/mono/SootModel_MONO.h
+        sootlib/soot_model/psd_models/moment_models/mono/SootModel_MONO.cc
+        sootlib/soot_model/psd_models/moment_models/qmom/SootModel_QMOM.h
+        sootlib/soot_model/psd_models/moment_models/qmom/SootModel_QMOM.cc
+        sootlib/soot_model/psd_models/sectional_models/sect/SootModel_SECT.h
+        sootlib/soot_model/psd_models/sectional_models/sect/SootModel_SECT.cc
         sootlib/soot_model/static.h)
 
 set(STATE_SRC_FILES
-        sootlib/state/InputState.h
-        sootlib/state/InputState.cc
-        )
+        sootlib/state/State.h
+        sootlib/state/State.cc
+        sootlib/state/GasState.h
+        sootlib/state/GasState.cc
+        sootlib/state/MomentState.h
+        sootlib/state/MomentState.cc
+        sootlib/state/PAHState.h
+        sootlib/state/PAHState.cc
+        sootlib/state/SectionalState.h
+        sootlib/state/SectionalState.cc
+        sootlib/state/SootState.h
+        sootlib/state/SootState.cc)
 
 set(SRC_FILES
         sootlib/soot_model/SootModel.h
@@ -75,18 +84,6 @@ set(LIB_FILES
         lib/eispack/eispack.h
         lib/eispack/eispack.cc)
 
-# ---- optionally include cantera comaptability files ----
-
-set(CANTERACOMPAT_SRC_FILES
-        )
-
-if (BUILD_CANTERA_COMPAT)
-    set(CANTERACOMPAT_SRC_FILES
-            ${CANTERACOMPAT_SRC_FILES}
-            sootlib/cantera_compat/cantera_compat.h
-            sootlib/cantera_compat/cantera_compat.cc)
-endif()
-
 # ---- compile all files ----
 
 set(ALL_SRC_FILES
@@ -97,7 +94,6 @@ set(ALL_SRC_FILES
         ${SOOTMODELS_SRC_FILES}
         ${STATE_SRC_FILES}
         ${SRC_FILES}
-        ${CANTERACOMPAT_SRC_FILES}
         ${LIB_FILES})
 
 add_library(sootlib STATIC ${ALL_SRC_FILES})

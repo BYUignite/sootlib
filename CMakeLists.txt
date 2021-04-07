@@ -8,21 +8,11 @@ project(sootlib)
 # (this project uses C++17 features)
 set(CMAKE_CXX_STANDARD 17)
 
-# ---- option to build Cantera compatability ----
-option(BUILD_CANTERA_COMPAT "Build Cantera compatability" OFF)
-
 # ---- option to build tests ----
 option(BUILD_TESTS "Build sootlib tests" ON)
 
 # ---- option to build examples ----
 option(BUILD_EXAMPLES "Build sootlib example" ON)
-
-############################### CANTERA ###############################
-
-if (BUILD_CANTERA_COMPAT)
-    find_library(CANTERA cantera REQUIRED)
-    SET(CMAKE_CXX_FLAGS -pthread)
-endif()
 
 ############################### SOOTLIB ###############################
 

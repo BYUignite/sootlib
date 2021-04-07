@@ -1,38 +1,38 @@
 #include "SootModelGenerator.h"
 
-/* Moment models */
-#include "sootlib/soot_model/models/SootModel_LOGN.h"
-#include "sootlib/soot_model/models/SootModel_MOMIC.h"
-#include "sootlib/soot_model/models/SootModel_MONO.h"
-#include "sootlib/soot_model/models/SootModel_QMOM.h"
+/* Moment psd_models */
+#include "sootlib/soot_model/psd_models/moment_models/logn/SootModel_LOGN.h"
+#include "sootlib/soot_model/psd_models/moment_models/momic/SootModel_MOMIC.h"
+#include "sootlib/soot_model/psd_models/moment_models/mono/SootModel_MONO.h"
+#include "sootlib/soot_model/psd_models/moment_models/qmom/SootModel_QMOM.h"
 
-/* Bin models */
-#include "sootlib/soot_model/models/SootModel_SECT.h"
+/* Bin psd_models */
+#include "sootlib/soot_model/psd_models/sectional_models/sect/SootModel_SECT.h"
 
-/* coagulation models */
-#include "sootlib/coagulation_model/CoagulationModel_FRENK.h"
-#include "sootlib/coagulation_model/CoagulationModel_FUCHS.h"
-#include "sootlib/coagulation_model/CoagulationModel_LL.h"
-#include "sootlib/coagulation_model/CoagulationModel_NONE.h"
+/* coagulation psd_models */
+#include "sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FRENK.h"
+#include "sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FUCHS.h"
+#include "sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_LL.h"
+#include "sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_NONE.h"
 
-/* growth models */
-#include "sootlib/growth_model/GrowthModel_HACA.h"
-#include "sootlib/growth_model/GrowthModel_LIN.h"
-#include "sootlib/growth_model/GrowthModel_LL.h"
-#include "sootlib/growth_model/GrowthModel_NONE.h"
+/* growth psd_models */
+#include "sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_HACA.h"
+#include "sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_LIN.h"
+#include "sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_LL.h"
+#include "sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_NONE.h"
 
-/* nucleation models */
-#include "sootlib/nucleation_model/NucleationModel_LIN.h"
-#include "sootlib/nucleation_model/NucleationModel_LL.h"
-#include "sootlib/nucleation_model/NucleationModel_NONE.h"
-#include "sootlib/nucleation_model/NucleationModel_PAH.h"
+/* nucleation psd_models */
+#include "sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_LIN.h"
+#include "sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_LL.h"
+#include "sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_NONE.h"
+#include "sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_PAH.h"
 
-/* oxidation models */
-#include "sootlib/oxidation_model/OxidationModel_HACA.h"
-#include "sootlib/oxidation_model/OxidationModel_LEE_NEOH.h"
-#include "sootlib/oxidation_model/OxidationModel_LL.h"
-#include "sootlib/oxidation_model/OxidationModel_NONE.h"
-#include "sootlib/oxidation_model/OxidationModel_NSC_NEOH.h"
+/* oxidation psd_models */
+#include "sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_HACA.h"
+#include "sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_LEE_NEOH.h"
+#include "sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_LL.h"
+#include "sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_NONE.h"
+#include "sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_NSC_NEOH.h"
 
 using namespace std;
 using namespace soot;
@@ -97,7 +97,7 @@ void SootModelGenerator::setModel(SootModelType modelType) {
     this->modelType = modelType;
 }
 SootModel* SootModelGenerator::getModel() const {
-    /* create helper models */
+    /* create helper psd_models */
     unique_ptr<CoagulationModel> cm = getCoagulationModel();
     unique_ptr<GrowthModel> gm = getGrowthModel();
     unique_ptr<NucleationModel> nm = getNucleationModel();

@@ -17,8 +17,4 @@ target_include_directories(testtools PUBLIC testtools)
 
 # ---- add tests ----
 
-add_subdirectory(standard)
-
-if (BUILD_CANTERA_COMPAT)
-    add_subdirectory(cantera)
-endif()
+add_subdirectory(tests)
