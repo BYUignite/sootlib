@@ -82,7 +82,8 @@ set(SRC_FILES
 
 set(LIB_FILES
         lib/eispack/eispack.h
-        lib/eispack/eispack.cc)
+        lib/eispack/eispack.cc
+        lib/binomial/binomial.h)
 
 # ---- compile all files ----
 
