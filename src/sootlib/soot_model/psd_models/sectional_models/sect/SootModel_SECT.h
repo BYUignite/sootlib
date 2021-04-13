@@ -23,7 +23,7 @@ private:
                    std::unique_ptr<OxidationModel> oxidationModel);
 
     // helper functions specific to this PSD
-    static std::vector<double> getDivision(double mass, double num, const std::vector<double>& absc);
+    [[nodiscard]] static std::vector<double> getDivision(double mass, double num, const std::vector<double>& absc);
 };
 }
 

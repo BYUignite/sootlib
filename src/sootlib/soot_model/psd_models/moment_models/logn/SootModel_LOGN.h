@@ -24,9 +24,9 @@ private:
 
     // helper functions specific to this PSD
     [[nodiscard]] static double Mk(double k, double M0, double M1, double M2);
-    static double getKfm(const State& state);
-    static double getKc(const State& state);
-    static double getKcp(const State& state);
+    [[nodiscard]] static double getKfm(const State& state);
+    [[nodiscard]] static double getKc(const State& state);
+    [[nodiscard]] static double getKcp(const State& state);
 };
 }
 
