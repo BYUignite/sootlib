@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "SootModel_MOMIC.h"
 #include "lib/binomial/binomial.h"
 
@@ -68,32 +69,8 @@ SourceTerms SootModel_MOMIC::getSourceTerms(State& state) const {
 
     //---------- get gas source terms
 
-    map<GasSpecies, double> gasSourceTerms;
-    map<size_t, double> PAHSourceTerms;
-
-    // Nucleation
-    for (auto it = massRateRatios.nucCond().gasSpeciesBegin(); it != massRateRatios.nucCond().gasSpeciesEnd(); it++)
-        gasSourceTerms[it->first] += Mnuc.at(1) * it->second / state.getRhoGas();
-    for (auto it = massRateRatios.nucCond().PAHBegin(); it != massRateRatios.nucCond().PAHEnd(); it++)
-        PAHSourceTerms[it->first] += Mnuc.at(1) * it->second / state.getRhoGas();
-
-    // Growth
-    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
-        gasSourceTerms[it->first] += Mgrw.at(1) * it->second / state.getRhoGas();
-
-    // Oxidation
-    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
-        gasSourceTerms[it->first] += Moxi.at(1) * it->second / state.getRhoGas();
-    for (auto it = massRateRatios.groOxi().PAHBegin(); it != massRateRatios.groOxi().PAHEnd(); it++)
-        PAHSourceTerms[it->first] += Moxi.at(1) * it->second / state.getRhoGas();
-
-    // PAH condensation
-    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
-        gasSourceTerms[it->first] += Mcnd.at(1) * it->second / state.getRhoGas();
-    for (auto it = massRateRatios.nucCond().PAHBegin(); it != massRateRatios.nucCond().PAHEnd(); it++)
-        PAHSourceTerms[it->first] += Mcnd.at(1) * it->second / state.getRhoGas();
-
-    // Coagulation - n/a
+    map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, Mnuc.at(1), Mgrw.at(1), Moxi.at(1), Mcnd.at(1));
+    map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, Mnuc.at(1), 0, Moxi.at(1), Mcnd.at(1));
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }

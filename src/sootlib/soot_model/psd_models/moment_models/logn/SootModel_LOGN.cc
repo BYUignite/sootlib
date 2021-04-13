@@ -125,32 +125,8 @@ SourceTerms SootModel_LOGN::getSourceTerms(State& state) const {
 
     //---------- get gas source terms
 
-    map<GasSpecies, double> gasSourceTerms;
-    map<size_t, double> PAHSourceTerms;
-
-    // Nucleation
-    for (auto it = massRateRatios.nucCond().gasSpeciesBegin(); it != massRateRatios.nucCond().gasSpeciesEnd(); it++)
-        gasSourceTerms[it->first] += N1 * it->second / state.getRhoGas();
-    for (auto it = massRateRatios.nucCond().PAHBegin(); it != massRateRatios.nucCond().PAHEnd(); it++)
-        PAHSourceTerms[it->first] += N1 * it->second / state.getRhoGas();
-
-    // Growth
-    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
-        gasSourceTerms[it->first] += G1 * it->second / state.getRhoGas();
-
-    // Oxidation
-    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
-        gasSourceTerms[it->first] += X1 * it->second / state.getRhoGas();
-    for (auto it = massRateRatios.groOxi().PAHBegin(); it != massRateRatios.groOxi().PAHEnd(); it++)
-        PAHSourceTerms[it->first] += X1 * it->second / state.getRhoGas();
-
-    // PAH condensation
-    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
-        gasSourceTerms[it->first] += Cnd1 * it->second / state.getRhoGas();
-    for (auto it = massRateRatios.nucCond().PAHBegin(); it != massRateRatios.nucCond().PAHEnd(); it++)
-        PAHSourceTerms[it->first] += Cnd1 * it->second / state.getRhoGas();
-
-    // Coagulation - n/a
+    map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, N1, G1, X1, Cnd1);
+    map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, N1, 0, X1, Cnd1);
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }

@@ -25,11 +25,13 @@ protected:
           oxidationModel(std::move(oxidationModel)) {}
 
     /* Calculation Models */
-
     const std::unique_ptr<CoagulationModel> coagulationModel;
     const std::unique_ptr<GrowthModel> growthModel;
     const std::unique_ptr<NucleationModel> nucleationModel;
     const std::unique_ptr<OxidationModel> oxidationModel;
+
+    [[nodiscard]] static std::map<GasSpecies, double> getGasSourceTerms(const State& state, MassRateRatios& ratio, double N, double G, double X, double C);
+    [[nodiscard]] static std::map<size_t, double> getPAHSourceTerms(const State& state, MassRateRatios& ratio, double N, double G, double X, double C);
 };
 }
 

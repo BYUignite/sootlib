@@ -139,26 +139,8 @@ SourceTerms SootModel_QMOM::getSourceTerms(State& state) const {
 
     //---------- get gas source terms
 
-    map<GasSpecies, double> gasSourceTerms;
-    map<size_t, double> PAHSourceTerms;
-
-    // Nucleation
-    for (auto it = massRateRatios.nucCond().gasSpeciesBegin(); it != massRateRatios.nucCond().gasSpeciesEnd(); it++)
-        gasSourceTerms.at(it->first) += nucleationSourceM.at(1) * it->second / state.getRhoGas();
-    for (auto it = massRateRatios.nucCond().PAHBegin(); it != massRateRatios.nucCond().PAHEnd(); it++)
-        PAHSourceTerms.at(it->first) += nucleationSourceM.at(1) * it->second / state.getRhoGas();
-
-    // Growth
-    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
-        gasSourceTerms.at(it->first) += growthSourceM.at(1) * it->second / state.getRhoGas();
-
-    // Oxidation
-    for (auto it = massRateRatios.groOxi().gasSpeciesBegin(); it != massRateRatios.groOxi().gasSpeciesEnd(); it++)
-        gasSourceTerms.at(it->first) += oxidationSourceM.at(1) * it->second / state.getRhoGas();
-    for (auto it = massRateRatios.groOxi().PAHBegin(); it != massRateRatios.groOxi().PAHEnd(); it++)
-        PAHSourceTerms.at(it->first) += oxidationSourceM.at(1) * it->second / state.getRhoGas();
-
-    // Coagulation - n/a
+    map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, nucleationSourceM.at(1), growthSourceM.at(1), oxidationSourceM.at(1), 0);
+    map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, nucleationSourceM.at(1), 0, oxidationSourceM.at(1), 0);
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }

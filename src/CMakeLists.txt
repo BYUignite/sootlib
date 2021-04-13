@@ -44,6 +44,7 @@ set(OXIDATION_SRC_FILES
 
 set(SOOTMODELS_SRC_FILES
         sootlib/soot_model/SootChemistry.h
+        sootlib/soot_model/SootChemistry.cc
         sootlib/soot_model/psd_models/moment_models/logn/SootModel_LOGN.h
         sootlib/soot_model/psd_models/moment_models/logn/SootModel_LOGN.cc
         sootlib/soot_model/psd_models/moment_models/momic/SootModel_MOMIC.h
