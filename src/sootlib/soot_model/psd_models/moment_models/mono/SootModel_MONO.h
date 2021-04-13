@@ -5,9 +5,7 @@
 #include "sootlib/soot_model/SootChemistry.h"
 
 namespace soot {
-
 class SootModel_MONO : public SootModel, public SootChemistry {
-
 public:
     [[nodiscard]] static SootModel_MONO* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
                                                      std::unique_ptr<GrowthModel> growthModel,
@@ -19,12 +17,12 @@ public:
     ~SootModel_MONO() override = default;
 
 private:
-
     SootModel_MONO(std::unique_ptr<CoagulationModel> coagulationModel,
                    std::unique_ptr<GrowthModel> growthModel,
                    std::unique_ptr<NucleationModel> nucleationModel,
                    std::unique_ptr<OxidationModel> oxidationModel);
 
+    // helper functions specific to this PSD
 };
 }
 

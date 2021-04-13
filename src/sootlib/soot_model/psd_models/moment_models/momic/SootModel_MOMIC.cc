@@ -35,38 +35,38 @@ SourceTerms SootModel_MOMIC::getSourceTerms(State& state) const {
     vector<double> Mnuc(state.getNumMoments(), 0);
 
     double m_nuc = state.getCMin() * MW_C / Na;
-    for (size_t k = 0; k < N; k++)
-        Mnuc.at(k) = pow(m_nuc, k) * Jnuc;
+    for (size_t i = 0; i < N; i++)
+        Mnuc.at(i) = pow(m_nuc, i) * Jnuc;
 
     vector<double> Mcnd(state.getNumMoments(), 0);
 
     CoagulationModel_MOMIC coag = CoagulationModel_MOMIC();
     if (nucleationModel->getMechanism() == NucleationMechanism::PAH) {
-        for (size_t k = 1; k < N; k++)
-            Mcnd.at(k) = coag.getCoagulationRate(state, k) * state.getDimer() * state.getMDimer() * k;
+        for (size_t i = 1; i < N; i++)
+            Mcnd.at(i) = coag.getCoagulationRate(state, (int) i) * state.getDimer() * state.getMDimer() * (double) i;
     }
 
     vector<double> Mgrw(state.getNumMoments(), 0);
 
-    const double Acoef = M_PI * pow(abs(6.0 / M_PI / state.getRhoSoot()), 2.0 / 3);
-    for (int k = 1; k < N; k++)
-        Mgrw.at(k) = Kgrw * Acoef * k * MOMIC(k - 1.0 / 3, state.getMomentsConst());
+    const double Acoef = M_PI * pow(abs(6 / M_PI / state.getRhoSoot()), 2.0 / 3);
+    for (size_t i = 1; i < N; i++)
+        Mgrw.at(i) = Kgrw * Acoef * (double) i * MOMIC((double) i - 1.0 / 3, state.getMomentsConst());
 
     vector<double> Moxi(state.getNumMoments(), 0);
 
-    for (int k = 1; k < N; k++)
-        Moxi.at(k) = Koxi * Acoef * k * MOMIC(k - 1.0 / 3, state.getMomentsConst());
+    for (size_t i = 1; i < N; i++)
+        Moxi.at(i) = Koxi * Acoef * (double) i * MOMIC((double) i - 1.0 / 3, state.getMomentsConst());
 
     vector<double> Mcoa(state.getNumMoments(), 0);
 
     if (coagulationModel->getMechanism() != CoagulationMechanism::NONE) {
-        for (int k = 0; k < N; k++)
-            Mcoa.at(k) = coag.getCoagulationRate(state, k);
+        for (size_t i = 0; i < N; i++)
+            Mcoa.at(i) = coag.getCoagulationRate(state, (int) i);
     }
 
     vector<double> sootSourceTerms(state.getNumMoments(), 0);
-    for (size_t k = 0; k < state.getNumMoments(); k++)
-        sootSourceTerms.at(k) = Mnuc.at(k) + Mcnd.at(k) + Mgrw.at(k) + Moxi.at(k) + Mcoa.at(k);
+    for (size_t i = 0; i < state.getNumMoments(); i++)
+        sootSourceTerms.at(i) = Mnuc.at(i) + Mcnd.at(i) + Mgrw.at(i) + Moxi.at(i) + Mcoa.at(i);
 
     //---------- get gas source terms
 

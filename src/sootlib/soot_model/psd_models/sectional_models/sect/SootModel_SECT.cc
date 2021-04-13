@@ -51,9 +51,8 @@ SourceTerms SootModel_SECT::getSourceTerms(State& state) const {
             Coag.at(i) -= leaving;
             Coag.at(j) -= leaving;
             divided = getDivision((state.getBin(i) + state.getBin(j)), leaving, absc);
-            for (size_t k = 0; k < Coag.size(); k++) {
+            for (size_t k = 0; k < Coag.size(); k++)
                 Coag.at(k) += divided.at(k);
-            }
         }
     }
 
@@ -73,7 +72,7 @@ SourceTerms SootModel_SECT::getSourceTerms(State& state) const {
     vector<double> Am2m3(state.getNumBins(), 0);
     for (size_t i = 0; i < state.getNumBins(); i++) {
         if (wts.at(i) > 0)
-            Am2m3.at(i) = M_PI * pow(abs(6.0 / (M_PI * state.getRhoSoot()) * state.getBin(i)), 2.0 / 3) * abs(wts.at(i));
+            Am2m3.at(i) = M_PI * pow(abs(6 / (M_PI * state.getRhoSoot()) * state.getBin(i)), 2.0 / 3) * abs(wts.at(i));
     }
     vector<double> G0(state.getNumBins(), 0);
     double G_tot = 0;
@@ -151,7 +150,7 @@ vector<double> SootModel_SECT::getDivision(double mass, double num, const vector
     while (!found) {
         loc++;
         if (loc >= absc.size()) {
-            loc = absc.size() - 1;
+            loc = (int) absc.size() - 1;
             found = true;
         }
         if (absc.at(loc) > mass)

@@ -22,6 +22,7 @@ private:
                    std::unique_ptr<NucleationModel> nucleationModel,
                    std::unique_ptr<OxidationModel> oxidationModel);
 
+    // helper functions specific to this PSD
     [[nodiscard]] static double Mk_LOGN(double k, double M0, double M1, double M2) ;
 };
 }

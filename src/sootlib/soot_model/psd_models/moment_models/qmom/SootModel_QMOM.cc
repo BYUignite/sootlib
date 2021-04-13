@@ -44,30 +44,29 @@ SourceTerms SootModel_QMOM::getSourceTerms(State& state) const {
 
     MassRateRatios massRateRatios;
 
-    int nMom = state.getNumMoments();
-    vector<double> M(nMom, 0);
+    vector<double> M(state.getNumMoments(), 0);
     vector<double> weights = {0};
     vector<double> abscissas = {0};
 
     //---------- get moments
 
-    if (nMom % 2 == 1)
+    if (state.getNumMoments() % 2 == 1)
         throw runtime_error("QMOM soot model requires even number of moments");
-    if (nMom < 2)
+    if (state.getNumMoments() < 2)
         throw runtime_error("QMOM soot model requries at least 2 moments");
 
-    for (int k = 0; k < nMom; k++)
-        M.at(k) = state.getMoment(k);
+    for (size_t i = 0; i < state.getNumMoments(); i++)
+        M.at(i) = state.getMoment(i);
 
     //---------- set weights and abscissas
 
     getWtsAbs(M, weights, abscissas);           // wheeler algorithms applied here
 
-    for (int i = 0; i < weights.size(); i++) {
-        if (weights.at(i) < 0.0)
-            weights.at(i) = 0.0;
-        if (abscissas.at(i) < 0.0)
-            abscissas.at(i) = 0.0;
+    for (size_t i = 0; i < weights.size(); i++) {
+        if (weights.at(i) < 0)
+            weights.at(i) = 0;
+        if (abscissas.at(i) < 0)
+            abscissas.at(i) = 0;
     }
 
     //---------- get chemical rates
@@ -79,57 +78,65 @@ SourceTerms SootModel_QMOM::getSourceTerms(State& state) const {
 
     //---------- nucleation terms
 
-    vector<double> nucleationSourceM(nMom, 0.0);                        // nucleation source terms for moments
-    double mNuc = state.getCMin() * MW_C / Na;                              // mass of a nucleated particle
-    for (int k = 0; k < nMom; k++)
-        nucleationSourceM.at(k) = pow(mNuc, k) * jNuc;                          // Nuc_rate = m_nuc^r * jNuc
+    vector<double> nucleationSourceM(state.getNumMoments(), 0.);                        // nucleation source terms for moments
+    const double mNuc = state.getCMin() * MW_C / Na;                              // mass of a nucleated particle
+    for (size_t i = 0; i < state.getNumMoments(); i++)
+        nucleationSourceM.at(i) = pow(mNuc, i) * jNuc;                          // Nuc_rate = m_nuc^r * jNuc
 
     //---------- PAH condensation terms
 
-    vector<double> condensationSourceM(nMom, 0.0);                            // PAH condensation source terms
-    if (nucleationModel->getMechanism()
-        == NucleationMechanism::PAH) {      // do PAH condensation if PAH nucleation is selected
-        for (int k = 1; k < nMom;
-             k++) {                                         // M0 = 0.0 for condensation by definition
-            for (int ii = 0; ii < abscissas.size(); ii++)
-                condensationSourceM.at(k) += coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(ii)) * pow(abscissas.at(ii), k - 1) * weights.at(ii);
-            condensationSourceM.at(k) *= state.getDimer() * state.getMDimer() * k;
+    vector<double> condensationSourceM(state.getNumMoments(), 0);                            // PAH condensation source terms
+    if (nucleationModel->getMechanism() == NucleationMechanism::PAH) {      // do PAH condensation if PAH nucleation is selected
+        for (size_t i = 1; i < state.getNumMoments(); i++) {                                         // M0 = 0.0 for condensation by definition
+            for (size_t j = 0; j < abscissas.size(); j++)
+                condensationSourceM.at(i) += coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(j)) * pow(abscissas.at(j), i - 1) * weights.at(j);
+            condensationSourceM.at(i) *= state.getDimer() * state.getMDimer() * (double) i;
         }
     }
 
     //---------- growth terms
 
-    vector<double> growthSourceM(nMom, 0.0);                                      // growth source terms for moments
-    double Acoef = M_PI * pow(abs(6.0 / M_PI / state.getRhoSoot()), 2.0 / 3.0);   // Acoef (=) kmol^2/3 / kg^2/3
-    for (int k = 1; k < nMom; k++)                                                   // M0 = 0.0 for growth by definition
-        growthSourceM.at(k) = kGrw * Acoef * k * Mk(k - 1.0 / 3.0, weights, abscissas);                  // kg^k/m3*s
+    vector<double> growthSourceM(state.getNumMoments(), 0);                                      // growth source terms for moments
+    const double Acoef = M_PI * pow(abs(6 / M_PI / state.getRhoSoot()), 2.0 / 3);   // Acoef (=) kmol^2/3 / kg^2/3
+    for (size_t i = 1; i < state.getNumMoments(); i++)                                                   // M0 = 0.0 for growth by definition
+        growthSourceM.at(i) = kGrw * Acoef * (double) i * Mk((double) i - 1.0 / 3, weights, abscissas);                  // kg^k/m3*s
 
     //---------- oxidation terms
 
-    vector<double> oxidationSourceM(nMom, 0.0);                                   // oxidation source terms
-    for (int k = 1; k < nMom; k++)                                                   // M0 = 0.0 for oxidation by definition
-        oxidationSourceM.at(k) = -kOxi * Acoef * k * Mk(k - 1.0 / 3.0, weights, abscissas);              // kg^k/m3*s
+    vector<double> oxidationSourceM(state.getNumMoments(), 0);                                   // oxidation source terms
+    for (size_t i = 1; i < state.getNumMoments(); i++)                                                   // M0 = 0.0 for oxidation by definition
+        oxidationSourceM.at(i) = -kOxi * Acoef * (double) i * Mk((double) i - 1.0 / 3, weights, abscissas);              // kg^k/m3*s
 
     //---------- coagulation terms
 
-    vector<double>
-        coagulationSourceM(nMom, 0.0);                                 // coagulation source terms: initialize to zero!
-    for (int k = 0; k < nMom; k++) {
-        if (k == 1)
-            continue;                                                       // M1 = 0.0 for coagulation by definition
-        for (int ii = 1; ii < abscissas.size(); ii++)                                 // off-diagonal terms (looping half of them) with *2 incorporated
-            for (int j = 0; j < ii; j++)
-                coagulationSourceM.at(k) += coagulationModel->getCoagulationRate(state, abscissas.at(ii), abscissas.at(j)) * weights.at(ii) * weights.at(j) * (k == 0 ? -1.0 : (pow(abscissas.at(ii) + abscissas.at(j), k)) - pow(abscissas.at(ii), k) - pow(abscissas.at(j), k));
-        for (int ii = 0; ii < abscissas.size(); ii++)                                      // diagonal terms
-            coagulationSourceM.at(k) += coagulationModel->getCoagulationRate(state, abscissas.at(ii), abscissas.at(ii)) * weights.at(ii) * weights.at(ii) * (k == 0 ? -0.5 : pow(abscissas.at(ii), k) * (pow(2, k - 1) - 1));
+    vector<double> coagulationSourceM(state.getNumMoments(), 0);                                 // coagulation source terms: initialize to zero!
+
+    // there is a different case for the first moment
+    // the second moment does not need calculation
+    // the other moments are handled by the second loop
+    for (size_t i = 0; i < abscissas.size(); i++) {
+    	if (i != 0) {
+    		for (size_t j = 0; j < i; j++)
+			    coagulationSourceM.at(0) += coagulationModel->getCoagulationRate(state, abscissas.at(i), abscissas.at(j)) * weights.at(i) * weights.at(j) * -1;
+    	}
+	    coagulationSourceM.at(0) += coagulationModel->getCoagulationRate(state, abscissas.at(i), abscissas.at(i)) * weights.at(i) * weights.at(i) * -0.5;
+    }
+    for (size_t i = 2; i < state.getNumMoments(); i++) {
+    	for (size_t j = 0; j < abscissas.size(); j++) {
+    		if (j != 0) {
+    			for (size_t k = 0; k < j; k++)
+				    coagulationSourceM.at(i) += coagulationModel->getCoagulationRate(state, abscissas.at(j), abscissas.at(k)) * weights.at(j) * weights.at(k) * (i == 0 ? -1 : (pow(abscissas.at(j) + abscissas.at(k), i)) - pow(abscissas.at(j), i) - pow(abscissas.at(k), i));
+    		}
+		    coagulationSourceM.at(i) += coagulationModel->getCoagulationRate(state, abscissas.at(j), abscissas.at(j)) * weights.at(j) * weights.at(j) * (i == 0 ? -0.5 : pow(abscissas.at(j), i) * (pow(2, i - 1) - 1));
+    	}
     }
 
     //---------- combinine to make source terms
 
-    vector<double> sootSourceTerms(nMom, 0.0);
+    vector<double> sootSourceTerms(state.getNumMoments(), 0);
 
-    for (int k = 0; k < nMom; k++)
-        sootSourceTerms.at(k) = (nucleationSourceM.at(k) + condensationSourceM.at(k) + growthSourceM.at(k) + oxidationSourceM.at(k) + coagulationSourceM.at(k)) / state.getRhoGas();
+    for (size_t i = 0; i < state.getNumMoments(); i++)
+        sootSourceTerms.at(i) = (nucleationSourceM.at(i) + condensationSourceM.at(i) + growthSourceM.at(i) + oxidationSourceM.at(i) + coagulationSourceM.at(i)) / state.getRhoGas();
 
     //---------- get gas source terms
 

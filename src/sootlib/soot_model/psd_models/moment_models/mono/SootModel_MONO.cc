@@ -46,7 +46,7 @@ SourceTerms SootModel_MONO::getSourceTerms(State& state) const {
 
     //---------- get moments 
 
-    if (state.getNumMoments() < 2)
+    if (state.getNumMoments() != 2)
         throw runtime_error("MONO soot model requires 2 soot moments");
 
     const double M0 = state.getMoment(0);
@@ -74,13 +74,11 @@ SourceTerms SootModel_MONO::getSourceTerms(State& state) const {
     //---------- PAH condensation terms
 
     const double Cnd0 = 0;
-    const double Cnd1 =
-        nucleationModel->getMechanism() == NucleationMechanism::PAH ? state.getDimer() * state.getMDimer()
-            * coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(0)) * weights.at(0) : 0;
+    const double Cnd1 = nucleationModel->getMechanism() == NucleationMechanism::PAH ? state.getDimer() * state.getMDimer() * coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(0)) * weights.at(0) : 0;
 
     //---------- growth terms
 
-    const double Am2m3 = M0 > 0 ? M_PI * pow(abs(6.0 / (M_PI * state.getRhoSoot()) * M1 / M0), 2.0 / 3.0) * abs(M0) : 0;
+    const double Am2m3 = M0 > 0 ? M_PI * pow(abs(6 / (M_PI * state.getRhoSoot()) * M1 / M0), 2.0 / 3) * abs(M0) : 0;
 
     const double G0 = 0;
     const double G1 = kGrw * Am2m3;
@@ -97,8 +95,8 @@ SourceTerms SootModel_MONO::getSourceTerms(State& state) const {
 
     //---------- combinine to make soot source terms
 
-    vector<double> sootSourceTerms =
-        {(N0 + Cnd0 + G0 + X0 + C0) / state.getRhoGas(), (N1 + Cnd1 + G1 + X1 + C1) / state.getRhoGas()};
+    vector<double> sootSourceTerms = {(N0 + Cnd0 + G0 + X0 + C0) / state.getRhoGas(),
+									  (N1 + Cnd1 + G1 + X1 + C1) / state.getRhoGas()};
 
     //---------- get gas source terms
 
