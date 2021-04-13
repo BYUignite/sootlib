@@ -137,7 +137,7 @@ static void getWtsAbs(const std::vector<double>& M, std::vector<double>& weights
         wheeler(M, N / 2, w_temp, a_temp);        // wheeler algorithm
 
         for (int k = 0; k < N / 2; k++) {
-            if (w_temp.at(k) < 0.0 || a_temp.at(k) < 0.0 || a_temp.at(k) > 1.0)
+            if (w_temp.at(k) < 0 || a_temp.at(k) < 0 || a_temp.at(k) > 1)
                 negs = true;
         }
 
@@ -253,7 +253,7 @@ static double Mk(double exp, const std::vector<double>& wts, const std::vector<d
  static double f_grid(int x, int y, const std::vector<double>& M) {
      // TODO save duplicate calculations in this function
     const double f1_0 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x - 1.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
-    const double f1_1 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 2.0 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 1.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2.0 * MOMIC(x + 5.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 7.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
+    const double f1_1 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 2 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 1.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x + 5.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 7.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
 
     if (y >= 4) {
         const std::vector<double> temp_x = {0, 1};
@@ -263,7 +263,7 @@ static double Mk(double exp, const std::vector<double>& wts, const std::vector<d
         return pow(10.0, value);
     }
 
-    double f1_2 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 13.0 / 6, M) + 2.0 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 11.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 3.0 / 2, M) + 2.0 * MOMIC(x + 1.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 4 * MOMIC(x + 5.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + 2 * MOMIC(x + 7.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 3.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x + 11.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 13.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
+    double f1_2 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 13.0 / 6, M) + 2 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 11.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 3.0 / 2, M) + 2 * MOMIC(x + 1.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 4 * MOMIC(x + 5.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + 2 * MOMIC(x + 7.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 3.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x + 11.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 13.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
 
     if (y >= 3) {
         const std::vector<double> temp_x = {0, 1, 2};
@@ -274,7 +274,7 @@ static double Mk(double exp, const std::vector<double>& wts, const std::vector<d
         return pow(10.0, value);
     }
 
-    double f1_3 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 19.0 / 6, M) + 2.0 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 17.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 5.0 / 2, M) + 3.0 * MOMIC(x + 1.0 / 2, M) * MOMIC(y + 13.0 / 6, M) + 6.0 * MOMIC(x + 5.0 / 6, M) * MOMIC(y + 11.0 / 6, M) + 3 * MOMIC(x + 7.0 / 6, M) * MOMIC(y + 3.0 / 2, M) + 3 *MOMIC(x + 3.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 6 * MOMIC(x + 11.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + 3 * MOMIC(x + 13.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 5.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x + 17.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 19.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
+    double f1_3 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 19.0 / 6, M) + 2 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 17.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 5.0 / 2, M) + 3 * MOMIC(x + 1.0 / 2, M) * MOMIC(y + 13.0 / 6, M) + 6 * MOMIC(x + 5.0 / 6, M) * MOMIC(y + 11.0 / 6, M) + 3 * MOMIC(x + 7.0 / 6, M) * MOMIC(y + 3.0 / 2, M) + 3 *MOMIC(x + 3.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 6 * MOMIC(x + 11.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + 3 * MOMIC(x + 13.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 5.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x + 17.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 19.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
 
     const std::vector<double> temp_x = {0, 1, 2, 3};
     const std::vector<double> temp_y = {log10(f1_0), log10(f1_1), log10(f1_2), log10(f1_3)};

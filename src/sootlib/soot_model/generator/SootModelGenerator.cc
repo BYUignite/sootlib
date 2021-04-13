@@ -60,8 +60,8 @@ unique_ptr<CoagulationModel> SootModelGenerator::getCoagulationModel() const {
     switch (coagulationMechanism) {
         case CoagulationMechanism::NONE: return make_unique<CoagulationModel_NONE>();
         case CoagulationMechanism::LL: return make_unique<CoagulationModel_LL>();
-        case CoagulationMechanism::FUCHS: make_unique<CoagulationModel_FUCHS>();
-        case CoagulationMechanism::FRENK: make_unique<CoagulationModel_FRENK>();
+        case CoagulationMechanism::FUCHS: return make_unique<CoagulationModel_FUCHS>();
+        case CoagulationMechanism::FRENK: return make_unique<CoagulationModel_FRENK>();
         default: throw domain_error("Bad soot coagulation mechanism");
     }
 }
@@ -106,30 +106,15 @@ SootModel* SootModelGenerator::getModel() const {
     /* create and return model ptr */
     switch (modelType) {
         case SootModelType::MONO:
-            return SootModel_MONO::getInstance(move(cm),
-                                               move(gm),
-                                               move(nm),
-                                               move(om));
+            return SootModel_MONO::getInstance(move(cm), move(gm), move(nm), move(om));
         case SootModelType::LOGN:
-            return SootModel_LOGN::getInstance(move(cm),
-                                               move(gm),
-                                               move(nm),
-                                               move(om));
+            return SootModel_LOGN::getInstance(move(cm), move(gm), move(nm), move(om));
         case SootModelType::MOMIC:
-            return SootModel_MOMIC::getInstance(move(cm),
-                                                move(gm),
-                                                move(nm),
-                                                move(om));
+            return SootModel_MOMIC::getInstance(move(cm), move(gm), move(nm), move(om));
         case SootModelType::QMOM:
-            return SootModel_QMOM::getInstance(move(cm),
-                                               move(gm),
-                                               move(nm),
-                                               move(om));
+            return SootModel_QMOM::getInstance(move(cm), move(gm), move(nm), move(om));
         case SootModelType::SECT:
-            return SootModel_SECT::getInstance(move(cm),
-                                               move(gm),
-                                               move(nm),
-                                               move(om));
+            return SootModel_SECT::getInstance(move(cm), move(gm), move(nm), move(om));
         default: throw domain_error("Bad soot model type");
     }
 }

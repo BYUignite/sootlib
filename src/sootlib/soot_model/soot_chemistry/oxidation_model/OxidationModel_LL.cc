@@ -19,6 +19,5 @@ double OxidationModel_LL::getOxidationRate(const State& state, MassRateRatios& r
     ratio.groOxi().gasSpeciesRatio(GasSpecies::O2) = -0.5 * MW_O2 / MW_C;
     ratio.groOxi().gasSpeciesRatio(GasSpecies::CO) = MW_CO / MW_C;
 
-    return 0.1E5 * sqrt(state.getT()) * exp(-19680.0 / state.getT()) * state.getGasSpeciesC(GasSpecies::C2H2)
-        * MW_C;    // kg/m^2*s
+    return 0.1E5 * sqrt(state.getT()) * exp(-19680 / state.getT()) * state.getGasSpeciesC(GasSpecies::C2H2) * MW_C;    // kg/m^2*s
 }

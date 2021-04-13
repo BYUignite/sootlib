@@ -22,7 +22,7 @@ private:
                    std::unique_ptr<NucleationModel> nucleationModel,
                    std::unique_ptr<OxidationModel> oxidationModel);
 
-    [[nodiscard]] double Mk_LOGN(double k, double M0, double M1, double M2) const;
+    [[nodiscard]] static double Mk_LOGN(double k, double M0, double M1, double M2) ;
 };
 }
 
