@@ -39,6 +39,7 @@ in this project.
 
 ### Short Term Design
 
+* Could require a getInstance function from the PSD interface
 * Create some common code for duplicate gas source term code
 * Optimize all models by saving intermediate calculations
 * Perhaps add warnings when running into 0 or having illegal calculations to guide people in NAN situations
