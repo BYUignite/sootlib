@@ -8,8 +8,7 @@ set(COAGULATION_SRC_FILES
         sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FUCHS.cc
         sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_LL.h
         sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_LL.cc
-        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_MOMIC.h
-        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_MOMIC.cc)
+        )
 
 set(GROWTH_SRC_FILES
         sootlib/soot_model/soot_chemistry/growth_model/GrowthModel.h
@@ -54,8 +53,7 @@ set(SOOTMODELS_SRC_FILES
         sootlib/soot_model/psd_models/moment_models/qmom/SootModel_QMOM.h
         sootlib/soot_model/psd_models/moment_models/qmom/SootModel_QMOM.cc
         sootlib/soot_model/psd_models/sectional_models/sect/SootModel_SECT.h
-        sootlib/soot_model/psd_models/sectional_models/sect/SootModel_SECT.cc
-        sootlib/soot_model/static.h)
+        sootlib/soot_model/psd_models/sectional_models/sect/SootModel_SECT.cc)
 
 set(STATE_SRC_FILES
         sootlib/state/State.h

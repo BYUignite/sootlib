@@ -5,7 +5,6 @@
 
 #include "SootModel_QMOM.h"
 #include "lib/eispack/eispack.h"
-#include "sootlib/soot_model/static.h"
 
 using namespace std;
 using namespace soot;
@@ -162,4 +161,152 @@ SourceTerms SootModel_QMOM::getSourceTerms(State& state) const {
     // Coagulation - n/a
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
+}
+////////////////////////////////////////////////////////////////////////////////
+/*! Wheeler algorithm for computing weights and abscissas from moments
+ *
+ *      From Marchisio and Fox (2013) Computational Models for Polydisperse and
+ *      Multiphase Systems. Uses eispack function tql2 for eigenvalues and
+ *      eigenvectors of a symmetric tridiagonal matrix. If eispack version tql2
+ *      is desired, download eispack.hpp and eispack.cc. LApack's dstev
+ *      function to compute eigenvalues and eigenvectors of symmetrical
+ *      tridiagonal matrix.
+ *
+ *      @param m    \input     vector of moments (size = 2N)
+ *      @param N    \input     number of quadrature nodes (abscissas)
+ *      @param w    \output    weights
+ *      @param x    \output    abscissas
+ */
+void SootModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w, vector<double>& x)
+{
+	vector<vector<double> > sigma(N + 1, vector<double>(N * 2, 0));
+	vector<double> a(N, 0);
+	vector<double> b(N, 0);
+	vector<double> eval(N);
+	vector<double> evec(N * N);
+	vector<double> j_diag(N);
+	vector<double> j_ldiag(N);
+
+	for (size_t i = 0; i <= N * 2 - 1; i++)
+		sigma.at(1).at(i) = m.at(i);
+
+	a.at(0) = m.at(1) / m.at(0);
+
+	for (size_t i = 1; i < N; i++) {
+		for (size_t j = i; j < N * 2 - i; j++)
+			sigma.at(i + 1).at(j) = sigma.at(i).at(j + 1) - a.at(i - 1) * sigma.at(i).at(j) - b.at(i - 1) * sigma.at(i - 1).at(j);
+		a.at(i) = -sigma.at(i).at(i) / sigma.at(i).at(i - 1) + sigma.at(i + 1).at(i + 1) / sigma.at(i + 1).at(i);
+		b.at(i) = sigma.at(i + 1).at(i) / sigma.at(i).at(i - 1);
+	}
+
+	j_diag = a;
+	for (size_t i = 1; i < N; i++)
+		j_ldiag.at(i) = -sqrt(abs(b.at(i)));
+
+	for (size_t i = 0; i < N; i++)
+		evec.at(i + N * i) = 1;
+
+//    int flag = tql2(N, &j_diag.at(0), &j_ldiag.at(0), &evec.at(0));       // for eispack
+
+	//char VorN = 'V';
+	//vector<double> work(2*N-2);
+	//int info;
+	//dstev_( &VorN, &N, &j_diag.at(0), &j_ldiag.at(1), &evec.at(0), &N, &work.at(0), &info);
+
+	x = j_diag;      // j_diag are now the vector of eigenvalues.
+
+	for (size_t i = 0; i < N; i++)
+		w.at(i) = pow(evec.at(0 + i * N), 2) * m.at(0);
+}
+////////////////////////////////////////////////////////////////////////////////
+/*! getWtsAbs function
+ *
+ *      Calculates weights and abscissas from moments using PD algorithm or
+ *      wheeler algorithm.
+ *
+ *      @param M        \input  vector of moments
+ *      @param wts      \input  weights
+ *      @param absc     \input  abscissas
+ *
+ *      Notes:
+ *      - Use wheeler over pdalg whenever possible.
+ *      - wts and abs DO NOT change size; if we downselect to a smaller number
+ *      of moments, the extra values are set at and stay zero
+ *      - using w_temp and a_temp means we don't have to resize wts and absc,
+ *      which is more convenient when wts and absc are used to reconstitute
+ *      moment source terms.
+ */
+void SootModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, vector<double>& abscissas)
+{
+	size_t N = M.size();              // local nMom; may change with moment deselection
+
+	for (double num : M) {                // if any moments are zero, return with zero wts and absc
+		if (num <= 0)
+			return;
+	}
+
+	bool negs;                          // flag for downselecting if there are negative wts/abs
+
+	vector<double> w_temp(N / 2, 0);
+	vector<double> a_temp(N / 2, 0);
+
+	do {                                        // downselection loop
+
+		negs = false;                           // reset flag
+
+		for (size_t i = 0; i < N / 2; i++) {             // reinitialize weights and abscissas with zeros
+			w_temp.at(i) = 0;
+			a_temp.at(i) = 0;
+		}
+
+		if (N == 2) {                           // in 2 moment case, return monodisperse output
+			weights.at(0) = M.at(0);
+			abscissas.at(0) = M.at(1) / M.at(0);
+			return;
+		}
+
+		//pdAlg(N,N/2,ymom,wts,absc);           // PD algorithm
+		wheeler(M, N / 2, w_temp, a_temp);        // wheeler algorithm
+
+		for (size_t i = 0; i < N / 2; i++) {
+			if (w_temp.at(i) < 0 || a_temp.at(i) < 0 || a_temp.at(i) > 1)
+				negs = true;
+		}
+
+		if (negs) {                     // if we found negative values
+			N = N - 2;                          // downselect to two fewer moments and try again
+			w_temp.resize(N / 2);
+			a_temp.resize(N / 2);
+		}
+
+	}
+	while (negs);                     // end of downselection loop
+
+	for (size_t i = 0; i < w_temp.size(); i++) {   // assign temporary variables to output
+		weights.at(i) = w_temp.at(i);
+		abscissas.at(i) = a_temp.at(i);
+	}
+}
+////////////////////////////////////////////////////////////////////////////////
+/** Mk function
+*
+*  calculates fractional moments from weights and abscissas.
+*
+*  @param exp  \input  fractional moment to compute, corresponds to exponent
+*  @param wts  \input  weights
+*  @param absc \input  abscissas
+*  @param Mk   \output fractional moment value
+*/
+double SootModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<double>& absc)
+{
+	double Mk = 0;
+
+	for (size_t i = 0; i < wts.size() / 2; i++) {
+		if (wts.at(i) == 0 || absc.at(i) == 0)
+			return 0;
+		else
+			Mk += wts.at(i) * pow(absc.at(i), exp);
+	}
+
+	return Mk;
 }

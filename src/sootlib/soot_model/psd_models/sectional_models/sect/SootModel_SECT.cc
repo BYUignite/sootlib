@@ -144,7 +144,7 @@ SourceTerms SootModel_SECT::getSourceTerms(State& state) const {
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
 vector<double> SootModel_SECT::getDivision(double mass, double num, const vector<double>& absc) {
-    int loc = 0;
+    size_t loc = 0;
     bool found = false;
     vector<double> toReturn(absc.size(), 0);
     while (!found) {
