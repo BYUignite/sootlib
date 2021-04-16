@@ -18,6 +18,8 @@
 
 #include "CoagulationModel_FUCHS.h"
 
+#include <cmath>
+
 using namespace std;
 using namespace soot;
 

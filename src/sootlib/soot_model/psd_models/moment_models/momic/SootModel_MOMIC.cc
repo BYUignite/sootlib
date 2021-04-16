@@ -2,6 +2,8 @@
 #include "SootModel_MOMIC.h"
 #include "lib/binomial/binomial.h"
 
+#include <cmath>
+
 using namespace std;
 using namespace soot;
 
@@ -145,8 +147,10 @@ double SootModel_MOMIC::f_grid(int x, int y, const vector<double>& M)
 
 	return pow(10, value);
 }
-double SootModel_MOMIC::MOMICCoagulationRate(const State& state, int r)
-{
+double SootModel_MOMIC::MOMICCoagulationRate(const State& state, size_t r){
+    // FIXME I think this might be pretty messed up with r and k unsigned, but it's unclear which they should be
+    // maybe everything should just be converted to signed
+
 	if (r == 1)
 		return 0;
 
@@ -169,14 +173,14 @@ double SootModel_MOMIC::MOMICCoagulationRate(const State& state, int r)
 	}
 	else {
 		Rate_C = 0;
-		for (int k = 0; k < r; k++) {
+		for (size_t k = 0; k < r; k++) {
 			if (k <= r - k)
 				Rate_C += binomial_coefficient(r, k) * (2 * state.getMoment(k) * state.getMoment(r - k)
-					+ MOMIC(k + 1.0 / 3, state.getMomentsConst()) * MOMIC(r - k - 1.0 / 3, state.getMomentsConst())
-					+ MOMIC(k - 1.0 / 3, state.getMomentsConst()) * MOMIC(r - k + 1.0 / 3, state.getMomentsConst())
-					+ 2 * K_Cprime * (2 * MOMIC(k - 1.0 / 3, state.getMomentsConst()) * state.getMoment(r - k)
-						+ state.getMoment(k) * MOMIC(r - k - 1.0 / 3, state.getMomentsConst())
-						+ MOMIC(k - 2.0 / 3, state.getMomentsConst()) * MOMIC(r - k + 1.0 / 3, state.getMomentsConst())));
+					+ MOMIC((double) k + 1.0 / 3, state.getMomentsConst()) * MOMIC((double) r - (double) k - 1.0 / 3, state.getMomentsConst())
+					+ MOMIC((double) k - 1.0 / 3, state.getMomentsConst()) * MOMIC((double) r - (double) k + 1.0 / 3, state.getMomentsConst())
+					+ 2 * K_Cprime * (2 * MOMIC((double) k - 1.0 / 3, state.getMomentsConst()) * state.getMoment(r - k)
+						+ state.getMoment(k) * MOMIC((double) r - (double) k - 1.0 / 3, state.getMomentsConst())
+						+ MOMIC((double) k - 2.0 / 3, state.getMomentsConst()) * MOMIC((double) r - (double) k + 1.0 / 3, state.getMomentsConst())));
 		}
 		Rate_C *= 0.5 * K_C;
 	}
@@ -189,9 +193,9 @@ double SootModel_MOMIC::MOMICCoagulationRate(const State& state, int r)
 	}
 	else {
 		Rate_F = 0;
-		for (int k = 1; k < r; k++) {
+		for (size_t k = 1; k < r; k++) {
 			if (k <= r - k)
-				Rate_F += binomial_coefficient(r, k) * f_grid(k, r - k, state.getMomentsConst());
+				Rate_F += binomial_coefficient(r, k) * f_grid((int) k, (int) r - (int) k, state.getMomentsConst());
 		}
 		Rate_F *= 0.5 * K_f;
 	}

@@ -15,6 +15,8 @@
 
 #include "OxidationModel_HACA.h"
 
+#include <cmath>
+
 using namespace soot;
 
 double OxidationModel_HACA::getOxidationRate(const State& state, MassRateRatios& ratio) const {

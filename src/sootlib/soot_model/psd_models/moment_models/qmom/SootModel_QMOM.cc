@@ -4,7 +4,8 @@
  */
 
 #include "SootModel_QMOM.h"
-#include "lib/eispack/eispack.h"
+
+#include <cmath>
 
 using namespace std;
 using namespace soot;
@@ -161,7 +162,7 @@ SourceTerms SootModel_QMOM::getSourceTerms(State& state) const {
  */
 void SootModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w, vector<double>& x)
 {
-	vector<vector<double> > sigma(N + 1, vector<double>(N * 2, 0));
+	vector<vector<double>> sigma(N + 1, vector<double>(N * 2, 0));
 	vector<double> a(N, 0);
 	vector<double> b(N, 0);
 	vector<double> eval(N);

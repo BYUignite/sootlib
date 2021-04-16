@@ -1,5 +1,7 @@
 #include "SootModel_LOGN.h"
 
+#include <cmath>
+
 using namespace std;
 using namespace soot;
 

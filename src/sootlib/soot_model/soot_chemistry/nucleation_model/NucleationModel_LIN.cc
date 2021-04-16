@@ -8,6 +8,8 @@
 
 #include "NucleationModel_LIN.h"
 
+#include <cmath>
+
 using namespace std;
 using namespace soot;
 

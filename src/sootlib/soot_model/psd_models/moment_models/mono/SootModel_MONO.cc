@@ -5,6 +5,8 @@
 
 #include "SootModel_MONO.h"
 
+#include <cmath>
+
 using namespace std;
 using namespace soot;
 

@@ -11,6 +11,8 @@
 
 #include "CoagulationModel_FRENK.h"
 
+#include <cmath>
+
 using namespace std;
 using namespace soot;
 

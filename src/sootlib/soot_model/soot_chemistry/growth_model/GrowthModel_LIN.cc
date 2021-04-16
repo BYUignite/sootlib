@@ -10,6 +10,8 @@
 
 #include "GrowthModel_LIN.h"
 
+#include <cmath>
+
 using namespace soot;
 
 double GrowthModel_LIN::getGrowthRate(const State& state, MassRateRatios& ratio) const {

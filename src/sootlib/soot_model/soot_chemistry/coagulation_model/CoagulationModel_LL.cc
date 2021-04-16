@@ -16,6 +16,8 @@
 
 #include "CoagulationModel_LL.h"
 
+#include <cmath>
+
 using namespace std;
 using namespace soot;
 

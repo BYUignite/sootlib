@@ -63,8 +63,6 @@ set(STATE_SRC_FILES
         sootlib/state/GasState.cc
         sootlib/state/MomentState.h
         sootlib/state/MomentState.cc
-        sootlib/state/PAHState.h
-        sootlib/state/PAHState.cc
         sootlib/state/SectionalState.h
         sootlib/state/SectionalState.cc
         sootlib/state/SootState.h

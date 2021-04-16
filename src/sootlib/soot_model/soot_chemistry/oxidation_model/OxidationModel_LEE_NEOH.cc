@@ -15,6 +15,8 @@
 
 #include "OxidationModel_LEE_NEOH.h"
 
+#include <cmath>
+
 using namespace soot;
 
 double OxidationModel_LEE_NEOH::getOxidationRate(const State& state, MassRateRatios& ratio) const {

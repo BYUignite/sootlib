@@ -1,1 +1,23 @@
 #include "SectionalState.h"
+
+using namespace soot;
+using namespace std;
+
+size_t SectionalState::getNumSections() const {
+    return sections.size();
+}
+void SectionalState::resetSections(size_t numSections) {
+    sections = vector<double>(numSections, 0);
+}
+double SectionalState::getSection(size_t i) const {
+    return sections.at(i);
+}
+void SectionalState::setSection(size_t i, double value) {
+    sections.at(i) = value;
+}
+vector<double>& SectionalState::getSections() {
+    return sections;
+}
+const vector<double>& SectionalState::getSectionsConst() const {
+    return sections;
+}

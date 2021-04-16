@@ -12,6 +12,8 @@
 
 #include "OxidationModel_LL.h"
 
+#include <cmath>
+
 using namespace soot;
 
 double OxidationModel_LL::getOxidationRate(const State& state, MassRateRatios& ratio) const {

@@ -54,7 +54,7 @@ public:
     void setPAHSourceTerm(size_t n, double value) {
         PAHSourceTerms[n] = value;
     }
-    [[nodiscard]] double getNumPAHSourceTerms() {
+    [[nodiscard]] size_t getNumPAHSourceTerms() {
         return PAHSourceTerms.size();
     }
 

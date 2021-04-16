@@ -2,7 +2,8 @@
 #define STATIC_H
 
 #include <map>
-#include <vector>
+
+// TODO this whole file or most of it could maybe be deleted
 
 namespace soot {
 const double Na = 6.02214086E26;  ///< Avogadro's constant: #/kmol
@@ -35,10 +36,6 @@ const std::map<GasSpecies, double> gasSpeciesMW = {{GasSpecies::C2H2, MW_C2H2},
                                                           {GasSpecies::H2O, MW_H2O},
                                                           {GasSpecies::CO, MW_CO},
                                                           {GasSpecies::C, MW_C}};
-// TODO this might not be correct
-double PAH_MW(size_t n) {
-    return n * MW_C;
-}
 }
 
 #endif //STATIC_H

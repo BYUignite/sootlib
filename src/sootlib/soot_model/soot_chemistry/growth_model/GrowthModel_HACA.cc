@@ -15,6 +15,8 @@
 
 #include "GrowthModel_HACA.h"
 
+#include <cmath>
+
 using namespace soot;
 
 double GrowthModel_HACA::getGrowthRate(const State& state, MassRateRatios& ratio) const {

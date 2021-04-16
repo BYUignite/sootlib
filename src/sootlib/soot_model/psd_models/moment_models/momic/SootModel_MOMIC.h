@@ -25,7 +25,7 @@ private:
     // helper functions specific to this PSD
     [[nodiscard]] static size_t downselectIfNeeded(std::vector<double>& M);
     [[nodiscard]] static double f_grid(int x, int y, const std::vector<double>& M);
-    [[nodiscard]] static double MOMICCoagulationRate(const State& state, int r);
+    [[nodiscard]] static double MOMICCoagulationRate(const State& state, size_t r);
     [[nodiscard]] static double lagrangeInterp(double x_i, const std::vector<double>& x, const std::vector<double>& y);
     [[nodiscard]] static double MOMIC(double p, const std::vector<double>& M);
 };
