@@ -162,8 +162,8 @@ double SootModel_MOMIC::MOMICCoagulationRate(const State& state, size_t r){
 
 	double Rate_C;
 
-	double K_C = 2 * kb * state.getT() / (3 * state.getMuGas());
-	double K_Cprime = 1.257 * lambda_g * pow(M_PI * state.getRhoSoot() / 6, 1.0 / 3);
+	const double K_C = 2 * kb * state.getT() / (3 * state.getMuGas());
+	const double K_Cprime = 1.257 * lambda_g * pow(M_PI * state.getRhoSoot() / 6, 1.0 / 3);
 
 	if (r == 0) {
 		Rate_C = -K_C * (pow(state.getMoment(0), 2)
