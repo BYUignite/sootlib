@@ -111,9 +111,35 @@ size_t SootModel_MOMIC::downselectIfNeeded(vector<double>& M)
  */
 double SootModel_MOMIC::f_grid(int x, int y, const vector<double>& M)
 {
-	// TODO save duplicate calculations in this function
-	const double f1_0 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x - 1.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
-	const double f1_1 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 2 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 1.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x + 5.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 7.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
+	// any MOMIC calculation that is reused is calculated once here
+	const double temp0 = MOMIC(x - 1.0 / 2, M);
+	const double temp1 = MOMIC(y + 1.0 / 6, M);
+	const double temp2 = MOMIC(x - 1.0 / 6, M);
+	const double temp3 = MOMIC(y - 1.0 / 6, M);
+	const double temp4 = MOMIC(x + 1.0 / 6, M);
+	const double temp5 = MOMIC(y - 1.0 / 2, M);
+	const double temp6 = MOMIC(y + 7.0 / 6, M);
+	const double temp7 = MOMIC(y + 5.0 / 6, M);
+	const double temp8 = MOMIC(y + 1.0 / 2, M);
+	const double temp9 = MOMIC(x + 1.0 / 2, M);
+	const double temp10 = MOMIC(x + 5.0 / 6, M);
+	const double temp11 = MOMIC(x + 7.0 / 6, M);
+	const double temp12 = MOMIC(y + 13.0 / 6, M);
+	const double temp13 = MOMIC(y + 11.0 / 6, M);
+	const double temp14 = MOMIC(y + 3.0 / 2, M);
+	const double temp15 = MOMIC(x + 3.0 / 2, M);
+	const double temp16 = MOMIC(x + 11.0 / 6, M);
+	const double temp17 = MOMIC(x + 13.0 / 6, M);
+
+	const double f1_0 = temp0 * temp1
+	    + 2 * temp2 * temp3
+	    + temp4 * temp5;
+	const double f1_1 = temp0 * temp6
+	    + 2 * temp2 * temp7
+	    + temp4 * temp8
+	    + temp9 * temp1
+	    + 2 * temp10 * temp3
+	    + temp11 * temp5;
 
 	vector<double> temp_x;
 	vector<double> temp_y;
@@ -127,7 +153,15 @@ double SootModel_MOMIC::f_grid(int x, int y, const vector<double>& M)
 		return pow(10, value);
 	}
 
-	double f1_2 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 13.0 / 6, M) + 2 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 11.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 3.0 / 2, M) + 2 * MOMIC(x + 1.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 4 * MOMIC(x + 5.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + 2 * MOMIC(x + 7.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 3.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x + 11.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 13.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
+	double f1_2 = temp0 * temp12
+	    + 2 * temp2 * temp13
+	    + temp4 * temp14
+	    + 2 * temp9 * temp6
+	    + 4 * temp10 * temp7
+	    + 2 * temp11 * temp8
+	    + temp15 * temp1
+	    + 2 * temp16 * temp3
+	    + temp17 * temp5;
 
 	if (y >= 3) {
 		temp_x = {0, 1, 2};
@@ -138,7 +172,18 @@ double SootModel_MOMIC::f_grid(int x, int y, const vector<double>& M)
 		return pow(10, value);
 	}
 
-	double f1_3 = MOMIC(x - 1.0 / 2, M) * MOMIC(y + 19.0 / 6, M) + 2 * MOMIC(x - 1.0 / 6, M) * MOMIC(y + 17.0 / 6, M) + MOMIC(x + 1.0 / 6, M) * MOMIC(y + 5.0 / 2, M) + 3 * MOMIC(x + 1.0 / 2, M) * MOMIC(y + 13.0 / 6, M) + 6 * MOMIC(x + 5.0 / 6, M) * MOMIC(y + 11.0 / 6, M) + 3 * MOMIC(x + 7.0 / 6, M) * MOMIC(y + 3.0 / 2, M) + 3 *MOMIC(x + 3.0 / 2, M) * MOMIC(y + 7.0 / 6, M) + 6 * MOMIC(x + 11.0 / 6, M) * MOMIC(y + 5.0 / 6, M) + 3 * MOMIC(x + 13.0 / 6, M) * MOMIC(y + 1.0 / 2, M) + MOMIC(x + 5.0 / 2, M) * MOMIC(y + 1.0 / 6, M) + 2 * MOMIC(x + 17.0 / 6, M) * MOMIC(y - 1.0 / 6, M) + MOMIC(x + 19.0 / 6, M) * MOMIC(y - 1.0 / 2, M);
+	double f1_3 = temp0 * MOMIC(y + 19.0 / 6, M)
+	    + 2 * temp2 * MOMIC(y + 17.0 / 6, M)
+	    + temp4 * MOMIC(y + 5.0 / 2, M)
+	    + 3 * temp9 * temp12
+	    + 6 * temp10 * temp13
+	    + 3 * temp11 * temp14
+	    + 3 * temp15 * temp6
+	    + 6 * temp16 * temp7
+	    + 3 * temp17 * temp8
+	    + MOMIC(x + 5.0 / 2, M) * temp1
+	    + 2 * MOMIC(x + 17.0 / 6, M) * temp3
+	    + MOMIC(x + 19.0 / 6, M) * temp5;
 
 	temp_x = {0, 1, 2, 3};
 	temp_y = {log10(f1_0), log10(f1_1), log10(f1_2), log10(f1_3)};
