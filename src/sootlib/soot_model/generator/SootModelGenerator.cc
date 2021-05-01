@@ -37,6 +37,7 @@
 using namespace std;
 using namespace soot;
 
+// Here are the default parameters for the soot model
 SootModelGenerator::SootModelGenerator() {
     modelType = SootModelType::MONO;
     nucleationMechanism = NucleationMechanism::NONE;

@@ -1,8 +1,8 @@
 #include <algorithm>
+#include <cmath>
+
 #include "SootModel_MOMIC.h"
 #include "lib/binomial/binomial.h"
-
-#include <cmath>
 
 using namespace std;
 using namespace soot;

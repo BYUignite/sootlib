@@ -13,11 +13,6 @@ public:
         return growthOxidation;
     }
 
-    void reset() {
-        nucleationCondensation = MassRateRatio();
-        growthOxidation = MassRateRatio();
-    }
-
 private:
     MassRateRatio nucleationCondensation;
     MassRateRatio growthOxidation;
