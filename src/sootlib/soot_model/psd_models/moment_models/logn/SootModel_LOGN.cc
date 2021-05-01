@@ -39,23 +39,37 @@ SourceTerms SootModel_LOGN::getSourceTerms(State& state) const {
 
     MassRateRatios massRateRatios;
 
+    // reused Mk function results here
+    const double temp0 = Mk(1.0 / 3, M0, M1, M2);
+    const double temp1 = Mk(2.0 / 3, M0, M1, M2);
+    const double temp2 = Mk(-1.0 / 2, M0, M1, M2);
+    const double temp3 = Mk(-1.0 / 6, M0, M1, M2);
+    const double temp4 = Mk(-1.0 / 3, M0, M1, M2);
+    const double temp5 = Mk(-2.0 / 3, M0, M1, M2);
+    const double temp6 = Mk(4.0 / 3, M0, M1, M2);
+    const double temp7 = Mk(5.0 / 3, M0, M1, M2);
+    const double temp8 = Mk(1.0 / 2, M0, M1, M2);
+    const double temp9 = Mk(5.0 / 6, M0, M1, M2);
+    const double temp10 = Mk(7.0 / 6, M0, M1, M2);
+    const double temp11 = Mk(1.0 / 6, M0, M1, M2);
+
     double Jnuc;
     if (nucleationModel->getMechanism() != NucleationMechanism::PAH) {
         Jnuc = nucleationModel->getNucleationRate(state, {}, {}, massRateRatios);
     }
     else {
         const double Ifm = Kfm * b_coag * (M0 * pow(state.getMDimer(), 1.0 / 6)
-        	+ 2 * Mk(1.0 / 3, M0, M1, M2) * pow(state.getMDimer(), -1.0 / 6)
-        	+ Mk(2.0 / 3, M0, M1, M2) * pow(state.getMDimer(), -1.0 / 2)
-        	+ Mk(-1.0 / 2, M0, M1, M2) * pow(state.getMDimer(), 2.0 / 3)
-        	+ 2 * Mk(-1.0 / 6, M0, M1, M2) * pow(state.getMDimer(), 1.0 / 3)
-        	+ Mk(1.0 / 6, M0, M1, M2));
-        const double Ic = Kc * (2 * M0 + Mk(-1.0 / 3, M0, M1, M2) * pow(state.getMDimer(), 1.0 / 3)
-        	+ Mk(1.0 / 3, M0, M1, M2) * pow(state.getMDimer(), -1.0 / 3)
+        	+ 2 * temp0 * pow(state.getMDimer(), -1.0 / 6)
+        	+ temp1 * pow(state.getMDimer(), -1.0 / 2)
+        	+ temp2 * pow(state.getMDimer(), 2.0 / 3)
+        	+ 2 * temp3 * pow(state.getMDimer(), 1.0 / 3)
+        	+ temp11);
+        const double Ic = Kc * (2 * M0 + temp4 * pow(state.getMDimer(), 1.0 / 3)
+        	+ temp0 * pow(state.getMDimer(), -1.0 / 3)
         	+ Kcp * (M0 * pow(state.getMDimer(), -1.0 / 3)
-        	+ Mk(-1.0 / 3, M0, M1, M2)
-        	+ Mk(1.0 / 3, M0, M1, M2) * pow(state.getMDimer(), -2.0 / 3)
-        	+ Mk(-2.0 / 3, M0, M1, M2) * pow(state.getMDimer(), 1.0 / 3)));
+        	+ temp4
+        	+ temp0 * pow(state.getMDimer(), -2.0 / 3)
+        	+ temp5 * pow(state.getMDimer(), 1.0 / 3)));
 
         const double beta_DD = coagulationModel->getCoagulationRate(state, state.getMDimer(), state.getMDimer());
         // TODO this might not be the right DIMER
@@ -63,18 +77,19 @@ SourceTerms SootModel_LOGN::getSourceTerms(State& state) const {
 
         const double Ifm1 = Ifm;
         const double Ifm2 = Kfm * b_coag * (M1 * pow(state.getMDimer(), 1.0 /6)
-        	+ 2 * Mk(4.0 / 3, M0, M1, M2) * pow(state.getMDimer(), -1.0 / 6)
-        	+ Mk(5.0 / 3, M0, M1, M2) * pow(state.getMDimer(), -1.0 / 2)
-        	+ Mk(1.0 / 2, M0, M1, M2) * pow(state.getMDimer(), 2.0 / 3)
-        	+ 2 * Mk(5.0 / 6, M0, M1, M2) * pow(state.getMDimer(), 1.0 / 3)
-        	+ Mk(7.0 / 6, M0, M1, M2));
+        	+ 2 * temp6 * pow(state.getMDimer(), -1.0 / 6)
+        	+ temp7 * pow(state.getMDimer(), -1.0 / 2)
+        	+ temp8 * pow(state.getMDimer(), 2.0 / 3)
+        	+ 2 * temp9 * pow(state.getMDimer(), 1.0 / 3)
+        	+ temp10);
         const double Ic1 = Ic;
-        const double Ic2 = Kc * (2 * M1 + Mk(2.0 / 3, M0, M1, M2) * pow(state.getMDimer(), 1.0 / 3)
-        	+ Mk(4.0 / 3, M0, M1, M2) * pow(state.getMDimer(), -1.0 / 3)
+        const double Ic2 = Kc * (2 * M1
+            + temp1 * pow(state.getMDimer(), 1.0 / 3)
+        	+ temp6 * pow(state.getMDimer(), -1.0 / 3)
         	+ Kcp * (M1 * pow(state.getMDimer(), -1.0 / 3)
-        	+ Mk(2.0 / 3, M0, M1, M2)
-        	+ Mk(4.0 / 3, M0, M1, M2) * pow(state.getMDimer(), -2.0 / 3)
-        	+ Mk(1.0 / 3, M0, M1, M2) * pow(state.getMDimer(), 1.0 / 3)));
+        	+ temp1
+        	+ temp6 * pow(state.getMDimer(), -2.0 / 3)
+        	+ temp0 * pow(state.getMDimer(), 1.0 / 3)));
 
         Cnd1 = state.getMDimer() * state.getDimer() * (Ic1 * Ifm1) / (Ic1 + Ifm1);
         Cnd2 = 2 * state.getMDimer() * state.getDimer() * (Ic2 * Ifm2) / (Ic2 + Ifm2);
@@ -86,36 +101,21 @@ SourceTerms SootModel_LOGN::getSourceTerms(State& state) const {
 
     const double term = Kgrw * M_PI * pow(6 / state.getRhoSoot() / M_PI, 2.0 / 3);
 
-    const double G0 = 0, G1 = term * Mk(2.0 / 3, M0, M1, M2), G2 = term * Mk(5.0 / 3, M0, M1, M2);
+    const double G0 = 0, G1 = term * temp1, G2 = term * temp7;
 
     const double Koxi = oxidationModel->getOxidationRate(state, massRateRatios);
 
     const double X0 = 0;
-    const double X1 = Koxi * M_PI * pow(6.0 / state.getRhoSoot() / M_PI, 2.0 / 3) * Mk(2.0 / 3, M0, M1, M2);
-    const double X2 = Koxi * M_PI * pow(6.0 / state.getRhoSoot() / M_PI, 2.0 / 3) * Mk(5.0 / 3, M0, M1, M2) * 2;
+    const double X1 = Koxi * M_PI * pow(6.0 / state.getRhoSoot() / M_PI, 2.0 / 3) * temp1;
+    const double X2 = Koxi * M_PI * pow(6.0 / state.getRhoSoot() / M_PI, 2.0 / 3) * temp7 * 2;
 
-    const double C0_fm = -Kfm * b_coag * (M0 * Mk(1.0 / 6, M0, M1, M2)
-    	+ 2 * Mk(1.0 / 3, M0, M1, M2) * Mk(-1.0 / 6, M0, M1, M2)
-    	+ Mk(2.0 / 3, M0, M1, M2) * Mk(-1.0 / 2, M0, M1, M2));
+    const double C0_fm = -Kfm * b_coag * (M0 * temp11 + 2 * temp0 * temp3 + temp1 * temp2);
 //    const double C1_fm = 0;
-    const double C2_fm = 2 * Kfm * b_coag * (M1 * Mk(7.0 / 6, M0, M1, M2)
-    	+ 2 * Mk(4.0 / 3, M0, M1, M2) * Mk(5.0 / 6, M0, M1, M2)
-    	+ Mk(5.0 / 3, M0, M1, M2) * Mk(1.0 / 2, M0, M1, M2));
+    const double C2_fm = 2 * Kfm * b_coag * (M1 * temp10 + 2 * temp6 * temp9 + temp7 * temp8);
 
-    const double C0_c = -Kc * (M0 * M0 + Mk(1.0 / 3, M0, M1, M2) * Mk(-1.0 / 3, M0, M1, M2)
-    	+ Kcp * (M0 * Mk(-1.0 / 3, M0, M1, M2)
-    	+ Mk(1.0 / 3, M0, M1, M2) * Mk(-2.0 / 3, M0, M1, M2)));
+    const double C0_c = -Kc * (M0 * M0 + temp0 * temp4 + Kcp * (M0 * temp4 + temp0 * temp5));
 //    const double C1_c = 0;
-    const double C2_c = 2 * Kc * (M1 * M1 + Mk(2.0 / 3, M0, M1, M2) * Mk(4.0 / 3, M0, M1, M2) + Kcp * (M1 * Mk(
-	    2.0 / 3,
-	    M0,
-	    M1,
-	    M2) +
-	    Mk(1.0 / 3, M0, M1, M2) * Mk(
-	    4.0 / 3,
-	    M0,
-	    M1,
-	    M2)));
+    const double C2_c = 2 * Kc * (M1 * M1 + temp1 * temp6 + Kcp * (M1 * temp1 + temp0 * temp6));
 
     const double C0 = C0_fm * C0_c / (C0_fm + C0_c);
     const double C1 = 0;
