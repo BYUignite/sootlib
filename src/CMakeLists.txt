@@ -72,10 +72,10 @@ set(SRC_FILES
         sootlib/soot_model/SootModel.h
         sootlib/soot_model/generator/SootModelGenerator.h
         sootlib/soot_model/generator/SootModelGenerator.cc
-        sootlib/static.h
+        sootlib/constants.h
         sootlib/SourceTerms.h
-        sootlib/MassRateRatio.h
-        sootlib/MassRateRatios.h)
+        sootlib/ratio/MassRateRatio.h
+        sootlib/ratio/MassRateRatios.h)
 
 set(LIB_FILES
         lib/eispack/eispack.h

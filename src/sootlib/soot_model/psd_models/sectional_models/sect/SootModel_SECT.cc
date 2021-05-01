@@ -22,8 +22,6 @@ SootModel_SECT::SootModel_SECT(unique_ptr<CoagulationModel> coagulationModel,
                                                                                           move(nucleationModel),
                                                                                           move(oxidationModel)) {}
 SourceTerms SootModel_SECT::getSourceTerms(State& state) const {
-    // FIXME this actually might be a bin model?
-
     MassRateRatios massRateRatios;
     vector<double> wts = state.getSectionsConst();
     vector<double> absc(state.getNumSections(), 0);
@@ -36,6 +34,7 @@ SourceTerms SootModel_SECT::getSourceTerms(State& state) const {
             num = 0;
     }
 
+    // FIXME this code is likely incorrect
     const double Jnuc = nucleationModel->getNucleationRate(state, absc, wts, massRateRatios);
     vector<double> Kgrw(state.getNumSections(), 0);
     for (double& num : Kgrw)

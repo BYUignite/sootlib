@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include "sootlib/static.h"
+#include "sootlib/constants.h"
 
 namespace soot {
 class SourceTerms {

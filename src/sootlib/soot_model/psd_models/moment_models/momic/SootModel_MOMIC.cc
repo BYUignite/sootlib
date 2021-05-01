@@ -193,8 +193,7 @@ double SootModel_MOMIC::f_grid(int x, int y, const vector<double>& M)
 	return pow(10, value);
 }
 double SootModel_MOMIC::MOMICCoagulationRate(const State& state, size_t r){
-    // FIXME I think this might be pretty messed up with r and k unsigned, but it's unclear which they should be
-    // maybe everything should just be converted to signed
+    // the converions between signed and unsigned with r and k is midly concerning, but as far as I can see shouldn't be a problem
 
 	if (r == 1)
 		return 0;

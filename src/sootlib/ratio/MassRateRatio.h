@@ -3,7 +3,7 @@
 
 #include <map>
 
-#include "static.h"
+#include "sootlib/constants.h"
 
 namespace soot {
 class MassRateRatio {

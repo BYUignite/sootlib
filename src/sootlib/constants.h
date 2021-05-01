@@ -3,8 +3,6 @@
 
 #include <map>
 
-// TODO this whole file or most of it could maybe be deleted
-
 namespace soot {
 const double Na = 6.02214086E26;  ///< Avogadro's constant: #/kmol
 const double kb = 1.38064852E-23; ///< Boltzmann constant = Rg/Na: J/#*K

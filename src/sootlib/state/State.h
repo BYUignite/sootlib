@@ -1,8 +1,8 @@
 #ifndef BASESTATE_H
 #define BASESTATE_H
 
-#include "sootlib/static.h"
-#include "sootlib/MassRateRatios.h"
+#include "sootlib/constants.h"
+#include "sootlib/ratio/MassRateRatios.h"
 #include "sootlib/state/SootState.h"
 #include "sootlib/state/GasState.h"
 
@@ -16,9 +16,9 @@ public:
 
     void calculateMDimer(MassRateRatios* ratio = nullptr);
 
-    void setT(double T);
-    void setRhoSoot(double rhoSoot);
-    void setPAHFrac(size_t n, double frac);
+    void setT(double T) override;
+    void setRhoSoot(double rhoSoot) override;
+    void setPAHFrac(size_t n, double frac) override;
 
 private:
     // TODO according to some specs it looks like cMin is a constant and according to others it looks calculated

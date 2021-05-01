@@ -8,7 +8,7 @@ namespace soot {
 class SootState : public SectionalState, public MomentState {
 public:
     [[nodiscard]] double getRhoSoot() const;
-    void setRhoSoot(double rhoSoot);
+    virtual void setRhoSoot(double rhoSoot);
     [[nodiscard]] double getDimer() const;
     void setDimer(double dimer);
     [[nodiscard]] double getBCoag() const;
@@ -21,11 +21,8 @@ public:
 protected:
     double rhoSoot = 1850;
     double dimer = 0;
-    // FIXME this variable isn't used
     double bCoag = 0.8536;
-    // FIXME this variable isn't used
     double epsC = 2.2;
-    // FIXME this variable isn't used
     double sootDf = 1.8;
 };
 }

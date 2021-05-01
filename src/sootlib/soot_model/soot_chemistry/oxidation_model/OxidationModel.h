@@ -2,7 +2,7 @@
 #define OXIDATIONMODEL_H
 
 #include "sootlib/state/State.h"
-#include "sootlib/MassRateRatios.h"
+#include "sootlib/ratio/MassRateRatios.h"
 
 namespace soot {
 class OxidationModel {
