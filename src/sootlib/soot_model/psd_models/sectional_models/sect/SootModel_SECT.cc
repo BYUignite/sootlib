@@ -38,10 +38,12 @@ SourceTerms SootModel_SECT::getSourceTerms(State& state) const {
     const double Jnuc = nucleationModel->getNucleationRate(state, absc, wts, massRateRatios);
     vector<double> Kgrw(state.getNumSections(), 0);
     for (double& num : Kgrw)
-        num = growthModel->getGrowthRate(state, massRateRatios); // FIXME the old code wants to use stuff with wts and absc
+        num = growthModel->getGrowthRate(state, massRateRatios); // FIXME the old code wants to use stuff with wts and absc as inputs
+        // this is not how the growth model is treated anywhere else and it doesn't really work that way in this setup
     vector<double> Koxi(state.getNumSections(), 0);
     for (double& num : Koxi)
         num = oxidationModel->getOxidationRate(state, massRateRatios); // FIXME the old code also wants to do different stuff with these too
+        // this is not how the oxidation model is treated anywhere else and it doesn't really work that way in this setup
 
     vector<double> Coag(state.getNumSections(), 0);
     double leaving;

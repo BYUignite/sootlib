@@ -21,7 +21,7 @@ public:
     void setPAHFrac(size_t n, double frac) override;
 
 private:
-    // TODO according to some specs it looks like cMin is a constant and according to others it looks calculated
+    // according to some specs it looks like cMin is a constant and according to others it looks calculated
     double cMin = 100;
     double mDimer = 0;
     double wdotD = 0;

@@ -72,7 +72,7 @@ SourceTerms SootModel_LOGN::getSourceTerms(State& state) const {
         	+ temp5 * pow(state.getMDimer(), 1.0 / 3)));
 
         const double beta_DD = coagulationModel->getCoagulationRate(state, state.getMDimer(), state.getMDimer());
-        // TODO this might not be the right DIMER
+        // TODO I'm concerned this might not be the right DIMER
         Jnuc = 0.5 * beta_DD * state.getDimer() * state.getDimer();
 
         const double Ifm1 = Ifm;
