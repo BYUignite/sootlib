@@ -18,6 +18,8 @@ public:
     [[nodiscard]] double getSootDf() const;
     void setSootDf(double sootDf);
 
+    void printInfo(std::ostream& out) const;
+
 protected:
     double rhoSoot = 1850;
     double dimer = 0;

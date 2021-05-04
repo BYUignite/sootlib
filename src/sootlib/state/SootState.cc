@@ -1,5 +1,6 @@
 #include "SootState.h"
 
+using namespace std;
 using namespace soot;
 
 double SootState::getRhoSoot() const {
@@ -31,4 +32,16 @@ double SootState::getSootDf() const {
 }
 void SootState::setSootDf(double sootDf) {
     SootState::sootDf = sootDf;
+}
+void SootState::printInfo(ostream& out) const {
+    SectionalState::printInfo(out);
+    MomentState::printInfo(out);
+
+    out << " === [SootState] ===" << endl;
+    out << "Rho Soot: " << rhoSoot << endl;
+    out << "Dimer (cached): " << dimer << endl;
+    out << "bCoag: " << bCoag << endl;
+    out << "epsC: " << epsC << endl;
+    out << "sootDf: " << sootDf << endl;
+    out << endl;
 }

@@ -84,3 +84,20 @@ double GasState::getPAHN(size_t n) const {
 double GasState::getGasSpeciesP(GasSpecies species, double def) const {
     return gasFractions.count(species) == 0 ? def : gasFractions.at(species) * MWGas / gasSpeciesMW.at(species) * P;
 }
+void GasState::printInfo(ostream& out) const {
+    out << " === [GasState] ===" << endl;
+    out << "T: " << T << endl;
+    out << "P: " << P << endl;
+    out << "Rho Gas: " << rhoGas << endl;
+    out << "MW Gas: " << MWGas << endl;
+    out << "Mu Gas: " << muGas << endl;
+
+    out << "Gas fractions (" << gasFractions.size() << ")" << endl;
+    for (const auto& [g, f] : gasFractions)
+        out << "Gas " << (int) g << ": " << f << endl;
+
+    out << "PAH fractions (" << PAHFractions.size() << ")" << endl;
+    for (const auto& [p, f] : PAHFractions)
+        out << "PAH species " << p << ": " << f << endl;
+    out << endl;
+}

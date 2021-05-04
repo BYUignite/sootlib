@@ -75,6 +75,19 @@ void State::setPAHFrac(size_t n, double frac) {
     mDimerValid = false;
     GasState::setPAHFrac(n, frac);
 }
-void State::printIssues(std::ostream& out) const {
-    out << "hi" << std::endl;
+void State::printInfo(std::ostream& out) const {
+    SootState::printInfo(out);
+    GasState::printInfo(out);
+
+    out << " === [State] ===" << endl;
+    out << "cMin (cached): " << cMin << endl;
+    out << "mDimer (cached): " << mDimer << endl;
+    out << "wdotD (cached): " << wdotD << endl;
+    out << "mDimer valid: ";
+    if (mDimerValid)
+        out << "true";
+    else
+        out << "false";
+    out << endl;
+    out << endl;
 }

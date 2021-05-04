@@ -21,3 +21,10 @@ vector<double>& SectionalState::getSections() {
 const vector<double>& SectionalState::getSectionsConst() const {
     return sections;
 }
+void SectionalState::printInfo(ostream& out) const {
+    out << " === [SectionState] ===" << endl;
+    out << "Sections (" << sections.size() << ")" << endl;
+    for (size_t i = 0; i < sections.size(); i++)
+        out << i << ": " << sections.at(i) << endl;
+    out << endl;
+}

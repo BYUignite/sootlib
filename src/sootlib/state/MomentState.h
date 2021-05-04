@@ -1,6 +1,7 @@
 #ifndef MOMENTSTATE_H_
 #define MOMENTSTATE_H_
 
+#include <ostream>
 #include <vector>
 
 namespace soot {
@@ -12,6 +13,8 @@ public:
     void setMoment(size_t i, double value);
     std::vector<double>& getMoments();
     [[nodiscard]] const std::vector<double>& getMomentsConst() const;
+
+    void printInfo(std::ostream& out) const;
 
 protected:
     std::vector<double> moments;

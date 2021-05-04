@@ -21,3 +21,10 @@ vector<double>& MomentState::getMoments() {
 const vector<double>& MomentState::getMomentsConst() const {
     return moments;
 }
+void MomentState::printInfo(ostream& out) const {
+    out << " === [MomentState] ===" << endl;
+    out << "Moments (" << moments.size() << ")" << endl;
+    for (size_t i = 0; i < moments.size(); i++)
+        out << i << ": " << moments.at(i) << endl;
+    out << endl;
+}

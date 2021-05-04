@@ -1,6 +1,7 @@
 #ifndef SECTIONALSTATE_H_
 #define SECTIONALSTATE_H_
 
+#include <ostream>
 #include <vector>
 
 namespace soot {
@@ -12,6 +13,8 @@ public:
     void setSection(size_t i, double value);
     std::vector<double>& getSections();
     [[nodiscard]] const std::vector<double>& getSectionsConst() const;
+
+    void printInfo(std::ostream& out) const;
 
 protected:
     std::vector<double> sections;

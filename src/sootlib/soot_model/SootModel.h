@@ -9,7 +9,7 @@ enum class SootModelType { MONO, LOGN, MOMIC, QMOM, SECT };
 class SootModel {
 public:
     [[nodiscard]] SourceTerms getSourceTermsVerbose(State& state, std::ostream& out) const {
-        state.printIssues(out);
+        state.printInfo(out);
         return getSourceTermsImpl(state, &out);
     }
     [[nodiscard]] SourceTerms getSourceTerms(State& state) const {

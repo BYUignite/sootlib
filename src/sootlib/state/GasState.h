@@ -2,6 +2,7 @@
 #define GASSTATE_H_
 
 #include <map>
+#include <ostream>
 
 #include "sootlib/constants.h"
 
@@ -39,6 +40,8 @@ public:
     static double PAH_MW(size_t n);
     static double getPAHGamma(size_t n);
     [[nodiscard]] double getPAHN(size_t n) const;
+
+    void printInfo(std::ostream& out) const;
 
 protected:
     double T = 0;
