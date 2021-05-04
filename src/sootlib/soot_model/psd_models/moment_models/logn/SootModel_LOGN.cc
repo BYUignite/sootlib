@@ -23,10 +23,17 @@ SootModel_LOGN::SootModel_LOGN(unique_ptr<CoagulationModel> coagulationModel,
 																						  move(oxidationModel)) {
 }
 SourceTerms SootModel_LOGN::getSourceTermsImpl(State& state, std::ostream* out) const {
+
+    if (out) {
+        *out << " === [SootModel MONO] ===" << endl;
+        *out << endl;
+    }
+
     const double M0 = state.getMoment(0);
     const double M1 = state.getMoment(0);
     const double M2 = state.getMoment(0);
 
+    // FIXME why was b_coag defined here and somewhere in the soot state?
     const double b_coag = 0.8536;
 
     double Cnd0 = 0, Cnd1 = 0, Cnd2 = 0;
@@ -35,7 +42,19 @@ SourceTerms SootModel_LOGN::getSourceTermsImpl(State& state, std::ostream* out) 
     const double Kc = getKc(state);
     const double Kcp = getKcp(state);
 
+    if (out) {
+        *out << "Kfm: " << Kfm << endl;
+        *out << "Kc: " << Kc << endl;
+        *out << "Kcp: " << Kcp << endl;
+        *out << endl;
+    }
+
     const double mmin = state.getCMin() * MW_C / Na;
+
+    if (out) {
+        *out << "mmin: " << mmin << endl;
+        *out << endl;
+    }
 
     MassRateRatios massRateRatios;
 
@@ -55,9 +74,19 @@ SourceTerms SootModel_LOGN::getSourceTermsImpl(State& state, std::ostream* out) 
 
     double Jnuc;
     if (nucleationModel->getMechanism() != NucleationMechanism::PAH) {
+        if (out) {
+            *out << "Using simpler Jnuc calcuation due to PAH Nucleation" << endl;
+            *out << endl;
+        }
+
         Jnuc = nucleationModel->getNucleationRate(state, {}, {}, massRateRatios);
     }
     else {
+        if (out) {
+            *out << "Using long Jnuc calculation due to non PAH Nucleation" << endl;
+            *out << endl;
+        }
+
         const double Ifm = Kfm * b_coag * (M0 * pow(state.getMDimer(), 1.0 / 6)
         	+ 2 * temp0 * pow(state.getMDimer(), -1.0 / 6)
         	+ temp1 * pow(state.getMDimer(), -1.0 / 2)
@@ -91,13 +120,39 @@ SourceTerms SootModel_LOGN::getSourceTermsImpl(State& state, std::ostream* out) 
         	+ temp6 * pow(state.getMDimer(), -2.0 / 3)
         	+ temp0 * pow(state.getMDimer(), 1.0 / 3)));
 
+        if (out) {
+            *out << "Ifm: " << Ifm << endl;
+            *out << "Ic: " << Ic << endl;
+            *out << "beta DD: " << beta_DD << endl;
+            *out << "Ifm1: " << Ifm1 << endl;
+            *out << "Ifm2: " << Ifm2 << endl;
+            *out << "Ic1: " << Ic1 << endl;
+            *out << "Ic2: " << Ic2 << endl;
+            *out << endl;
+        }
+
         Cnd1 = state.getMDimer() * state.getDimer() * (Ic1 * Ifm1) / (Ic1 + Ifm1);
         Cnd2 = 2 * state.getMDimer() * state.getDimer() * (Ic2 * Ifm2) / (Ic2 + Ifm2);
+    }
+
+    if (out) {
+        *out << "Cnd1: " << Cnd1 << endl;
+        *out << "Cnd2: " << Cnd2 << endl;
+        *out << "Jnuc: " << Jnuc << endl;
+        *out << endl;
     }
 
     const double N0 = Jnuc, N1 = Jnuc * mmin, N2 = Jnuc * mmin * mmin;
 
     const double Kgrw = growthModel->getGrowthRate(state, massRateRatios);
+
+    if (out) {
+        *out << "N0: " << N0 << endl;
+        *out << "N1: " << N1 << endl;
+        *out << "N2: " << N2 << endl;
+        *out << "Kgrw: " << Kgrw << endl;
+        *out << endl;
+    }
 
     const double term = Kgrw * M_PI * pow(6 / state.getRhoSoot() / M_PI, 2.0 / 3);
 
@@ -105,9 +160,24 @@ SourceTerms SootModel_LOGN::getSourceTermsImpl(State& state, std::ostream* out) 
 
     const double Koxi = oxidationModel->getOxidationRate(state, massRateRatios);
 
+    if (out) {
+        *out << "G0: " << G0 << endl;
+        *out << "G1: " << G1 << endl;
+        *out << "G2: " << G2 << endl;
+        *out << "Koxi: " << Koxi << endl;
+        *out << endl;
+    }
+
     const double X0 = 0;
     const double X1 = Koxi * M_PI * pow(6.0 / state.getRhoSoot() / M_PI, 2.0 / 3) * temp1;
     const double X2 = Koxi * M_PI * pow(6.0 / state.getRhoSoot() / M_PI, 2.0 / 3) * temp7 * 2;
+
+    if (out) {
+        *out << "X0: " << X0 << endl;
+        *out << "X1: " << X1 << endl;
+        *out << "X2: " << X2 << endl;
+        *out << endl;
+    }
 
     const double C0_fm = -Kfm * b_coag * (M0 * temp11 + 2 * temp0 * temp3 + temp1 * temp2);
 //    const double C1_fm = 0;
@@ -121,14 +191,42 @@ SourceTerms SootModel_LOGN::getSourceTermsImpl(State& state, std::ostream* out) 
     const double C1 = 0;
     const double C2 = C2_fm * C2_c / (C2_fm + C2_c);
 
+    if (out) {
+        *out << "C0 fm: " << C0_fm << endl;
+        *out << "C2 fm: " << C2_fm << endl;
+        *out << "C0 c: " << C0_c << endl;
+        *out << "C2 c: " << C2_c << endl;
+        *out << "C0: " << C0 << endl;
+        *out << "C1: " << C1 << endl;
+        *out << "C2: " << C2 << endl;
+        *out << endl;
+    }
+
     const vector<double> sootSourceTerms = {(N0 + G0 + Cnd0 - X0 + C0),
 											(N1 + G1 + Cnd1 - X1 + C1),
 											(N2 + G2 + Cnd2 - X2 + C2)};
+
+    if (out) {
+        *out << "Soot Source Terms (" << sootSourceTerms.size() << ")" << endl;
+        for (size_t i = 0; i < sootSourceTerms.size(); i++)
+            *out << i << ": " << sootSourceTerms.at(i) << endl;
+        *out << endl;
+    }
 
     //---------- get gas source terms
 
     map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, N1, G1, X1, Cnd1);
     map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, N1, 0, X1, Cnd1);
+
+    if (out) {
+        *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;
+        for (const auto& [g, t] : gasSourceTerms)
+            *out << (int) g << ": " << t << endl;
+        *out << "PAH Source Terms (" << PAHSourceTerms.size() << ")" << endl;
+        for (const auto& [s, t] : PAHSourceTerms)
+            *out << s << ": " << t << endl;
+        *out << endl;
+    }
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
