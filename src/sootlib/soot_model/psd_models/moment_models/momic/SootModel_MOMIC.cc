@@ -25,7 +25,19 @@ SootModel_MOMIC::SootModel_MOMIC(unique_ptr<CoagulationModel> coagulationModel,
                                                                                             move(oxidationModel)) {
 }
 SourceTerms SootModel_MOMIC::getSourceTermsImpl(State& state, std::ostream* out) const {
+
+    if (out) {
+        *out << " === [SootModel MOMIC] ===" << endl;
+        *out << endl;
+    }
+
     const size_t N = downselectIfNeeded(state.getMoments());
+
+    if (out) {
+        *out << "N: " << N << endl;
+        *out << endl;
+    }
+
     MassRateRatios massRateRatios;
 
     // FIXME it looks like these guys are trying to trigger optional parts of the supporting psd_models with negative values
@@ -34,11 +46,25 @@ SourceTerms SootModel_MOMIC::getSourceTermsImpl(State& state, std::ostream* out)
     const double Kgrw = growthModel->getGrowthRate(state, massRateRatios);
     const double Koxi = oxidationModel->getOxidationRate(state, massRateRatios);
 
+    if (out) {
+        *out << "Jnuc: " << Jnuc << endl;
+        *out << "Kgrw: " << Kgrw << endl;
+        *out << "Koxi: " << Koxi << endl;
+        *out << endl;
+    }
+
     vector<double> Mnuc(state.getNumMoments(), 0);
 
     double m_nuc = state.getCMin() * MW_C / Na;
     for (size_t i = 0; i < N; i++)
         Mnuc.at(i) = pow(m_nuc, i) * Jnuc;
+
+    if (out) {
+        *out << "Mnuc (" << Mnuc.size() << ")" << endl;
+        for (size_t i = 0; i < Mnuc.size(); i++)
+            *out << i << ": " << Mnuc.at(i) << endl;
+        *out << endl;
+    }
 
     vector<double> Mcnd(state.getNumMoments(), 0);
 
@@ -47,16 +73,37 @@ SourceTerms SootModel_MOMIC::getSourceTermsImpl(State& state, std::ostream* out)
             Mcnd.at(i) = MOMICCoagulationRate(state, (int) i) * state.getDimer() * state.getMDimer() * (double) i;
     }
 
+    if (out) {
+        *out << "Mcnd (" << Mcnd.size() << ")" << endl;
+        for (size_t i = 0; i < Mcnd.size(); i++)
+            *out << i << ": " << Mcnd.at(i) << endl;
+        *out << endl;
+    }
+
     vector<double> Mgrw(state.getNumMoments(), 0);
 
     const double Acoef = M_PI * pow(abs(6 / M_PI / state.getRhoSoot()), 2.0 / 3);
     for (size_t i = 1; i < N; i++)
         Mgrw.at(i) = Kgrw * Acoef * (double) i * MOMIC((double) i - 1.0 / 3, state.getMomentsConst());
 
+    if (out) {
+        *out << "Mgrw (" << Mgrw.size() << ")" << endl;
+        for (size_t i = 0; i < Mgrw.size(); i++)
+            *out << i << ": " << Mgrw.at(i) << endl;
+        *out << endl;
+    }
+
     vector<double> Moxi(state.getNumMoments(), 0);
 
     for (size_t i = 1; i < N; i++)
         Moxi.at(i) = Koxi * Acoef * (double) i * MOMIC((double) i - 1.0 / 3, state.getMomentsConst());
+
+    if (out) {
+        *out << "Moxi (" << Moxi.size() << ")" << endl;
+        for (size_t i = 0; i < Moxi.size(); i++)
+            *out << i << ": " << Moxi.at(i) << endl;
+        *out << endl;
+    }
 
     vector<double> Mcoa(state.getNumMoments(), 0);
 
@@ -65,14 +112,38 @@ SourceTerms SootModel_MOMIC::getSourceTermsImpl(State& state, std::ostream* out)
             Mcoa.at(i) = MOMICCoagulationRate(state, (int) i);
     }
 
+    if (out) {
+        *out << "Mcoa (" << Mcoa.size() << ")" << endl;
+        for (size_t i = 0; i < Mcoa.size(); i++)
+            *out << i << ": " << Mcoa.at(i) << endl;
+        *out << endl;
+    }
+
     vector<double> sootSourceTerms(state.getNumMoments(), 0);
     for (size_t i = 0; i < state.getNumMoments(); i++)
         sootSourceTerms.at(i) = Mnuc.at(i) + Mcnd.at(i) + Mgrw.at(i) + Moxi.at(i) + Mcoa.at(i);
+
+    if (out) {
+        *out << "Soot Source Terms (" << sootSourceTerms.size() << ")" << endl;
+        for (size_t i = 0; i < sootSourceTerms.size(); i++)
+            *out << i << ": " << sootSourceTerms.at(i) << endl;
+        *out << endl;
+    }
 
     //---------- get gas source terms
 
     map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, Mnuc.at(1), Mgrw.at(1), Moxi.at(1), Mcnd.at(1));
     map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, Mnuc.at(1), 0, Moxi.at(1), Mcnd.at(1));
+
+    if (out) {
+        *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;
+        for (const auto& [g, t] : gasSourceTerms)
+            *out << (int) g << ": " << t << endl;
+        *out << "PAH Source Terms (" << PAHSourceTerms.size() << ")" << endl;
+        for (const auto& [s, t] : PAHSourceTerms)
+            *out << s << ": " << t << endl;
+        *out << endl;
+    }
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
