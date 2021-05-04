@@ -41,6 +41,11 @@ SootModel_MONO* SootModel_MONO::getInstance(unique_ptr<CoagulationModel> coagula
 
 SourceTerms SootModel_MONO::getSourceTermsImpl(State& state, std::ostream* out) const {
 
+    if (out) {
+        *out << " === [SootModel MONO] ===" << endl;
+        *out << endl;
+    }
+
     MassRateRatios massRateRatios;
 
     vector<double> weights = {0};
@@ -68,15 +73,35 @@ SourceTerms SootModel_MONO::getSourceTermsImpl(State& state, std::ostream* out) 
     const double kOxi = oxidationModel->getOxidationRate(state, massRateRatios);
     const double coag = coagulationModel->getCoagulationRate(state, abscissas.at(0), abscissas.at(0));
 
+    if (out) {
+        *out << "jNuc: " << jNuc << endl;
+        *out << "kGrw: " << kGrw << endl;
+        *out << "kOxi: " << kOxi << endl;
+        *out << "coag: " << coag << endl;
+        *out << endl;
+    }
+
     //---------- nucleation terms
 
     const double N0 = jNuc;
     const double N1 = jNuc * state.getCMin() * MW_C / Na;
 
+    if (out) {
+        *out << "N0: " << N0 << endl;
+        *out << "N1: " << N1 << endl;
+        *out << endl;
+    }
+
     //---------- PAH condensation terms
 
     const double Cnd0 = 0;
     const double Cnd1 = nucleationModel->getMechanism() == NucleationMechanism::PAH ? state.getDimer() * state.getMDimer() * coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(0)) * weights.at(0) : 0;
+
+    if (out) {
+        *out << "Cnd0: " << Cnd0 << endl;
+        *out << "Cnd1: " << Cnd1 << endl;
+        *out << endl;
+    }
 
     //---------- growth terms
 
@@ -85,25 +110,61 @@ SourceTerms SootModel_MONO::getSourceTermsImpl(State& state, std::ostream* out) 
     const double G0 = 0;
     const double G1 = kGrw * Am2m3;
 
+    if (out) {
+        *out << "Am2m3: " << Am2m3 << endl;
+        *out << "G0: " << G0 << endl;
+        *out << "G1: " << G1 << endl;
+        *out << endl;
+    }
+
     //---------- oxidation terms
 
     const double X0 = 0;
     const double X1 = -kOxi * Am2m3;
+
+    if (out) {
+        *out << "X0: " << X0 << endl;
+        *out << "X1: " << X1 << endl;
+        *out << endl;
+    }
 
     //---------- coagulation terms
 
     const double C0 = -0.5 * coag * weights.at(0) * weights.at(0);
     const double C1 = 0;
 
+    if (out) {
+        *out << "C0: " << C0 << endl;
+        *out << "C1: " << C1 << endl;
+        *out << endl;
+    }
+
     //---------- combinine to make soot source terms
 
     vector<double> sootSourceTerms = {(N0 + Cnd0 + G0 + X0 + C0) / state.getRhoGas(),
 									  (N1 + Cnd1 + G1 + X1 + C1) / state.getRhoGas()};
 
+    if (out) {
+        *out << "Soot Source Terms (" << sootSourceTerms.size() << ")" << endl;
+        for (size_t i = 0; i < sootSourceTerms.size(); i++)
+            *out << i << ": " << sootSourceTerms.at(i) << endl;
+        *out << endl;
+    }
+
     //---------- get gas source terms
 
     map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, N1, G1, X1, 0);
     map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, N1, 0, X1, 0);
+
+    if (out) {
+        *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;
+        for (const auto& [g, t] : gasSourceTerms)
+            *out << (int) g << ": " << t << endl;
+        *out << "PAH Source Terms (" << PAHSourceTerms.size() << ")" << endl;
+        for (const auto& [s, t] : PAHSourceTerms)
+            *out << s << ": " << t << endl;
+        *out << endl;
+    }
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
