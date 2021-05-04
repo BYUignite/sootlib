@@ -30,7 +30,7 @@ SootModel_MONO* SootModel_MONO::getInstance(unique_ptr<CoagulationModel> coagula
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** getSourceTerms function
+/** getSourceTermsImpl function
  *  
  *      Calculates soot source terms using monodispersed PSD model (MONO).
  *      Returns soot, gas, and PAH source terms (where applicable). 
@@ -39,7 +39,7 @@ SootModel_MONO* SootModel_MONO::getInstance(unique_ptr<CoagulationModel> coagula
  *
  */
 
-SourceTerms SootModel_MONO::getSourceTerms(State& state) const {
+SourceTerms SootModel_MONO::getSourceTermsImpl(State& state, std::ostream* out) const {
 
     MassRateRatios massRateRatios;
 

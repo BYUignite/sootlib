@@ -20,6 +20,8 @@ public:
     void setRhoSoot(double rhoSoot) override;
     void setPAHFrac(size_t n, double frac) override;
 
+    void printIssues(std::ostream& out) const;
+
 private:
     // according to some specs it looks like cMin is a constant and according to others it looks calculated
     double cMin = 100;

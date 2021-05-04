@@ -21,7 +21,7 @@ SootModel_SECT::SootModel_SECT(unique_ptr<CoagulationModel> coagulationModel,
                                                                                           move(growthModel),
                                                                                           move(nucleationModel),
                                                                                           move(oxidationModel)) {}
-SourceTerms SootModel_SECT::getSourceTerms(State& state) const {
+SourceTerms SootModel_SECT::getSourceTermsImpl(State& state, std::ostream* out) const {
     MassRateRatios massRateRatios;
     vector<double> wts = state.getSectionsConst();
     vector<double> absc(state.getNumSections(), 0);

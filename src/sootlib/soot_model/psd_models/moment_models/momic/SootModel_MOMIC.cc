@@ -24,7 +24,7 @@ SootModel_MOMIC::SootModel_MOMIC(unique_ptr<CoagulationModel> coagulationModel,
                                                                                             move(nucleationModel),
                                                                                             move(oxidationModel)) {
 }
-SourceTerms SootModel_MOMIC::getSourceTerms(State& state) const {
+SourceTerms SootModel_MOMIC::getSourceTermsImpl(State& state, std::ostream* out) const {
     const size_t N = downselectIfNeeded(state.getMoments());
     MassRateRatios massRateRatios;
 

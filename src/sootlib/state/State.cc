@@ -1,6 +1,7 @@
 #include "State.h"
 
 #include <cmath>
+#include <ostream>
 
 using namespace std;
 using namespace soot;
@@ -73,4 +74,7 @@ void State::setRhoSoot(double rhoSoot) {
 void State::setPAHFrac(size_t n, double frac) {
     mDimerValid = false;
     GasState::setPAHFrac(n, frac);
+}
+void State::printIssues(std::ostream& out) const {
+    out << "hi" << std::endl;
 }

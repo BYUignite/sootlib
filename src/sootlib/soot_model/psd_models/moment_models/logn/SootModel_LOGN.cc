@@ -22,7 +22,7 @@ SootModel_LOGN::SootModel_LOGN(unique_ptr<CoagulationModel> coagulationModel,
 																						  move(nucleationModel),
 																						  move(oxidationModel)) {
 }
-SourceTerms SootModel_LOGN::getSourceTerms(State& state) const {
+SourceTerms SootModel_LOGN::getSourceTermsImpl(State& state, std::ostream* out) const {
     const double M0 = state.getMoment(0);
     const double M1 = state.getMoment(0);
     const double M2 = state.getMoment(0);

@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     state.setP(21);
     state.setT(100);
 
-    auto sourceTerms = sootModel->getSourceTerms(state);
+    auto sourceTerms = sootModel->getSourceTermsImpl(state);
 
     // TODO it looks like there is some value in the state that needs to be set not to 0 becuase we are getting NAN
     /* Print the values we got */

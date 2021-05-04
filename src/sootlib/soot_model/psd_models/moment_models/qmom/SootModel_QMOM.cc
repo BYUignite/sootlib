@@ -31,7 +31,7 @@ SootModel_QMOM* SootModel_QMOM::getInstance(unique_ptr<CoagulationModel> coagula
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** getSourceTerms function
+/** getSourceTermsImpl function
  *  
  *      Calculates soot source terms using quadrature method of momdents
  *      (QMOM). Returns soot, gas, and PAH source terms (where applicable). 
@@ -40,7 +40,7 @@ SootModel_QMOM* SootModel_QMOM::getInstance(unique_ptr<CoagulationModel> coagula
  *
  */
 
-SourceTerms SootModel_QMOM::getSourceTerms(State& state) const {
+SourceTerms SootModel_QMOM::getSourceTermsImpl(State& state, std::ostream* out) const {
 
     MassRateRatios massRateRatios;
 

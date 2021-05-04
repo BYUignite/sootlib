@@ -12,11 +12,11 @@ public:
                                                      std::unique_ptr<NucleationModel> nucleationModel,
                                                      std::unique_ptr<OxidationModel> oxidationModel);
 
-    [[nodiscard]] SourceTerms getSourceTerms(State& state) const override;
-
     ~SootModel_LOGN() override = default;
 
 private:
+    [[nodiscard]] SourceTerms getSourceTermsImpl(State& state, std::ostream* out) const override;
+
     SootModel_LOGN(std::unique_ptr<CoagulationModel> coagulationModel,
                    std::unique_ptr<GrowthModel> growthModel,
                    std::unique_ptr<NucleationModel> nucleationModel,

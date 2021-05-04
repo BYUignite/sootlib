@@ -1,5 +1,8 @@
+#include <iostream>
+
 #include "sootlib/soot_model/generator/SootModelGenerator.h"
 
+using namespace std;
 using namespace soot;
 
 int main(int argc, char** argv) {
@@ -19,6 +22,8 @@ int main(int argc, char** argv) {
     // the default mono model requires at least 2 soot moments
     state.resetMoments(2);
     auto sourceTerms = sootModel->getSourceTerms(state);
+
+    sourceTerms = sootModel->getSourceTermsVerbose(state, cout);
 
     return 0;
 }
