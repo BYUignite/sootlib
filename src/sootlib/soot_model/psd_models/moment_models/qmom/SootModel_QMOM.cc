@@ -42,9 +42,13 @@ SootModel_QMOM* SootModel_QMOM::getInstance(unique_ptr<CoagulationModel> coagula
 
 SourceTerms SootModel_QMOM::getSourceTermsImpl(State& state, std::ostream* out) const {
 
+    if (out) {
+        *out << " === [SootModel QMOM] ===" << endl;
+        *out << endl;
+    }
+
     MassRateRatios massRateRatios;
 
-    vector<double> M(state.getNumMoments(), 0);
     vector<double> weights = {0};
     vector<double> abscissas = {0};
 
@@ -55,18 +59,25 @@ SourceTerms SootModel_QMOM::getSourceTermsImpl(State& state, std::ostream* out) 
     if (state.getNumMoments() < 2)
         throw runtime_error("QMOM soot model requries at least 2 moments");
 
-    for (size_t i = 0; i < state.getNumMoments(); i++)
-        M.at(i) = state.getMoment(i);
-
     //---------- set weights and abscissas
 
-    getWtsAbs(M, weights, abscissas);           // wheeler algorithms applied here
+    getWtsAbs(state.getMoments(), weights, abscissas);           // wheeler algorithms applied here
 
     for (size_t i = 0; i < weights.size(); i++) {
         if (weights.at(i) < 0)
             weights.at(i) = 0;
         if (abscissas.at(i) < 0)
             abscissas.at(i) = 0;
+    }
+
+    if (out) {
+        *out << "weights (" << weights.size() << ")" << endl;
+        for (size_t i = 0; i < weights.size(); i++)
+            *out << i << ": " << weights.at(i) << endl;
+        *out << "abscissas (" << abscissas.size() << ")" << endl;
+        for (size_t i = 0; i < abscissas.size(); i++)
+            *out << i << ": " << abscissas.at(i) << endl;
+        *out << endl;
     }
 
     //---------- get chemical rates
@@ -76,12 +87,26 @@ SourceTerms SootModel_QMOM::getSourceTermsImpl(State& state, std::ostream* out) 
     const double kOxi = oxidationModel->getOxidationRate(state, massRateRatios);
 //    const double coag = coagulationModel->getCoagulationRate(state, abscissas.at(0), abscissas.at(0));
 
+    if (out) {
+        *out << "jNuc: " << jNuc << endl;
+        *out << "kGrw: " << kGrw << endl;
+        *out << "kOxi: " << kOxi << endl;
+        *out << endl;
+    }
+
     //---------- nucleation terms
 
     vector<double> nucleationSourceM(state.getNumMoments(), 0.);                        // nucleation source terms for moments
     const double mNuc = state.getCMin() * MW_C / Na;                              // mass of a nucleated particle
     for (size_t i = 0; i < state.getNumMoments(); i++)
         nucleationSourceM.at(i) = pow(mNuc, i) * jNuc;                          // Nuc_rate = m_nuc^r * jNuc
+
+    if (out) {
+        *out << "nucleation source terms for moments (" << nucleationSourceM.size() << ")" << endl;
+        for (size_t i = 0; i < nucleationSourceM.size(); i++)
+            *out << i << ": " << nucleationSourceM.at(i) << endl;
+        *out << endl;
+    }
 
     //---------- PAH condensation terms
 
@@ -94,6 +119,13 @@ SourceTerms SootModel_QMOM::getSourceTermsImpl(State& state, std::ostream* out) 
         }
     }
 
+    if (out) {
+        *out << "PAH condensation source terms (" << condensationSourceM.size() << ")" << endl;
+        for (size_t i = 0; i < condensationSourceM.size(); i++)
+            *out << i << ": " << condensationSourceM.at(i) << endl;
+        *out << endl;
+    }
+
     //---------- growth terms
 
     vector<double> growthSourceM(state.getNumMoments(), 0);                                      // growth source terms for moments
@@ -101,11 +133,25 @@ SourceTerms SootModel_QMOM::getSourceTermsImpl(State& state, std::ostream* out) 
     for (size_t i = 1; i < state.getNumMoments(); i++)                                                   // M0 = 0.0 for growth by definition
         growthSourceM.at(i) = kGrw * Acoef * (double) i * Mk((double) i - 1.0 / 3, weights, abscissas);                  // kg^k/m3*s
 
+    if (out) {
+        *out << "growth source terms for moments (" << growthSourceM.size() << ")" << endl;
+        for (size_t i = 0; i < growthSourceM.size(); i++)
+            *out << i << ": " << growthSourceM.at(i) << endl;
+        *out << endl;
+    }
+
     //---------- oxidation terms
 
     vector<double> oxidationSourceM(state.getNumMoments(), 0);                                   // oxidation source terms
     for (size_t i = 1; i < state.getNumMoments(); i++)                                                   // M0 = 0.0 for oxidation by definition
         oxidationSourceM.at(i) = -kOxi * Acoef * (double) i * Mk((double) i - 1.0 / 3, weights, abscissas);              // kg^k/m3*s
+
+    if (out) {
+        *out << "oxidation source terms (" << oxidationSourceM.size() << ")" << endl;
+        for (size_t i = 0; i < oxidationSourceM.size(); i++)
+            *out << i << ": " << oxidationSourceM.at(i) << endl;
+        *out << endl;
+    }
 
     //---------- coagulation terms
 
@@ -131,6 +177,13 @@ SourceTerms SootModel_QMOM::getSourceTermsImpl(State& state, std::ostream* out) 
     	}
     }
 
+    if (out) {
+        *out << "coagulation source terms (" << coagulationSourceM.size() << ")" << endl;
+        for (size_t i = 0; i < coagulationSourceM.size(); i++)
+            *out << i << ": " << coagulationSourceM.at(i) << endl;
+        *out << endl;
+    }
+
     //---------- combinine to make source terms
 
     vector<double> sootSourceTerms(state.getNumMoments(), 0);
@@ -138,10 +191,27 @@ SourceTerms SootModel_QMOM::getSourceTermsImpl(State& state, std::ostream* out) 
     for (size_t i = 0; i < state.getNumMoments(); i++)
         sootSourceTerms.at(i) = (nucleationSourceM.at(i) + condensationSourceM.at(i) + growthSourceM.at(i) + oxidationSourceM.at(i) + coagulationSourceM.at(i)) / state.getRhoGas();
 
+    if (out) {
+        *out << "Soot Source Terms (" << sootSourceTerms.size() << ")" << endl;
+        for (size_t i = 0; i < sootSourceTerms.size(); i++)
+            *out << i << ": " << sootSourceTerms.at(i) << endl;
+        *out << endl;
+    }
+
     //---------- get gas source terms
 
     map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, nucleationSourceM.at(1), growthSourceM.at(1), oxidationSourceM.at(1), 0);
     map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, nucleationSourceM.at(1), 0, oxidationSourceM.at(1), 0);
+
+    if (out) {
+        *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;
+        for (const auto& [g, t] : gasSourceTerms)
+            *out << (int) g << ": " << t << endl;
+        *out << "PAH Source Terms (" << PAHSourceTerms.size() << ")" << endl;
+        for (const auto& [s, t] : PAHSourceTerms)
+            *out << s << ": " << t << endl;
+        *out << endl;
+    }
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
