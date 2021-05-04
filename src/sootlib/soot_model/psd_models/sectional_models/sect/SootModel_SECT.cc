@@ -22,28 +22,65 @@ SootModel_SECT::SootModel_SECT(unique_ptr<CoagulationModel> coagulationModel,
                                                                                           move(nucleationModel),
                                                                                           move(oxidationModel)) {}
 SourceTerms SootModel_SECT::getSourceTermsImpl(State& state, std::ostream* out) const {
+
+    if (out) {
+        *out << " === [SootModel SECT] ===" << endl;
+        *out << endl;
+    }
+
     MassRateRatios massRateRatios;
     vector<double> wts = state.getSectionsConst();
     vector<double> absc(state.getNumSections(), 0);
 
     for (size_t k = 0; k < state.getNumSections(); k++)
-        absc.at(k) = state.getCMin() * pow(2.0, k) * MW_C / Na;
+        absc.at(k) = state.getCMin() * pow(2, k) * MW_C / Na;
 
     for (double& num : wts) {
         if (num < 0)
             num = 0;
     }
 
+    if (out) {
+        *out << "weights (" << wts.size() << ")" << endl;
+        for (size_t i = 0; i < wts.size(); i++)
+            *out << i << ": " << wts.at(i) << endl;
+        *out << "abscissas (" << absc.size() << ")" << endl;
+        for (size_t i = 0; i < absc.size(); i++)
+            *out << i << ": " << absc.at(i) << endl;
+        *out << endl;
+    }
+
     // FIXME this code is likely incorrect
     const double Jnuc = nucleationModel->getNucleationRate(state, absc, wts, massRateRatios);
+
+    if (out) {
+        *out << "Jnuc: " << Jnuc << endl;
+        *out << endl;
+    }
+
     vector<double> Kgrw(state.getNumSections(), 0);
     for (double& num : Kgrw)
         num = growthModel->getGrowthRate(state, massRateRatios); // FIXME the old code wants to use stuff with wts and absc as inputs
         // this is not how the growth model is treated anywhere else and it doesn't really work that way in this setup
+
+    if (out) {
+        *out << "Kgrw (" << Kgrw.size() << ")" << endl;
+        for (size_t i = 0; i < Kgrw.size(); i++)
+            *out << i << ": " << Kgrw.at(i) << endl;
+        *out << endl;
+    }
+
     vector<double> Koxi(state.getNumSections(), 0);
     for (double& num : Koxi)
         num = oxidationModel->getOxidationRate(state, massRateRatios); // FIXME the old code also wants to do different stuff with these too
         // this is not how the oxidation model is treated anywhere else and it doesn't really work that way in this setup
+
+    if (out) {
+        *out << "Koxi (" << Koxi.size() << ")" << endl;
+        for (size_t i = 0; i < Koxi.size(); i++)
+            *out << i << ": " << Koxi.at(i) << endl;
+        *out << endl;
+    }
 
     vector<double> Coag(state.getNumSections(), 0);
     double leaving;
@@ -59,9 +96,24 @@ SourceTerms SootModel_SECT::getSourceTermsImpl(State& state, std::ostream* out) 
         }
     }
 
+    if (out) {
+        *out << "Coag (" << Coag.size() << ")" << endl;
+        for (size_t i = 0; i < Coag.size(); i++)
+            *out << i << ": " << Coag.at(i) << endl;
+        *out << endl;
+    }
+
     vector<double> N0(state.getNumSections(), 0);
     N0.at(0) = Jnuc;
     const double N_tot = Jnuc * state.getCMin() * MW_C / Na;
+
+    if (out) {
+        *out << "N0 (" << N0.size() << ")" << endl;
+        for (size_t i = 0; i < N0.size(); i++)
+            *out << i << ": " << N0.at(i) << endl;
+        *out << "N tot: " << N_tot << endl;
+        *out << endl;
+    }
 
     vector<double> Cnd0(state.getNumSections(), 0);
     double Cnd_tot = 0;
@@ -72,11 +124,27 @@ SourceTerms SootModel_SECT::getSourceTermsImpl(State& state, std::ostream* out) 
         }
     }
 
+    if (out) {
+        *out << "Cnd0 (" << Cnd0.size() << ")" << endl;
+        for (size_t i = 0; i < Cnd0.size(); i++)
+            *out << i << ": " << Cnd0.at(i) << endl;
+        *out << "Cnd tot: " << Cnd_tot << endl;
+        *out << endl;
+    }
+
     vector<double> Am2m3(state.getNumSections(), 0);
     for (size_t i = 0; i < state.getNumSections(); i++) {
         if (wts.at(i) > 0)
             Am2m3.at(i) = M_PI * pow(abs(6 / (M_PI * state.getRhoSoot()) * state.getSection(i)), 2.0 / 3) * abs(wts.at(i));
     }
+
+    if (out) {
+        *out << "Am2m3 (" << Am2m3.size() << ")" << endl;
+        for (size_t i = 0; i < Am2m3.size(); i++)
+            *out << i << ": " << Am2m3.at(i) << endl;
+        *out << endl;
+    }
+
     vector<double> G0(state.getNumSections(), 0);
     double G_tot = 0;
     double Ngrw;
@@ -90,6 +158,14 @@ SourceTerms SootModel_SECT::getSourceTermsImpl(State& state, std::ostream* out) 
 
         G0.at(i) = Ngrw;
         G_tot += Ngrw * absc.at(i);
+    }
+
+    if (out) {
+        *out << "G0 (" << G0.size() << ")" << endl;
+        for (size_t i = 0; i < G0.size(); i++)
+            *out << i << ": " << G0.at(i) << endl;
+        *out << "G tot: " << G_tot << endl;
+        *out << endl;
     }
 
     vector<double> X0(state.getNumSections(), 0);
@@ -107,11 +183,26 @@ SourceTerms SootModel_SECT::getSourceTermsImpl(State& state, std::ostream* out) 
         X_tot += Noxi * absc.at(i);
     }
 
-    vector<double> C0 = Coag;
+    if (out) {
+        *out << "X0 (" << X0.size() << ")" << endl;
+        for (size_t i = 0; i < X0.size(); i++)
+            *out << i << ": " << X0.at(i) << endl;
+        *out << "X tot: " << X_tot << endl;
+        *out << endl;
+    }
+
+    vector<double>& C0 = Coag;
 
     vector<double> sootSourceTerms(state.getNumSections(), 0);
     for (size_t i = 0; i < sootSourceTerms.size(); i++)
         sootSourceTerms.at(i) = (N0.at(i) + Cnd0.at(i) + G0.at(i) + X0.at(i) + C0.at(i)) / state.getRhoSoot();
+
+    if (out) {
+        *out << "Soot Source Terms (" << sootSourceTerms.size() << ")" << endl;
+        for (size_t i = 0; i < sootSourceTerms.size(); i++)
+            *out << i << ": " << sootSourceTerms.at(i) << endl;
+        *out << endl;
+    }
 
     // There was a commented out section in the old code here labeled "computer gas source terms", but it looked like it didn't do anything anymore
 
@@ -119,6 +210,17 @@ SourceTerms SootModel_SECT::getSourceTermsImpl(State& state, std::ostream* out) 
 
     map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, N_tot, G_tot, X_tot, Cnd_tot);
     map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, N_tot, 0, X_tot, Cnd_tot);
+
+    if (out) {
+        *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;
+        for (const auto& [g, t] : gasSourceTerms)
+            *out << (int) g << ": " << t << endl;
+        *out << "PAH Source Terms (" << PAHSourceTerms.size() << ")" << endl;
+        for (const auto& [s, t] : PAHSourceTerms)
+            *out << s << ": " << t << endl;
+        *out << endl;
+    }
+
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
