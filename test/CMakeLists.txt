@@ -1,11 +1,3 @@
-# ---- initialize google test ----
-enable_testing()
-include(GoogleTest)
-include_directories(googletest)
-set(GTEST_LIBS
-        gtest
-        gtest_main)
-
 # ---- create test helper library ----
 
 set(TEST_HELP_LIB_FILES
