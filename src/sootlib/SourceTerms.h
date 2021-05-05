@@ -1,6 +1,7 @@
 #ifndef SOURCETERMS_H
 #define SOURCETERMS_H
 
+#include <ostream>
 #include <map>
 #include <utility>
 #include <vector>
@@ -77,6 +78,24 @@ public:
     }
     [[nodiscard]] std::map<size_t, double>::const_iterator PAHTermsEnd() const {
         return PAHSourceTerms.end();
+    }
+
+    void printInfo(std::ostream& out) const {
+    	out << " === [SourceTerms] ===" << std::endl;
+
+    	out << "Soot Source Terms (" << sootSourceTerms.size() << ")" << std::endl;
+    	for (size_t i = 0; i < sootSourceTerms.size(); i++)
+    		out << i << ": " << sootSourceTerms.at(i) << std::endl;
+
+    	out << "Gas Source Terms (" << gasSourceTerms.size() << std::endl;
+    	for (const auto& [g, t] : gasSourceTerms)
+    		out << "Gas " << (int) g << ": " << t << std::endl;
+
+    	out << "PAH Source Terms (" << PAHSourceTerms.size() << ")" << std::endl;
+    	for (const auto& [p, t] : PAHSourceTerms)
+    		out << "PAH species " << p << ": " << t << std::endl;
+
+    	out << std::endl;
     }
 
 private:

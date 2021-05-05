@@ -57,7 +57,6 @@ int main(int argc, char** argv) {
 
     // ============== begin moment tests ==============
 
-    // ============== MONO TEST ==============
     *out << "*********************************************" << endl;
     *out << "*             BEGIN MONO TEST               *" << endl;
     *out << "*********************************************" << endl << endl;
@@ -66,8 +65,8 @@ int main(int argc, char** argv) {
     sootModel = generator.getModelUnique();
 
     sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
+    sourceTerms.printInfo(*out);
 
-    // ============== LOGN TEST ==============
     *out << "*********************************************" << endl;
     *out << "*            BEGIN LOGN TEST                *" << endl;
     *out << "*********************************************" << endl << endl;
@@ -76,8 +75,8 @@ int main(int argc, char** argv) {
     sootModel = generator.getModelUnique();
 
     sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
+    sourceTerms.printInfo(*out);
 
-    // ============== MOMIC TEST ==============
     *out << "*********************************************" << endl;
     *out << "*            BEGIN MOMIC TEST               *" << endl;
     *out << "*********************************************" << endl << endl;
@@ -86,8 +85,8 @@ int main(int argc, char** argv) {
     sootModel = generator.getModelUnique();
 
     sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
+    sourceTerms.printInfo(*out);
 
-    // ============== QMOM TEST ==============
     *out << "*********************************************" << endl;
     *out << "*           BEGIN QMOM TEST                 *" << endl;
     *out << "*********************************************" << endl << endl;
@@ -96,13 +95,13 @@ int main(int argc, char** argv) {
     sootModel = generator.getModelUnique();
 
     sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
+    sourceTerms.printInfo(*out);
 
     // ============== begin sectional tests ==============
     state.resetSections(2);
     state.setSection(0, 0.5);
     state.setSection(1, 0.5);
 
-    //  ============== SECT TEST ==============
     *out << "*********************************************" << endl;
     *out << "*            BEGIN SECT TEST                *" << endl;
     *out << "*********************************************" << endl << endl;
@@ -111,4 +110,5 @@ int main(int argc, char** argv) {
     sootModel = generator.getModelUnique();
 
     sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
+    sourceTerms.printInfo(*out);
 }
