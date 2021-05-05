@@ -25,7 +25,7 @@ SootModel_LOGN::SootModel_LOGN(unique_ptr<CoagulationModel> coagulationModel,
 SourceTerms SootModel_LOGN::getSourceTermsImpl(State& state, std::ostream* out) const {
 
     if (out) {
-        *out << " === [SootModel MONO] ===" << endl;
+        *out << " === [SootModel LOGN] ===" << endl;
         *out << endl;
     }
 
