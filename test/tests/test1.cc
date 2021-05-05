@@ -67,7 +67,6 @@ int main(int argc, char** argv) {
     sootModel = generator.getModelUnique();
 
     sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
-    sourceTerms.printInfo(*out);
 
     *out << "*********************************************" << endl;
     *out << "*            BEGIN LOGN TEST                *" << endl;
@@ -77,7 +76,6 @@ int main(int argc, char** argv) {
     sootModel = generator.getModelUnique();
 
     sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
-    sourceTerms.printInfo(*out);
 
     *out << "*********************************************" << endl;
     *out << "*            BEGIN MOMIC TEST               *" << endl;
@@ -87,7 +85,6 @@ int main(int argc, char** argv) {
     sootModel = generator.getModelUnique();
 
     sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
-    sourceTerms.printInfo(*out);
 
     *out << "*********************************************" << endl;
     *out << "*           BEGIN QMOM TEST                 *" << endl;
@@ -97,7 +94,6 @@ int main(int argc, char** argv) {
     sootModel = generator.getModelUnique();
 
     sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
-    sourceTerms.printInfo(*out);
 
     // ============== begin sectional tests ==============
     state.resetSections(2);
@@ -112,5 +108,4 @@ int main(int argc, char** argv) {
     sootModel = generator.getModelUnique();
 
     sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
-    sourceTerms.printInfo(*out);
 }

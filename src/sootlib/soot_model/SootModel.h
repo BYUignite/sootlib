@@ -10,7 +10,9 @@ class SootModel {
 public:
     [[nodiscard]] SourceTerms getSourceTermsVerbose(State& state, std::ostream& out) const {
         state.printInfo(out);
-        return getSourceTermsImpl(state, &out);
+        SourceTerms sourceTerms = getSourceTermsImpl(state, &out);
+        sourceTerms.printInfo(out);
+        return sourceTerms;
     }
     [[nodiscard]] SourceTerms getSourceTerms(State& state) const {
         return getSourceTermsImpl(state, nullptr);
