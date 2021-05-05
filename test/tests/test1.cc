@@ -42,14 +42,24 @@ int main(int argc, char** argv) {
     state.setMoment(1, 20);
 
     state.setT(273);
-
     state.setP(101325);
+    state.setRhoGas(10);
+    state.setMWGas(25);
+    state.setMuGas(2);
+
+    state.setRhoSoot(10);
+
+    state.setGasSpeciesFrac(GasSpecies::C2H2, 0.25);
+    state.setGasSpeciesFrac(GasSpecies::O2, 0.25);
+    state.setGasSpeciesFrac(GasSpecies::CO, 0.25);
+
+    state.setPAHFrac(5, 0.25);
 
     // ============== begin moment tests ==============
 
     // ============== MONO TEST ==============
     *out << "*********************************************" << endl;
-    *out << "             BEGIN MONO TEST" << endl;
+    *out << "*             BEGIN MONO TEST               *" << endl;
     *out << "*********************************************" << endl << endl;
 
     generator.setModel(SootModelType::MONO);
@@ -59,7 +69,7 @@ int main(int argc, char** argv) {
 
     // ============== LOGN TEST ==============
     *out << "*********************************************" << endl;
-    *out << "            BEGIN LOGN TEST" << endl;
+    *out << "*            BEGIN LOGN TEST                *" << endl;
     *out << "*********************************************" << endl << endl;
 
     generator.setModel(SootModelType::LOGN);
@@ -69,7 +79,7 @@ int main(int argc, char** argv) {
 
     // ============== MOMIC TEST ==============
     *out << "*********************************************" << endl;
-    *out << "            BEGIN MOMIC TEST" << endl;
+    *out << "*            BEGIN MOMIC TEST               *" << endl;
     *out << "*********************************************" << endl << endl;
 
     generator.setModel(SootModelType::MOMIC);
@@ -79,7 +89,7 @@ int main(int argc, char** argv) {
 
     // ============== QMOM TEST ==============
     *out << "*********************************************" << endl;
-    *out << "           BEGIN QMOM TEST" << endl;
+    *out << "*           BEGIN QMOM TEST                 *" << endl;
     *out << "*********************************************" << endl << endl;
 
     generator.setModel(SootModelType::QMOM);
@@ -94,7 +104,7 @@ int main(int argc, char** argv) {
 
     //  ============== SECT TEST ==============
     *out << "*********************************************" << endl;
-    *out << "            BEGIN SECT TEST" << endl;
+    *out << "*            BEGIN SECT TEST                *" << endl;
     *out << "*********************************************" << endl << endl;
 
     generator.setModel(SootModelType::SECT);

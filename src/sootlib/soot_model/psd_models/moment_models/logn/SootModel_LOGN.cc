@@ -75,7 +75,7 @@ SourceTerms SootModel_LOGN::getSourceTermsImpl(State& state, std::ostream* out) 
     double Jnuc;
     if (nucleationModel->getMechanism() != NucleationMechanism::PAH) {
         if (out) {
-            *out << "Using simpler Jnuc calcuation due to PAH Nucleation" << endl;
+            *out << "Using simpler Jnuc calcuation due to non PAH Nucleation" << endl;
             *out << endl;
         }
 
@@ -83,7 +83,7 @@ SourceTerms SootModel_LOGN::getSourceTermsImpl(State& state, std::ostream* out) 
     }
     else {
         if (out) {
-            *out << "Using long Jnuc calculation due to non PAH Nucleation" << endl;
+            *out << "Using long Jnuc calculation due to PAH Nucleation" << endl;
             *out << endl;
         }
 
