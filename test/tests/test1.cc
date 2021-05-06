@@ -1,5 +1,4 @@
-#include <iostream>
-#include <fstream>
+#include "TestTools.h"
 
 #include "sootlib/soot_model/generator/SootModelGenerator.h"
 
@@ -17,12 +16,7 @@ using namespace soot;
 int main(int argc, char** argv) {
 
     // ============== set stream for verbose output to either cout or a file ==============
-    ofstream fout;
-    ostream* out = &cout;
-    if (argc > 1) {
-        fout.open(argv[1]);
-        out = &fout;
-    }
+    ostream* out = TestTools::getOutStreamFromArgs(argc, argv);
 
     // ============== variables used for testing ==============
     auto generator = SootModelGenerator();

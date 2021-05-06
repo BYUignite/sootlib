@@ -7,8 +7,7 @@ set(COAGULATION_SRC_FILES
         sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FUCHS.h
         sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FUCHS.cc
         sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_LL.h
-        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_LL.cc
-        )
+        sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_LL.cc)
 
 set(GROWTH_SRC_FILES
         sootlib/soot_model/soot_chemistry/growth_model/GrowthModel.h
