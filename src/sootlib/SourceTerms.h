@@ -87,7 +87,7 @@ public:
     	for (size_t i = 0; i < sootSourceTerms.size(); i++)
     		out << i << ": " << sootSourceTerms.at(i) << std::endl;
 
-    	out << "Gas Source Terms (" << gasSourceTerms.size() << std::endl;
+    	out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << std::endl;
     	for (const auto& [g, t] : gasSourceTerms)
     		out << "Gas " << (int) g << ": " << t << std::endl;
 
