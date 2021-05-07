@@ -86,10 +86,12 @@ public:
     	out << "Soot Source Terms (" << sootSourceTerms.size() << ")" << std::endl;
     	for (size_t i = 0; i < sootSourceTerms.size(); i++)
     		out << i << ": " << sootSourceTerms.at(i) << std::endl;
+    	out << std::endl;
 
     	out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << std::endl;
     	for (const auto& [g, t] : gasSourceTerms)
     		out << "Gas " << (int) g << ": " << t << std::endl;
+    	out << std::endl;
 
     	out << "PAH Source Terms (" << PAHSourceTerms.size() << ")" << std::endl;
     	for (const auto& [p, t] : PAHSourceTerms)
