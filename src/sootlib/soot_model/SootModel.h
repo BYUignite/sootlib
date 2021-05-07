@@ -5,7 +5,9 @@
 #include "sootlib/state/State.h"
 
 namespace soot {
+
 enum class SootModelType { MONO, LOGN, MOMIC, QMOM, SECT };
+
 class SootModel {
 public:
     [[nodiscard]] SourceTerms getSourceTermsVerbose(State& state, std::ostream& out) const {

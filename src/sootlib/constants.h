@@ -27,13 +27,13 @@ const double MW_C = 12.011;
 enum class GasSpecies { C2H2, O2, H, H2, OH, H2O, CO, C };
 
 const std::map<GasSpecies, double> gasSpeciesMW = {{GasSpecies::C2H2, MW_C2H2},
-                                                          {GasSpecies::O2, MW_O2},
-                                                          {GasSpecies::H, MW_H},
-                                                          {GasSpecies::H2, MW_H2},
-                                                          {GasSpecies::OH, MW_OH},
-                                                          {GasSpecies::H2O, MW_H2O},
-                                                          {GasSpecies::CO, MW_CO},
-                                                          {GasSpecies::C, MW_C}};
+                                                   {GasSpecies::O2, MW_O2},
+                                                   {GasSpecies::H, MW_H},
+                                                   {GasSpecies::H2, MW_H2},
+                                                   {GasSpecies::OH, MW_OH},
+                                                   {GasSpecies::H2O, MW_H2O},
+                                                   {GasSpecies::CO, MW_CO},
+                                                   {GasSpecies::C, MW_C}};
 }
 
 #endif //STATIC_H
