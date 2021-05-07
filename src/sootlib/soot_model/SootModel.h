@@ -11,7 +11,7 @@ public:
     [[nodiscard]] SourceTerms getSourceTermsVerbose(State& state, std::ostream& out) const {
         state.printInfo(out);
         SourceTerms sourceTerms = getSourceTermsImpl(state, &out);
-        sourceTerms.printInfo(out);
+//        sourceTerms.printInfo(out);
         return sourceTerms;
     }
     [[nodiscard]] SourceTerms getSourceTerms(State& state) const {
