@@ -49,8 +49,8 @@ protected:
     double rhoGas = 0;
     double MWGas = 0;
     double muGas = 0;
-    std::map<GasSpecies, double> gasFractions;
 
+    std::map<GasSpecies, double> gasFractions;
     std::map<size_t, double> PAHFractions;
 };
 }

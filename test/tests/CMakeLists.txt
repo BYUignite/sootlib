@@ -1,7 +1,8 @@
 # ---- list executable .cc files without their extension ----
 
 set(TEST_FILES
-        test1)
+        test1
+        pytest)
 
 foreach (TEST_FILE ${TEST_FILES})
     add_executable(${TEST_FILE} ${TEST_FILE}.cc)

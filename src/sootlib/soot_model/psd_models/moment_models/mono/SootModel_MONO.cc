@@ -53,7 +53,7 @@ SourceTerms SootModel_MONO::getSourceTermsImpl(State& state, std::ostream* out) 
 
     //---------- get moments 
 
-    if (state.getNumMoments() != 2)
+    if (state.getNumMoments() < 2)
         throw runtime_error("MONO soot model requires 2 soot moments");
 
     const double M0 = state.getMoment(0);
