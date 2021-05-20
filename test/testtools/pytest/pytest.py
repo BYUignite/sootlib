@@ -124,7 +124,7 @@ def get_data():
     return pd.read_csv(general['Output'] + '/data.csv'), general['Output']
 
 
-# edit this function to use the data how you want
+# edit this function to use the data (in the form of a pandas dataframe) how you want
 # Column headers:
 # section_i, moment_i, T, P, RhoGas, MWGas, MuGas, C_C2H2, C_O2, C_H, C_H2, C_OH, C_H2O, C_CO, C_C, PAH_frac_i, CMin,
 # soot_source_i, PAH_source_i, C2H2_source, O2_source, H_source, H2_source, OH_source, H2O_source, CO_source, C_source
