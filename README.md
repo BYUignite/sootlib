@@ -2,9 +2,6 @@
 
 Sootlib requires C++17
 
-Google Test: The unit tests in `test/` require Google Test to be built. Google Test is currently included in this
-directory. https://github.com/google/googletest
-
 # Build Instructions
 
 Run `cmake .` to generate the sootlib build files in the current directory while inside of the top level sootlib directory.
@@ -32,14 +29,13 @@ You can add .cc source files to `test/tests/`. Add these files to
 `example_test.cc` as `example_test`. These files will be built as standalone executables with Google Test. Files in
 `test/tests/` will be added to the test list `standardTests`.
 
-We should roughly (or closely) follow the [Cantera contributions stype guide](https://github.com/Cantera/cantera/blob/main/CONTRIBUTING.md)
+We should roughly follow the [Cantera contributions stype guide](https://github.com/Cantera/cantera/blob/main/CONTRIBUTING.md)
 in this project.
 
 # TODO
 
 ### Short Term Design
 
-* Optimize all models by saving intermediate calculations
 * Perhaps add warnings when running into 0 or having illegal calculations to guide people in NAN situations
   
 ### Long Term Design
@@ -50,33 +46,4 @@ in this project.
 ### Broken / Not Building
 
 * SECT model was highly broken in old code so current interpretation is probably not accurate
-
-### Untested
-
-* `State`
-* `GrowthModel_LIN`
-* `GrowthModel_LL`
-* `GrowthModel_HACA`
-* `NucleationModel_LIN`
-* `NucleationModel_LL`
-* `NucleationModel_PAH`
-* `OxidationModel_LL`
-* `OxidationModel_LEE_NEOH`
-* `OxidationModel_NSC_NEOH`
-* `OxidationModel_HACA`
-* `CoagulationModel_LL`
-* `CoagulationModel_Frenk`
-* `CoagulationModel_Fuchs`
-* `SootModel_MONO`
-* `SootModel_MOMIC`
-* `SootModel_QMOM`
-* `SootModel_LOGN`
-* `SootModel_SECT`
-
-### Not Implemented
-
-*
-
-### Missing Features
-
-*
+* MOMIC throws vector out of bounds errors in all situations
