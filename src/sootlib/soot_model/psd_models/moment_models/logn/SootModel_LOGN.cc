@@ -1,6 +1,7 @@
 #include "SootModel_LOGN.h"
 
 #include <cmath>
+#include <iostream>
 
 using namespace std;
 using namespace soot;
@@ -266,4 +267,10 @@ double SootModel_LOGN::getKc(const State& state)
 double SootModel_LOGN::getKcp(const State& state)
 {
 	return 2 * 1.657 * state.getGasMeanFreePath() * pow(M_PI / 6 * state.getRhoSoot(), 1.0 / 3);
+}
+void SootModel_LOGN::checkState(const State& state) const {
+    if (state.getNumMoments() < 3)
+        throw runtime_error("LOGN soot model requires 3 soot moments");
+    if (state.getNumMoments() > 3)
+        cerr << "LOGN soot model requires 3 moments, got " << state.getNumMoments() << endl;
 }

@@ -191,7 +191,8 @@ int main(int argc, char** argv) {
     // open out file
     ofstream out;
     out.open(output + "/data.csv");
-    // state header stuff
+
+    // state headers
     for (int i = 0; i < numSections; i++) {
         out << "section_" << i << ", ";
     }
@@ -203,7 +204,8 @@ int main(int argc, char** argv) {
         out << "PAH_frac_" << (i + 1) * 6 << ", ";
     }
     out << "CMin, ";
-    // source term header stuff
+
+    // source term headers
     for (int i = 0; i < numSootSourceTerms; i++) {
         out << "soot_source_" << i << ", ";
     }
@@ -212,7 +214,7 @@ int main(int argc, char** argv) {
     }
     out << "C2H2_source, O2_source, H_source, H2_source, OH_source, H2O_source, CO_source, C_source" << endl;
 
-    // start doing calculations
+    // do calculations
     time_t startTime = time(nullptr);
     for (int i = 0; i < steps; i++) {
         cout << "\rRunning step " << i + 1 << "/" << steps << "         ";
@@ -248,7 +250,7 @@ int main(int argc, char** argv) {
 
         state.setCMin(interp(CMinIni, CMinFin, steps, i));
 
-        // print state
+        // print state to file
         for (int j = 0; j < numSections; j++) {
             out << state.getSection(j) << ", ";
         }
@@ -272,7 +274,7 @@ int main(int argc, char** argv) {
         // get new source terms
         sourceTerms = sootModel->getSourceTerms(state);
 
-        // print new source terms
+        // print new source terms to file
         for (int j = 0; j < sourceTerms.getNumSootSourceTerms(); j++) {
             out << sourceTerms.getSootSourceTerm(j) << ", ";
         }
@@ -288,6 +290,8 @@ int main(int argc, char** argv) {
         out << sourceTerms.getGasSourceTerm(GasSpecies::CO) << ", ";
         out << sourceTerms.getGasSourceTerm(GasSpecies::C) << endl;
     }
+
+    // print time elapsed
     const double elapsed = difftime(time(nullptr), startTime);
     cout << endl << "Finished in " << elapsed << "s (" << elapsed / steps << "s/step)" << endl;
 

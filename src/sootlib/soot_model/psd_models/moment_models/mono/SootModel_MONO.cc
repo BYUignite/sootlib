@@ -6,6 +6,7 @@
 #include "SootModel_MONO.h"
 
 #include <cmath>
+#include <iostream>
 
 using namespace std;
 using namespace soot;
@@ -47,14 +48,10 @@ SourceTerms SootModel_MONO::getSourceTermsImpl(State& state, std::ostream* out) 
     }
 
     MassRateRatios massRateRatios;
-
     vector<double> weights = {0};
     vector<double> abscissas = {0};
 
-    //---------- get moments 
-
-    if (state.getNumMoments() < 2)
-        throw runtime_error("MONO soot model requires 2 soot moments");
+    //---------- get moments
 
     const double M0 = state.getMoment(0);
     const double M1 = state.getMoment(1);
@@ -167,4 +164,10 @@ SourceTerms SootModel_MONO::getSourceTermsImpl(State& state, std::ostream* out) 
     }
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
+}
+void SootModel_MONO::checkState(const State& state) const {
+    if (state.getNumMoments() < 2)
+        throw runtime_error("MONO soot model requires 2 soot moments");
+    if (state.getNumMoments() > 2)
+        cerr << "MONO soot model requries 2 soot moments, got " << state.getNumMoments() << endl;
 }

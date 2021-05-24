@@ -1,7 +1,9 @@
+#include "SootModel_MOMIC.h"
+
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
-#include "SootModel_MOMIC.h"
 #include "lib/binomial/binomial.h"
 
 using namespace std;
@@ -376,4 +378,10 @@ double SootModel_MOMIC::MOMIC(double p, const vector<double>& M)
 	const double log_mu_p = lagrangeInterp(p, x, log_mu);
 
 	return pow(10, log_mu_p) * M.at(0);
+}
+void SootModel_MOMIC::checkState(const State& state) const {
+    if (state.getNumMoments() < 1)
+        throw runtime_error("MOMIC soot model requires 1-8 soot moments");
+    if (state.getNumMoments() > 8)
+        cerr << "MOMIC soot model requires 1-8 soot moments, got " << state.getNumMoments() << endl;
 }

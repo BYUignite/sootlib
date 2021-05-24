@@ -17,6 +17,8 @@ public:
 private:
     [[nodiscard]] SourceTerms getSourceTermsImpl(State& state, std::ostream* out) const override;
 
+    void checkState(const State& state) const override;
+
     SootModel_SECT(std::unique_ptr<CoagulationModel> coagulationModel,
                    std::unique_ptr<GrowthModel> growthModel,
                    std::unique_ptr<NucleationModel> nucleationModel,

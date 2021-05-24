@@ -245,3 +245,7 @@ vector<double> SootModel_SECT::getDivision(double mass, double num, const vector
 
     return toReturn;
 }
+void SootModel_SECT::checkState(const State& state) const {
+    if (state.getNumSections() < 1)
+        throw runtime_error("SECT soot model requires 1+ sections/bins");
+}

@@ -6,6 +6,7 @@
 #include "SootModel_QMOM.h"
 
 #include <cmath>
+#include <iostream>
 
 using namespace std;
 using namespace soot;
@@ -48,16 +49,8 @@ SourceTerms SootModel_QMOM::getSourceTermsImpl(State& state, std::ostream* out) 
     }
 
     MassRateRatios massRateRatios;
-
     vector<double> weights = {0};
     vector<double> abscissas = {0};
-
-    //---------- get moments
-
-    if (state.getNumMoments() % 2 == 1)
-        throw runtime_error("QMOM soot model requires even number of moments");
-    if (state.getNumMoments() < 2)
-        throw runtime_error("QMOM soot model requries at least 2 moments");
 
     //---------- set weights and abscissas
 
@@ -362,4 +355,13 @@ double SootModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<do
 	}
 
 	return Mk;
+}
+void SootModel_QMOM::checkState(const State& state) const {
+    if (state.getNumMoments() < 2)
+        throw runtime_error("QMOM soot model requries 2, 4 or 6 moments");
+    // TODO if the algorithms can still run without failing with an odd number of moments this can be changed to a warning
+    if (state.getNumMoments() % 2 == 1)
+        throw runtime_error("QMOM soot model requires 2, 4 or 6 moments");
+    if (state.getNumMoments() > 6)
+        cerr << "QMOM soot model requires 2, 4 or 6 moments, got " << state.getNumMoments() << endl;
 }
