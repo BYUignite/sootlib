@@ -20,6 +20,8 @@
 
 #include <cmath>
 
+#include "lib/jutil/jutil.h"
+
 using namespace std;
 using namespace soot;
 
@@ -27,9 +29,12 @@ double CoagulationModel_FUCHS::getCoagulationRate(const State& state,
                                                   double m1,
                                                   double m2) const {
 
+    JUtil::checkZero(state.getRhoSoot(), "rhoSoot");
     const double Dp1 = pow(6 * abs(m1) / M_PI / state.getRhoSoot(), 1.0 / 3);
     const double Dp2 = pow(6 * abs(m2) / M_PI / state.getRhoSoot(), 1.0 / 3);
 
+    JUtil::checkZero(m1, "m1");
+    JUtil::checkZero(m2, "m2");
     const double c1 = sqrt(8 * kb * state.getT() / M_PI / m1);
     const double c2 = sqrt(8 * kb * state.getT() / M_PI / m2);
 
@@ -39,6 +44,7 @@ double CoagulationModel_FUCHS::getCoagulationRate(const State& state,
     const double Cc1 = 1 + Kn1 * (1.257 + 0.4 * exp(-1.1 / Kn1));       // Seinfeld p. 372 eq. 9.34. This is for air at 298 K, 1 atm
     const double Cc2 = 1 + Kn2 * (1.257 + 0.4 * exp(-1.1 / Kn2));       // for D<<mfp_g, Cc = 1 + 1.657*Kn; Seinfeld p. 380: 10% error at Kn=1, 0% at Kn=0.01, 100
 
+    JUtil::checkZero(state.getMuGas(), "muGas");
     const double D1 = kb * state.getT() * Cc1 / (3 * M_PI * state.getMuGas() * Dp1);
     const double D2 = kb * state.getT() * Cc2 / (3 * M_PI * state.getMuGas() * Dp2);
 
@@ -49,5 +55,4 @@ double CoagulationModel_FUCHS::getCoagulationRate(const State& state,
     const double g2 = sqrt(2) / 3 / Dp2 / l1 * (pow(Dp2 + l2, 3) - pow(Dp2 * Dp2 + l2 * l2, 3.0 / 2)) - sqrt(2) * Dp2;
 
     return 2 * M_PI * (D1 + D2) * (Dp1 + Dp2) / ((Dp1 + Dp2) / (Dp1 + Dp2 + 2 * sqrt(g1 * g1 + g2 * g2)) + 8 / eps_c * (D1 + D2) / sqrt(c1 * c1 + c2 * c2) / (Dp1 + Dp2));
-
 }

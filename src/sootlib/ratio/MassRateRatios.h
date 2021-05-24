@@ -1,7 +1,7 @@
 #ifndef MASSRATERATIOS_H_
 #define MASSRATERATIOS_H_
 
-#include "MassRateRatio.h"
+#include "sootlib/ratio/MassRateRatio.h"
 
 namespace soot {
 class MassRateRatios {

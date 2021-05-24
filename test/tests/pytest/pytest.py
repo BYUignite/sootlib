@@ -6,13 +6,18 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 
-ini_path = 'test/testtools/pytest/test.ini'
+ini_path = 'test/tests/pytest/test.ini'
 
 
 # leave this function alone
 def get_data():
     config = configparser.ConfigParser()
-    config.read(ini_path)
+    try:
+        config.read(ini_path)
+    except FileNotFoundError:
+        print(f'Could not find ini file at {ini_path}')
+        print('Exiting...')
+        exit(1)
     general = config['General']
     sectional = config['Sectional State']
     moment = config['Moment State']
@@ -107,6 +112,9 @@ def get_data():
     arguments.append(state['CMinIni'])
     arguments.append(state['CMinFin'])
 
+    if any([arg == '' for arg in arguments]):
+        print('There is an empty argument - this will probably be a problem')
+
     print('[Starting test subprocess]')
     try:
         shutil.rmtree(general['Output'])
@@ -115,27 +123,31 @@ def get_data():
     except PermissionError:
         print(f'Unabled to clear output directory: {general["Output"]}')
         print('Exiting...')
-        exit()
+        exit(1)
     os.mkdir(general['Output'])
     complete = subprocess.run(arguments)
     print(f'[Exited with code {complete.returncode}]')
     print()
 
-    return pd.read_csv(general['Output'] + '/data.csv'), general['Output']
+    try:
+        return pd.read_csv(general['Output'] + '/data.csv'), general['Output']
+    except FileNotFoundError:
+        print(f'Could not find {general["Output"] +"/data.csv"}')
+        print('Exiting...')
+        exit(1)
 
 
 # edit this function to use the data (in the form of a pandas dataframe) how you want
 # Column headers:
-# section_i, moment_i, T, P, RhoGas, MWGas, MuGas, C_C2H2, C_O2, C_H, C_H2, C_OH, C_H2O, C_CO, C_C, PAH_frac_i, CMin,
-# soot_source_i, PAH_source_i, C2H2_source, O2_source, H_source, H2_source, OH_source, H2O_source, CO_source, C_source
+# section_i..., moment_i..., T, P, RhoGas, MWGas, MuGas, C_C2H2, C_O2, C_H, C_H2, C_OH, C_H2O, C_CO, C_C, PAH_frac_i..., CMin,
+# soot_source_i..., PAH_source_i..., C2H2_source, O2_source, H_source, H2_source, OH_source, H2O_source, CO_source, C_source
 def use_data(df, output_dir):
+    print(f'From {output_dir}')
     print(df)
 
     plt.title('Section 0 over time')
     plt.plot(range(len(df['section_0'])), df['section_0'])
     plt.savefig(output_dir + '/fig.png')
-
-    print(df['section_0'])
 
 
 if __name__ == '__main__':

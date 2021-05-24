@@ -18,6 +18,8 @@
 
 #include <cmath>
 
+#include "lib/jutil/jutil.h"
+
 using namespace std;
 using namespace soot;
 
@@ -25,6 +27,7 @@ double CoagulationModel_LL::getCoagulationRate(const State& state,
                                                double m1,
                                                double m2) const {
     const double Ca = 9;
+    JUtil::checkZero(state.getRhoSoot(), "rhoSoot");
     const double Dp1 = pow(6 * abs(m1) / M_PI / state.getRhoSoot(), 1.0 / 3);
     return 2 * Ca * sqrt(Dp1 * 6 * kb * state.getT() / state.getRhoSoot());
 }

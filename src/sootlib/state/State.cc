@@ -15,11 +15,14 @@ void State::setCMin(double CMin) {
     cMin = CMin;
 }
 void State::calculateMDimer(MassRateRatios* ratio) {
+    // I decided to remove the parts here where cMin gets updated because it doesn't really make sense
+    // FIXME this function is broken anyway - it's calculating mDimer as inf
+
     const double preFac = sqrt(4 * M_PI * kb * T) * pow(6 / (M_PI * rhoSoot), 2.0 / 3);
 
     wdotD = 0;
     mDimer = 0;
-    cMin = 0;
+//    cMin = 0;
 
     double wDotI;
     double MPAHn;
@@ -31,7 +34,7 @@ void State::calculateMDimer(MassRateRatios* ratio) {
         wDotI = abs(getPAHGamma(n) * preFac * pow(MPAHn, exp) * N_n * N_n);
         wdotD += wDotI;
         mDimer += wDotI * MPAHn;
-        cMin += wDotI * MPAHn;
+//        cMin += wDotI * MPAHn;
 
         if (ratio != nullptr)
             ratio->nucCond().PAHSpeciesRatio(n) = wDotI * MPAHn;
@@ -43,7 +46,7 @@ void State::calculateMDimer(MassRateRatios* ratio) {
     }
 
     mDimer += 2 / wdotD;
-    cMin *= 4 / wdotD;
+//    cMin *= 4 / wdotD;
 
     if (ratio != nullptr) {
         for (const auto& [n, frac] : PAHFractions)

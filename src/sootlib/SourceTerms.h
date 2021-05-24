@@ -1,6 +1,7 @@
 #ifndef SOURCETERMS_H
 #define SOURCETERMS_H
 
+#include <iostream>
 #include <ostream>
 #include <map>
 #include <utility>
@@ -36,8 +37,10 @@ public:
     }
 
     [[nodiscard]] double getGasSourceTerm(GasSpecies species, double def = 0) {
-        if (gasSourceTerms.count(species) == 0)
+        if (gasSourceTerms.count(species) == 0) {
+//            std::cout << "Returning a default value of " << def << " from Source Terms" << std::endl;
             return def;
+        }
         return gasSourceTerms.at(species);
     }
     void setGasSourceTerm(GasSpecies species, double value) {

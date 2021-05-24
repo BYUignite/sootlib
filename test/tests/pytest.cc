@@ -44,20 +44,28 @@ int main(int argc, char** argv) {
 
     // sectional state
     const int numSections = 10;
+    int numSectionsFound = 0;
     double initialSections[numSections];
     double finalSections[numSections];
     for (int i = 0; i < numSections; i++) {
         initialSections[i] = argvDouble(counter, argv);
         finalSections[i] = argvDouble(counter, argv);
+        if (initialSections[i] != 0 || finalSections[i] != 0) {
+            numSectionsFound++;
+        }
     }
     
     // moment state
     const int numMoments = 10;
+    int numMomentsFound = 0;
     double initialMoments[numMoments];
     double finalMoments[numMoments];
     for (int i = 0; i < numMoments; i++) {
         initialMoments[i] = argvDouble(counter, argv);
         finalMoments[i] = argvDouble(counter, argv);
+        if (initialMoments[i] != 0 || finalMoments[i] != 0) {
+            numMomentsFound++;
+        }
     }
     
     // gas state
@@ -219,13 +227,13 @@ int main(int argc, char** argv) {
     for (int i = 0; i < steps; i++) {
         cout << "\rRunning step " << i + 1 << "/" << steps << "         ";
         // reset state
-        state.resetSections(numSections);
-        for (int j = 0; j < numSections; j++) {
+        state.resetSections(numSectionsFound);
+        for (int j = 0; j < numSectionsFound; j++) {
             state.setSection(j, interp(initialSections[j], finalSections[j], steps, i));
         }
 
-        state.resetMoments(numMoments);
-        for (int j = 0; j < numMoments; j++) {
+        state.resetMoments(numMomentsFound);
+        for (int j = 0; j < numMomentsFound; j++) {
             state.setMoment(j, interp(initialMoments[j], initialMoments[j], steps, i));
         }
 
@@ -251,11 +259,17 @@ int main(int argc, char** argv) {
         state.setCMin(interp(CMinIni, CMinFin, steps, i));
 
         // print state to file
-        for (int j = 0; j < numSections; j++) {
+        for (int j = 0; j < numSectionsFound; j++) {
             out << state.getSection(j) << ", ";
         }
-        for (int j = 0; j < numMoments; j++) {
+        for (int j = 0; j < numSections - numSectionsFound; j++) {
+            out << 0 << ", ";
+        }
+        for (int j = 0; j < numMomentsFound; j++) {
             out << state.getMoment(j) << ", ";
+        }
+        for (int j = 0; j < numMoments - numMomentsFound; j++) {
+            out << 0 << ", ";
         }
         out << state.getT() << ", " << state.getP() << ", " << state.getRhoGas() << ", " << state.getMWGas() << ", " << state.getMuGas() << ", ";
         out << state.getGasSpeciesC(GasSpecies::C2H2) << ", ";
@@ -275,8 +289,11 @@ int main(int argc, char** argv) {
         sourceTerms = sootModel->getSourceTerms(state);
 
         // print new source terms to file
-        for (int j = 0; j < sourceTerms.getNumSootSourceTerms(); j++) {
+        for (int j = 0; j < sourceTerms.getNumSootSourceTerms() && j < numSootSourceTerms; j++) {
             out << sourceTerms.getSootSourceTerm(j) << ", ";
+        }
+        for (int j = 0; j < numSootSourceTerms - sourceTerms.getNumSootSourceTerms(); j++) {
+            out << 0 << ", ";
         }
         for (int j = 0; j < numPAHFractions; j++) {
             out << sourceTerms.getPAHSourceTerm((j + 1) * 6) << ", ";
