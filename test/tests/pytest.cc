@@ -1,4 +1,4 @@
-#include <ctime>
+#include <chrono>
 
 #include "TestTools.h"
 
@@ -220,10 +220,12 @@ int main(int argc, char** argv) {
     for (int i = 0; i < numPAHFractions; i++) {
         out << "PAH_source_" << (i + 1) * 6 << ", ";
     }
-    out << "C2H2_source, O2_source, H_source, H2_source, OH_source, H2O_source, CO_source, C_source" << endl;
+    out << "C2H2_source, O2_source, H_source, H2_source, OH_source, H2O_source, CO_source, C_source, time" << endl;
 
     // do calculations
-    time_t startTime = time(nullptr);
+    auto jobStart = chrono::steady_clock::now();
+    chrono::time_point<chrono::steady_clock> startTime;
+    chrono::time_point<chrono::steady_clock> endTime;
     for (int i = 0; i < steps; i++) {
         cout << "\rRunning step " << i + 1 << "/" << steps << "         ";
         // reset state
@@ -286,7 +288,9 @@ int main(int argc, char** argv) {
         out << state.getCMin() << ", ";
 
         // get new source terms
+        startTime = chrono::steady_clock::now();
         sourceTerms = sootModel->getSourceTerms(state);
+        endTime = chrono::steady_clock::now();
 
         // print new source terms to file
         for (int j = 0; j < sourceTerms.getNumSootSourceTerms() && j < numSootSourceTerms; j++) {
@@ -305,12 +309,13 @@ int main(int argc, char** argv) {
         out << sourceTerms.getGasSourceTerm(GasSpecies::OH) << ", ";
         out << sourceTerms.getGasSourceTerm(GasSpecies::H2O) << ", ";
         out << sourceTerms.getGasSourceTerm(GasSpecies::CO) << ", ";
-        out << sourceTerms.getGasSourceTerm(GasSpecies::C) << endl;
+        out << sourceTerms.getGasSourceTerm(GasSpecies::C) << ", ";
+        out << (float) chrono::duration_cast<chrono::nanoseconds>(endTime - startTime).count() / 1e9 << endl;
     }
 
     // print time elapsed
-    const double elapsed = difftime(time(nullptr), startTime);
-    cout << endl << "Finished in " << elapsed << "s (" << elapsed / steps << "s/step)" << endl;
+    const size_t elapsed = chrono::duration_cast<chrono::seconds>(jobStart - chrono::steady_clock::now()).count();
+    cout << endl << "Finished in " << elapsed << "s" << endl;
 
     // close out file
     out.close();

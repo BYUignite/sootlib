@@ -2,7 +2,8 @@
 
 set(TEST_FILES
         test1
-        pytest)
+        pytest
+        momic_debug)
 
 foreach (TEST_FILE ${TEST_FILES})
     add_executable(${TEST_FILE} ${TEST_FILE}.cc)
