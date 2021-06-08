@@ -231,13 +231,14 @@ vector<double> SootModel_SECT::getDivision(double mass, double num, const vector
     while (!found) {
         loc++;
         if (loc >= absc.size()) {
-            loc = absc.size() - 1;
-            found = true;
+            loc = absc.size() - 1;  // FIXME this is the problematic statement, it doesn't account for the scenario where the size of absc is 1 or less
+            found = true;  // TODO I think it would probably be more appropriate to have a break here
         }
         if (absc.at(loc) > mass)
             found = true;
     }
 
+    // FIXME it's possible for loc to be 0 here, which is a problem
     const double right = (mass - absc.at(loc - 1)) / (absc.at(loc) - absc.at(loc - 1)) * num;
     const double left = (absc.at(loc) - mass) / (absc.at(loc) - absc.at(loc - 1)) * num;
     toReturn.at(loc - 1) += left;
