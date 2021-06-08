@@ -18,6 +18,9 @@ public:
 
 protected:
     std::vector<double> moments;
+
+private:
+    void checkSize(size_t i) const;
 };
 }
 

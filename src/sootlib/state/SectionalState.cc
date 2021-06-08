@@ -28,3 +28,7 @@ void SectionalState::printInfo(ostream& out) const {
         out << i << ": " << sections.at(i) << endl;
     out << endl;
 }
+void SectionalState::checkSize(size_t i) const {
+    if (i > sections.size())
+        throw range_error("Section " + to_string(i) + " out of bounds for state with " + to_string(sections.size()) + " sections");
+}

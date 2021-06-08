@@ -9,16 +9,21 @@ using namespace soot;
 
 int main(int argc, char** argv) {
     auto generator = SootModelGenerator();
-    generator.setModel(SootModelType::MOMIC);
-    generator.setNucleationMechanism(NucleationMechanism::LL);
-    generator.setGrowthMechanism(GrowthMechanism::LL);
-    generator.setOxidationMechanism(OxidationMechanism::LL);
-    generator.setCoagulationMechanism(CoagulationMechanism::LL);
+    generator.setModel(SootModelType::SECT);
+
+    generator.setNucleationMechanism(NucleationMechanism::PAH);
+    generator.setCoagulationMechanism(CoagulationMechanism::FRENK);
+    generator.setGrowthMechanism(GrowthMechanism::HACA);
+    generator.setOxidationMechanism(OxidationMechanism::HACA);
+
     auto model = generator.getModelUnique();
 
     auto state = State();
-    state.resetMoments(1);
-    state.setMoment(0, 1.0e17);
+//    state.resetMoments(2);
+//    state.setMoment(0, 1.0e17);
+//    state.setMoment(1, 1.0e-6);
+    state.resetSections(1);
+    state.setSection(0, 1.0e10);
     state.setT(1500);
     state.setP(101325);
     state.setRhoGas(0.08);

@@ -154,7 +154,7 @@ size_t SootModel_MOMIC::downselectIfNeeded(vector<double>& M)
 	if (M.at(0) <= 0)
 		return 0;
 
-	if (M.at(1) <= 0) {
+	if (M.size() > 1 && M.at(1) <= 0) {
 		const double M0 = 1;
 		const double sigL = 3;
 		const double mavg = 1.0E-21;
