@@ -133,7 +133,7 @@ SourceTerms SootModel_MOMIC::getSourceTermsImpl(State& state, std::ostream* out)
     }
 
     //---------- get gas source terms
-
+    // FIXME in the old code these were hardcoded to use index 1, but it looks like this depends on the number of moments which supposedly might be only 1
     map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, Mnuc.at(1), Mgrw.at(1), Moxi.at(1), Mcnd.at(1));
     map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, Mnuc.at(1), 0, Moxi.at(1), Mcnd.at(1));
 
@@ -154,7 +154,7 @@ size_t SootModel_MOMIC::downselectIfNeeded(vector<double>& M)
 	if (M.at(0) <= 0)
 		return 0;
 
-	// FIXME I changed this to do a size check. It looks like more size checks are needed but I don't know what is appropriate
+	// FIXME I changed this to do a size check nut I'm not sure that's what should happen
 	if (M.size() > 1 && M.at(1) <= 0) {
 		const double M0 = 1;
 		const double sigL = 3;
