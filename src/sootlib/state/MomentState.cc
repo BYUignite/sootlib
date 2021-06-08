@@ -31,6 +31,6 @@ void MomentState::printInfo(ostream& out) const {
     out << endl;
 }
 void MomentState::checkSize(size_t i) const {
-    if (i > moments.size())
+    if (i >= moments.size())
         throw range_error("Moment " + to_string(i) + " out of bounds for state with " + to_string(moments.size()) + " moments");
 }
