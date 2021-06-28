@@ -68,7 +68,7 @@ set(STATE_SRC_FILES
         sootlib/state/SootState.cc)
 
 set(SRC_FILES
-        sootlib/soot_model/SootModel.h
+        sootlib/soot_model/PSDModel.h
         sootlib/soot_model/generator/SootModelGenerator.h
         sootlib/soot_model/generator/SootModelGenerator.cc
         sootlib/constants.h

@@ -18,9 +18,9 @@ int main(int argc, char** argv) {
      * smart shared pointer
      */
 
-    SootModel* rawMomentModel = momentModelGenerator.getModel();
-    unique_ptr<SootModel> uniqueMomentModel = momentModelGenerator.getModelUnique();
-    shared_ptr<SootModel> sharedMomentModel = momentModelGenerator.getModelShared();
+    PSDModel* rawMomentModel = momentModelGenerator.getModel();
+    unique_ptr<PSDModel> uniqueMomentModel = momentModelGenerator.getModelUnique();
+    shared_ptr<PSDModel> sharedMomentModel = momentModelGenerator.getModelShared();
 
     /*
      * Any soot model is going to have a coagultion model, growth model, nucleation model, and oxidation model
@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
      * The current default bin based model is SECT
      */
 
-    momentModelGenerator.setModel(SootModelType::QMOM);
+    momentModelGenerator.setPSDModel(PSDMechanism::QMOM);
 
     rawMomentModel = momentModelGenerator.getModel();
 

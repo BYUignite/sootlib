@@ -120,19 +120,19 @@ int main(int argc, char** argv) {
     // make soot model
     auto sootModelGenerator = SootModelGenerator();
     if (PSDModel == "logn") {
-        sootModelGenerator.setModel(SootModelType::LOGN);
+        sootModelGenerator.setPSDModel(PSDMechanism::LOGN);
     }
     else if (PSDModel == "momic") {
-        sootModelGenerator.setModel(SootModelType::MOMIC);
+        sootModelGenerator.setPSDModel(PSDMechanism::MOMIC);
     }
     else if (PSDModel == "mono") {
-        sootModelGenerator.setModel(SootModelType::MONO);
+        sootModelGenerator.setPSDModel(PSDMechanism::MONO);
     }
     else if (PSDModel == "qmom") {
-        sootModelGenerator.setModel(SootModelType::QMOM);
+        sootModelGenerator.setPSDModel(PSDMechanism::QMOM);
     }
     else if (PSDModel == "sect") {
-        sootModelGenerator.setModel(SootModelType::SECT);
+        sootModelGenerator.setPSDModel(PSDMechanism::SECT);
     }
 
     if (coagulationMethod == "frenk") {

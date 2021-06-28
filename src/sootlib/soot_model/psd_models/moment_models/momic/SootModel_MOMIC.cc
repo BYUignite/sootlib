@@ -26,7 +26,7 @@ SootModel_MOMIC::SootModel_MOMIC(unique_ptr<CoagulationModel> coagulationModel,
                                                                                             move(nucleationModel),
                                                                                             move(oxidationModel)) {
 }
-SourceTerms SootModel_MOMIC::getSourceTermsImpl(State& state, std::ostream* out) const {
+SourceTerms SootModel_MOMIC::getSourceTermsImplementation(State& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel MOMIC] ===" << endl;

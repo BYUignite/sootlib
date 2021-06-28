@@ -39,7 +39,7 @@ using namespace soot;
 
 // Here are the default parameters for the soot model
 SootModelGenerator::SootModelGenerator() {
-    modelType = SootModelType::MONO;
+    psdMechanism = PSDMechanism::MONO;
     nucleationMechanism = NucleationMechanism::NONE;
     growthMechanism = GrowthMechanism::NONE;
     oxidationMechanism = OxidationMechanism::NONE;
@@ -57,7 +57,7 @@ void SootModelGenerator::setOxidationMechanism(OxidationMechanism mechanism) {
 void SootModelGenerator::setCoagulationMechanism(CoagulationMechanism mechanism) {
     coagulationMechanism = mechanism;
 }
-unique_ptr<CoagulationModel> SootModelGenerator::getCoagulationModel() const {
+unique_ptr<CoagulationModel> SootModelGenerator::makeCoagulationModel() const {
     switch (coagulationMechanism) {
         case CoagulationMechanism::NONE: return make_unique<CoagulationModel_NONE>();
         case CoagulationMechanism::LL: return make_unique<CoagulationModel_LL>();
@@ -66,7 +66,7 @@ unique_ptr<CoagulationModel> SootModelGenerator::getCoagulationModel() const {
         default: throw domain_error("Bad soot coagulation mechanism");
     }
 }
-unique_ptr<GrowthModel> SootModelGenerator::getGrowthModel() const {
+unique_ptr<GrowthModel> SootModelGenerator::makeGrowthModel() const {
     switch (growthMechanism) {
         case GrowthMechanism::NONE: return make_unique<GrowthModel_NONE>();
         case GrowthMechanism::LL: return make_unique<GrowthModel_LL>();
@@ -75,7 +75,7 @@ unique_ptr<GrowthModel> SootModelGenerator::getGrowthModel() const {
         default: throw domain_error("Bad soot growth mechanism");
     }
 }
-unique_ptr<NucleationModel> SootModelGenerator::getNucleationModel() const {
+unique_ptr<NucleationModel> SootModelGenerator::makeNucleationModel() const {
     switch (nucleationMechanism) {
         case NucleationMechanism::NONE: return make_unique<NucleationModel_NONE>();
         case NucleationMechanism::LL: return make_unique<NucleationModel_LL>();
@@ -84,7 +84,7 @@ unique_ptr<NucleationModel> SootModelGenerator::getNucleationModel() const {
         default: throw domain_error("Bad soot nucleation mechanism");
     }
 }
-unique_ptr<OxidationModel> SootModelGenerator::getOxidationModel() const {
+unique_ptr<OxidationModel> SootModelGenerator::makeOxidationModel() const {
     switch (oxidationMechanism) {
         case OxidationMechanism::NONE: return make_unique<OxidationModel_NONE>();
         case OxidationMechanism::LL: return make_unique<OxidationModel_LL>();
@@ -94,34 +94,34 @@ unique_ptr<OxidationModel> SootModelGenerator::getOxidationModel() const {
         default: throw domain_error("Bad soot oxidation model");
     }
 }
-void SootModelGenerator::setModel(SootModelType modelType) {
-    this->modelType = modelType;
+void SootModelGenerator::setPSDModel(PSDMechanism modelType) {
+    this->psdMechanism = modelType;
 }
-SootModel* SootModelGenerator::getModel() const {
+PSDModel* SootModelGenerator::getModel() const {
     /* create helper psd_models */
-    unique_ptr<CoagulationModel> cm = getCoagulationModel();
-    unique_ptr<GrowthModel> gm = getGrowthModel();
-    unique_ptr<NucleationModel> nm = getNucleationModel();
-    unique_ptr<OxidationModel> om = getOxidationModel();
+    unique_ptr<CoagulationModel> cm = makeCoagulationModel();
+    unique_ptr<GrowthModel> gm = makeGrowthModel();
+    unique_ptr<NucleationModel> nm = makeNucleationModel();
+    unique_ptr<OxidationModel> om = makeOxidationModel();
 
     /* create and return model ptr */
-    switch (modelType) {
-        case SootModelType::MONO:
+    switch (psdMechanism) {
+        case PSDMechanism::MONO:
             return SootModel_MONO::getInstance(move(cm), move(gm), move(nm), move(om));
-        case SootModelType::LOGN:
+        case PSDMechanism::LOGN:
             return SootModel_LOGN::getInstance(move(cm), move(gm), move(nm), move(om));
-        case SootModelType::MOMIC:
+        case PSDMechanism::MOMIC:
             return SootModel_MOMIC::getInstance(move(cm), move(gm), move(nm), move(om));
-        case SootModelType::QMOM:
+        case PSDMechanism::QMOM:
             return SootModel_QMOM::getInstance(move(cm), move(gm), move(nm), move(om));
-        case SootModelType::SECT:
+        case PSDMechanism::SECT:
             return SootModel_SECT::getInstance(move(cm), move(gm), move(nm), move(om));
         default: throw domain_error("Bad soot model type");
     }
 }
-std::unique_ptr<SootModel> SootModelGenerator::getModelUnique() const {
-    return unique_ptr<SootModel>(getModel());
+std::unique_ptr<PSDModel> SootModelGenerator::getModelUnique() const {
+    return unique_ptr<PSDModel>(getModel());
 }
-std::shared_ptr<SootModel> SootModelGenerator::getModelShared() const {
-    return shared_ptr<SootModel>(getModel());
+std::shared_ptr<PSDModel> SootModelGenerator::getModelShared() const {
+    return shared_ptr<PSDModel>(getModel());
 }

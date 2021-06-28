@@ -23,7 +23,7 @@ SootModel_LOGN::SootModel_LOGN(unique_ptr<CoagulationModel> coagulationModel,
 																						  move(nucleationModel),
 																						  move(oxidationModel)) {
 }
-SourceTerms SootModel_LOGN::getSourceTermsImpl(State& state, std::ostream* out) const {
+SourceTerms SootModel_LOGN::getSourceTermsImplementation(State& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel LOGN] ===" << endl;

@@ -21,7 +21,7 @@ SootModel_SECT::SootModel_SECT(unique_ptr<CoagulationModel> coagulationModel,
                                                                                           move(growthModel),
                                                                                           move(nucleationModel),
                                                                                           move(oxidationModel)) {}
-SourceTerms SootModel_SECT::getSourceTermsImpl(State& state, std::ostream* out) const {
+SourceTerms SootModel_SECT::getSourceTermsImplementation(State& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel SECT] ===" << endl;

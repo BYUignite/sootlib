@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
     // ============== variables used for testing ==============
     auto generator = SootModelGenerator();
     auto state = State();
-    unique_ptr<SootModel> sootModel;
+    unique_ptr<PSDModel> psdModel;
     SourceTerms sourceTerms;
 
     // ============== set chemistry models ==============
@@ -57,37 +57,37 @@ int main(int argc, char** argv) {
     *out << "*             BEGIN MONO TEST               *" << endl;
     *out << "*********************************************" << endl << endl;
 
-    generator.setModel(SootModelType::MONO);
-    sootModel = generator.getModelUnique();
+    generator.setPSDModel(PSDMechanism::MONO);
+    psdModel = generator.getModelUnique();
 
-    sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
+    sourceTerms = psdModel->getSourceTermsVerbose(state, *out);
 
     *out << "*********************************************" << endl;
     *out << "*            BEGIN LOGN TEST                *" << endl;
     *out << "*********************************************" << endl << endl;
 
-    generator.setModel(SootModelType::LOGN);
-    sootModel = generator.getModelUnique();
+    generator.setPSDModel(PSDMechanism::LOGN);
+    psdModel = generator.getModelUnique();
 
-    sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
+    sourceTerms = psdModel->getSourceTermsVerbose(state, *out);
 
     *out << "*********************************************" << endl;
     *out << "*            BEGIN MOMIC TEST               *" << endl;
     *out << "*********************************************" << endl << endl;
 
-    generator.setModel(SootModelType::MOMIC);
-    sootModel = generator.getModelUnique();
+    generator.setPSDModel(PSDMechanism::MOMIC);
+    psdModel = generator.getModelUnique();
 
-    sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
+    sourceTerms = psdModel->getSourceTermsVerbose(state, *out);
 
     *out << "*********************************************" << endl;
     *out << "*           BEGIN QMOM TEST                 *" << endl;
     *out << "*********************************************" << endl << endl;
 
-    generator.setModel(SootModelType::QMOM);
-    sootModel = generator.getModelUnique();
+    generator.setPSDModel(PSDMechanism::QMOM);
+    psdModel = generator.getModelUnique();
 
-    sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
+    sourceTerms = psdModel->getSourceTermsVerbose(state, *out);
 
     // ============== begin sectional tests ==============
     state.resetSections(2);
@@ -98,8 +98,8 @@ int main(int argc, char** argv) {
     *out << "*            BEGIN SECT TEST                *" << endl;
     *out << "*********************************************" << endl << endl;
 
-    generator.setModel(SootModelType::SECT);
-    sootModel = generator.getModelUnique();
+    generator.setPSDModel(PSDMechanism::SECT);
+    psdModel = generator.getModelUnique();
 
-    sourceTerms = sootModel->getSourceTermsVerbose(state, *out);
+    sourceTerms = psdModel->getSourceTermsVerbose(state, *out);
 }

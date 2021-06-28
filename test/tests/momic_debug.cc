@@ -9,7 +9,7 @@ using namespace soot;
 
 int main(int argc, char** argv) {
     auto generator = SootModelGenerator();
-    generator.setModel(SootModelType::SECT);
+    generator.setPSDModel(PSDMechanism::SECT);
 
     generator.setNucleationMechanism(NucleationMechanism::NONE);
     generator.setCoagulationMechanism(CoagulationMechanism::NONE);

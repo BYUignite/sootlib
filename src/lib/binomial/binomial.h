@@ -1,8 +1,21 @@
+/**
+ * Josh Bedwell - June 2021
+ *
+ * This file holds a binomial coefficient function
+ */
+
 #ifndef BINOMIAL_H_
 #define BINOMIAL_H_
 
 #include <exception>
 
+/**
+ * This function calculates a binomial coefficient efficiently by enumerating several factorials
+ *
+ * @param r
+ * @param k
+ * @return binomal coefficient of r and k
+ */
 double binomial_coefficient(unsigned r, unsigned k) {
     constexpr double factorials[] = {
         1.0,

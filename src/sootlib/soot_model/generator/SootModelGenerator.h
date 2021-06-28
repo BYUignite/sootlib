@@ -4,7 +4,7 @@
 #include <memory>
 
 /* Soot model */
-#include "sootlib/soot_model/SootModel.h"
+#include "sootlib/soot_model/PSDModel.h"
 
 /* coagulation model */
 #include "sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel.h"
@@ -23,27 +23,27 @@ class SootModelGenerator {
 public:
     SootModelGenerator();
 
-    void setModel(SootModelType modelType);
+    void setPSDModel(PSDMechanism modelType);
     void setNucleationMechanism(NucleationMechanism mechanism);
     void setGrowthMechanism(GrowthMechanism mechanism);
     void setOxidationMechanism(OxidationMechanism mechanism);
     void setCoagulationMechanism(CoagulationMechanism mechanism);
 
-    [[nodiscard]] SootModel* getModel() const;
-    [[nodiscard]] std::unique_ptr<SootModel> getModelUnique() const;
-    [[nodiscard]] std::shared_ptr<SootModel> getModelShared() const;
+    [[nodiscard]] PSDModel* getModel() const;
+    [[nodiscard]] std::unique_ptr<PSDModel> getModelUnique() const;
+    [[nodiscard]] std::shared_ptr<PSDModel> getModelShared() const;
 
 private:
-    SootModelType modelType;
+    PSDMechanism psdMechanism;
     NucleationMechanism nucleationMechanism;
     GrowthMechanism growthMechanism;
     OxidationMechanism oxidationMechanism;
     CoagulationMechanism coagulationMechanism;
 
-    [[nodiscard]] std::unique_ptr<CoagulationModel> getCoagulationModel() const;
-    [[nodiscard]] std::unique_ptr<GrowthModel> getGrowthModel() const;
-    [[nodiscard]] std::unique_ptr<NucleationModel> getNucleationModel() const;
-    [[nodiscard]] std::unique_ptr<OxidationModel> getOxidationModel() const;
+    [[nodiscard]] std::unique_ptr<CoagulationModel> makeCoagulationModel() const;
+    [[nodiscard]] std::unique_ptr<GrowthModel> makeGrowthModel() const;
+    [[nodiscard]] std::unique_ptr<NucleationModel> makeNucleationModel() const;
+    [[nodiscard]] std::unique_ptr<OxidationModel> makeOxidationModel() const;
 };
 }
 
