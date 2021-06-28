@@ -17,7 +17,6 @@ public:
         return sourceTerms;
     }
     [[nodiscard]] SourceTerms getSourceTerms(State& state) const {
-        checkState(state);
         return getSourceTermsImplementation(state, nullptr);
     }
 

@@ -1,7 +1,7 @@
 #include "SootModelGenerator.h"
 
 /* Moment psd_models */
-#include "sootlib/soot_model/psd_models/moment_models/logn/SootModel_LOGN.h"
+#include "sootlib/soot_model/psd_models/moment_models/logn/PSDModel_LOGN.h"
 #include "sootlib/soot_model/psd_models/moment_models/momic/SootModel_MOMIC.h"
 #include "sootlib/soot_model/psd_models/moment_models/mono/SootModel_MONO.h"
 #include "sootlib/soot_model/psd_models/moment_models/qmom/SootModel_QMOM.h"
@@ -57,40 +57,40 @@ void SootModelGenerator::setOxidationMechanism(OxidationMechanism mechanism) {
 void SootModelGenerator::setCoagulationMechanism(CoagulationMechanism mechanism) {
     coagulationMechanism = mechanism;
 }
-unique_ptr<CoagulationModel> SootModelGenerator::makeCoagulationModel() const {
+CoagulationModel* SootModelGenerator::makeCoagulationModel() const {
     switch (coagulationMechanism) {
-        case CoagulationMechanism::NONE: return make_unique<CoagulationModel_NONE>();
-        case CoagulationMechanism::LL: return make_unique<CoagulationModel_LL>();
-        case CoagulationMechanism::FUCHS: return make_unique<CoagulationModel_FUCHS>();
-        case CoagulationMechanism::FRENK: return make_unique<CoagulationModel_FRENK>();
+        case CoagulationMechanism::NONE: return new CoagulationModel_NONE();
+        case CoagulationMechanism::LL: return new CoagulationModel_LL();
+        case CoagulationMechanism::FUCHS: return new CoagulationModel_FUCHS();
+        case CoagulationMechanism::FRENK: return new CoagulationModel_FRENK();
         default: throw domain_error("Bad soot coagulation mechanism");
     }
 }
-unique_ptr<GrowthModel> SootModelGenerator::makeGrowthModel() const {
+GrowthModel* SootModelGenerator::makeGrowthModel() const {
     switch (growthMechanism) {
-        case GrowthMechanism::NONE: return make_unique<GrowthModel_NONE>();
-        case GrowthMechanism::LL: return make_unique<GrowthModel_LL>();
-        case GrowthMechanism::LIN: return make_unique<GrowthModel_LIN>();
-        case GrowthMechanism::HACA: return make_unique<GrowthModel_HACA>();
+        case GrowthMechanism::NONE: return new GrowthModel_NONE();
+        case GrowthMechanism::LL: return new GrowthModel_LL();
+        case GrowthMechanism::LIN: return new GrowthModel_LIN();
+        case GrowthMechanism::HACA: return new GrowthModel_HACA();
         default: throw domain_error("Bad soot growth mechanism");
     }
 }
-unique_ptr<NucleationModel> SootModelGenerator::makeNucleationModel() const {
+NucleationModel* SootModelGenerator::makeNucleationModel() const {
     switch (nucleationMechanism) {
-        case NucleationMechanism::NONE: return make_unique<NucleationModel_NONE>();
-        case NucleationMechanism::LL: return make_unique<NucleationModel_LL>();
-        case NucleationMechanism::LIN: return make_unique<NucleationModel_LIN>();
-        case NucleationMechanism::PAH: return make_unique<NucleationModel_PAH>();
+        case NucleationMechanism::NONE: return new NucleationModel_NONE();
+        case NucleationMechanism::LL: return new NucleationModel_LL();
+        case NucleationMechanism::LIN: return new NucleationModel_LIN();
+        case NucleationMechanism::PAH: return new NucleationModel_PAH();
         default: throw domain_error("Bad soot nucleation mechanism");
     }
 }
-unique_ptr<OxidationModel> SootModelGenerator::makeOxidationModel() const {
+OxidationModel* SootModelGenerator::makeOxidationModel() const {
     switch (oxidationMechanism) {
-        case OxidationMechanism::NONE: return make_unique<OxidationModel_NONE>();
-        case OxidationMechanism::LL: return make_unique<OxidationModel_LL>();
-        case OxidationMechanism::LEE_NEOH: return make_unique<OxidationModel_LEE_NEOH>();
-        case OxidationMechanism::NSC_NEOH: return make_unique<OxidationModel_NSC_NEOH>();
-        case OxidationMechanism::HACA: return make_unique<OxidationModel_HACA>();
+        case OxidationMechanism::NONE: return new OxidationModel_NONE();
+        case OxidationMechanism::LL: return new OxidationModel_LL();
+        case OxidationMechanism::LEE_NEOH: return new OxidationModel_LEE_NEOH();
+        case OxidationMechanism::NSC_NEOH: return new OxidationModel_NSC_NEOH();
+        case OxidationMechanism::HACA: return new OxidationModel_HACA();
         default: throw domain_error("Bad soot oxidation model");
     }
 }
@@ -99,23 +99,24 @@ void SootModelGenerator::setPSDModel(PSDMechanism modelType) {
 }
 PSDModel* SootModelGenerator::getModel() const {
     /* create helper psd_models */
-    unique_ptr<CoagulationModel> cm = makeCoagulationModel();
-    unique_ptr<GrowthModel> gm = makeGrowthModel();
-    unique_ptr<NucleationModel> nm = makeNucleationModel();
-    unique_ptr<OxidationModel> om = makeOxidationModel();
+    auto cm = makeCoagulationModel();
+    auto gm = makeGrowthModel();
+    auto nm = makeNucleationModel();
+    auto om = makeOxidationModel();
+    auto sootChemistry = SootChemistry(cm, gm, nm, om);
 
     /* create and return model ptr */
     switch (psdMechanism) {
         case PSDMechanism::MONO:
-            return SootModel_MONO::getInstance(move(cm), move(gm), move(nm), move(om));
+            return new SootModel_MONO(sootChemistry);
         case PSDMechanism::LOGN:
-            return SootModel_LOGN::getInstance(move(cm), move(gm), move(nm), move(om));
+            return new PSDModel_LOGN(sootChemistry);
         case PSDMechanism::MOMIC:
-            return SootModel_MOMIC::getInstance(move(cm), move(gm), move(nm), move(om));
+            return new SootModel_MOMIC(sootChemistry);
         case PSDMechanism::QMOM:
-            return SootModel_QMOM::getInstance(move(cm), move(gm), move(nm), move(om));
+            return new SootModel_QMOM(sootChemistry);
         case PSDMechanism::SECT:
-            return SootModel_SECT::getInstance(move(cm), move(gm), move(nm), move(om));
+            return new SootModel_SECT(sootChemistry);
         default: throw domain_error("Bad soot model type");
     }
 }

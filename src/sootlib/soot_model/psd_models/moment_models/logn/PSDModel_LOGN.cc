@@ -1,4 +1,4 @@
-#include "SootModel_LOGN.h"
+#include "PSDModel_LOGN.h"
 
 #include <cmath>
 #include <iostream>
@@ -6,24 +6,13 @@
 using namespace std;
 using namespace soot;
 
-SootModel_LOGN* SootModel_LOGN::getInstance(unique_ptr<CoagulationModel> coagulationModel,
-                                            unique_ptr<GrowthModel> growthModel,
-                                            unique_ptr<NucleationModel> nucleationModel,
-                                            unique_ptr<OxidationModel> oxidationModel) {
-    return new SootModel_LOGN(move(coagulationModel),
-                              move(growthModel),
-                              move(nucleationModel),
-                              move(oxidationModel));
+//PSDModel_LOGN* PSDModel_LOGN::getInstance(SootChemistry sootChemistry) {
+//    return new PSDModel_LOGN(sootChemistry);
+//}
+PSDModel_LOGN::PSDModel_LOGN(const SootChemistry& sootChemistry) {
+    this->sootChemistry = sootChemistry;
 }
-SootModel_LOGN::SootModel_LOGN(unique_ptr<CoagulationModel> coagulationModel,
-                               unique_ptr<GrowthModel> growthModel,
-                               unique_ptr<NucleationModel> nucleationModel,
-                               unique_ptr<OxidationModel> oxidationModel) : SootChemistry(move(coagulationModel),
-																						  move(growthModel),
-																						  move(nucleationModel),
-																						  move(oxidationModel)) {
-}
-SourceTerms SootModel_LOGN::getSourceTermsImplementation(State& state, std::ostream* out) const {
+SourceTerms PSDModel_LOGN::getSourceTermsImplementation(State& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel LOGN] ===" << endl;
@@ -74,13 +63,13 @@ SourceTerms SootModel_LOGN::getSourceTermsImplementation(State& state, std::ostr
     const double temp11 = Mk(1.0 / 6, M0, M1, M2);
 
     double Jnuc;
-    if (nucleationModel->getMechanism() != NucleationMechanism::PAH) {
+    if (sootChemistry.nucleationModel->getMechanism() != NucleationMechanism::PAH) {
         if (out) {
             *out << "Using simpler Jnuc calcuation due to non PAH Nucleation" << endl;
             *out << endl;
         }
 
-        Jnuc = nucleationModel->getNucleationRate(state, {}, {}, massRateRatios);
+        Jnuc = sootChemistry.nucleationModel->getNucleationRate(state, {}, {}, massRateRatios);
     }
     else {
         if (out) {
@@ -101,7 +90,7 @@ SourceTerms SootModel_LOGN::getSourceTermsImplementation(State& state, std::ostr
         	+ temp0 * pow(state.getMDimer(), -2.0 / 3)
         	+ temp5 * pow(state.getMDimer(), 1.0 / 3)));
 
-        const double beta_DD = coagulationModel->getCoagulationRate(state, state.getMDimer(), state.getMDimer());
+        const double beta_DD = sootChemistry.coagulationModel->getCoagulationRate(state, state.getMDimer(), state.getMDimer());
         // TODO I'm concerned this might not be the right DIMER
         Jnuc = 0.5 * beta_DD * state.getDimer() * state.getDimer();
 
@@ -145,7 +134,7 @@ SourceTerms SootModel_LOGN::getSourceTermsImplementation(State& state, std::ostr
 
     const double N0 = Jnuc, N1 = Jnuc * mmin, N2 = Jnuc * mmin * mmin;
 
-    const double Kgrw = growthModel->getGrowthRate(state, massRateRatios);
+    const double Kgrw = sootChemistry.growthModel->getGrowthRate(state, massRateRatios);
 
     if (out) {
         *out << "N0: " << N0 << endl;
@@ -159,7 +148,7 @@ SourceTerms SootModel_LOGN::getSourceTermsImplementation(State& state, std::ostr
 
     const double G0 = 0, G1 = term * temp1, G2 = term * temp7;
 
-    const double Koxi = oxidationModel->getOxidationRate(state, massRateRatios);
+    const double Koxi = sootChemistry.oxidationModel->getOxidationRate(state, massRateRatios);
 
     if (out) {
         *out << "G0: " << G0 << endl;
@@ -216,8 +205,8 @@ SourceTerms SootModel_LOGN::getSourceTermsImplementation(State& state, std::ostr
 
     //---------- get gas source terms
 
-    map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, N1, G1, X1, Cnd1);
-    map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, N1, 0, X1, Cnd1);
+    map<GasSpecies, double> gasSourceTerms = sootChemistry.getGasSourceTerms(state, massRateRatios, N1, G1, X1, Cnd1);
+    map<size_t, double> PAHSourceTerms = sootChemistry.getPAHSourceTerms(state, massRateRatios, N1, 0, X1, Cnd1);
 
     if (out) {
         *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;
@@ -231,7 +220,7 @@ SourceTerms SootModel_LOGN::getSourceTermsImplementation(State& state, std::ostr
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
-double SootModel_LOGN::Mk(double k, double M0, double M1, double M2) {
+double PSDModel_LOGN::Mk(double k, double M0, double M1, double M2) {
     const double M0_exp = 1 + 0.5 * k * (k - 3);
     const double M1_exp = k * (2 - k);
     double M2_exp = 0.5 * k * (k - 1);
@@ -246,7 +235,7 @@ double SootModel_LOGN::Mk(double k, double M0, double M1, double M2) {
  *      Returns continuum coagulation coefficient Kc prime
  *      Call set_gas_state_vars first.
  */
-double SootModel_LOGN::getKfm(const State& state)
+double PSDModel_LOGN::getKfm(const State& state)
 {
 	return eps_c * sqrt(M_PI * kb * state.getT() / 2) * pow(6 / M_PI / state.getRhoSoot(), 2 / 3.0);
 }
@@ -255,7 +244,7 @@ double SootModel_LOGN::getKfm(const State& state)
  *      Returns continuum coagulation coefficient Kc
  *      Call set_gas_state_vars first.
  */
-double SootModel_LOGN::getKc(const State& state)
+double PSDModel_LOGN::getKc(const State& state)
 {
 	return 2 * kb * state.getT() / (3 / state.getMuGas());
 }
@@ -264,11 +253,11 @@ double SootModel_LOGN::getKc(const State& state)
  *      Returns continuum coagulation coefficient Kc prime
  *      Call set_gas_state_vars first.
  */
-double SootModel_LOGN::getKcp(const State& state)
+double PSDModel_LOGN::getKcp(const State& state)
 {
 	return 2 * 1.657 * state.getGasMeanFreePath() * pow(M_PI / 6 * state.getRhoSoot(), 1.0 / 3);
 }
-void SootModel_LOGN::checkState(const State& state) const {
+void PSDModel_LOGN::checkState(const State& state) const {
     if (state.getNumMoments() < 3)
         throw runtime_error("LOGN soot model requires 3 soot moments");
     if (state.getNumMoments() > 3)

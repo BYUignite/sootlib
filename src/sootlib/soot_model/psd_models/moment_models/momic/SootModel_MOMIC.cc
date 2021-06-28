@@ -9,22 +9,8 @@
 using namespace std;
 using namespace soot;
 
-SootModel_MOMIC* SootModel_MOMIC::getInstance(unique_ptr<CoagulationModel> coagulationModel,
-                                              unique_ptr<GrowthModel> growthModel,
-                                              unique_ptr<NucleationModel> nucleationModel,
-                                              unique_ptr<OxidationModel> oxidationModel) {
-    return new SootModel_MOMIC(move(coagulationModel),
-                               move(growthModel),
-                               move(nucleationModel),
-                               move(oxidationModel));
-}
-SootModel_MOMIC::SootModel_MOMIC(unique_ptr<CoagulationModel> coagulationModel,
-                                 unique_ptr<GrowthModel> growthModel,
-                                 unique_ptr<NucleationModel> nucleationModel,
-                                 unique_ptr<OxidationModel> oxidationModel) : SootChemistry(move(coagulationModel),
-                                                                                            move(growthModel),
-                                                                                            move(nucleationModel),
-                                                                                            move(oxidationModel)) {
+SootModel_MOMIC::SootModel_MOMIC(const SootChemistry& sootChemistry) {
+    this->sootChemistry = sootChemistry;
 }
 SourceTerms SootModel_MOMIC::getSourceTermsImplementation(State& state, std::ostream* out) const {
 
@@ -44,9 +30,9 @@ SourceTerms SootModel_MOMIC::getSourceTermsImplementation(State& state, std::ost
 
     // FIXME it looks like these guys are trying to trigger optional parts of the supporting psd_models with negative values
     // this does not work well with what I have set up now :( there needs to be some explicit arguments for that
-    const double Jnuc = nucleationModel->getNucleationRate(state, {}, {}, massRateRatios);
-    const double Kgrw = growthModel->getGrowthRate(state, massRateRatios);
-    const double Koxi = oxidationModel->getOxidationRate(state, massRateRatios);
+    const double Jnuc = sootChemistry.nucleationModel->getNucleationRate(state, {}, {}, massRateRatios);
+    const double Kgrw = sootChemistry.growthModel->getGrowthRate(state, massRateRatios);
+    const double Koxi = sootChemistry.oxidationModel->getOxidationRate(state, massRateRatios);
 
     if (out) {
         *out << "Jnuc: " << Jnuc << endl;
@@ -70,7 +56,7 @@ SourceTerms SootModel_MOMIC::getSourceTermsImplementation(State& state, std::ost
 
     vector<double> Mcnd(state.getNumMoments(), 0);
 
-    if (nucleationModel->getMechanism() == NucleationMechanism::PAH) {
+    if (sootChemistry.nucleationModel->getMechanism() == NucleationMechanism::PAH) {
         for (size_t i = 1; i < N; i++)
             Mcnd.at(i) = MOMICCoagulationRate(state, (int) i) * state.getDimer() * state.getMDimer() * (double) i;
     }
@@ -109,7 +95,7 @@ SourceTerms SootModel_MOMIC::getSourceTermsImplementation(State& state, std::ost
 
     vector<double> Mcoa(state.getNumMoments(), 0);
 
-    if (coagulationModel->getMechanism() != CoagulationMechanism::NONE) {
+    if (sootChemistry.coagulationModel->getMechanism() != CoagulationMechanism::NONE) {
         for (size_t i = 0; i < N; i++)
             Mcoa.at(i) = MOMICCoagulationRate(state, (int) i);
     }
@@ -134,8 +120,8 @@ SourceTerms SootModel_MOMIC::getSourceTermsImplementation(State& state, std::ost
 
     //---------- get gas source terms
     // FIXME in the old code these were hardcoded to use index 1, but it looks like this depends on the number of moments which supposedly might be only 1
-    map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, Mnuc.at(1), Mgrw.at(1), Moxi.at(1), Mcnd.at(1));
-    map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, Mnuc.at(1), 0, Moxi.at(1), Mcnd.at(1));
+    map<GasSpecies, double> gasSourceTerms = SootChemistry::getGasSourceTerms(state, massRateRatios, Mnuc.at(1), Mgrw.at(1), Moxi.at(1), Mcnd.at(1));
+    map<size_t, double> PAHSourceTerms = SootChemistry::getPAHSourceTerms(state, massRateRatios, Mnuc.at(1), 0, Moxi.at(1), Mcnd.at(1));
 
     if (out) {
         *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;

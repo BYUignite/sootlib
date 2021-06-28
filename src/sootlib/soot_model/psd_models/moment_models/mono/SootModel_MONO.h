@@ -5,24 +5,16 @@
 #include "sootlib/soot_model/SootChemistry.h"
 
 namespace soot {
-class SootModel_MONO : public PSDModel, public SootChemistry {
+class SootModel_MONO : public PSDModel {
 public:
-    [[nodiscard]] static SootModel_MONO* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
-                                                     std::unique_ptr<GrowthModel> growthModel,
-                                                     std::unique_ptr<NucleationModel> nucleationModel,
-                                                     std::unique_ptr<OxidationModel> oxidationModel);
-
+    explicit SootModel_MONO(const SootChemistry& sootChemistry);
     ~SootModel_MONO() override = default;
 
 private:
+    SootChemistry sootChemistry;
+
     [[nodiscard]] SourceTerms getSourceTermsImplementation(State& state, std::ostream* out) const override;
-
     void checkState(const State& state) const override;
-
-    SootModel_MONO(std::unique_ptr<CoagulationModel> coagulationModel,
-                   std::unique_ptr<GrowthModel> growthModel,
-                   std::unique_ptr<NucleationModel> nucleationModel,
-                   std::unique_ptr<OxidationModel> oxidationModel);
 
     // helper functions specific to this PSD
 };

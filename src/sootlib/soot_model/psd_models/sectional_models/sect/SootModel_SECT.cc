@@ -5,22 +5,9 @@
 using namespace std;
 using namespace soot;
 
-SootModel_SECT* SootModel_SECT::getInstance(unique_ptr<CoagulationModel> coagulationModel,
-                                            unique_ptr<GrowthModel> growthModel,
-                                            unique_ptr<NucleationModel> nucleationModel,
-                                            unique_ptr<OxidationModel> oxidationModel) {
-    return new SootModel_SECT(move(coagulationModel),
-                              move(growthModel),
-                              move(nucleationModel),
-                              move(oxidationModel));
+SootModel_SECT::SootModel_SECT(const SootChemistry& sootChemistry) {
+    this->sootChemistry = sootChemistry;
 }
-SootModel_SECT::SootModel_SECT(unique_ptr<CoagulationModel> coagulationModel,
-                               unique_ptr<GrowthModel> growthModel,
-                               unique_ptr<NucleationModel> nucleationModel,
-                               unique_ptr<OxidationModel> oxidationModel) : SootChemistry(move(coagulationModel),
-                                                                                          move(growthModel),
-                                                                                          move(nucleationModel),
-                                                                                          move(oxidationModel)) {}
 SourceTerms SootModel_SECT::getSourceTermsImplementation(State& state, std::ostream* out) const {
 
     if (out) {
@@ -51,7 +38,7 @@ SourceTerms SootModel_SECT::getSourceTermsImplementation(State& state, std::ostr
     }
 
     // FIXME this code is likely incorrect
-    const double Jnuc = nucleationModel->getNucleationRate(state, absc, wts, massRateRatios);
+    const double Jnuc = sootChemistry.nucleationModel->getNucleationRate(state, absc, wts, massRateRatios);
 
     if (out) {
         *out << "Jnuc: " << Jnuc << endl;
@@ -60,7 +47,7 @@ SourceTerms SootModel_SECT::getSourceTermsImplementation(State& state, std::ostr
 
     vector<double> Kgrw(state.getNumSections(), 0);
     for (double& num : Kgrw)
-        num = growthModel->getGrowthRate(state, massRateRatios); // FIXME the old code wants to use stuff with wts and absc as inputs
+        num = sootChemistry.growthModel->getGrowthRate(state, massRateRatios); // FIXME the old code wants to use stuff with wts and absc as inputs
         // this is not how the growth model is treated anywhere else and it doesn't really work that way in this setup
 
     if (out) {
@@ -72,7 +59,7 @@ SourceTerms SootModel_SECT::getSourceTermsImplementation(State& state, std::ostr
 
     vector<double> Koxi(state.getNumSections(), 0);
     for (double& num : Koxi)
-        num = oxidationModel->getOxidationRate(state, massRateRatios); // FIXME the old code also wants to do different stuff with these too
+        num = sootChemistry.oxidationModel->getOxidationRate(state, massRateRatios); // FIXME the old code also wants to do different stuff with these too
         // this is not how the oxidation model is treated anywhere else and it doesn't really work that way in this setup
 
     if (out) {
@@ -87,7 +74,7 @@ SourceTerms SootModel_SECT::getSourceTermsImplementation(State& state, std::ostr
     vector<double> divided;
     for (size_t i = 0; i < Coag.size(); i++) {
         for (size_t j = 0; j < Coag.size(); j++) {
-            leaving = 0.5 * coagulationModel->getCoagulationRate(state, absc.at(i), absc.at(j)) * wts.at(i) * wts.at(i);
+            leaving = 0.5 * sootChemistry.coagulationModel->getCoagulationRate(state, absc.at(i), absc.at(j)) * wts.at(i) * wts.at(i);
             Coag.at(i) -= leaving;
             Coag.at(j) -= leaving;
             divided = getDivision((state.getSection(i) + state.getSection(j)), leaving, absc);
@@ -117,9 +104,9 @@ SourceTerms SootModel_SECT::getSourceTermsImplementation(State& state, std::ostr
 
     vector<double> Cnd0(state.getNumSections(), 0);
     double Cnd_tot = 0;
-    if (nucleationModel->getMechanism() == NucleationMechanism::PAH) {
+    if (sootChemistry.nucleationModel->getMechanism() == NucleationMechanism::PAH) {
         for (size_t i = 0; i < Cnd0.size(); i++) {
-            Cnd0.at(i) = state.getDimer() * state.getMDimer() * coagulationModel->getCoagulationRate(state, state.getMDimer(), absc.at(i)) * wts.at(i);
+            Cnd0.at(i) = state.getDimer() * state.getMDimer() * sootChemistry.coagulationModel->getCoagulationRate(state, state.getMDimer(), absc.at(i)) * wts.at(i);
             Cnd_tot += Cnd0.at(i) * absc.at(i);
         }
     }
@@ -208,8 +195,8 @@ SourceTerms SootModel_SECT::getSourceTermsImplementation(State& state, std::ostr
 
     //---------- get gas source terms
 
-    map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, N_tot, G_tot, X_tot, Cnd_tot);
-    map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, N_tot, 0, X_tot, Cnd_tot);
+    map<GasSpecies, double> gasSourceTerms = sootChemistry.getGasSourceTerms(state, massRateRatios, N_tot, G_tot, X_tot, Cnd_tot);
+    map<size_t, double> PAHSourceTerms = sootChemistry.getPAHSourceTerms(state, massRateRatios, N_tot, 0, X_tot, Cnd_tot);
 
     if (out) {
         *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;

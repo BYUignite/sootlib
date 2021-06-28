@@ -10,24 +10,17 @@
 #include "sootlib/soot_model/SootChemistry.h"
 
 namespace soot {
-class SootModel_QMOM : public PSDModel, public SootChemistry {
+class SootModel_QMOM : public PSDModel {
 public:
-    [[nodiscard]] static SootModel_QMOM* getInstance(std::unique_ptr<CoagulationModel> coagulationModel,
-                                                     std::unique_ptr<GrowthModel> growthModel,
-                                                     std::unique_ptr<NucleationModel> nucleationModel,
-                                                     std::unique_ptr<OxidationModel> oxidationModel);
-
+    explicit SootModel_QMOM(const SootChemistry& sootChemistry);
     ~SootModel_QMOM() override = default;
 
 private:
+    SootChemistry sootChemistry;
+
     [[nodiscard]] SourceTerms getSourceTermsImplementation(State& state, std::ostream* out) const override;
 
     void checkState(const State& state) const override;
-
-    SootModel_QMOM(std::unique_ptr<CoagulationModel> coagulationModel,
-                   std::unique_ptr<GrowthModel> growthModel,
-                   std::unique_ptr<NucleationModel> nucleationModel,
-                   std::unique_ptr<OxidationModel> oxidationModel);
 
     // helper functions specific to this PSD
     static void wheeler(const std::vector<double>& m, size_t N, std::vector<double>& w, std::vector<double>& x);

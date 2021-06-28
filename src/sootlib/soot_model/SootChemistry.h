@@ -14,21 +14,32 @@
 
 namespace soot {
 class SootChemistry {
-protected:
-    SootChemistry(std::unique_ptr<CoagulationModel> coagulationModel,
-                  std::unique_ptr<GrowthModel> growthModel,
-                  std::unique_ptr<NucleationModel> nucleationModel,
-                  std::unique_ptr<OxidationModel> oxidationModel)
-        : coagulationModel(std::move(coagulationModel)),
-          growthModel(std::move(growthModel)),
-          nucleationModel(std::move(nucleationModel)),
-          oxidationModel(std::move(oxidationModel)) {}
+public:
+    SootChemistry() :
+    coagulationModel(nullptr),
+    growthModel(nullptr),
+    nucleationModel(nullptr),
+    oxidationModel(nullptr) {}
+    SootChemistry(CoagulationModel* coagulationModel,
+                  GrowthModel* growthModel,
+                  NucleationModel* nucleationModel,
+                  OxidationModel* oxidationModel)
+        : coagulationModel(coagulationModel),
+          growthModel(growthModel),
+          nucleationModel(nucleationModel),
+          oxidationModel(oxidationModel) {}
+    ~SootChemistry() {
+        delete coagulationModel;
+        delete growthModel;
+        delete nucleationModel;
+        delete oxidationModel;
+    }
 
     /* Calculation Models */
-    const std::unique_ptr<CoagulationModel> coagulationModel;
-    const std::unique_ptr<GrowthModel> growthModel;
-    const std::unique_ptr<NucleationModel> nucleationModel;
-    const std::unique_ptr<OxidationModel> oxidationModel;
+    const CoagulationModel* coagulationModel;
+    const GrowthModel* growthModel;
+    const NucleationModel* nucleationModel;
+    const OxidationModel* oxidationModel;
 
     [[nodiscard]] static std::map<GasSpecies, double> getGasSourceTerms(const State& state, MassRateRatios& ratio, double N, double G, double X, double C);
     [[nodiscard]] static std::map<size_t, double> getPAHSourceTerms(const State& state, MassRateRatios& ratio, double N, double G, double X, double C);

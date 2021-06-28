@@ -11,23 +11,8 @@
 using namespace std;
 using namespace soot;
 
-SootModel_MONO::SootModel_MONO(unique_ptr<CoagulationModel> coagulationModel,
-                               unique_ptr<GrowthModel> growthModel,
-                               unique_ptr<NucleationModel> nucleationModel,
-                               unique_ptr<OxidationModel> oxidationModel)
-    : SootChemistry(move(coagulationModel),
-                    move(growthModel),
-                    move(nucleationModel),
-                    move(oxidationModel)) {}
-
-SootModel_MONO* SootModel_MONO::getInstance(unique_ptr<CoagulationModel> coagulationModel,
-                                            unique_ptr<GrowthModel> growthModel,
-                                            unique_ptr<NucleationModel> nucleationModel,
-                                            unique_ptr<OxidationModel> oxidationModel) {
-    return new SootModel_MONO(move(coagulationModel),
-                              move(growthModel),
-                              move(nucleationModel),
-                              move(oxidationModel));
+SootModel_MONO::SootModel_MONO(const SootChemistry& sootChemistry) {
+    this->sootChemistry = sootChemistry;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,10 +50,10 @@ SourceTerms SootModel_MONO::getSourceTermsImplementation(State& state, std::ostr
 
     //---------- get chemical rates
 
-    const double jNuc = nucleationModel->getNucleationRate(state, abscissas, weights, massRateRatios);
-    const double kGrw = growthModel->getGrowthRate(state, massRateRatios);
-    const double kOxi = oxidationModel->getOxidationRate(state, massRateRatios);
-    const double coag = coagulationModel->getCoagulationRate(state, abscissas.at(0), abscissas.at(0));
+    const double jNuc = sootChemistry.nucleationModel->getNucleationRate(state, abscissas, weights, massRateRatios);
+    const double kGrw = sootChemistry.growthModel->getGrowthRate(state, massRateRatios);
+    const double kOxi = sootChemistry.oxidationModel->getOxidationRate(state, massRateRatios);
+    const double coag = sootChemistry.coagulationModel->getCoagulationRate(state, abscissas.at(0), abscissas.at(0));
 
     if (out) {
         *out << "jNuc: " << jNuc << endl;
@@ -92,7 +77,7 @@ SourceTerms SootModel_MONO::getSourceTermsImplementation(State& state, std::ostr
     //---------- PAH condensation terms
 
     const double Cnd0 = 0;
-    const double Cnd1 = nucleationModel->getMechanism() == NucleationMechanism::PAH ? state.getDimer() * state.getMDimer() * coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(0)) * weights.at(0) : 0;
+    const double Cnd1 = sootChemistry.nucleationModel->getMechanism() == NucleationMechanism::PAH ? state.getDimer() * state.getMDimer() * sootChemistry.coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(0)) * weights.at(0) : 0;
 
     if (out) {
         *out << "Cnd0: " << Cnd0 << endl;
@@ -150,8 +135,8 @@ SourceTerms SootModel_MONO::getSourceTermsImplementation(State& state, std::ostr
 
     //---------- get gas source terms
 
-    map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, N1, G1, X1, 0);
-    map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, N1, 0, X1, 0);
+    map<GasSpecies, double> gasSourceTerms = SootChemistry::getGasSourceTerms(state, massRateRatios, N1, G1, X1, 0);
+    map<size_t, double> PAHSourceTerms = SootChemistry::getPAHSourceTerms(state, massRateRatios, N1, 0, X1, 0);
 
     if (out) {
         *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;

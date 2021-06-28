@@ -11,24 +11,8 @@
 using namespace std;
 using namespace soot;
 
-SootModel_QMOM::SootModel_QMOM(unique_ptr<CoagulationModel> coagulationModel,
-                               unique_ptr<GrowthModel> growthModel,
-                               unique_ptr<NucleationModel> nucleationModel,
-                               unique_ptr<OxidationModel> oxidationModel)
-    : SootChemistry(move(coagulationModel),
-                    move(growthModel),
-                    move(nucleationModel),
-                    move(oxidationModel)) {}
-
-SootModel_QMOM* SootModel_QMOM::getInstance(unique_ptr<CoagulationModel> coagulationModel,
-                                            unique_ptr<GrowthModel> growthModel,
-                                            unique_ptr<NucleationModel> nucleationModel,
-                                            unique_ptr<OxidationModel> oxidationModel) {
-
-    return new SootModel_QMOM(move(coagulationModel),
-                              move(growthModel),
-                              move(nucleationModel),
-                              move(oxidationModel));
+SootModel_QMOM::SootModel_QMOM(const SootChemistry& sootChemistry) {
+    this->sootChemistry = sootChemistry;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,9 +59,9 @@ SourceTerms SootModel_QMOM::getSourceTermsImplementation(State& state, std::ostr
 
     //---------- get chemical rates
 
-    const double jNuc = nucleationModel->getNucleationRate(state, abscissas, weights, massRateRatios);
-    const double kGrw = growthModel->getGrowthRate(state, massRateRatios);
-    const double kOxi = oxidationModel->getOxidationRate(state, massRateRatios);
+    const double jNuc = sootChemistry.nucleationModel->getNucleationRate(state, abscissas, weights, massRateRatios);
+    const double kGrw = sootChemistry.growthModel->getGrowthRate(state, massRateRatios);
+    const double kOxi = sootChemistry.oxidationModel->getOxidationRate(state, massRateRatios);
 //    const double coag = coagulationModel->getCoagulationRate(state, abscissas.at(0), abscissas.at(0));
 
     if (out) {
@@ -104,10 +88,10 @@ SourceTerms SootModel_QMOM::getSourceTermsImplementation(State& state, std::ostr
     //---------- PAH condensation terms
 
     vector<double> condensationSourceM(state.getNumMoments(), 0);                            // PAH condensation source terms
-    if (nucleationModel->getMechanism() == NucleationMechanism::PAH) {      // do PAH condensation if PAH nucleation is selected
+    if (sootChemistry.nucleationModel->getMechanism() == NucleationMechanism::PAH) {      // do PAH condensation if PAH nucleation is selected
         for (size_t i = 1; i < state.getNumMoments(); i++) {                                         // M0 = 0.0 for condensation by definition
             for (size_t j = 0; j < abscissas.size(); j++)
-                condensationSourceM.at(i) += coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(j)) * pow(abscissas.at(j), i - 1) * weights.at(j);
+                condensationSourceM.at(i) += sootChemistry.coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(j)) * pow(abscissas.at(j), i - 1) * weights.at(j);
             condensationSourceM.at(i) *= state.getDimer() * state.getMDimer() * (double) i;
         }
     }
@@ -156,17 +140,17 @@ SourceTerms SootModel_QMOM::getSourceTermsImplementation(State& state, std::ostr
     for (size_t i = 0; i < abscissas.size(); i++) {
     	if (i != 0) {
     		for (size_t j = 0; j < i; j++)
-			    coagulationSourceM.at(0) += coagulationModel->getCoagulationRate(state, abscissas.at(i), abscissas.at(j)) * weights.at(i) * weights.at(j) * -1;
+			    coagulationSourceM.at(0) += sootChemistry.coagulationModel->getCoagulationRate(state, abscissas.at(i), abscissas.at(j)) * weights.at(i) * weights.at(j) * -1;
     	}
-	    coagulationSourceM.at(0) += coagulationModel->getCoagulationRate(state, abscissas.at(i), abscissas.at(i)) * weights.at(i) * weights.at(i) * -0.5;
+	    coagulationSourceM.at(0) += sootChemistry.coagulationModel->getCoagulationRate(state, abscissas.at(i), abscissas.at(i)) * weights.at(i) * weights.at(i) * -0.5;
     }
     for (size_t i = 2; i < state.getNumMoments(); i++) {
     	for (size_t j = 0; j < abscissas.size(); j++) {
     		if (j != 0) {
     			for (size_t k = 0; k < j; k++)
-				    coagulationSourceM.at(i) += coagulationModel->getCoagulationRate(state, abscissas.at(j), abscissas.at(k)) * weights.at(j) * weights.at(k) * (i == 0 ? -1 : (pow(abscissas.at(j) + abscissas.at(k), i)) - pow(abscissas.at(j), i) - pow(abscissas.at(k), i));
+				    coagulationSourceM.at(i) += sootChemistry.coagulationModel->getCoagulationRate(state, abscissas.at(j), abscissas.at(k)) * weights.at(j) * weights.at(k) * (i == 0 ? -1 : (pow(abscissas.at(j) + abscissas.at(k), i)) - pow(abscissas.at(j), i) - pow(abscissas.at(k), i));
     		}
-		    coagulationSourceM.at(i) += coagulationModel->getCoagulationRate(state, abscissas.at(j), abscissas.at(j)) * weights.at(j) * weights.at(j) * (i == 0 ? -0.5 : pow(abscissas.at(j), i) * (pow(2, i - 1) - 1));
+		    coagulationSourceM.at(i) += sootChemistry.coagulationModel->getCoagulationRate(state, abscissas.at(j), abscissas.at(j)) * weights.at(j) * weights.at(j) * (i == 0 ? -0.5 : pow(abscissas.at(j), i) * (pow(2, i - 1) - 1));
     	}
     }
 
@@ -193,8 +177,8 @@ SourceTerms SootModel_QMOM::getSourceTermsImplementation(State& state, std::ostr
 
     //---------- get gas source terms
 
-    map<GasSpecies, double> gasSourceTerms = getGasSourceTerms(state, massRateRatios, nucleationSourceM.at(1), growthSourceM.at(1), oxidationSourceM.at(1), 0);
-    map<size_t, double> PAHSourceTerms = getPAHSourceTerms(state, massRateRatios, nucleationSourceM.at(1), 0, oxidationSourceM.at(1), 0);
+    map<GasSpecies, double> gasSourceTerms = SootChemistry::getGasSourceTerms(state, massRateRatios, nucleationSourceM.at(1), growthSourceM.at(1), oxidationSourceM.at(1), 0);
+    map<size_t, double> PAHSourceTerms = SootChemistry::getPAHSourceTerms(state, massRateRatios, nucleationSourceM.at(1), 0, oxidationSourceM.at(1), 0);
 
     if (out) {
         *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;
