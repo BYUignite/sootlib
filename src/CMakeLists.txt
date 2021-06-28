@@ -46,14 +46,14 @@ set(SOOTMODELS_SRC_FILES
         sootlib/soot_model/SootChemistry.cc
         sootlib/soot_model/psd_models/moment_models/logn/PSDModel_LOGN.h
         sootlib/soot_model/psd_models/moment_models/logn/PSDModel_LOGN.cc
-        sootlib/soot_model/psd_models/moment_models/momic/SootModel_MOMIC.h
-        sootlib/soot_model/psd_models/moment_models/momic/SootModel_MOMIC.cc
-        sootlib/soot_model/psd_models/moment_models/mono/SootModel_MONO.h
-        sootlib/soot_model/psd_models/moment_models/mono/SootModel_MONO.cc
-        sootlib/soot_model/psd_models/moment_models/qmom/SootModel_QMOM.h
-        sootlib/soot_model/psd_models/moment_models/qmom/SootModel_QMOM.cc
-        sootlib/soot_model/psd_models/sectional_models/sect/SootModel_SECT.h
-        sootlib/soot_model/psd_models/sectional_models/sect/SootModel_SECT.cc)
+        sootlib/soot_model/psd_models/moment_models/momic/PSDModel_MOMIC.h
+        sootlib/soot_model/psd_models/moment_models/momic/PSDModel_MOMIC.cc
+        sootlib/soot_model/psd_models/moment_models/mono/PSDModel_MONO.h
+        sootlib/soot_model/psd_models/moment_models/mono/PSDModel_MONO.cc
+        sootlib/soot_model/psd_models/moment_models/qmom/PSDModel_QMOM.h
+        sootlib/soot_model/psd_models/moment_models/qmom/PSDModel_QMOM.cc
+        sootlib/soot_model/psd_models/sectional_models/sect/PSDModel_SECT.h
+        sootlib/soot_model/psd_models/sectional_models/sect/PSDModel_SECT.cc)
 
 set(STATE_SRC_FILES
         sootlib/state/State.h

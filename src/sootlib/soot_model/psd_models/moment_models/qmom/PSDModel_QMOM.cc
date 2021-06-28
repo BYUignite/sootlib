@@ -3,7 +3,7 @@
  * Source file for class SootModel_QMOM
  */
 
-#include "SootModel_QMOM.h"
+#include "PSDModel_QMOM.h"
 
 #include <cmath>
 #include <iostream>
@@ -11,7 +11,7 @@
 using namespace std;
 using namespace soot;
 
-SootModel_QMOM::SootModel_QMOM(const SootChemistry& sootChemistry) {
+PSDModel_QMOM::PSDModel_QMOM(const SootChemistry& sootChemistry) {
     this->sootChemistry = sootChemistry;
 }
 
@@ -25,7 +25,7 @@ SootModel_QMOM::SootModel_QMOM(const SootChemistry& sootChemistry) {
  *
  */
 
-SourceTerms SootModel_QMOM::getSourceTermsImplementation(State& state, std::ostream* out) const {
+SourceTerms PSDModel_QMOM::getSourceTermsImplementation(State& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel QMOM] ===" << endl;
@@ -207,7 +207,7 @@ SourceTerms SootModel_QMOM::getSourceTermsImplementation(State& state, std::ostr
  *      @param w    \output    weights
  *      @param x    \output    abscissas
  */
-void SootModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w, vector<double>& x)
+void PSDModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w, vector<double>& x)
 {
 	vector<vector<double>> sigma(N + 1, vector<double>(N * 2, 0));
 	vector<double> a(N, 0);
@@ -266,7 +266,7 @@ void SootModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& 
  *      which is more convenient when wts and absc are used to reconstitute
  *      moment source terms.
  */
-void SootModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, vector<double>& abscissas)
+void PSDModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, vector<double>& abscissas)
 {
 	size_t N = M.size();              // local nMom; may change with moment deselection
 
@@ -327,7 +327,7 @@ void SootModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights,
 *  @param absc \input  abscissas
 *  @param Mk   \output fractional moment value
 */
-double SootModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<double>& absc)
+double PSDModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<double>& absc)
 {
 	double Mk = 0;
 
@@ -340,7 +340,7 @@ double SootModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<do
 
 	return Mk;
 }
-void SootModel_QMOM::checkState(const State& state) const {
+void PSDModel_QMOM::checkState(const State& state) const {
     if (state.getNumMoments() < 2)
         throw runtime_error("QMOM soot model requries 2, 4 or 6 moments");
     // TODO if the algorithms can still run without failing with an odd number of moments this can be changed to a warning

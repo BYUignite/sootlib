@@ -2,19 +2,19 @@
  * Josh Bedwell - June 2021
  */
 
-#ifndef SOOTMODEL_LOGN_H
-#define SOOTMODEL_LOGN_H
+#ifndef SOOTMODEL_MOMIC_H
+#define SOOTMODEL_MOMIC_H
 
 #include "sootlib/soot_model/PSDModel.h"
 #include "sootlib/soot_model/SootChemistry.h"
 
 namespace soot {
+class PSDModel_MOMIC : public PSDModel {
 /**
- * An implementation of the PSDModel interface following the LOGN moment-based model
+ * An implementation of the PSDModel interface following the MOMIC model
  *
- * Associated with the enum PSDMechanism:LOGN
+ * Associated with the enum PSDMechanism:MOMIC
  */
-class PSDModel_LOGN : public PSDModel {
 public:
     /**
      * Sets the sootChemistry member
@@ -22,12 +22,12 @@ public:
      *
      * @param sootChemistry
      */
-    explicit PSDModel_LOGN(const SootChemistry& sootChemistry);
+    explicit PSDModel_MOMIC(const SootChemistry& sootChemistry);
     /**
      * Default deconstructor
      * requried by PSDModel
      */
-    ~PSDModel_LOGN() override = default;
+    ~PSDModel_MOMIC() override = default;
 
 private:
     /**
@@ -52,11 +52,12 @@ private:
 
     // helper functions specific to this PSD
     // TODO I don't know good descriptions for these functions
-    [[nodiscard]] static double Mk(double k, double M0, double M1, double M2);
-    [[nodiscard]] static double getKfm(const State& state);
-    [[nodiscard]] static double getKc(const State& state);
-    [[nodiscard]] static double getKcp(const State& state);
+    [[nodiscard]] static size_t downselectIfNeeded(std::vector<double>& M);
+    [[nodiscard]] static double f_grid(int x, int y, const std::vector<double>& M);
+    [[nodiscard]] static double MOMICCoagulationRate(const State& state, size_t r);
+    [[nodiscard]] static double lagrangeInterp(double x_i, const std::vector<double>& x, const std::vector<double>& y);
+    [[nodiscard]] static double MOMIC(double p, const std::vector<double>& M);
 };
 }
 
-#endif //SOOTMODEL_LOGN_H
+#endif //SOOTMODEL_MOMIC_H

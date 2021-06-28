@@ -2,12 +2,12 @@
 
 /* Moment psd_models */
 #include "sootlib/soot_model/psd_models/moment_models/logn/PSDModel_LOGN.h"
-#include "sootlib/soot_model/psd_models/moment_models/momic/SootModel_MOMIC.h"
-#include "sootlib/soot_model/psd_models/moment_models/mono/SootModel_MONO.h"
-#include "sootlib/soot_model/psd_models/moment_models/qmom/SootModel_QMOM.h"
+#include "sootlib/soot_model/psd_models/moment_models/momic/PSDModel_MOMIC.h"
+#include "sootlib/soot_model/psd_models/moment_models/mono/PSDModel_MONO.h"
+#include "sootlib/soot_model/psd_models/moment_models/qmom/PSDModel_QMOM.h"
 
 /* Bin psd_models */
-#include "sootlib/soot_model/psd_models/sectional_models/sect/SootModel_SECT.h"
+#include "sootlib/soot_model/psd_models/sectional_models/sect/PSDModel_SECT.h"
 
 /* coagulation psd_models */
 #include "sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FRENK.h"
@@ -107,16 +107,11 @@ PSDModel* SootModelGenerator::getModel() const {
 
     /* create and return model ptr */
     switch (psdMechanism) {
-        case PSDMechanism::MONO:
-            return new SootModel_MONO(sootChemistry);
-        case PSDMechanism::LOGN:
-            return new PSDModel_LOGN(sootChemistry);
-        case PSDMechanism::MOMIC:
-            return new SootModel_MOMIC(sootChemistry);
-        case PSDMechanism::QMOM:
-            return new SootModel_QMOM(sootChemistry);
-        case PSDMechanism::SECT:
-            return new SootModel_SECT(sootChemistry);
+        case PSDMechanism::MONO: return new PSDModel_MONO(sootChemistry);
+        case PSDMechanism::LOGN: return new PSDModel_LOGN(sootChemistry);
+        case PSDMechanism::MOMIC: return new PSDModel_MOMIC(sootChemistry);
+        case PSDMechanism::QMOM: return new PSDModel_QMOM(sootChemistry);
+        case PSDMechanism::SECT: return new PSDModel_SECT(sootChemistry);
         default: throw domain_error("Bad soot model type");
     }
 }

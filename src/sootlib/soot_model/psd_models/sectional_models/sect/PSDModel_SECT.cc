@@ -1,14 +1,14 @@
-#include "SootModel_SECT.h"
+#include "PSDModel_SECT.h"
 
 #include <cmath>
 
 using namespace std;
 using namespace soot;
 
-SootModel_SECT::SootModel_SECT(const SootChemistry& sootChemistry) {
+PSDModel_SECT::PSDModel_SECT(const SootChemistry& sootChemistry) {
     this->sootChemistry = sootChemistry;
 }
-SourceTerms SootModel_SECT::getSourceTermsImplementation(State& state, std::ostream* out) const {
+SourceTerms PSDModel_SECT::getSourceTermsImplementation(State& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel SECT] ===" << endl;
@@ -211,7 +211,7 @@ SourceTerms SootModel_SECT::getSourceTermsImplementation(State& state, std::ostr
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
-vector<double> SootModel_SECT::getDivision(double mass, double num, const vector<double>& absc) {
+vector<double> PSDModel_SECT::getDivision(double mass, double num, const vector<double>& absc) {
     size_t loc = 0;
     bool found = false;
     vector<double> toReturn(absc.size(), 0);
@@ -233,7 +233,7 @@ vector<double> SootModel_SECT::getDivision(double mass, double num, const vector
 
     return toReturn;
 }
-void SootModel_SECT::checkState(const State& state) const {
+void PSDModel_SECT::checkState(const State& state) const {
     if (state.getNumSections() < 1)
         throw runtime_error("SECT soot model requires 1+ sections/bins");
 }

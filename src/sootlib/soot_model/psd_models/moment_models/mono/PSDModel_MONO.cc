@@ -3,7 +3,7 @@
  * Source file for class SootModel_MONO
  */
 
-#include "SootModel_MONO.h"
+#include "PSDModel_MONO.h"
 
 #include <cmath>
 #include <iostream>
@@ -11,7 +11,7 @@
 using namespace std;
 using namespace soot;
 
-SootModel_MONO::SootModel_MONO(const SootChemistry& sootChemistry) {
+PSDModel_MONO::PSDModel_MONO(const SootChemistry& sootChemistry) {
     this->sootChemistry = sootChemistry;
 }
 
@@ -25,7 +25,7 @@ SootModel_MONO::SootModel_MONO(const SootChemistry& sootChemistry) {
  *
  */
 
-SourceTerms SootModel_MONO::getSourceTermsImplementation(State& state, std::ostream* out) const {
+SourceTerms PSDModel_MONO::getSourceTermsImplementation(State& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel MONO] ===" << endl;
@@ -150,7 +150,7 @@ SourceTerms SootModel_MONO::getSourceTermsImplementation(State& state, std::ostr
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
-void SootModel_MONO::checkState(const State& state) const {
+void PSDModel_MONO::checkState(const State& state) const {
     if (state.getNumMoments() < 2)
         throw runtime_error("MONO soot model requires 2 soot moments");
     if (state.getNumMoments() > 2)

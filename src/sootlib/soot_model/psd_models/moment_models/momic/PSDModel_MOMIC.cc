@@ -1,4 +1,4 @@
-#include "SootModel_MOMIC.h"
+#include "PSDModel_MOMIC.h"
 
 #include <algorithm>
 #include <cmath>
@@ -9,10 +9,10 @@
 using namespace std;
 using namespace soot;
 
-SootModel_MOMIC::SootModel_MOMIC(const SootChemistry& sootChemistry) {
+PSDModel_MOMIC::PSDModel_MOMIC(const SootChemistry& sootChemistry) {
     this->sootChemistry = sootChemistry;
 }
-SourceTerms SootModel_MOMIC::getSourceTermsImplementation(State& state, std::ostream* out) const {
+SourceTerms PSDModel_MOMIC::getSourceTermsImplementation(State& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel MOMIC] ===" << endl;
@@ -135,7 +135,7 @@ SourceTerms SootModel_MOMIC::getSourceTermsImplementation(State& state, std::ost
 
     return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
-size_t SootModel_MOMIC::downselectIfNeeded(vector<double>& M)
+size_t PSDModel_MOMIC::downselectIfNeeded(vector<double>& M)
 {
 	if (M.at(0) <= 0)
 		return 0;
@@ -169,7 +169,7 @@ size_t SootModel_MOMIC::downselectIfNeeded(vector<double>& M)
  *      @param M     \input vector of whole order moments
  *
  */
-double SootModel_MOMIC::f_grid(int x, int y, const vector<double>& M)
+double PSDModel_MOMIC::f_grid(int x, int y, const vector<double>& M)
 {
 	// any MOMIC calculation that is reused is calculated once here
 	const double temp0 = MOMIC(x - 1.0 / 2, M);
@@ -252,7 +252,7 @@ double SootModel_MOMIC::f_grid(int x, int y, const vector<double>& M)
 
 	return pow(10, value);
 }
-double SootModel_MOMIC::MOMICCoagulationRate(const State& state, size_t r){
+double PSDModel_MOMIC::MOMICCoagulationRate(const State& state, size_t r){
     // the converions between signed and unsigned with r and k is midly concerning, but as far as I can see shouldn't be a problem
 
 	if (r == 1)
@@ -317,7 +317,7 @@ double SootModel_MOMIC::MOMICCoagulationRate(const State& state, size_t r){
  *      @param y_i  \output     interpolated y value
  *
  */
-double SootModel_MOMIC::lagrangeInterp(double x_i, const vector<double>& x, const vector<double>& y)
+double PSDModel_MOMIC::lagrangeInterp(double x_i, const vector<double>& x, const vector<double>& y)
 {
 	double y_i = 0;
 
@@ -345,7 +345,7 @@ double SootModel_MOMIC::lagrangeInterp(double x_i, const vector<double>& x, cons
  *      @param M     \input     vector of whole order moments
  *
  */
-double SootModel_MOMIC::MOMIC(double p, const vector<double>& M)
+double PSDModel_MOMIC::MOMIC(double p, const vector<double>& M)
 {
 	if (p == 0)
 		return M.at(0);
@@ -366,7 +366,7 @@ double SootModel_MOMIC::MOMIC(double p, const vector<double>& M)
 
 	return pow(10, log_mu_p) * M.at(0);
 }
-void SootModel_MOMIC::checkState(const State& state) const {
+void PSDModel_MOMIC::checkState(const State& state) const {
     if (state.getNumMoments() < 1)
         throw runtime_error("MOMIC soot model requires 1-8 soot moments");
     if (state.getNumMoments() > 8)

@@ -2,19 +2,19 @@
  * Josh Bedwell - June 2021
  */
 
-#ifndef SOOTMODEL_LOGN_H
-#define SOOTMODEL_LOGN_H
+#ifndef SOOTMODEL_MONO_H
+#define SOOTMODEL_MONO_H
 
 #include "sootlib/soot_model/PSDModel.h"
 #include "sootlib/soot_model/SootChemistry.h"
 
 namespace soot {
 /**
- * An implementation of the PSDModel interface following the LOGN moment-based model
+ * An implementation of the PSDModel interface following the MONO model
  *
- * Associated with the enum PSDMechanism:LOGN
+ * Associated with the enum PSDMechanism:MONO
  */
-class PSDModel_LOGN : public PSDModel {
+class PSDModel_MONO : public PSDModel {
 public:
     /**
      * Sets the sootChemistry member
@@ -22,12 +22,12 @@ public:
      *
      * @param sootChemistry
      */
-    explicit PSDModel_LOGN(const SootChemistry& sootChemistry);
+    explicit PSDModel_MONO(const SootChemistry& sootChemistry);
     /**
      * Default deconstructor
      * requried by PSDModel
      */
-    ~PSDModel_LOGN() override = default;
+    ~PSDModel_MONO() override = default;
 
 private:
     /**
@@ -51,12 +51,7 @@ private:
     SootChemistry sootChemistry;
 
     // helper functions specific to this PSD
-    // TODO I don't know good descriptions for these functions
-    [[nodiscard]] static double Mk(double k, double M0, double M1, double M2);
-    [[nodiscard]] static double getKfm(const State& state);
-    [[nodiscard]] static double getKc(const State& state);
-    [[nodiscard]] static double getKcp(const State& state);
 };
 }
 
-#endif //SOOTMODEL_LOGN_H
+#endif //SOOTMODEL_MONO_H

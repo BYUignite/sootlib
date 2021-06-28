@@ -112,28 +112,28 @@ private:
      * Function that handles creating a pointer to a CoagulationModel based on the stored CoagulationMechanism
      * Called by getModel() when a new PSDModel is being generated
      *
-     * @return an raw pointer to a CoagulationModel
+     * @return a raw pointer to a CoagulationModel
      */
     [[nodiscard]] CoagulationModel* makeCoagulationModel() const;
     /**
      * Function that handles creating a pointer to a GrowthModel based on the stored GrowthMechanism
      * Called by getModel() when a new PSDModel is being generated
      *
-     * @return an raw pointer to a GrowthModel
+     * @return a raw pointer to a GrowthModel
      */
     [[nodiscard]] GrowthModel* makeGrowthModel() const;
     /**
      * Function that handles creating a pointer to a NucleationModel based on the stored NucleationMechanism
      * Called by getModel() when a new PSDModel is being generated
      *
-     * @return an raw pointer to a NucleationModel
+     * @return a raw pointer to a NucleationModel
      */
     [[nodiscard]] NucleationModel* makeNucleationModel() const;
     /**
      * Function that handles creating a pointer to an OxidationModel based on the stored OxidationMechanism
      * Called by getModel() when a new PSDModel is being generated
      *
-     * @return an raw pointer to an OxidationModel
+     * @return a raw pointer to an OxidationModel
      */
     [[nodiscard]] OxidationModel* makeOxidationModel() const;
 };

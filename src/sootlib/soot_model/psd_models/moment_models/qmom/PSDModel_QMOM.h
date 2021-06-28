@@ -2,19 +2,19 @@
  * Josh Bedwell - June 2021
  */
 
-#ifndef SOOTMODEL_LOGN_H
-#define SOOTMODEL_LOGN_H
+#ifndef SOOTMODEL_QMOM_H
+#define SOOTMODEL_QMOM_H
 
 #include "sootlib/soot_model/PSDModel.h"
 #include "sootlib/soot_model/SootChemistry.h"
 
 namespace soot {
+class PSDModel_QMOM : public PSDModel {
 /**
- * An implementation of the PSDModel interface following the LOGN moment-based model
+ * An implementation of the PSDModel interface following the QMOM model
  *
- * Associated with the enum PSDMechanism:LOGN
+ * Associated with the enum PSDMechanism:QMOM
  */
-class PSDModel_LOGN : public PSDModel {
 public:
     /**
      * Sets the sootChemistry member
@@ -22,12 +22,12 @@ public:
      *
      * @param sootChemistry
      */
-    explicit PSDModel_LOGN(const SootChemistry& sootChemistry);
+    explicit PSDModel_QMOM(const SootChemistry& sootChemistry);
     /**
      * Default deconstructor
      * requried by PSDModel
      */
-    ~PSDModel_LOGN() override = default;
+    ~PSDModel_QMOM() override = default;
 
 private:
     /**
@@ -52,11 +52,10 @@ private:
 
     // helper functions specific to this PSD
     // TODO I don't know good descriptions for these functions
-    [[nodiscard]] static double Mk(double k, double M0, double M1, double M2);
-    [[nodiscard]] static double getKfm(const State& state);
-    [[nodiscard]] static double getKc(const State& state);
-    [[nodiscard]] static double getKcp(const State& state);
+    static void wheeler(const std::vector<double>& m, size_t N, std::vector<double>& w, std::vector<double>& x);
+    static void getWtsAbs(const std::vector<double>& M, std::vector<double>& weights, std::vector<double>& abscissas);
+    [[nodiscard]] static double Mk(double exp, const std::vector<double>& wts, const std::vector<double>& absc);
 };
 }
 
-#endif //SOOTMODEL_LOGN_H
+#endif //SOOTMODEL_QMOM_H
