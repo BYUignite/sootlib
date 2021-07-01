@@ -8,7 +8,7 @@ using namespace soot;
 int main(int argc, char** argv) {
     /* Create a soot model generator */
 
-    // this generator can make moment based soot psd_models
+    // this generator can make moment based soot psdModels
     auto generator = SootModelGenerator();
 
     /* Create a default soot model */

@@ -42,8 +42,8 @@ set(OXIDATION_SRC_FILES
         sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_NSC_NEOH.cc)
 
 set(SOOTMODELS_SRC_FILES
-        sootlib/soot_model/SootChemistry.h
-        sootlib/soot_model/SootChemistry.cc
+        soot_model/SootChemistry.h
+        soot_model/SootChemistry.cc
         sootlib/soot_model/psd_models/moment_models/logn/PSDModel_LOGN.h
         sootlib/soot_model/psd_models/moment_models/logn/PSDModel_LOGN.cc
         sootlib/soot_model/psd_models/moment_models/momic/PSDModel_MOMIC.h
@@ -56,31 +56,30 @@ set(SOOTMODELS_SRC_FILES
         sootlib/soot_model/psd_models/sectional_models/sect/PSDModel_SECT.cc)
 
 set(STATE_SRC_FILES
-        sootlib/state/State.h
-        sootlib/state/State.cc
-        sootlib/state/GasState.h
-        sootlib/state/GasState.cc
-        sootlib/state/MomentState.h
-        sootlib/state/MomentState.cc
-        sootlib/state/SectionalState.h
-        sootlib/state/SectionalState.cc
-        sootlib/state/SootState.h
-        sootlib/state/SootState.cc)
+        state/State.h
+        state/State.cc
+        state/GasState.h
+        state/GasState.cc
+        state/MomentState.h
+        state/MomentState.cc
+        state/SectionalState.h
+        state/SectionalState.cc
+        state/SootState.h
+        state/SootState.cc)
 
 set(SRC_FILES
-        sootlib/soot_model/PSDModel.h
-        sootlib/soot_model/generator/SootModelGenerator.h
-        sootlib/soot_model/generator/SootModelGenerator.cc
-        sootlib/constants.h
-        sootlib/SourceTerms.h
+        soot_model/psdModels/PSDModel.h
+        sootModels/modelGenerator.h
+        sootModels/modelGenerator.cc
+        constants.h
         sootlib/ratio/MassRateRatio.h
         sootlib/ratio/MassRateRatios.h)
 
 set(LIB_FILES
-        lib/eispack/eispack.h
-        lib/eispack/eispack.cc
-        lib/binomial/binomial.h
-        lib/jutil/jutil.h)
+        ../include/extern/eispack/eispack.h
+        ../include/extern/eispack/eispack.cc
+        ../include/extern/binomial/binomial.h
+        ../include/extern/jutil/jutil.h)
 
 # ---- compile all files ----
 

@@ -1,63 +1,63 @@
-#include "SootModelGenerator.h"
+#include "modelGenerator.h"
 
-/* Moment psd_models */
-#include "sootlib/soot_model/psd_models/moment_models/logn/PSDModel_LOGN.h"
-#include "sootlib/soot_model/psd_models/moment_models/momic/PSDModel_MOMIC.h"
-#include "sootlib/soot_model/psd_models/moment_models/mono/PSDModel_MONO.h"
-#include "sootlib/soot_model/psd_models/moment_models/qmom/PSDModel_QMOM.h"
+/* Moment psdModels */
+#include "src/soot_model/psd_models/PSDModel_LOGN.h"
+#include "src/soot_model/psd_models/PSDModel_MOMIC.h"
+#include "src/soot_model/psd_models/PSDModel_MONO.h"
+#include "src/soot_model/psd_models/PSDModel_QMOM.h"
 
-/* Bin psd_models */
-#include "sootlib/soot_model/psd_models/sectional_models/sect/PSDModel_SECT.h"
+/* Bin psdModels */
+#include "src/soot_model/psd_models/PSDModel_SECT.h"
 
-/* coagulation psd_models */
-#include "sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FRENK.h"
-#include "sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FUCHS.h"
-#include "sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_LL.h"
-#include "sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel_NONE.h"
+/* coagulation psdModels */
+#include "src/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FRENK.h"
+#include "src/soot_model/soot_chemistry/coagulation_model/CoagulationModel_FUCHS.h"
+#include "src/soot_model/soot_chemistry/coagulation_model/CoagulationModel_LL.h"
+#include "src/soot_model/soot_chemistry/coagulation_model/CoagulationModel_NONE.h"
 
-/* growth psd_models */
-#include "sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_HACA.h"
-#include "sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_LIN.h"
-#include "sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_LL.h"
-#include "sootlib/soot_model/soot_chemistry/growth_model/GrowthModel_NONE.h"
+/* growth psdModels */
+#include "src/soot_model/soot_chemistry/growth_model/GrowthModel_HACA.h"
+#include "src/soot_model/soot_chemistry/growth_model/GrowthModel_LIN.h"
+#include "src/soot_model/soot_chemistry/growth_model/GrowthModel_LL.h"
+#include "src/soot_model/soot_chemistry/growth_model/GrowthModel_NONE.h"
 
-/* nucleation psd_models */
-#include "sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_LIN.h"
-#include "sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_LL.h"
-#include "sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_NONE.h"
-#include "sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel_PAH.h"
+/* nucleation psdModels */
+#include "src/soot_model/soot_chemistry/nucleation_model/NucleationModel_LIN.h"
+#include "src/soot_model/soot_chemistry/nucleation_model/NucleationModel_LL.h"
+#include "src/soot_model/soot_chemistry/nucleation_model/NucleationModel_NONE.h"
+#include "src/soot_model/soot_chemistry/nucleation_model/NucleationModel_PAH.h"
 
-/* oxidation psd_models */
-#include "sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_HACA.h"
-#include "sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_LEE_NEOH.h"
-#include "sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_LL.h"
-#include "sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_NONE.h"
-#include "sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel_NSC_NEOH.h"
+/* oxidation psdModels */
+#include "src/soot_model/soot_chemistry/oxidation_model/OxidationModel_HACA.h"
+#include "src/soot_model/soot_chemistry/oxidation_model/OxidationModel_LEE_NEOH.h"
+#include "src/soot_model/soot_chemistry/oxidation_model/OxidationModel_LL.h"
+#include "src/soot_model/soot_chemistry/oxidation_model/OxidationModel_NONE.h"
+#include "src/soot_model/soot_chemistry/oxidation_model/OxidationModel_NSC_NEOH.h"
 
 using namespace std;
 using namespace soot;
 
 // Here are the default parameters for the soot model
-SootModelGenerator::SootModelGenerator() {
+modelGenerator::modelGenerator() {
     psdMechanism = PSDMechanism::MONO;
     nucleationMechanism = NucleationMechanism::NONE;
     growthMechanism = GrowthMechanism::NONE;
     oxidationMechanism = OxidationMechanism::NONE;
     coagulationMechanism = CoagulationMechanism::NONE;
 }
-void SootModelGenerator::setNucleationMechanism(NucleationMechanism mechanism) {
+void modelGenerator::setNucleationMechanism(NucleationMechanism mechanism) {
     nucleationMechanism = mechanism;
 }
-void SootModelGenerator::setGrowthMechanism(GrowthMechanism mechanism) {
+void modelGenerator::setGrowthMechanism(GrowthMechanism mechanism) {
     growthMechanism = mechanism;
 }
-void SootModelGenerator::setOxidationMechanism(OxidationMechanism mechanism) {
+void modelGenerator::setOxidationMechanism(OxidationMechanism mechanism) {
     oxidationMechanism = mechanism;
 }
-void SootModelGenerator::setCoagulationMechanism(CoagulationMechanism mechanism) {
+void modelGenerator::setCoagulationMechanism(CoagulationMechanism mechanism) {
     coagulationMechanism = mechanism;
 }
-CoagulationModel* SootModelGenerator::makeCoagulationModel() const {
+CoagulationModel* modelGenerator::makeCoagulationModel() const {
     switch (coagulationMechanism) {
         case CoagulationMechanism::NONE: return new CoagulationModel_NONE();
         case CoagulationMechanism::LL: return new CoagulationModel_LL();
@@ -66,7 +66,7 @@ CoagulationModel* SootModelGenerator::makeCoagulationModel() const {
         default: throw domain_error("Bad soot coagulation mechanism");
     }
 }
-GrowthModel* SootModelGenerator::makeGrowthModel() const {
+GrowthModel* modelGenerator::makeGrowthModel() const {
     switch (growthMechanism) {
         case GrowthMechanism::NONE: return new GrowthModel_NONE();
         case GrowthMechanism::LL: return new GrowthModel_LL();
@@ -75,7 +75,7 @@ GrowthModel* SootModelGenerator::makeGrowthModel() const {
         default: throw domain_error("Bad soot growth mechanism");
     }
 }
-NucleationModel* SootModelGenerator::makeNucleationModel() const {
+NucleationModel* modelGenerator::makeNucleationModel() const {
     switch (nucleationMechanism) {
         case NucleationMechanism::NONE: return new NucleationModel_NONE();
         case NucleationMechanism::LL: return new NucleationModel_LL();
@@ -84,7 +84,7 @@ NucleationModel* SootModelGenerator::makeNucleationModel() const {
         default: throw domain_error("Bad soot nucleation mechanism");
     }
 }
-OxidationModel* SootModelGenerator::makeOxidationModel() const {
+OxidationModel* modelGenerator::makeOxidationModel() const {
     switch (oxidationMechanism) {
         case OxidationMechanism::NONE: return new OxidationModel_NONE();
         case OxidationMechanism::LL: return new OxidationModel_LL();
@@ -94,11 +94,11 @@ OxidationModel* SootModelGenerator::makeOxidationModel() const {
         default: throw domain_error("Bad soot oxidation model");
     }
 }
-void SootModelGenerator::setPSDModel(PSDMechanism modelType) {
+void modelGenerator::setPSDModel(PSDMechanism modelType) {
     this->psdMechanism = modelType;
 }
-PSDModel* SootModelGenerator::getModel() const {
-    /* create helper psd_models */
+PSDModel* modelGenerator::getModel() const {
+    /* create helper psdModels */
     auto cm = makeCoagulationModel();
     auto gm = makeGrowthModel();
     auto nm = makeNucleationModel();
@@ -115,9 +115,9 @@ PSDModel* SootModelGenerator::getModel() const {
         default: throw domain_error("Bad soot model type");
     }
 }
-std::unique_ptr<PSDModel> SootModelGenerator::getModelUnique() const {
+std::unique_ptr<PSDModel> modelGenerator::getModelUnique() const {
     return unique_ptr<PSDModel>(getModel());
 }
-std::shared_ptr<PSDModel> SootModelGenerator::getModelShared() const {
+std::shared_ptr<PSDModel> modelGenerator::getModelShared() const {
     return shared_ptr<PSDModel>(getModel());
 }

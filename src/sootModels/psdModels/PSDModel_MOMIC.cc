@@ -28,7 +28,7 @@ SourceTerms PSDModel_MOMIC::getSourceTermsImplementation(State& state, std::ostr
 
     MassRateRatios massRateRatios;
 
-    // FIXME it looks like these guys are trying to trigger optional parts of the supporting psd_models with negative values
+    // FIXME it looks like these guys are trying to trigger optional parts of the supporting psdModels with negative values
     // this does not work well with what I have set up now :( there needs to be some explicit arguments for that
     const double Jnuc = sootChemistry.nucleationModel->getNucleationRate(state, {}, {}, massRateRatios);
     const double Kgrw = sootChemistry.growthModel->getGrowthRate(state, massRateRatios);

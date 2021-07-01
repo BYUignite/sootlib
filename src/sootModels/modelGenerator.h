@@ -8,19 +8,19 @@
 #include <memory>
 
 /* Soot model */
-#include "sootlib/soot_model/PSDModel.h"
+#include "src/soot_model/psd_models/PSDModel.h"
 
 /* coagulation model */
-#include "sootlib/soot_model/soot_chemistry/coagulation_model/CoagulationModel.h"
+#include "src/soot_model/soot_chemistry/coagulation_model/CoagulationModel.h"
 
 /* growth model */
-#include "sootlib/soot_model/soot_chemistry/growth_model/GrowthModel.h"
+#include "src/soot_model/soot_chemistry/growth_model/GrowthModel.h"
 
 /* nucleation model */
-#include "sootlib/soot_model/soot_chemistry/nucleation_model/NucleationModel.h"
+#include "src/soot_model/soot_chemistry/nucleation_model/NucleationModel.h"
 
 /* oxidation model */
-#include "sootlib/soot_model/soot_chemistry/oxidation_model/OxidationModel.h"
+#include "src/soot_model/soot_chemistry/oxidation_model/OxidationModel.h"
 
 namespace soot {
 /**
@@ -29,12 +29,12 @@ namespace soot {
  * Simplifies the process by eliminating user interaction with a complicated specific PSDModel constructor and having default values
  * Properties of the next PSDModel to be generated are set and then a PSDModel is generated
  */
-class SootModelGenerator {
+class modelGenerator {
 public:
     /**
      * Sets default properties of the next PSDModel to be generated
      */
-    SootModelGenerator();
+    modelGenerator();
 
     /**
      * Sets the PSDMechanism the next generated PSDModel will use

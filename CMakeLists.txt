@@ -12,12 +12,12 @@ project(sootlib
         VERSION 1.0
         LANGUAGES CXX)
 
-############################### PROJECT OPTIONS ###############################
+#################### PROJECT OPTIONS ###############################
 
 option(BUILD_TESTS "Build sootlib tests" ON)        # option to build tests
 option(BUILD_EXAMPLES "Build sootlib example" ON)   # option to build examples
 
-############################### SOOTLIB ###############################
+####################### SOOTLIB ###############################
 
 add_subdirectory(src ${CMAKE_CURRENT_BINARY_DIR}/src)
 
@@ -27,13 +27,13 @@ target_include_directories(sootlib PUBLIC
         "$<INSTALL_INTERFACE:include>"
         )
 
-################## TESTS ###############################
+######################### TESTS ###############################
 
 if (BUILD_TESTS)
     add_subdirectory(test ${CMAKE_CURRENT_BINARY_DIR}/test)
 endif()
 
-################## EXAMPLES ###############################
+######################## EXAMPLES ###############################
 
 if (BUILD_EXAMPLES)
     add_subdirectory(examples ${CMAKE_CURRENT_BINARY_DIR}/examples)

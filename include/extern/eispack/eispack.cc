@@ -794,7 +794,7 @@ double pythag ( double a, double b )
 //
 //      PYTHAG = sqrt ( A * A + B * B )
 //
-//    is reasonably accurate, but can fail if, for example, A^2 is larger
+//    is reasonably accurate, but can fail if, for examples, A^2 is larger
 //    than the machine overflow.  The formula can lose most of its accuracy
 //    if the sum of the squares is very large or very small.
 //

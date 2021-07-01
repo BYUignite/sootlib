@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "sootlib/state/State.h"
-#include "sootlib/ratio/MassRateRatios.h"
+#include "src/state/State.h"
+#include "src/ratio/MassRateRatios.h"
 
 namespace soot {
 class NucleationModel {
