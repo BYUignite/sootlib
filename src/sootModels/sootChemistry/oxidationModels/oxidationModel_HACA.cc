@@ -1,0 +1,59 @@
+//////////////////////////////////////////////////////////////////////////////////
+/*! Oxidation by HACA
+ *
+ *      See Appel, Bockhorn, & Frenklach (2000), Comb. & Flame 121:122-136.
+ *      For details, see Franklach and Wang (1990), 23rd Symposium, pp. 1559-1566.
+ *
+ *      Parameters for steric factor alpha updated to those given in Balthasar
+ *      and Franklach (2005) Comb. & Flame 140:130-145.
+ *
+ *      Returns the chemical soot oxidation rate in kg/m2*s.
+ *
+ *      @param MomentState&     /input      local moment state; need M0 and M1
+ *      @param rSoot            /output     soot growth rate (kg/m2*s)
+ */
+
+#include "oxidationModel_HACA.h"
+
+#include <cmath>
+
+using namespace soot;
+
+double OxidationModel_HACA::getOxidationRate(const State& state, MassRateRatios& ratio) const {
+
+    const double M0 = state.getMoment(0);                           // #/m3
+    const double M1 = state.getMoment(1);                           // kg/m3
+
+    //---------- calculate alpha, other constants
+    const double RT = 1.9872036E-3 * state.getT();            // R (=) kcal/mol
+    const double chi_soot = 2.3E15;                                 // (=) sites/cm^2
+    const double a_param = 33.167 - 0.0154 * state.getT();         // a parameter for calculating alpha
+    const double b_param = -2.5786 + 0.00112 * state.getT();       // b parameter for calculating alpha
+
+    //---------- calculate raw HACA reaction rates
+    const double fR1 = 4.2E13 * exp(-13 / RT) * state.getGasSpeciesC(GasSpecies::H) / 1000;
+    const double rR1 = 3.9E12 * exp(-11 / RT) * state.getGasSpeciesC(GasSpecies::H2) / 1000;
+    const double fR2 = 1.0E10 * pow(state.getT(), 0.734) * exp(-1.43 / RT) * state.getGasSpeciesC(GasSpecies::OH) / 1000;
+    const double rR2 = 3.68E8 * pow(state.getT(), 1.139) * exp(-17.1 / RT) * state.getGasSpeciesC(GasSpecies::H2O) / 1000;
+    const double fR3 = 2.0E13 * state.getGasSpeciesC(GasSpecies::H) / 1000;
+    const double fR4 = 8.00E7 * pow(state.getT(), 1.56) * exp(-3.8 / RT) * state.getGasSpeciesC(GasSpecies::C2H2) / 1000;
+    const double fR5 = 2.2E12 * exp(-7.5 / RT) * state.getGasSpeciesC(GasSpecies::O2) / 1000;
+    const double fR6 = 1290 * 0.13 * state.getP() * (state.getGasSpeciesC(GasSpecies::OH) / state.getRhoGas() * MW_OH) / sqrt(state.getT());    // gamma = 0.13 from Neoh et al.
+
+    //---------- Steady state calculation of chi for soot radical; see Frenklach 1990 pg. 1561
+    const double denom = rR1 + rR2 + fR3 + fR4 + fR5;
+	const double chi_rad = denom == 0 ? 0 : 2 * chi_soot * (fR1 + fR2 + fR6) / denom;  // sites/cm^2
+
+    double alpha = 1.0;                                            // alpha = fraction of available surface sites
+    if (M0 > 0.0)
+        alpha = tanh(a_param / log10(M1 / M0) + b_param);
+    if (alpha < 0.0)
+        alpha = 1.0;
+
+    const double c_soot_H = alpha * chi_soot * 1E4;              // sites/m2-mixture
+    const double c_soot_rad = alpha * chi_rad * 1E4;              // sites/m2-mixture
+
+    const double Roxi = -fR1 * c_soot_H + rR1 * c_soot_rad - fR2 * c_soot_H + rR2 * c_soot_rad + fR3 * c_soot_rad + fR4 * c_soot_rad - fR6 * c_soot_H;    // #-available-sites/m2-mix*s
+
+    return Roxi / Na * MW_C;                                       // kg/m2*s
+}
