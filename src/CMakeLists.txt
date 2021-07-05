@@ -69,8 +69,8 @@ set(STATE_SRC_FILES
 
 set(SRC_FILES
         soot_model/psdModels/PSDModel.h
-        sootModels/modelGenerator.h
-        sootModels/modelGenerator.cc
+        sootModel.h
+        sootModel.cc
         constants.h
         sootlib/ratio/MassRateRatio.h
         sootlib/ratio/MassRateRatios.h)
