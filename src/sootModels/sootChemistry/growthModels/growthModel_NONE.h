@@ -4,17 +4,29 @@
 #include "growthModel.h"
 
 namespace soot {
-class GrowthModel_NONE : public growthModel {
-public:
-    [[nodiscard]] double getGrowthRate(const State& state, MassRateRatios& ratio) const override {
-        return 0;
-    }
-    [[nodiscard]] GrowthMechanism getMechanism() const override {
-        return GrowthMechanism::NONE;
-    }
 
-    ~GrowthModel_NONE() override = default;
-};
+    class growthModel_NONE : public growthModel {
+
+    //////////////// DATA MEMBERS /////////////////////
+
+    private:
+
+        std::map<gasSp, double>   *growthRxnRatios{};
+
+    //////////////// MEMBER FUNCTIONS /////////////////
+
+    public:
+
+         double getGrowthSootRate(const state &state) const override { return 0; }
+
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+
+    public:
+
+         growthModel_NONE() = default;
+        ~growthModel_NONE() override = default;
+
+    };
 }
 
 #endif //GROWTHMODEL_NONE_H

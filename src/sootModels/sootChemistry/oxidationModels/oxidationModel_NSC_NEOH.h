@@ -4,15 +4,40 @@
 #include "oxidationModel.h"
 
 namespace soot {
-class OxidationModel_NSC_NEOH : public oxidationModel {
-public:
-    [[nodiscard]] double getOxidationRate(const State& state, MassRateRatios& ratio) const override;
-    [[nodiscard]] OxidationMechanism getMechanism() const override {
-        return OxidationMechanism::NSC_NEOH;
-    }
 
-    ~OxidationModel_NSC_NEOH() override = default;
-};
+    ////////////////////////////////////////////////////////////////////////////////
+    /*! Oxidation by NSC + Neoh
+     *
+     *      Rates from Nagle and Strickland-Constable (1961) and Neoh (1981) "Soot
+     *      oxidation in flames" in Particulate Carbon Formation During Combustion
+     *      book
+     *      C + 0.5 O2 --> CO
+     *      C + OH     --> CO + H
+     *
+     *      Returns chemical soot oxidation rate in kg/m2*s.
+     *
+     */
+    class oxidationModel_NSC_NEOH : public oxidationModel {
+
+    //////////////// DATA MEMBERS /////////////////////
+
+    public:
+
+        std::map<gasSp, double>  *oxidationRxnRatios;
+
+    //////////////// MEMBER FUNCTIONS /////////////////
+
+    public:
+
+         double getOxidationSootRate(const state &state) const override;
+
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+
+    public:
+
+         oxidationModel_NSC_NEOH();
+        ~oxidationModel_NSC_NEOH() override = default;
+    };
 }
 
 #endif //OXIDATIONMODEL_NSC_NEOH_H

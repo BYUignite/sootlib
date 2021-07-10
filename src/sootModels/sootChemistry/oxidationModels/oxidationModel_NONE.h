@@ -4,17 +4,28 @@
 #include "oxidationModel.h"
 
 namespace soot {
-class OxidationModel_NONE : public oxidationModel {
-public:
-    [[nodiscard]] double getOxidationRate(const State& state, MassRateRatios& ratio) const override {
-        return 0;
-    }
-    [[nodiscard]] OxidationMechanism getMechanism() const override {
-        return OxidationMechanism::NONE;
-    }
 
-    ~OxidationModel_NONE() override = default;
-};
+    class oxidationModel_NONE : public oxidationModel {
+
+    //////////////// DATA MEMBERS /////////////////////
+
+    private:
+
+        std::map<gasSp, double>   *oxidationRxnRatios{};
+
+    //////////////// MEMBER FUNCTIONS /////////////////
+
+    public:
+
+         double getOxidationSootRate(const state &state) const override { return 0; }
+
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+
+    public:
+
+         oxidationModel_NONE() = default;
+        ~oxidationModel_NONE() override = default;
+    };
 }
 
 #endif //OXIDATIONMODEL_NONE_H

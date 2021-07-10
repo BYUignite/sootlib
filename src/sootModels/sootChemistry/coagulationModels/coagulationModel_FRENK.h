@@ -1,41 +1,46 @@
-/**
- * Josh Bedwell - June 2021
- */
-
 #ifndef COAGULATIONMODEL_FRENK_H
 #define COAGULATIONMODEL_FRENK_H
 
 #include "coagulationModel.h"
 
 namespace soot {
-class CoagulationModel_FRENK : public coagulationModel {
-/**
- * Implementation of coagulationModel interface
- */
-public:
-    /**
-     * Calculates coagulation rate - required by coagulationModel
-     *
-     * @param state
-     * @param m1
-     * @param m2
-     * @return
-     */
-    [[nodiscard]] double getCoagulationRate(const State& state, double m1, double m2) const override;
-    /**
-     * Reports mechanism type - requried by coagulationModel
-     *
-     * @return
-     */
-    [[nodiscard]] CoagulationMechanism getMechanism() const override {
-        return CoagulationMechanism::FRENK;
-    }
 
-    /**
-     * Defines deconstructor behavior as default - required by coagulationModel
+    ////////////////////////////////////////////////////////////////////////////////
+    /*! Coagulation by Frenklach
+     *
+     *      Implementation of coagulationModel interface
+     *
+     *      Returns the value of the collision rate function beta in m3/#*s.
+     *
+     *      @param MomentState&     \input      local moment state; need M0 and M1
+     *      @param m1               \input      first particle size (kg)
+     *      @param m2               \input      second particle size (kg)
+     *
      */
-    ~CoagulationModel_FRENK() override = default;
-};
+    class coagulationModel_FRENK : public coagulationModel {
+
+    //////////////// DATA MEMBERS /////////////////////
+
+    //////////////// MEMBER FUNCTIONS /////////////////
+
+    public:
+        /**
+         * Calculates coagulation rate - required by coagulationModel
+         *
+         * @param state
+         * @param m1
+         * @param m2
+         * @return
+         */
+         double getCoagulationSootRate(const state& state, double m1, double m2) const override;
+
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+
+    public:
+
+         coagulationModel_FRENK() = default;
+        ~coagulationModel_FRENK() override = default;
+    };
 }
 
 #endif //COAGULATIONMODEL_FRENK_H
