@@ -2,51 +2,76 @@
 #define CONSTANTS_H
 
 #include <map>
+#include <vector>
+#include <cmath>
+#include <iostream>
+#include <algorithm>
+#include <memory>
 
 namespace soot {
 
+    // universal constants
     const double Na = 6.02214086E26;    ///< Avogadro's constant: #/kmol
     const double kb = 1.38064852E-23;   ///< Boltzmann constant = Rg/Na: J/#*K
     const double Rg = 8314.46;          ///< Universal gas constant
-    const double eps_c = 2.2;           ///< coagulationModel constant
+    const double eps_c = 2.2;           ///< coagulation constant
     const double Df = 1.8;              ///< soot fractal dimension
-    const double cMin = 100;            ///< soot min num carbon atoms
+//    const double cMin = 100;            ///< soot min num carbon atoms
     const double rhoSoot = 1850;        ///< soot particle density
     const double bCoag = 0.8536;        ///< coagulation constant
 
+    // model options
     enum class nucleationMech   { NONE, LL, LIN, PAH };
     enum class growthMech       { NONE, LL, LIN, HACA };
     enum class oxidationMech    { NONE, LL, LEE_NEOH, NSC_NEOH, HACA };
     enum class coagulationMech  { NONE, LL, FUCHS, FRENK };
     enum class psdMech          { MONO, LOGN, QMOM, MOMIC, SECT };
 
-    const double MW_C2H2 = 26.038;        ///< molar weight: kg/kmol
-    const double MW_O = 15.999;
-    const double MW_O2 = 31.998;
-    const double MW_H = 1.008;
-    const double MW_H2 = 2.016;
-    const double MW_OH = 17.007;
-    const double MW_H2O = 18.015;
-    const double MW_CO = 28.010;
-    const double MW_C = 12.011;
+    // gas species list and properties
 
-    enum class gasSpecies { C2H2, O, O2, H, H2, OH, H2O, CO, C };
+    enum class gasSp { C2H2, O, O2, H, H2, OH, H2O, CO, C, C6H6 };
 
-    const std::map<gasSpecies, double> gasSpeciesMW = {{gasSpecies::C2H2, MW_C2H2},
-                                                       {gasSpecies::O,    MW_O},
-                                                       {gasSpecies::O2,   MW_O2},
-                                                       {gasSpecies::H,    MW_H},
-                                                       {gasSpecies::H2,   MW_H2},
-                                                       {gasSpecies::OH,   MW_OH},
-                                                       {gasSpecies::H2O,  MW_H2O},
-                                                       {gasSpecies::CO,   MW_CO},
-                                                       {gasSpecies::C,    MW_C}};
+    const std::map<gasSp, double> gasSpMW = {{gasSp::C2H2, 26.038},      ///< molar weight (kg/kmol)
+                                             {gasSp::O,    15.999},
+                                             {gasSp::O2,   31.998},
+                                             {gasSp::H,    1.008},
+                                             {gasSp::H2,   2.016},
+                                             {gasSp::OH,   17.007},
+                                             {gasSp::H2O,  18.015},
+                                             {gasSp::CO,   28.010},
+                                             {gasSp::C,    12.011},
+                                             {gasSp::C6H6, 78.114}};
 
+    // PAH species list and properties for PAH nucleation and condensation
+    // See Blanquart & Pitsch (2009) "A joint volume-surface-hydrogen multi-variate model for soot formation"
+
+    enum class pahSp { C10H8, C12H8, C12H10, C14H10, C16H10, C18H10 };
+
+    const std::map<pahSp, double> pahSpMW = {{pahSp::C10H8,  128},      ///< molar weight (kg/kmol)
+                                             {pahSp::C12H8,  152},
+                                             {pahSp::C12H10, 154},
+                                             {pahSp::C14H10, 178},
+                                             {pahSp::C16H10, 202},
+                                             {pahSp::C18H10, 226}};
+
+    const std::map<pahSp, int> pahSpNC = {{pahSp::C10H8,  10},      ///< number of carbon atoms per PAH species
+                                          {pahSp::C12H8,  12},
+                                          {pahSp::C12H10, 12},
+                                          {pahSp::C14H10, 14},
+                                          {pahSp::C16H10, 16},
+                                          {pahSp::C18H10, 18}};
+
+    const std::map<pahSp, double> pahSpGamma = {{pahSp::C10H8,  0.0010},      ///< unitless sticking coefficient
+                                                {pahSp::C12H8,  0.0030},
+                                                {pahSp::C12H10, 0.0085},
+                                                {pahSp::C14H10, 0.0150},
+                                                {pahSp::C16H10, 0.0250},
+                                                {pahSp::C18H10, 0.0390}};
 
     struct sourceTermStruct {
-        std::vector<double>             sootSourceTerms;
-        std::map<gasSpecies, double>    gasSourceTerms;
-        std::map<size_t, double>        pahSourceTerms;
+        std::vector<double>       sootSourceTerms;
+        std::map<gasSp, double>   gasSourceTerms;
+        std::map<pahSp, double>   pahSourceTerms;
     };
 
 }
