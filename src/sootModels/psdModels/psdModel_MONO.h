@@ -1,57 +1,51 @@
-/**
- * Josh Bedwell - June 2021
- */
+#ifndef PSDMODEL_MONO_H
+#define PSDMODEL_MONO_H
 
-#ifndef SOOTMODEL_MONO_H
-#define SOOTMODEL_MONO_H
-
-#include "sootlib/soot_model/PSDModel.h"
-#include "sootlib/soot_model/SootChemistry.h"
+#include "psdModel.h"
 
 namespace soot {
-/**
- * An implementation of the PSDModel interface following the MONO model
- *
- * Associated with the enum PSDMechanism:MONO
- */
-class PSDModel_MONO : public PSDModel {
-public:
-    /**
-     * Sets the sootChemistry member
-     * Marked explicit to avoid unintentional implicit conversions due to single argument
-     *
-     * @param sootChemistry
-     */
-    explicit PSDModel_MONO(const SootChemistry& sootChemistry);
-    /**
-     * Default deconstructor
-     * requried by PSDModel
-     */
-    ~PSDModel_MONO() override = default;
-
-private:
-    /**
-     * source terms calculation function required by PSDModel
-     *
-     * @param state contains soot and gas state data
-     * @param out pointer to an outstream for debugging purposes, can be null
-     * @return source terms object with computer values
-     */
-    [[nodiscard]] SourceTerms getSourceTermsImplementation(State& state, std::ostream* out) const override;
-    /**
-     * throws exceptions if the state object is in an illegal state to calculate source terms required by PSDModel
-     *
-     * @param state
-     */
-    void checkState(const State& state) const override;
 
     /**
-     * SootChemistry member used in calculations during getSourceTermsImplementation
+     *  An implementation of the psdModel interface following the MONO model
+     *
+     *  Associated with enum psdMech:MONO
      */
-    SootChemistry sootChemistry;
+    class psdModel_MONO : public psdModel {
 
-    // helper functions specific to this PSD
-};
+    //////////////// DATA MEMBERS /////////////////////
+
+    private:
+
+        size_t nMom;
+
+    //////////////// MEMBER FUNCTIONS /////////////////
+
+    private:
+
+        /**
+         * source terms calculation function required by psdModel
+         *
+         * @param state contains soot and gas state data
+         * @param out pointer to an outstream for debugging purposes, can be null
+         * @return source terms object with computer values
+         */
+        sourceTermStruct getSourceTermsImplementation(state& state, std::ostream* out) const override;
+
+        /**
+         * throws exceptions if the state object is in an illegal state to calculate source terms required by psdModel
+         *
+         * @param state
+         */
+        void checkState(const state& state) const override;
+
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+
+    public:
+
+        psdModel_MONO(size_t n);
+        ~psdModel_MONO() override = default;
+
+    };
 }
 
-#endif //SOOTMODEL_MONO_H
+#endif //PSDMODEL_MONO_H

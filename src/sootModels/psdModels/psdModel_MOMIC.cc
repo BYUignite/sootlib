@@ -1,18 +1,13 @@
 #include "psdModel_MOMIC.h"
 
-#include <algorithm>
-#include <cmath>
-#include <iostream>
-
-#include "lib/binomial/binomial.h"
-
 using namespace std;
 using namespace soot;
 
-PSDModel_MOMIC::PSDModel_MOMIC(const SootChemistry& sootChemistry) {
-    this->sootChemistry = sootChemistry;
+ psdModel_MOMIC:: psdModel_MOMIC(size_t n) {
+    this->nMom = n;     // TODO error message for unusable values
 }
-SourceTerms PSDModel_MOMIC::getSourceTermsImplementation(State& state, std::ostream* out) const {
+
+sourceTermStruct  psdModel_MOMIC::getSourceTermsImplementation(state& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel MOMIC] ===" << endl;
@@ -43,7 +38,7 @@ SourceTerms PSDModel_MOMIC::getSourceTermsImplementation(State& state, std::ostr
 
     vector<double> Mnuc(state.getNumMoments(), 0);
 
-    double m_nuc = state.getCMin() * MW_C / Na;
+    double m_nuc = cMin * MW_C / Na;
     for (size_t i = 0; i < N; i++)
         Mnuc.at(i) = pow(m_nuc, i) * Jnuc;
 
@@ -56,7 +51,7 @@ SourceTerms PSDModel_MOMIC::getSourceTermsImplementation(State& state, std::ostr
 
     vector<double> Mcnd(state.getNumMoments(), 0);
 
-    if (sootChemistry.nucleationModel->getMechanism() == NucleationMechanism::PAH) {
+    if (sootChemistry.nucleationModel->getMechanism() == nucleationMech::PAH) {
         for (size_t i = 1; i < N; i++)
             Mcnd.at(i) = MOMICCoagulationRate(state, (int) i) * state.getDimer() * state.getMDimer() * (double) i;
     }
@@ -95,7 +90,7 @@ SourceTerms PSDModel_MOMIC::getSourceTermsImplementation(State& state, std::ostr
 
     vector<double> Mcoa(state.getNumMoments(), 0);
 
-    if (sootChemistry.coagulationModel->getMechanism() != CoagulationMechanism::NONE) {
+    if (sootChemistry.coagulationModel->getMechanism() != coagulationMech::NONE) {
         for (size_t i = 0; i < N; i++)
             Mcoa.at(i) = MOMICCoagulationRate(state, (int) i);
     }
@@ -120,7 +115,7 @@ SourceTerms PSDModel_MOMIC::getSourceTermsImplementation(State& state, std::ostr
 
     //---------- get gas source terms
     // FIXME in the old code these were hardcoded to use index 1, but it looks like this depends on the number of moments which supposedly might be only 1
-    map<GasSpecies, double> gasSourceTerms = SootChemistry::getGasSourceTerms(state, massRateRatios, Mnuc.at(1), Mgrw.at(1), Moxi.at(1), Mcnd.at(1));
+    map<gasSp, double> gasSourceTerms = SootChemistry::getGasSourceTerms(state, massRateRatios, Mnuc.at(1), Mgrw.at(1), Moxi.at(1), Mcnd.at(1));
     map<size_t, double> PAHSourceTerms = SootChemistry::getPAHSourceTerms(state, massRateRatios, Mnuc.at(1), 0, Moxi.at(1), Mcnd.at(1));
 
     if (out) {
@@ -133,9 +128,9 @@ SourceTerms PSDModel_MOMIC::getSourceTermsImplementation(State& state, std::ostr
         *out << endl;
     }
 
-    return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
+    return sourceTermStruct(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
-size_t PSDModel_MOMIC::downselectIfNeeded(vector<double>& M)
+size_t  psdModel_MOMIC::downselectIfNeeded(vector<double>& M)
 {
 	if (M.at(0) <= 0)
 		return 0;
@@ -169,7 +164,7 @@ size_t PSDModel_MOMIC::downselectIfNeeded(vector<double>& M)
  *      @param M     \input vector of whole order moments
  *
  */
-double PSDModel_MOMIC::f_grid(int x, int y, const vector<double>& M)
+double  psdModel_MOMIC::f_grid(int x, int y, const vector<double>& M)
 {
 	// any MOMIC calculation that is reused is calculated once here
 	const double temp0 = MOMIC(x - 1.0 / 2, M);
@@ -252,22 +247,22 @@ double PSDModel_MOMIC::f_grid(int x, int y, const vector<double>& M)
 
 	return pow(10, value);
 }
-double PSDModel_MOMIC::MOMICCoagulationRate(const State& state, size_t r){
+double  psdModel_MOMIC::MOMICCoagulationRate(const state& state, size_t r){
     // the converions between signed and unsigned with r and k is midly concerning, but as far as I can see shouldn't be a problem
 
 	if (r == 1)
 		return 0;
 
 	const double mu_1 = state.getMoment(1) / state.getMoment(0);
-	const double d_g = pow(6 * kb * state.getT() / state.getP() / M_PI, 1.0 / 3);
-	const double d_p = pow(6 * mu_1 / state.getRhoSoot() / M_PI, 1.0 / 3);
-	const double lambda_g = kb * state.getT() / (pow(2, 0.5) * M_PI * pow(d_g, 2) * state.getP());
+	const double d_g = pow(6 * kb * state.T / state.P / M_PI, 1.0 / 3);
+	const double d_p = pow(6 * mu_1 / rhoSoot / M_PI, 1.0 / 3);
+	const double lambda_g = kb * state.T / (pow(2, 0.5) * M_PI * pow(d_g, 2) * state.getP());
 	const double Kn = lambda_g / d_p;
 
 	double Rate_C;
 
-	const double K_C = 2 * kb * state.getT() / (3 * state.getMuGas());
-	const double K_Cprime = 1.257 * lambda_g * pow(M_PI * state.getRhoSoot() / 6, 1.0 / 3);
+	const double K_C = 2 * kb * state.T / (3 * state.getMuGas());
+	const double K_Cprime = 1.257 * lambda_g * pow(M_PI * rhoSoot / 6, 1.0 / 3);
 
 	if (r == 0) {
 		Rate_C = -K_C * (pow(state.getMoment(0), 2)
@@ -290,7 +285,7 @@ double PSDModel_MOMIC::MOMICCoagulationRate(const State& state, size_t r){
 	}
 
 	double Rate_F;
-	const double K_f = 2.2 * pow(3 / (4 * M_PI * state.getRhoSoot()), 2.0 / 3) * pow(8 * M_PI * kb * state.getT(), 1.0 / 2);
+	const double K_f = 2.2 * pow(3 / (4 * M_PI * state.getRhoSoot()), 2.0 / 3) * pow(8 * M_PI * kb * state.T, 1.0 / 2);
 
 	if (r == 0) {
 		Rate_F = -0.5 * K_f * f_grid(0, 0, state.getMomentsConst());
@@ -317,7 +312,7 @@ double PSDModel_MOMIC::MOMICCoagulationRate(const State& state, size_t r){
  *      @param y_i  \output     interpolated y value
  *
  */
-double PSDModel_MOMIC::lagrangeInterp(double x_i, const vector<double>& x, const vector<double>& y)
+double  psdModel_MOMIC::lagrangeInterp(double x_i, const vector<double>& x, const vector<double>& y)
 {
 	double y_i = 0;
 
@@ -334,6 +329,7 @@ double PSDModel_MOMIC::lagrangeInterp(double x_i, const vector<double>& x, const
 
 	return y_i;
 }
+
 ////////////////////////////////////////////////////////////////////////////////
 /*! MOMIC function
  *
@@ -345,7 +341,7 @@ double PSDModel_MOMIC::lagrangeInterp(double x_i, const vector<double>& x, const
  *      @param M     \input     vector of whole order moments
  *
  */
-double PSDModel_MOMIC::MOMIC(double p, const vector<double>& M)
+double  psdModel_MOMIC::MOMIC(double p, const vector<double>& M)
 {
 	if (p == 0)
 		return M.at(0);
@@ -366,7 +362,7 @@ double PSDModel_MOMIC::MOMIC(double p, const vector<double>& M)
 
 	return pow(10, log_mu_p) * M.at(0);
 }
-void PSDModel_MOMIC::checkState(const State& state) const {
+void  psdModel_MOMIC::checkState(const state& state) const {
     if (state.getNumMoments() < 1)
         throw runtime_error("MOMIC soot model requires 1-8 soot moments");
     if (state.getNumMoments() > 8)

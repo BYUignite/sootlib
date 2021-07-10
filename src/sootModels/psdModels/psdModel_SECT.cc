@@ -1,14 +1,14 @@
 #include "psdModel_SECT.h"
 
-#include <cmath>
-
 using namespace std;
 using namespace soot;
 
-PSDModel_SECT::PSDModel_SECT(const SootChemistry& sootChemistry) {
-    this->sootChemistry = sootChemistry;
+psdModel_SECT::psdModel_SECT(size_t n) {
+
+    this->nBin = n;         //TODO error message for unusable values
 }
-SourceTerms PSDModel_SECT::getSourceTermsImplementation(State& state, std::ostream* out) const {
+
+sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel SECT] ===" << endl;
@@ -20,7 +20,7 @@ SourceTerms PSDModel_SECT::getSourceTermsImplementation(State& state, std::ostre
     vector<double> absc(state.getNumSections(), 0);
 
     for (size_t k = 0; k < state.getNumSections(); k++)
-        absc.at(k) = state.getCMin() * pow(2, k) * MW_C / Na;
+        absc.at(k) = cMin * pow(2, k) * MW_C / Na;
 
     for (double& num : wts) {
         if (num < 0)
@@ -92,7 +92,7 @@ SourceTerms PSDModel_SECT::getSourceTermsImplementation(State& state, std::ostre
 
     vector<double> N0(state.getNumSections(), 0);
     N0.at(0) = Jnuc;
-    const double N_tot = Jnuc * state.getCMin() * MW_C / Na;
+    const double N_tot = Jnuc * cMin * MW_C / Na;
 
     if (out) {
         *out << "N0 (" << N0.size() << ")" << endl;
@@ -104,7 +104,7 @@ SourceTerms PSDModel_SECT::getSourceTermsImplementation(State& state, std::ostre
 
     vector<double> Cnd0(state.getNumSections(), 0);
     double Cnd_tot = 0;
-    if (sootChemistry.nucleationModel->getMechanism() == NucleationMechanism::PAH) {
+    if (sootChemistry.nucleationModel->getMechanism() == nucleationMech::PAH) {
         for (size_t i = 0; i < Cnd0.size(); i++) {
             Cnd0.at(i) = state.getDimer() * state.getMDimer() * sootChemistry.coagulationModel->getCoagulationRate(state, state.getMDimer(), absc.at(i)) * wts.at(i);
             Cnd_tot += Cnd0.at(i) * absc.at(i);
@@ -182,7 +182,7 @@ SourceTerms PSDModel_SECT::getSourceTermsImplementation(State& state, std::ostre
 
     vector<double> sootSourceTerms(state.getNumSections(), 0);
     for (size_t i = 0; i < sootSourceTerms.size(); i++)
-        sootSourceTerms.at(i) = (N0.at(i) + Cnd0.at(i) + G0.at(i) + X0.at(i) + C0.at(i)) / state.getRhoSoot();
+        sootSourceTerms.at(i) = (N0.at(i) + Cnd0.at(i) + G0.at(i) + X0.at(i) + C0.at(i)) / rhoSoot;
 
     if (out) {
         *out << "Soot Source Terms (" << sootSourceTerms.size() << ")" << endl;
@@ -195,7 +195,7 @@ SourceTerms PSDModel_SECT::getSourceTermsImplementation(State& state, std::ostre
 
     //---------- get gas source terms
 
-    map<GasSpecies, double> gasSourceTerms = sootChemistry.getGasSourceTerms(state, massRateRatios, N_tot, G_tot, X_tot, Cnd_tot);
+    map<gasSp, double> gasSourceTerms = sootChemistry.getGasSourceTerms(state, massRateRatios, N_tot, G_tot, X_tot, Cnd_tot);
     map<size_t, double> PAHSourceTerms = sootChemistry.getPAHSourceTerms(state, massRateRatios, N_tot, 0, X_tot, Cnd_tot);
 
     if (out) {
@@ -209,9 +209,9 @@ SourceTerms PSDModel_SECT::getSourceTermsImplementation(State& state, std::ostre
     }
 
 
-    return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
+    return sourceTermStruct(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
-vector<double> PSDModel_SECT::getDivision(double mass, double num, const vector<double>& absc) {
+vector<double> psdModel_SECT::getDivision(double mass, double num, const vector<double>& absc) {
     size_t loc = 0;
     bool found = false;
     vector<double> toReturn(absc.size(), 0);
@@ -233,7 +233,7 @@ vector<double> PSDModel_SECT::getDivision(double mass, double num, const vector<
 
     return toReturn;
 }
-void PSDModel_SECT::checkState(const State& state) const {
+void psdModel_SECT::checkState(const state& state) const {
     if (state.getNumSections() < 1)
         throw runtime_error("SECT soot model requires 1+ sections/bins");
 }

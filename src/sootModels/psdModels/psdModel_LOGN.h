@@ -1,62 +1,57 @@
-/**
- * Josh Bedwell - June 2021
- */
+#ifndef PSDMODEL_LOGN_H
+#define PSDMODEL_LOGN_H
 
-#ifndef SOOTMODEL_LOGN_H
-#define SOOTMODEL_LOGN_H
-
-#include "sootlib/soot_model/PSDModel.h"
-#include "sootlib/soot_model/SootChemistry.h"
+#include "psdModel.h"
 
 namespace soot {
-/**
- * An implementation of the PSDModel interface following the LOGN moment-based model
- *
- * Associated with the enum PSDMechanism:LOGN
- */
-class PSDModel_LOGN : public PSDModel {
-public:
-    /**
-     * Sets the sootChemistry member
-     * Marked explicit to avoid unintentional implicit conversions due to single argument
-     *
-     * @param sootChemistry
-     */
-    explicit PSDModel_LOGN(const SootChemistry& sootChemistry);
-    /**
-     * Default deconstructor
-     * requried by PSDModel
-     */
-    ~PSDModel_LOGN() override = default;
-
-private:
-    /**
-     * source terms calculation function required by PSDModel
-     *
-     * @param state contains soot and gas state data
-     * @param out pointer to an outstream for debugging purposes, can be null
-     * @return source terms object with computer values
-     */
-    [[nodiscard]] SourceTerms getSourceTermsImplementation(State& state, std::ostream* out) const override;
-    /**
-     * throws exceptions if the state object is in an illegal state to calculate source terms required by PSDModel
-     *
-     * @param state
-     */
-    void checkState(const State& state) const override;
 
     /**
-     * SootChemistry member used in calculations during getSourceTermsImplementation
+     * An implementation of the psdModel interface following the LOGN moment-based model
+     *
+     * Associated with the enum psdMech:LOGN
      */
-    SootChemistry sootChemistry;
+    class psdModel_LOGN : public psdModel {
 
-    // helper functions specific to this PSD
-    // TODO I don't know good descriptions for these functions
-    [[nodiscard]] static double Mk(double k, double M0, double M1, double M2);
-    [[nodiscard]] static double getKfm(const State& state);
-    [[nodiscard]] static double getKc(const State& state);
-    [[nodiscard]] static double getKcp(const State& state);
-};
+    //////////////// DATA MEMBERS /////////////////////
+
+    public:
+
+        size_t nMom;
+
+    //////////////// MEMBER FUNCTIONS /////////////////
+
+    private:
+
+        /**
+         * source terms calculation function required by psdModel
+         *
+         * @param state contains soot and gas state data
+         * @param out pointer to an outstream for debugging purposes, can be null
+         * @return source terms object with computer values
+         */
+        sourceTermStruct getSourceTermsImplementation(state& state, std::ostream* out) const override;
+        /**
+         * throws exceptions if the state object is in an illegal state to calculate source terms required by psdModel
+         *
+         * @param state
+         */
+        void checkState(const state& state) const override;
+
+        // helper functions specific to this PSD
+        static double Mk(double k, double M0, double M1, double M2);
+        static double getKfm(const state& state);
+        static double getKc( const state& state);
+        static double getKcp(const state& state);
+
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+
+    public:
+
+        psdModel_LOGN(size_t n);
+        ~psdModel_LOGN() override = default;
+
+
+    };
 }
 
-#endif //SOOTMODEL_LOGN_H
+#endif //PSDMODEL_LOGN_H

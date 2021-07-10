@@ -1,59 +1,54 @@
-/**
- * Josh Bedwell - June 2021
- */
+#ifndef PSDMODEL_SECT_H
+#define PSDMODEL_SECT_H
 
-#ifndef SOOTMODEL_SECT_H
-#define SOOTMODEL_SECT_H
-
-#include "sootlib/soot_model/PSDModel.h"
-#include "sootlib/soot_model/SootChemistry.h"
+#include "psdModel.h"
 
 namespace soot {
-class PSDModel_SECT : public PSDModel {
-/**
- * An implementation of the PSDModel interaface following the SECT sectional/bin-based model
- *
- * Associated with the enum PSDMechanism:SECT
- */
-public:
-    /**
-     * Sets the sootChemistry member
-     * Marked explicit to avoid unintentional implicit conversions due to single argument
-     *
-     * @param sootChemistry
-     */
-    explicit PSDModel_SECT(const SootChemistry& sootChemistry);
-    /**
-     * Default deconstructor
-     * requried by PSDModel
-     */
-    ~PSDModel_SECT() override = default;
-
-private:
-    /**
-     * source terms calculation function required by PSDModel
-     *
-     * @param state contains soot and gas state data
-     * @param out pointer to an outstream for debugging purposes, can be null
-     * @return source terms object with computer values
-     */
-    [[nodiscard]] SourceTerms getSourceTermsImplementation(State& state, std::ostream* out) const override;
-    /**
-     * throws exceptions if the state object is in an illegal state to calculate source terms required by PSDModel
-     *
-     * @param state
-     */
-    void checkState(const State& state) const override;
 
     /**
-     * SootChemistry member used in calculations during getSourceTermsImplementation
+     * An implementation of the psdModel interface following the SECT sectional/bin-based model
+     *
+     * Associated with the enum psdMech::SECT
      */
-    SootChemistry sootChemistry;
+    class psdModel_SECT : public psdModel {
 
-    // helper functions specific to this PSD
-    // TODO I don't know good descriptions for these functions
-    [[nodiscard]] static std::vector<double> getDivision(double mass, double num, const std::vector<double>& absc);
-};
+    //////////////// DATA MEMBERS /////////////////////
+
+    private:
+
+        size_t nBins;
+
+    //////////////// MEMBER FUNCTIONS /////////////////
+
+    private:
+
+        /**
+         * source terms calculation function required by psdModel
+         *
+         * @param state contains soot and gas state data
+         * @param out pointer to an outstream for debugging purposes, can be null
+         * @return source terms object with computer values
+         */
+        sourceTermStruct getSourceTermsImplementation(state& state, std::ostream* out) const override;
+        /**
+         * throws exceptions if the state object is in an illegal state to calculate source terms required by psdModel
+         *
+         * @param state
+         */
+        void checkState(const state& state) const override;
+
+        // helper functions specific to this PSD
+        static std::vector<double> getDivision(double mass, double num, const std::vector<double>& absc);
+
+
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+
+    public:
+
+        psdModel_SECT(size_t n);
+        ~psdModel_SECT() override = default;
+
+    };
 }
 
-#endif //SOOTMODEL_SECT_H
+#endif //PSDMODEL_SECT_H

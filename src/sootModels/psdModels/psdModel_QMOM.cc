@@ -1,18 +1,11 @@
-/**
- * @file SootModel_QMOM.cc
- * Source file for class SootModel_QMOM
- */
-
 #include "psdModel_QMOM.h"
-
-#include <cmath>
-#include <iostream>
 
 using namespace std;
 using namespace soot;
 
-PSDModel_QMOM::PSDModel_QMOM(const SootChemistry& sootChemistry) {
-    this->sootChemistry = sootChemistry;
+psdModel_QMOM::psdModel_QMOM(size_t n) {
+
+    this->nMom = n;         // TODO error message for unusable values
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +18,7 @@ PSDModel_QMOM::PSDModel_QMOM(const SootChemistry& sootChemistry) {
  *
  */
 
-SourceTerms PSDModel_QMOM::getSourceTermsImplementation(State& state, std::ostream* out) const {
+sourceTermStruct psdModel_QMOM::getSourceTermsImplementation(state& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel QMOM] ===" << endl;
@@ -74,7 +67,7 @@ SourceTerms PSDModel_QMOM::getSourceTermsImplementation(State& state, std::ostre
     //---------- nucleation terms
 
     vector<double> nucleationSourceM(state.getNumMoments(), 0.);                        // nucleation source terms for moments
-    const double mNuc = state.getCMin() * MW_C / Na;                              // mass of a nucleated particle
+    const double mNuc = cMin * MW_C / Na;                              // mass of a nucleated particle
     for (size_t i = 0; i < state.getNumMoments(); i++)
         nucleationSourceM.at(i) = pow(mNuc, i) * jNuc;                          // Nuc_rate = m_nuc^r * jNuc
 
@@ -88,7 +81,7 @@ SourceTerms PSDModel_QMOM::getSourceTermsImplementation(State& state, std::ostre
     //---------- PAH condensation terms
 
     vector<double> condensationSourceM(state.getNumMoments(), 0);                            // PAH condensation source terms
-    if (sootChemistry.nucleationModel->getMechanism() == NucleationMechanism::PAH) {      // do PAH condensation if PAH nucleation is selected
+    if (sootChemistry.nucleationModel->getMechanism() == nucleationMech::PAH) {      // do PAH condensation if PAH nucleation is selected
         for (size_t i = 1; i < state.getNumMoments(); i++) {                                         // M0 = 0.0 for condensation by definition
             for (size_t j = 0; j < abscissas.size(); j++)
                 condensationSourceM.at(i) += sootChemistry.coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(j)) * pow(abscissas.at(j), i - 1) * weights.at(j);
@@ -177,7 +170,7 @@ SourceTerms PSDModel_QMOM::getSourceTermsImplementation(State& state, std::ostre
 
     //---------- get gas source terms
 
-    map<GasSpecies, double> gasSourceTerms = SootChemistry::getGasSourceTerms(state, massRateRatios, nucleationSourceM.at(1), growthSourceM.at(1), oxidationSourceM.at(1), 0);
+    map<gasSp, double> gasSourceTerms = SootChemistry::getGasSourceTerms(state, massRateRatios, nucleationSourceM.at(1), growthSourceM.at(1), oxidationSourceM.at(1), 0);
     map<size_t, double> PAHSourceTerms = SootChemistry::getPAHSourceTerms(state, massRateRatios, nucleationSourceM.at(1), 0, oxidationSourceM.at(1), 0);
 
     if (out) {
@@ -207,7 +200,7 @@ SourceTerms PSDModel_QMOM::getSourceTermsImplementation(State& state, std::ostre
  *      @param w    \output    weights
  *      @param x    \output    abscissas
  */
-void PSDModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w, vector<double>& x)
+void psdModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w, vector<double>& x)
 {
 	vector<vector<double>> sigma(N + 1, vector<double>(N * 2, 0));
 	vector<double> a(N, 0);
@@ -266,7 +259,7 @@ void PSDModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w
  *      which is more convenient when wts and absc are used to reconstitute
  *      moment source terms.
  */
-void PSDModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, vector<double>& abscissas)
+void psdModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, vector<double>& abscissas)
 {
 	size_t N = M.size();              // local nMom; may change with moment deselection
 
@@ -327,7 +320,7 @@ void PSDModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, 
 *  @param absc \input  abscissas
 *  @param Mk   \output fractional moment value
 */
-double PSDModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<double>& absc)
+double psdModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<double>& absc)
 {
 	double Mk = 0;
 
@@ -340,7 +333,7 @@ double PSDModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<dou
 
 	return Mk;
 }
-void PSDModel_QMOM::checkState(const State& state) const {
+void psdModel_QMOM::checkState(const state& state) const {
     if (state.getNumMoments() < 2)
         throw runtime_error("QMOM soot model requries 2, 4 or 6 moments");
     // TODO if the algorithms can still run without failing with an odd number of moments this can be changed to a warning
