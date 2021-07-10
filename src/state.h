@@ -1,74 +1,82 @@
-#ifndef BASESTATE_H
-#define BASESTATE_H
+#ifndef STATE_H
+#define STATE_H
 
 #include "src/constants.h"
 
-#include <vector>
-
 namespace soot {
+
     class state {
 
         //////////////// DATA MEMBERS /////////////////////
-        private:
 
-            std::map<gasSpecies, double> gasFractions;
-            std::map<size_t, double>     pahFractions;
-            std::vector<double>          sootBins;
+        public:
+
+            std::map<gasSp, double>      gasFractions;
+            std::map<pahSp, double>      pahFractions;
+            std::vector<double>          sootVar;
 
             double T = 0;
             double P = 0;
             double rhoGas = 0;
             double MWGas = 0;
             double muGas = 0;
+            double cMin = 100;          ///< soot min num carbon atoms
 
         //////////////// MEMBER FUNCTIONS /////////////////
 
         public:
-//            double get_PAHFrac(size_t n, double def = 0) const;
-//            void   set_PAHFrac(size_t n, double frac);
-            double get_PAHC(size_t n, double def = 0) const;
-            double get_PAHP(size_t n, double def = 0) const;
 
-            static double PAH_MW(size_t n);
-            static double getPAHGamma(size_t n);
-            double getPAHN(size_t n) const;
+            /** Sets the thermodynamic state based on user input
+             *
+             *      Only point of contact between users and the state class. User provides
+             *      relevant data to be assigned to sootlib's internal state variables.
+             *
+             *      @param T_           temperature (K)
+             *      @param P_           pressure (Pa)
+             *      @param rhoGas_      density of gas mixture (kg/m3)
+             *      @param MWGas_       gas mixture molecular weight (kg/kmol)
+             *      @param yGas_        gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
+             *      @param yPAH_        PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
+             *      @param sootVar_     soot variable (moments or section values) values
+             *      @param cMin_        minimum number of carbon atoms in a soot particle
+             *
+             *      IMPORTANT: gas and PAH species mass fractions MUST be provided in the order specified
+             *      above within the yGas and yPAH vectors. Values must be non-negative. If a species is
+             *      not represented or not present, DO NOT leave it out; instead, enter a mass fraction
+             *      value of zero. If the user mechanism contains more than one species with the same
+             *      molecular formula (C16H10 is a common culprit), enter the sum of the mass fractions
+             *      for the applicable species. Any additional species information is not used by sootlib
+             *      and will be ignored.
+             */
+            void setState(double T_, double P_, double rhoGas_, double muGas_, double MWGas_,
+                          std::vector<double> yGas_, std::vector<double> yPAH_, std::vector<double> sootVar_, double cMin_ = 100);
 
-//            double          getsootBin(size_t i) const          { checkSize(i);return sootBins.at(i); }
-//            void            setsootBin(size_t i, double value)  { checkSize(i);sootBins.at(i) = value; }
-//            void            resetsootBins(size_t numsootBins)    { sootBins = vector<double>(numsootBins, 0); }
-//            size_t          getNumsootBins() const              { return sootBins.size(); }
-//            vector<double>  getsootBins() const                 { return sootBins; }
+            double getGasSpC(gasSp sp)  const { return rhoGas * gasFractions.at(sp) / gasSpMW.at(sp); };
+            double getGasSpP(gasSp sp)  const { return gasFractions.at(sp) * MWGas / gasSpMW.at(sp) * P; };
 
-//            double  get_T() const                { return T; }
-//            void    set_T(double t)              { T = t; }
-//            double  get_P() const                { return P; }
-//            void    set_P(double p)              { P = p; }
-//            double  get_rhoGas() const           { return rhoGas; }
-//            void    set_rhoGas(double rhoGas_)   { rhoGas = rhoGas_; }
-//            double  get_cMin() const             { return cMin; }
-//            void    set_cMin(double cMin_)       { cMin = cMin_; }
-//
-//            std::map<gasSpecies, double>::const_iterator gasFractionsBegin() const { return gasFractions.begin(); }
-//            std::map<gasSpecies, double>::const_iterator gasFractionsEnd() const   { return gasFractions.end(); }
-//
-//            double  getMWGas() const            { return MWGas; }
-//            void    setMWGas(double MWGas_)     { MWGas = MWGas_; }
-//            double  getMuGas() const            { return muGas; }
-//            void    setMuGas(double muGas_)     { muGas = muGas_; }
-//
-//            double  getGasSpeciesFrac(gasSpecies species, double def = 0) const;
-//            void    setGasSpeciesFrac(gasSpecies species, double frac);
-            double  getGasSpeciesC(gasSpecies species, double def = 0) const;
-            double  getGasSpeciesP(gasSpecies species, double def = 0) const;
-            double  getGasMeanFreePath() const;
+            double getGasMeanFreePath() const { return muGas / rhoGas * sqrt(M_PI * MWGas / (2.0 * Rg * T)); };
 
-            void setState();
+            double get_pahSpC(pahSp sp) const { return rhoGas * pahFractions.at(sp) / pahSpMW.at(sp); };
+            double get_pahSpP(pahSp sp) const { return pahFractions.at(sp) * MWGas / pahSpMW.at(sp) * P; };
+            double get_pahSpN(pahSp sp) const { return rhoGas * pahFractions.at(sp) / pahSpMW.at(sp) * Na; };
 
-//            void setPAHFrac(size_t n, double frac);
+            double getParticleCollisionRate(double m1, double m2) const;
+
+//            double          getsootBin(size_t i) const          { checkSize(i);return sootVar.at(i); }
+//            void            setsootBin(size_t i, double value)  { checkSize(i);sootVar.at(i) = value; }
+//            void            resetsootBins(size_t numsootBins)    { sootVar = vector<double>(numsootBins, 0); }
+//            size_t          getNumsootBins() const              { return sootVar.size(); }
+//            vector<double>  getsootBins() const                 { return sootVar; }
 
 //            virtual void printInfo(std::ostream& out) const;
 
-        //////////////// CONSTRUCTOR FUNCTIONS ////////////
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+
+    public:
+
+         state();                    // initializes variable and sets default values for maps
+        ~state() = default;
+
 
     };
 }
@@ -87,4 +95,4 @@ namespace soot {
 
 
 
-#endif //BASESTATE_H
+#endif //STATE_H
