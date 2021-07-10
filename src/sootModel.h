@@ -1,8 +1,5 @@
-#ifndef BASESOOTMODELFACTORY_H
-#define BASESOOTMODELFACTORY_H
-
-#include <memory>
-#include <vector>
+#ifndef SOOTMODEL_H
+#define SOOTMODEL_H
 
 #include "src/constants.h"
 #include "src/state.h"
@@ -48,7 +45,7 @@
  *          2. Specify the desired PSD model with setPsdModel function
  *          3. Specify desired soot chemistry with setSootChemistry function
  *
- *      To get source terms //TODO finish this
+ *      To get source terms //TODO finish this documentation
  *
  */
 namespace soot {
@@ -60,7 +57,6 @@ namespace soot {
     public:
 
         sootModel();       // Sets default properties of the created soot model
-
 
     //////////////// DATA MEMBERS /////////////////////
 
@@ -94,7 +90,7 @@ namespace soot {
          *      @param nMom          number of moments (for moment based models)
          *      @param nBin          number of bins (for sectional models)
          */
-        void setPSDModel(psdMech modelType, int nMom = 0, int nBin = 0);
+        void setPsdModel(psdMech modelType, int nMom = 0, int nBins = 0);
 
         /** Selects soot chemistry mechanisms based on user input
          *
@@ -111,4 +107,4 @@ namespace soot {
     };
 }
 
-#endif //BASESOOTMODELFACTORY_H
+#endif //SOOTMODEL_H
