@@ -5,7 +5,18 @@ using namespace soot;
 
 psdModel_QMOM::psdModel_QMOM(size_t n) {
 
-    this->nMom = n;         // TODO error message for unusable values
+    if (n%2 == 1 || n < 1)
+        throw runtime_error("Invalid number of soot moments requested");
+
+    if (n > 6)
+        cerr << "Warning: QMOM inversion algorithm may behave unpredictably with "
+                "8+ soot moments. Proceed with caution." << endl;
+
+    this->nMom = n;
+
+    // initialize sourceTerms soot variable
+    for (int i=0; i<nMom; i++)
+        sourceTerms->sootSourceTerms.push_back(0);
 
 }
 
@@ -19,7 +30,7 @@ psdModel_QMOM::psdModel_QMOM(size_t n) {
  *
  */
 
-sourceTermStruct psdModel_QMOM::getSourceTermsImplementation(state& state, std::ostream* out) const {
+void psdModel_QMOM::getSourceTermsImplementation(state& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel QMOM] ===" << endl;
@@ -336,9 +347,8 @@ double psdModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<dou
 void psdModel_QMOM::checkState(const state& state) const {
     if (state.sootVar.size() < 2)
         throw runtime_error("QMOM soot model requries 2, 4 or 6 moments");
-    // TODO if the algorithms can still run without failing with an odd number of moments this can be changed to a warning
     if (state.sootVar.size() % 2 == 1)
         throw runtime_error("QMOM soot model requires 2, 4 or 6 moments");
     if (state.sootVar.size() > 6)
-        cerr << "QMOM soot model requires 2, 4 or 6 moments, got " << state.getNumMoments() << endl;
+        cerr << "QMOM soot model requires 2, 4 or 6 moments, got " << state.sootVar.size() << endl;
 }

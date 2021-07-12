@@ -5,10 +5,16 @@ using namespace soot;
 
 psdModel_MONO::psdModel_MONO(size_t n) {
 
-    if (n != 2) {
-        this->nMom=2; // issue warning message, notify user that MONO will default to 2 moments
-    }
+    // warn user if wrong number of soot moments is requested
+    if (n != 2)
+        cerr << "Invalid number of soot moments requested. MONO model will use default value of 2 soot moments." << endl;
+
+    // specify number of soot moments for MONO model
     this->nMom = 2;
+
+    // initialize sourceTerms soot variable
+    for (int i=0; i<nMom; i++)
+        sourceTerms->sootSourceTerms.push_back(0);
 
 }
 
@@ -22,7 +28,7 @@ psdModel_MONO::psdModel_MONO(size_t n) {
  *
  */
 
-sourceTermStruct psdModel_MONO::getSourceTermsImplementation(state& state, std::ostream* out) const {
+void psdModel_MONO::getSourceTermsImplementation(state& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel MONO] ===" << endl;
@@ -46,10 +52,10 @@ sourceTermStruct psdModel_MONO::getSourceTermsImplementation(state& state, std::
 
     //---------- get chemical rates
 
-    double jNuc = sootModel.nuc->getNucleationSootRate(state, abscissas, weights);
-    double kGrw = sootModel.grw->getGrowthSootRate(state);
-    double kOxi = sootModel.oxi->getOxidationSootRate(state);
-    double coag = sootModel.coa->getCoagulationSootRate(state, abscissas.at(0), abscissas.at(0));
+    double jNuc = nuc->getNucleationSootRate(state, abscissas, weights);
+    double kGrw = grw->getGrowthSootRate(state);
+    double kOxi = oxi->getOxidationSootRate(state);
+    double coag = coa->getCoagulationSootRate(state, abscissas.at(0), abscissas.at(0));
 
     if (out) {
         *out << "jNuc: " << jNuc << endl;
@@ -75,12 +81,12 @@ sourceTermStruct psdModel_MONO::getSourceTermsImplementation(state& state, std::
     double Cnd0 = 0;
     double Cnd1 = 0;
 
-    if (sootMode::nucleationMechanism == nucleationMech::PAH) {
+    if (sootModel::nucleationMechanism == nucleationMech::PAH) {
 
-        double nDimer = sootModel.nuc->nDimer;
-        double mDimer = sootModel.nuc->mDimer;
+        double nDimer = nuc->nDimer;
+        double mDimer = nuc->mDimer;
 
-        Cnd1 = nDimer * mDimer * sootModel.coa->getCoagulationRate(state, mDimer, abscissas.at(0)) * weights.at(0);
+        Cnd1 = nDimer * mDimer * coa->getCoagulationSootRate(state, mDimer, abscissas.at(0)) * weights.at(0);
 
 
     }
@@ -143,21 +149,35 @@ sourceTermStruct psdModel_MONO::getSourceTermsImplementation(state& state, std::
 
     //---------- get gas source terms
 
-    map<gasSp, double> gasSourceTerms = SootChemistry::getGasSourceTerms(state, massRateRatios, N1, G1, X1, 0);
-    map<size_t, double> PAHSourceTerms = SootChemistry::getPAHSourceTerms(state, massRateRatios, N1, 0, X1, 0);
+    map<gasSp, double> nucGas = nuc->getNucleationGasRates(state, N1).gasSourceTerms;
+    map<gasSp, double> grwGas = grw->getGrowthGasRates(state, G1).gasSourceTerms;
+    map<gasSp, double> oxiGas = oxi->getOxidationGasRates(state, X1).gasSourceTerms;
+    // coagulation does not contribute to gas sources/sinks
 
-    if (out) {
-        *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;
-        for (const auto& [g, t] : gasSourceTerms)
-            *out << (int) g << ": " << t << endl;
-        *out << "PAH Source Terms (" << PAHSourceTerms.size() << ")" << endl;
-        for (const auto& [s, t] : PAHSourceTerms)
-            *out << s << ": " << t << endl;
-        *out << endl;
+    for (auto const& x : sourceTerms->gasSourceTerms) {
+
+        gasSp sp = x.first;
+
+        if (sp != gasSp::C)
+            sourceTerms->gasSourceTerms.at(sp) = nucGas.at(sp) + grwGas.at(sp) + oxiGas.at(sp);
     }
 
-    return sourceTermStruct(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
+    // TODO generalize PAH source terms
+
+
+//    map<size_t, double> PAHSourceTerms = SootChemistry::getPAHSourceTerms(state, massRateRatios, N1, 0, X1, 0);
+
+//    if (out) {
+//        *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;
+//        for (const auto& [g, t] : gasSourceTerms)
+//            *out << (int) g << ": " << t << endl;
+//        *out << "PAH Source Terms (" << PAHSourceTerms.size() << ")" << endl;
+//        for (const auto& [s, t] : PAHSourceTerms)
+//            *out << s << ": " << t << endl;
+//        *out << endl;
+//    }
 }
+
 void psdModel_MONO::checkState(const state& state) const {
     if (state.sootVar.size() < 2)
         throw runtime_error("MONO soot model requires 2 soot moments");

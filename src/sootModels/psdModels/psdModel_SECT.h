@@ -1,7 +1,8 @@
 #ifndef PSDMODEL_SECT_H
 #define PSDMODEL_SECT_H
 
-#include "psdModel.h"
+#include "src/sootModel.h"
+//#include "psdModel.h"
 
 namespace soot {
 
@@ -10,7 +11,8 @@ namespace soot {
      *
      * Associated with the enum psdMech::SECT
      */
-    class psdModel_SECT : public psdModel {
+    class psdModel_SECT : public sootModel {
+//    class psdModel_SECT : public psdModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
@@ -29,7 +31,7 @@ namespace soot {
          * @param out pointer to an outstream for debugging purposes, can be null
          * @return source terms object with computer values
          */
-        sourceTermStruct getSourceTermsImplementation(state& state, std::ostream* out) const override;
+        void getSourceTermsImplementation(state& state, std::ostream* out) const override;
         /**
          * throws exceptions if the state object is in an illegal state to calculate source terms required by psdModel
          *

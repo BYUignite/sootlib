@@ -4,12 +4,12 @@
 #include "src/constants.h"
 #include "src/state.h"
 
-#include "src/sootModels/psdModels/psdModel.h"
-#include "src/sootModels/psdModels/psdModel_SECT.h"
-#include "src/sootModels/psdModels/psdModel_MONO.h"
-#include "src/sootModels/psdModels/psdModel_LOGN.h"
-#include "src/sootModels/psdModels/psdModel_QMOM.h"
-#include "src/sootModels/psdModels/psdModel_MOMIC.h"
+//#include "src/sootModels/psdModels/psdModel.h"
+//#include "src/sootModels/psdModels/psdModel_SECT.h"
+//#include "src/sootModels/psdModels/psdModel_MONO.h"
+//#include "src/sootModels/psdModels/psdModel_LOGN.h"
+//#include "src/sootModels/psdModels/psdModel_QMOM.h"
+//#include "src/sootModels/psdModels/psdModel_MOMIC.h"
 
 #include "src/sootModels/sootChemistry/nucleationModels/nucleationModel.h"
 #include "src/sootModels/sootChemistry/nucleationModels/nucleationModel_NONE.h"
@@ -52,17 +52,11 @@ namespace soot {
 
     class sootModel {
 
-    //////////////// CONSTRUCTOR /////////////////////////////
+    //////////////// DATA MEMBERS /////////////////////
 
     public:
 
-        sootModel();       // Sets default properties of the created soot model
-
-    //////////////// DATA MEMBERS /////////////////////
-
-    private:
-
-        // stored values for mechanism selections; probably not needed
+        // stored values for mechanism selections
         psdMech             psdMechanism;
         nucleationMech      nucleationMechanism;
         growthMech          growthMechanism;
@@ -70,15 +64,16 @@ namespace soot {
         coagulationMech     coagulationMechanism;
 
         // pointers to selected mechanisms
-        psdModel*           psd;
+        sootModel*          psd;
         nucleationModel*    nuc;
         growthModel*        grw;
         oxidationModel*     oxi;
         coagulationModel*   coa;
 
-    public:
-
         sourceTermStruct* sourceTerms;
+
+        size_t nMom = 0;    // for moment models
+        size_t nBin = 0;    // for sectional models
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
@@ -101,8 +96,16 @@ namespace soot {
          */
         void setSootChemistry(nucleationMech N, growthMech G, oxidationMech X, coagulationMech C);
 
-        // TODO documentation
+        virtual void getSourceTermsImplementation(state& state, std::ostream* out) const = 0;
+
+            // TODO documentation
         void calcSourceTerms(state& state);
+
+    //////////////// CONSTRUCTOR /////////////////////////////
+
+    public:
+
+        sootModel();       // Sets default properties of the created soot model
 
     };
 }

@@ -5,14 +5,19 @@ using namespace soot;
 
 psdModel_LOGN::psdModel_LOGN(size_t n) {
 
-    if (n != 3) {
-        // issue warning message, notify user that LOGN will default to 3 moments
-    }
+    // warn user if wrong number of soot moments is requested
+    if (n != 3)
+        cerr << "Invalid number of soot moments requested. LOGN model will use default value of 3 soot moments." << endl;
+
     this->nMom = 3;
+
+    // initialize sourceTerms soot variable
+    for (int i=0; i<nMom; i++)
+        sourceTerms->sootSourceTerms.push_back(0);
 
 }
 
-sourceTermStruct psdModel_LOGN::getSourceTermsImplementation(state& state, std::ostream* out) const {
+void psdModel_LOGN::getSourceTermsImplementation(state& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel LOGN] ===" << endl;

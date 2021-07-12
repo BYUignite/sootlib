@@ -4,10 +4,18 @@ using namespace std;
 using namespace soot;
 
  psdModel_MOMIC:: psdModel_MOMIC(size_t n) {
-    this->nMom = n;     // TODO error message for unusable values
+
+     if (n < 1)
+         throw runtime_error("Invalid number of soot moments requested");
+
+    this->nMom = n;
+
+     // initialize sourceTerms soot variable
+     for (int i=0; i<nMom; i++)
+         sourceTerms->sootSourceTerms.push_back(0);
 }
 
-sourceTermStruct  psdModel_MOMIC::getSourceTermsImplementation(state& state, std::ostream* out) const {
+void psdModel_MOMIC::getSourceTermsImplementation(state& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel MOMIC] ===" << endl;

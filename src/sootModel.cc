@@ -1,5 +1,11 @@
 #include "sootModel.h"
 
+#include "src/sootModels/psdModels/psdModel_SECT.h"
+#include "src/sootModels/psdModels/psdModel_MONO.h"
+#include "src/sootModels/psdModels/psdModel_LOGN.h"
+#include "src/sootModels/psdModels/psdModel_QMOM.h"
+#include "src/sootModels/psdModels/psdModel_MOMIC.h"
+
 using namespace std;
 using namespace soot;
 
@@ -14,15 +20,15 @@ sootModel::sootModel() {
 
 }
 
-void sootModel::setPsdModel(psdMech modelType, int nMom, int nBins) {
+void sootModel::setPsdModel(psdMech modelType, int nMoms, int nBins) {
 
     this->psdMechanism = modelType;
 
-    switch (modelType) {
-        case psdMech::MONO:  psd = new psdModel_MONO(nMom);
-        case psdMech::LOGN:  psd = new psdModel_LOGN(nMom);
-        case psdMech::QMOM:  psd = new psdModel_QMOM(nMom);
-        case psdMech::MOMIC: psd = new psdModel_MOMIC(nMom);
+    switch (psdMechanism) {
+        case psdMech::MONO:  psd = new psdModel_MONO(nMoms);
+        case psdMech::LOGN:  psd = new psdModel_LOGN(nMoms);
+        case psdMech::QMOM:  psd = new psdModel_QMOM(nMoms);
+        case psdMech::MOMIC: psd = new psdModel_MOMIC(nMoms);
         case psdMech::SECT:  psd = new psdModel_SECT(nBins);
     }
 }
@@ -36,7 +42,7 @@ void sootModel::setSootChemistry(nucleationMech N, growthMech G, oxidationMech X
     this->coagulationMechanism = C;
 
     // create nucleation model with desired mechanism
-    switch (N) {
+    switch (nucleationMechanism) {
         case nucleationMech::NONE: nuc = new nucleationModel_NONE();
         case nucleationMech::LL:   nuc = new nucleationModel_LL();
         case nucleationMech::LIN:  nuc = new nucleationModel_LIN();
@@ -45,7 +51,7 @@ void sootModel::setSootChemistry(nucleationMech N, growthMech G, oxidationMech X
     }
 
     // create growth model with desired mechanism
-    switch (G) {
+    switch (growthMechanism) {
         case growthMech::NONE: grw = new growthModel_NONE();
         case growthMech::LL:   grw = new growthModel_LL();
         case growthMech::LIN:  grw = new growthModel_LIN();
@@ -54,7 +60,7 @@ void sootModel::setSootChemistry(nucleationMech N, growthMech G, oxidationMech X
     }
 
     // create oxidation model with desired mechanism
-    switch (X) {
+    switch (oxidationMechanism) {
         case oxidationMech::NONE:     oxi = new oxidationModel_NONE();
         case oxidationMech::LL:       oxi = new oxidationModel_LL();
         case oxidationMech::LEE_NEOH: oxi = new oxidationModel_LEE_NEOH();
@@ -64,18 +70,22 @@ void sootModel::setSootChemistry(nucleationMech N, growthMech G, oxidationMech X
     }
 
     // create coagulation model with desired mechanism
-    switch (C) {
+    switch (coagulationMechanism) {
         case coagulationMech::NONE:  coa = new coagulationModel_NONE();
         case coagulationMech::LL:    coa = new coagulationModel_LL();
         case coagulationMech::FUCHS: coa = new coagulationModel_FUCHS();
         case coagulationMech::FRENK: coa = new coagulationModel_FRENK();
-        default: throw domain_error("Bad soot coagulation mechanism");
+//        default: throw domain_error("Bad soot coagulation mechanism");
     }
 
 }
 
 // TODO update this
 void sootModel::calcSourceTerms(state& state) {
+
+    std::ostream* out;
+
+    psd->getSourceTermsImplementation(state, out);
 
 //    checkState(state);
 //    return getSourceTermsImpl(state, nullptr);

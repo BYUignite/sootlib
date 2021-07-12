@@ -1,7 +1,8 @@
 #ifndef PSDMODEL_MONO_H
 #define PSDMODEL_MONO_H
 
-#include "psdModel.h"
+#include "src/sootModel.h"
+//#include "psdModel.h"
 
 namespace soot {
 
@@ -10,7 +11,8 @@ namespace soot {
      *
      *  Associated with enum psdMech:MONO
      */
-    class psdModel_MONO : public psdModel {
+    class psdModel_MONO : public sootModel {
+//    class psdModel_MONO : public psdModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
@@ -29,7 +31,7 @@ namespace soot {
          * @param out pointer to an out stream for debugging purposes, can be null
          * @return source terms object with computer values
          */
-        sourceTermStruct getSourceTermsImplementation(state& state, std::ostream* out) const override;
+        void getSourceTermsImplementation(state& state, std::ostream* out) const override;
 
         /**
          * throws exceptions if the state object is in an illegal state to calculate source terms required by psdModel
@@ -42,7 +44,7 @@ namespace soot {
 
     public:
 
-        psdModel_MONO(size_t n);
+         explicit psdModel_MONO(size_t n);
         ~psdModel_MONO() override = default;
 
     };

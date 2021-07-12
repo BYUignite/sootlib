@@ -5,10 +5,17 @@ using namespace soot;
 
 psdModel_SECT::psdModel_SECT(size_t n) {
 
-    this->nBins = n;         //TODO error message for unusable values
+    if (n < 1)
+        throw runtime_error("Invalid number of soot moments requested");
+
+    this->nBins = n;
+
+    // initialize sourceTerms soot variable
+    for (int i=0; i<nBins; i++)
+        sourceTerms->sootSourceTerms.push_back(0);
 }
 
-sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::ostream* out) const {
+void psdModel_SECT::getSourceTermsImplementation(state& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel SECT] ===" << endl;

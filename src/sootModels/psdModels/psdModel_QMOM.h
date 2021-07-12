@@ -1,7 +1,7 @@
 #ifndef PSDMODEL_QMOM_H
 #define PSDMODEL_QMOM_H
 
-#include "psdModel.h"
+#include "src/sootModel.h"
 
 namespace soot {
 
@@ -10,7 +10,8 @@ namespace soot {
      *
      * Associated with the enum psdMech:QMOM
      */
-    class psdModel_QMOM : public psdModel {
+    class psdModel_QMOM : public sootModel {
+//    class psdModel_QMOM : public psdModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
@@ -26,7 +27,7 @@ namespace soot {
          * @param out pointer to an outstream for debugging purposes, can be null
          * @return source terms object with computer values
          */
-        sourceTermStruct getSourceTermsImplementation(state& state, std::ostream* out) const override;
+        void getSourceTermsImplementation(state& state, std::ostream* out) const override;
         /**
          * throws exceptions if the state object is in an illegal state to calculate source terms required by psdModel
          *
