@@ -17,7 +17,7 @@ namespace soot {
 
     public:
 
-         double getNucleationSootRate(state& state, const std::vector<double> &mi, const std::vector<double> &wi) const override { return 0; };
+         double getNucleationSootRate(state& state, const std::vector<double> &mi, const std::vector<double> &wi) override { return 0; };
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 

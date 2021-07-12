@@ -11,7 +11,7 @@ nucleationModel_LL::nucleationModel_LL() {
 
 }
 
-double nucleationModel_LL::getNucleationSootRate(state& state, const std::vector<double> &mi, const std::vector<double> &wi) const {
+double nucleationModel_LL::getNucleationSootRate(state& state, const std::vector<double> &mi, const std::vector<double> &wi) {
 
     const double Rnuc = 0.1E5 * exp(-21100 / state.T) * state.getGasSpeciesC(gasSp::C2H2);    // kmol/m3*s
     return Rnuc * 2 * Na / state.cMin;   // #/m3*s

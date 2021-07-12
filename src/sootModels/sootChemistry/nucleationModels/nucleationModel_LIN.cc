@@ -11,7 +11,7 @@ nucleationModel_LIN::nucleationModel_LIN() {
 
 }
 
-double nucleationModel_LIN::getNucleationSootRate(const state& state, const vector<double> &mi, const vector<double> &wi) const {
+double nucleationModel_LIN::getNucleationSootRate(const state& state, const std::vector<double> &mi, const std::vector<double> &wi) {
 
     //TODO consider second reaction?
     return 0.63E4 * exp(-21100 / state.T) * state.getGasSpeciesC(gasSp::C2H2) * 2 * Na / state.cMin;

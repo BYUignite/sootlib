@@ -16,7 +16,6 @@ namespace soot {
     const double Rg = 8314.46;          ///< Universal gas constant
     const double eps_c = 2.2;           ///< coagulation constant
     const double Df = 1.8;              ///< soot fractal dimension
-//    const double cMin = 100;            ///< soot min num carbon atoms
     const double rhoSoot = 1850;        ///< soot particle density
     const double bCoag = 0.8536;        ///< coagulation constant
 
@@ -43,7 +42,8 @@ namespace soot {
                                              {gasSp::C6H6, 78.114}};
 
     // PAH species list and properties for PAH nucleation and condensation
-    // See Blanquart & Pitsch (2009) "A joint volume-surface-hydrogen multi-variate model for soot formation"
+    // See Blanquart & Pitsch (2009) "A joint volume-surface-hydrogen
+    // multi-variate model for soot formation"
 
     enum class pahSp { C10H8, C12H8, C12H10, C14H10, C16H10, C18H10 };
 
@@ -68,10 +68,18 @@ namespace soot {
                                                 {pahSp::C16H10, 0.0250},
                                                 {pahSp::C18H10, 0.0390}};
 
+    // custom structures
+
     struct sourceTermStruct {
         std::vector<double>       sootSourceTerms;
         std::map<gasSp, double>   gasSourceTerms;
         std::map<pahSp, double>   pahSourceTerms;
+    };
+
+    struct dimerStruct {
+        double mDimer;
+        double nDimer;
+        double wDotD;
     };
 
 }

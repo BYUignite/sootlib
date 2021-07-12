@@ -22,6 +22,10 @@ namespace soot {
 
     public:
 
+        dimerStruct DIMER;      // contains mDimer, nDimer, and wDotD
+
+    private:
+
         std::map<gasSp, double>  *nucleationRxnRatios;
         std::map<pahSp, double>  *nucleationPahRxnRatios;
 
@@ -29,13 +33,13 @@ namespace soot {
 
     public:
 
-        double getNucleationSootRate(state& state, const vector<double> &mi, const vector<double> &wi) const override;
+        double getNucleationSootRate(state& state, const std::vector<double> &mi, const std::vector<double> &wi) override;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     public:
 
-         nucleationModel_PAH() = default;
+         nucleationModel_PAH();
         ~nucleationModel_PAH() override = default;
     };
 }

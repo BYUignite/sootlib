@@ -11,6 +11,10 @@ namespace soot {
 
     //////////////// DATA MEMBERS /////////////////////
 
+    public:
+
+        dimerStruct DIMER;      // used for PAH nucleation only
+
     private:
 
         std::map<gasSp, double>   *nucleationRxnRatios;
@@ -20,7 +24,7 @@ namespace soot {
 
     public:
 
-        virtual double getNucleationSootRate(state& state, const std::vector<double> &mi, const std::vector<double> &wi) const = 0;
+        virtual double getNucleationSootRate(state& state, const std::vector<double> &mi, const std::vector<double> &wi) = 0;
 
         sourceTermStruct getNucleationGasRates(const state& state, const double &N1) const;  //TODO override for PAH nucleation
 
