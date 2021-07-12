@@ -1,8 +1,8 @@
 #ifndef PSDMODEL_H
 #define PSDMODEL_H
 
-#include "src/state.h"
 #include "src/constants.h"
+#include "src/state.h"
 #include "src/sootModel.h"
 
 namespace soot {
@@ -24,30 +24,16 @@ namespace soot {
     public:
 
         /**
-         * An implemented public function which calls getSourceTermsImplementation and calculates source terms using an outstream for debugging purposes
-         * Calls checkState which is unimplemented with the state before doing the calculation to verify the calculation is possible
-         *
-         * @param state
-         * @param out
-         * @return
-         */
-         sourceTermStruct getSourceTermsVerbose(state& state, std::ostream& out) const {
-            checkState(state);
-//            state.printInfo(out);
-            sourceTermStruct sourceTerms = getSourceTermsImplementation(state, &out);
-            return sourceTerms;
-        }
-        /**
          * An implemented public function which calls getSourceTermsImplementation and calculates source terms
          * Calls checkState which is unimplemented with the state before doing the calculation to verify the calculation is possible
-         * Uses a null pointer for the debug outstream
+         * Uses a null pointer for the debug out stream
          * This is the function which will be called by the user to provide functionality
          *
          * @param state
          * @return
          */
          sourceTermStruct getSourceTerms(state& state) const {
-            checkState(state);
+//            checkState(state);
             return getSourceTermsImplementation(state, nullptr);
         }
 

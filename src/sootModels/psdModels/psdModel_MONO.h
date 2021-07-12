@@ -26,7 +26,7 @@ namespace soot {
          * source terms calculation function required by psdModel
          *
          * @param state contains soot and gas state data
-         * @param out pointer to an outstream for debugging purposes, can be null
+         * @param out pointer to an out stream for debugging purposes, can be null
          * @return source terms object with computer values
          */
         sourceTermStruct getSourceTermsImplementation(state& state, std::ostream* out) const override;

@@ -6,15 +6,16 @@ using namespace soot;
 psdModel_QMOM::psdModel_QMOM(size_t n) {
 
     this->nMom = n;         // TODO error message for unusable values
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /** getSourceTermsImplementation function
  *  
- *      Calculates soot source terms using quadrature method of momdents
+ *      Calculates soot source terms using quadrature method of moments
  *      (QMOM). Returns soot, gas, and PAH source terms (where applicable). 
  *
- *      @param  state    \input gas/soot state (?)
+ *      @param  state    \input     thermodynamic state
  *
  */
 
@@ -25,13 +26,12 @@ sourceTermStruct psdModel_QMOM::getSourceTermsImplementation(state& state, std::
         *out << endl;
     }
 
-    MassRateRatios massRateRatios;
     vector<double> weights = {0};
     vector<double> abscissas = {0};
 
     //---------- set weights and abscissas
 
-    getWtsAbs(state.getMoments(), weights, abscissas);           // wheeler algorithms applied here
+    getWtsAbs(state.sootVar, weights, abscissas);           // wheeler algorithms applied here
 
     for (size_t i = 0; i < weights.size(); i++) {
         if (weights.at(i) < 0)
@@ -52,10 +52,10 @@ sourceTermStruct psdModel_QMOM::getSourceTermsImplementation(state& state, std::
 
     //---------- get chemical rates
 
-    const double jNuc = sootChemistry.nucleationModel->getNucleationRate(state, abscissas, weights, massRateRatios);
-    const double kGrw = sootChemistry.growthModel->getGrowthRate(state, massRateRatios);
-    const double kOxi = sootChemistry.oxidationModel->getOxidationRate(state, massRateRatios);
-//    const double coag = coagulationModel->getCoagulationRate(state, abscissas.at(0), abscissas.at(0));
+    double jNuc = sootModel.nuc->getNucleationRate(state, abscissas, weights);
+    double kGrw = sootModel.grw->getGrowthRate(state);
+    double kOxi = sootModel.oxi->getOxidationRate(state);
+    double jCoa = sootModel.coa->getCoagulationRate(state, abscissas.at(0), abscissas.at(0));
 
     if (out) {
         *out << "jNuc: " << jNuc << endl;
@@ -66,9 +66,9 @@ sourceTermStruct psdModel_QMOM::getSourceTermsImplementation(state& state, std::
 
     //---------- nucleation terms
 
-    vector<double> nucleationSourceM(state.getNumMoments(), 0.);                        // nucleation source terms for moments
-    const double mNuc = cMin * MW_C / Na;                              // mass of a nucleated particle
-    for (size_t i = 0; i < state.getNumMoments(); i++)
+    vector<double> nucleationSourceM(state.sootVar.size(), 0.);                        // nucleation source terms for moments
+    const double mNuc = state.cMin * gasSpMW.at(gasSp::C) / Na;                              // mass of a nucleated particle
+    for (size_t i = 0; i < state.sootVar.size(); i++)
         nucleationSourceM.at(i) = pow(mNuc, i) * jNuc;                          // Nuc_rate = m_nuc^r * jNuc
 
     if (out) {
@@ -80,9 +80,9 @@ sourceTermStruct psdModel_QMOM::getSourceTermsImplementation(state& state, std::
 
     //---------- PAH condensation terms
 
-    vector<double> condensationSourceM(state.getNumMoments(), 0);                            // PAH condensation source terms
-    if (sootChemistry.nucleationModel->getMechanism() == nucleationMech::PAH) {      // do PAH condensation if PAH nucleation is selected
-        for (size_t i = 1; i < state.getNumMoments(); i++) {                                         // M0 = 0.0 for condensation by definition
+    vector<double> condensationSourceM(state.sootVar.size(), 0);                            // PAH condensation source terms
+    if (sootModel.nucleationMechanism == nucleationMech::PAH) {      // do PAH condensation if PAH nucleation is selected
+        for (size_t i = 1; i < state.sootVar.size(); i++) {                                         // M0 = 0.0 for condensation by definition
             for (size_t j = 0; j < abscissas.size(); j++)
                 condensationSourceM.at(i) += sootChemistry.coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(j)) * pow(abscissas.at(j), i - 1) * weights.at(j);
             condensationSourceM.at(i) *= state.getDimer() * state.getMDimer() * (double) i;
@@ -98,9 +98,9 @@ sourceTermStruct psdModel_QMOM::getSourceTermsImplementation(state& state, std::
 
     //---------- growth terms
 
-    vector<double> growthSourceM(state.getNumMoments(), 0);                                      // growth source terms for moments
-    const double Acoef = M_PI * pow(abs(6 / M_PI / state.getRhoSoot()), 2.0 / 3);   // Acoef (=) kmol^2/3 / kg^2/3
-    for (size_t i = 1; i < state.getNumMoments(); i++)                                                   // M0 = 0.0 for growth by definition
+    vector<double> growthSourceM(state.sootVar.size(), 0);                                      // growth source terms for moments
+    const double Acoef = M_PI * pow(abs(6 / M_PI / rhoSoot), 2.0 / 3);   // Acoef (=) kmol^2/3 / kg^2/3
+    for (size_t i = 1; i < state.sootVar.size(); i++)                                                   // M0 = 0.0 for growth by definition
         growthSourceM.at(i) = kGrw * Acoef * (double) i * Mk((double) i - 1.0 / 3, weights, abscissas);                  // kg^k/m3*s
 
     if (out) {
@@ -112,8 +112,8 @@ sourceTermStruct psdModel_QMOM::getSourceTermsImplementation(state& state, std::
 
     //---------- oxidation terms
 
-    vector<double> oxidationSourceM(state.getNumMoments(), 0);                                   // oxidation source terms
-    for (size_t i = 1; i < state.getNumMoments(); i++)                                                   // M0 = 0.0 for oxidation by definition
+    vector<double> oxidationSourceM(state.sootVar.size(), 0);                                   // oxidation source terms
+    for (size_t i = 1; i < state.sootVar.size(); i++)                                                   // M0 = 0.0 for oxidation by definition
         oxidationSourceM.at(i) = -kOxi * Acoef * (double) i * Mk((double) i - 1.0 / 3, weights, abscissas);              // kg^k/m3*s
 
     if (out) {
@@ -125,7 +125,7 @@ sourceTermStruct psdModel_QMOM::getSourceTermsImplementation(state& state, std::
 
     //---------- coagulation terms
 
-    vector<double> coagulationSourceM(state.getNumMoments(), 0);                                 // coagulation source terms: initialize to zero!
+    vector<double> coagulationSourceM(state.sootVar.size(), 0);                                 // coagulation source terms: initialize to zero!
 
     // there is a different case for the first moment
     // the second moment does not need calculation
@@ -133,17 +133,17 @@ sourceTermStruct psdModel_QMOM::getSourceTermsImplementation(state& state, std::
     for (size_t i = 0; i < abscissas.size(); i++) {
     	if (i != 0) {
     		for (size_t j = 0; j < i; j++)
-			    coagulationSourceM.at(0) += sootChemistry.coagulationModel->getCoagulationRate(state, abscissas.at(i), abscissas.at(j)) * weights.at(i) * weights.at(j) * -1;
+			    coagulationSourceM.at(0) += sootModel.coa->getCoagulationRate(state, abscissas.at(i), abscissas.at(j)) * weights.at(i) * weights.at(j) * -1;
     	}
-	    coagulationSourceM.at(0) += sootChemistry.coagulationModel->getCoagulationRate(state, abscissas.at(i), abscissas.at(i)) * weights.at(i) * weights.at(i) * -0.5;
+	    coagulationSourceM.at(0) += sootModel.coa->getCoagulationRate(state, abscissas.at(i), abscissas.at(i)) * weights.at(i) * weights.at(i) * -0.5;
     }
-    for (size_t i = 2; i < state.getNumMoments(); i++) {
+    for (size_t i = 2; i < state.sootVar.size(); i++) {
     	for (size_t j = 0; j < abscissas.size(); j++) {
     		if (j != 0) {
     			for (size_t k = 0; k < j; k++)
-				    coagulationSourceM.at(i) += sootChemistry.coagulationModel->getCoagulationRate(state, abscissas.at(j), abscissas.at(k)) * weights.at(j) * weights.at(k) * (i == 0 ? -1 : (pow(abscissas.at(j) + abscissas.at(k), i)) - pow(abscissas.at(j), i) - pow(abscissas.at(k), i));
+				    coagulationSourceM.at(i) += sootModel.coa->getCoagulationRate(state, abscissas.at(j), abscissas.at(k)) * weights.at(j) * weights.at(k) * (i == 0 ? -1 : (pow(abscissas.at(j) + abscissas.at(k), i)) - pow(abscissas.at(j), i) - pow(abscissas.at(k), i));
     		}
-		    coagulationSourceM.at(i) += sootChemistry.coagulationModel->getCoagulationRate(state, abscissas.at(j), abscissas.at(j)) * weights.at(j) * weights.at(j) * (i == 0 ? -0.5 : pow(abscissas.at(j), i) * (pow(2, i - 1) - 1));
+		    coagulationSourceM.at(i) += sootModel.coa->getCoagulationRate(state, abscissas.at(j), abscissas.at(j)) * weights.at(j) * weights.at(j) * (i == 0 ? -0.5 : pow(abscissas.at(j), i) * (pow(2, i - 1) - 1));
     	}
     }
 
@@ -156,9 +156,9 @@ sourceTermStruct psdModel_QMOM::getSourceTermsImplementation(state& state, std::
 
     //---------- combinine to make source terms
 
-    vector<double> sootSourceTerms(state.getNumMoments(), 0);
+    vector<double> sootSourceTerms(state.sootVar.size(), 0);
 
-    for (size_t i = 0; i < state.getNumMoments(); i++)
+    for (size_t i = 0; i < state.sootVar.size(); i++)
         sootSourceTerms.at(i) = (nucleationSourceM.at(i) + condensationSourceM.at(i) + growthSourceM.at(i) + oxidationSourceM.at(i) + coagulationSourceM.at(i)) / state.getRhoGas();
 
     if (out) {
@@ -334,11 +334,11 @@ double psdModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<dou
 	return Mk;
 }
 void psdModel_QMOM::checkState(const state& state) const {
-    if (state.getNumMoments() < 2)
+    if (state.sootVar.size() < 2)
         throw runtime_error("QMOM soot model requries 2, 4 or 6 moments");
     // TODO if the algorithms can still run without failing with an odd number of moments this can be changed to a warning
-    if (state.getNumMoments() % 2 == 1)
+    if (state.sootVar.size() % 2 == 1)
         throw runtime_error("QMOM soot model requires 2, 4 or 6 moments");
-    if (state.getNumMoments() > 6)
+    if (state.sootVar.size() > 6)
         cerr << "QMOM soot model requires 2, 4 or 6 moments, got " << state.getNumMoments() << endl;
 }

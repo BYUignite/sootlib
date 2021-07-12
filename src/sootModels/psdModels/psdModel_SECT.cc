@@ -5,7 +5,7 @@ using namespace soot;
 
 psdModel_SECT::psdModel_SECT(size_t n) {
 
-    this->nBin = n;         //TODO error message for unusable values
+    this->nBins = n;         //TODO error message for unusable values
 }
 
 sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::ostream* out) const {
@@ -15,12 +15,11 @@ sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::
         *out << endl;
     }
 
-    MassRateRatios massRateRatios;
-    vector<double> wts = state.getSectionsConst();
-    vector<double> absc(state.getNumSections(), 0);
+    vector<double> wts(nBins, 0);
+    vector<double> absc(nBins, 0);
 
-    for (size_t k = 0; k < state.getNumSections(); k++)
-        absc.at(k) = cMin * pow(2, k) * MW_C / Na;
+    for (size_t k = 0; k < nBins; k++)
+        absc.at(k) = state.cMin * pow(2, k) * gasSpMW.at(gasSp::C) / Na;
 
     for (double& num : wts) {
         if (num < 0)
@@ -38,16 +37,16 @@ sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::
     }
 
     // FIXME this code is likely incorrect
-    const double Jnuc = sootChemistry.nucleationModel->getNucleationRate(state, absc, wts, massRateRatios);
+    const double Jnuc = sootModel.nuc->getNucleationSootRate(state, absc, wts);
 
     if (out) {
         *out << "Jnuc: " << Jnuc << endl;
         *out << endl;
     }
 
-    vector<double> Kgrw(state.getNumSections(), 0);
+    vector<double> Kgrw(nBins, 0);
     for (double& num : Kgrw)
-        num = sootChemistry.growthModel->getGrowthRate(state, massRateRatios); // FIXME the old code wants to use stuff with wts and absc as inputs
+        num = sootModel.grw->getGrowthSootRate(state); // FIXME the old code wants to use stuff with wts and absc as inputs
         // this is not how the growth model is treated anywhere else and it doesn't really work that way in this setup
 
     if (out) {
@@ -57,9 +56,9 @@ sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::
         *out << endl;
     }
 
-    vector<double> Koxi(state.getNumSections(), 0);
+    vector<double> Koxi(nBins, 0);
     for (double& num : Koxi)
-        num = sootChemistry.oxidationModel->getOxidationRate(state, massRateRatios); // FIXME the old code also wants to do different stuff with these too
+        num = sootModel.oxi->getOxidationSootRate(state); // FIXME the old code also wants to do different stuff with these too
         // this is not how the oxidation model is treated anywhere else and it doesn't really work that way in this setup
 
     if (out) {
@@ -69,15 +68,15 @@ sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::
         *out << endl;
     }
 
-    vector<double> Coag(state.getNumSections(), 0);
+    vector<double> Coag(nBins, 0);
     double leaving;
     vector<double> divided;
     for (size_t i = 0; i < Coag.size(); i++) {
         for (size_t j = 0; j < Coag.size(); j++) {
-            leaving = 0.5 * sootChemistry.coagulationModel->getCoagulationRate(state, absc.at(i), absc.at(j)) * wts.at(i) * wts.at(i);
+            leaving = 0.5 * sootModel.coa->getCoagulationRate(state, absc.at(i), absc.at(j)) * wts.at(i) * wts.at(i);
             Coag.at(i) -= leaving;
             Coag.at(j) -= leaving;
-            divided = getDivision((state.getSection(i) + state.getSection(j)), leaving, absc);
+            divided = getDivision((state.sootVar[i] + state.sootVar[j]), leaving, absc);
             for (size_t k = 0; k < Coag.size(); k++)
                 Coag.at(k) += divided.at(k);
         }
@@ -90,9 +89,9 @@ sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::
         *out << endl;
     }
 
-    vector<double> N0(state.getNumSections(), 0);
+    vector<double> N0(state.nBins, 0);
     N0.at(0) = Jnuc;
-    const double N_tot = Jnuc * cMin * MW_C / Na;
+    const double N_tot = Jnuc * state.cMin * gasSpMW.at(gasSp::C) / Na;
 
     if (out) {
         *out << "N0 (" << N0.size() << ")" << endl;
@@ -102,11 +101,11 @@ sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::
         *out << endl;
     }
 
-    vector<double> Cnd0(state.getNumSections(), 0);
+    vector<double> Cnd0(state.nBins, 0);
     double Cnd_tot = 0;
-    if (sootChemistry.nucleationModel->getMechanism() == nucleationMech::PAH) {
+    if (sootModel.nuc->getMechanism() == nucleationMech::PAH) {
         for (size_t i = 0; i < Cnd0.size(); i++) {
-            Cnd0.at(i) = state.getDimer() * state.getMDimer() * sootChemistry.coagulationModel->getCoagulationRate(state, state.getMDimer(), absc.at(i)) * wts.at(i);
+            Cnd0.at(i) = state.getDimer() * state.getMDimer() * sootModel.coa->getCoagulationRate(state, state.getMDimer(), absc.at(i)) * wts.at(i);
             Cnd_tot += Cnd0.at(i) * absc.at(i);
         }
     }
@@ -119,10 +118,10 @@ sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::
         *out << endl;
     }
 
-    vector<double> Am2m3(state.getNumSections(), 0);
-    for (size_t i = 0; i < state.getNumSections(); i++) {
+    vector<double> Am2m3(nBins, 0);
+    for (size_t i = 0; i < nBins; i++) {
         if (wts.at(i) > 0)
-            Am2m3.at(i) = M_PI * pow(abs(6 / (M_PI * state.getRhoSoot()) * state.getSection(i)), 2.0 / 3) * abs(wts.at(i));
+            Am2m3.at(i) = M_PI * pow(abs(6 / (M_PI * rhoSoot) * state.sootVar[i]), 2.0 / 3) * abs(wts.at(i));
     }
 
     if (out) {
@@ -132,13 +131,13 @@ sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::
         *out << endl;
     }
 
-    vector<double> G0(state.getNumSections(), 0);
+    vector<double> G0(nBins, 0);
     double G_tot = 0;
     double Ngrw;
-    for (size_t i = 0; i < state.getNumSections(); i++) {
+    for (size_t i = 0; i < nBins; i++) {
         if (i == 0)
             Ngrw = -Kgrw.at(i) * Am2m3.at(i) * wts.at(i) / (absc.at(i + 1) - absc.at(i));
-        else if (i == (state.getNumSections() - 1))
+        else if (i == (nBins - 1))
             Ngrw = Kgrw.at(i - 1) * Am2m3.at(i - 1) * wts.at(i - 1) / (absc.at(i) - absc.at(i - 1));
         else
             Ngrw = Kgrw.at(i - 1) * Am2m3.at(i - 1) * wts.at(i - 1) / (absc.at(i) - absc.at(i - 1)) - Kgrw.at(i) * Am2m3.at(i) * wts.at(i) / (absc.at(i + 1) - absc.at(i));
@@ -155,13 +154,13 @@ sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::
         *out << endl;
     }
 
-    vector<double> X0(state.getNumSections(), 0);
+    vector<double> X0(nBins, 0);
     double X_tot = 0;
     double Noxi;
-    for (size_t i = 0; i < state.getNumSections(); i++) {
+    for (size_t i = 0; i < nBins; i++) {
         if (i == 0)
             Noxi = Koxi.at(i) * Am2m3.at(i) * wts.at(i) / (absc.at(i + 1) - absc.at(i));
-        else if (i == (state.getNumSections() - 1))
+        else if (i == (nBins - 1))
             Noxi = -Koxi.at(i - 1) * Am2m3.at(i - 1) * wts.at(i - 1) / (absc.at(i) - absc.at(i - 1));
         else
             Noxi = -Koxi.at(i - 1) * Am2m3.at(i - 1) * wts.at(i - 1) / (absc.at(i) - absc.at(i - 1)) + Koxi.at(i) * Am2m3.at(i) * wts.at(i) / (absc.at(i + 1) - absc.at(i));
@@ -180,7 +179,7 @@ sourceTermStruct psdModel_SECT::getSourceTermsImplementation(state& state, std::
 
     vector<double>& C0 = Coag;
 
-    vector<double> sootSourceTerms(state.getNumSections(), 0);
+    vector<double> sootSourceTerms(nBins, 0);
     for (size_t i = 0; i < sootSourceTerms.size(); i++)
         sootSourceTerms.at(i) = (N0.at(i) + Cnd0.at(i) + G0.at(i) + X0.at(i) + C0.at(i)) / rhoSoot;
 
@@ -234,6 +233,6 @@ vector<double> psdModel_SECT::getDivision(double mass, double num, const vector<
     return toReturn;
 }
 void psdModel_SECT::checkState(const state& state) const {
-    if (state.getNumSections() < 1)
+    if (nBins < 1)
         throw runtime_error("SECT soot model requires 1+ sections/bins");
 }
