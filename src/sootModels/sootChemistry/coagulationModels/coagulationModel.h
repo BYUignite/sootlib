@@ -2,7 +2,7 @@
 #define COAGULATIONMODEL_H
 
 #include "src/state.h"
-#include "src/sootModel.h"
+//#include "src/sootModel.h"
 #include "src/constants.h"
 #include "include/extern/jutil/jutil.h"
 

@@ -2,7 +2,7 @@
 #define NUCLEATIONMODEL_H
 
 #include "src/state.h"
-#include "src/sootModel.h"
+//#include "src/sootModel.h"
 #include "src/constants.h"
 
 namespace soot {

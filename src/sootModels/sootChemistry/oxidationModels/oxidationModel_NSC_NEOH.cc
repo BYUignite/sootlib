@@ -15,8 +15,8 @@ oxidationModel_NSC_NEOH::oxidationModel_NSC_NEOH() {
 
 double oxidationModel_NSC_NEOH::getOxidationSootRate(const state &state) const {
 
-    double pO2_atm = state.getGasSpeciesP(gasSp::O2) / 101325.0; // partial pressure of O2 (atm)
-    double pOH_atm = state.getGasSpeciesP(gasSp::OH) / 101325.0; // partial pressure of OH (atm)
+    double pO2_atm = state.getGasSpP(gasSp::O2) / 101325.0; // partial pressure of O2 (atm)
+    double pOH_atm = state.getGasSpP(gasSp::OH) / 101325.0; // partial pressure of OH (atm)
 
     double kA = 20 * exp(-15098 / state.T);              // rate constants
     double kB = 4.46E-3 * exp(-7650 / state.T);

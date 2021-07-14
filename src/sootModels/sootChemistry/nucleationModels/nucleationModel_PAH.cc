@@ -64,6 +64,8 @@ double nucleationModel_PAH::getNucleationSootRate(state& state, const vector<dou
     for (int i = 0; i < mi.size(); i++)                                     // loop over soot "particles" (abscissas)
         I_beta_DS += abs(wi[i]) * state.getParticleCollisionRate(mDimer, mi[i]);
 
+    //TODO eliminate mi and wi from function inputs; state.momentInversion function maybe?
+
     //------------- solve quadratic for D: beta_DD*(D^2) + I_beta_DS*(D) - wDotD = 0
     // See Numerical Recipes 3rd ed. Sec 5.6 page 227.
     // Choosing the positive root.

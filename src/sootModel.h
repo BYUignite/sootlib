@@ -4,13 +4,6 @@
 #include "src/constants.h"
 #include "src/state.h"
 
-//#include "src/sootModels/psdModels/psdModel.h"
-//#include "src/sootModels/psdModels/psdModel_SECT.h"
-//#include "src/sootModels/psdModels/psdModel_MONO.h"
-//#include "src/sootModels/psdModels/psdModel_LOGN.h"
-//#include "src/sootModels/psdModels/psdModel_QMOM.h"
-//#include "src/sootModels/psdModels/psdModel_MOMIC.h"
-
 #include "src/sootModels/sootChemistry/nucleationModels/nucleationModel.h"
 #include "src/sootModels/sootChemistry/nucleationModels/nucleationModel_NONE.h"
 #include "src/sootModels/sootChemistry/nucleationModels/nucleationModel_LL.h"

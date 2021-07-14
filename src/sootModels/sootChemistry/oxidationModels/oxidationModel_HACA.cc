@@ -24,14 +24,14 @@ double oxidationModel_HACA::getOxidationSootRate(const state &state) const {
     double b_param = -2.5786 + 0.00112 * state.T;       // b parameter for calculating alpha
 
     //---------- calculate raw HACA reaction rates
-    double fR1 = 4.2E13 * exp(-13 / RT) * state.getGasSpeciesC(gasSp::H) / 1000;
-    double rR1 = 3.9E12 * exp(-11 / RT) * state.getGasSpeciesC(gasSp::H2) / 1000;
-    double fR2 = 1.0E10 * pow(state.T, 0.734) * exp(-1.43 / RT) * state.getGasSpeciesC(gasSp::OH) / 1000;
-    double rR2 = 3.68E8 * pow(state.T, 1.139) * exp(-17.1 / RT) * state.getGasSpeciesC(gasSp::H2O) / 1000;
-    double fR3 = 2.0E13 * state.getGasSpeciesC(gasSp::H) / 1000;
-    double fR4 = 8.00E7 * pow(state.T, 1.56) * exp(-3.8 / RT) * state.getGasSpeciesC(gasSp::C2H2) / 1000;
-    double fR5 = 2.2E12 * exp(-7.5 / RT) * state.getGasSpeciesC(gasSp::O2) / 1000;
-    double fR6 = 1290 * 0.13 * state.P * (state.getGasSpeciesC(gasSp::OH) / state.rhoGas * gasSpMW.at(gasSp::OH)) / sqrt(state.T);    // gamma = 0.13 from Neoh et al.
+    double fR1 = 4.2E13 * exp(-13 / RT) * state.getGasSpC(gasSp::H) / 1000;
+    double rR1 = 3.9E12 * exp(-11 / RT) * state.getGasSpC(gasSp::H2) / 1000;
+    double fR2 = 1.0E10 * pow(state.T, 0.734) * exp(-1.43 / RT) * state.getGasSpC(gasSp::OH) / 1000;
+    double rR2 = 3.68E8 * pow(state.T, 1.139) * exp(-17.1 / RT) * state.getGasSpC(gasSp::H2O) / 1000;
+    double fR3 = 2.0E13 * state.getGasSpC(gasSp::H) / 1000;
+    double fR4 = 8.00E7 * pow(state.T, 1.56) * exp(-3.8 / RT) * state.getGasSpC(gasSp::C2H2) / 1000;
+    double fR5 = 2.2E12 * exp(-7.5 / RT) * state.getGasSpC(gasSp::O2) / 1000;
+    double fR6 = 1290 * 0.13 * state.P * (state.getGasSpC(gasSp::OH) / state.rhoGas * gasSpMW.at(gasSp::OH)) / sqrt(state.T);    // gamma = 0.13 from Neoh et al.
 
     //---------- Steady state calculation of chi for soot radical; see Frenklach 1990 pg. 1561
     double denom = rR1 + rR2 + fR3 + fR4 + fR5;
