@@ -2,17 +2,16 @@
 #define PSDMODEL_MOMIC_H
 
 #include "src/sootModel.h"
-//#include "psdModel.h"
 #include "include/extern/binomial/binomial.h"
 
 namespace soot {
 
+    ////////////////////////////////////////////////////////////////////////////////
     /** An implementation of the psdModel interface following the MOMIC model
      *
-     *  Associated with the enum psdMech:MOMIC
+     *      Associated with enum psdMech:MOMIC
      */
     class psdModel_MOMIC : public sootModel {
-//    class psdModel_MOMIC : public psdModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
@@ -22,34 +21,78 @@ namespace soot {
 
     private:
 
-        /**
-         * source terms calculation function required by psdModel
+        ////////////////////////////////////////////////////////////////////////////////
+        /** getSourceTermsImplementation function
          *
-         * @param state contains soot and gas state data
-         * @param out pointer to an outstream for debugging purposes, can be null
-         * @return source terms object with computer values
+         *      Calculates soot source terms using the method of moments with interpolative
+         *      closure (MOMIC). Updates soot, gas, and PAH source terms (where applicable).
+         *
+         *      NOTE: PAH source terms are updated from within the getNucleationSootRate
+         *      function associated with PAH nucleation.
+         *
+         *      @param  state    \input     thermodynamic state object
+         *
          */
         void getSourceTermsImplementation(state& state, std::ostream* out) const override;
 
-        /**
-         * throws exceptions if the state object is in an illegal state to calculate source terms required by psdModel
+        ////////////////////////////////////////////////////////////////////////////////
+        /*! downselectIfNeeded function
          *
-         * @param state
+         *      Reduces the number of moments to avoid invalid inversion
+         *
+         *      @param state      \input      thermodynamic state
+         *      @param M          \input      vector of moment values
+         *
          */
-        void checkState(const state& state) const override;
+        static size_t downselectIfNeeded(state& state, std::vector<double>& M);
 
-        // helper functions specific to this PSD
-        static size_t downselectIfNeeded(std::vector<double>& M);
+        ////////////////////////////////////////////////////////////////////////////////
+        /*! f_grid function
+         *
+         *      Calculates the grid function described in Frenklach 2002 MOMIC paper
+         *      using lagrange interpolation between whole order moments
+         *
+         *      @param x     \input x grid point
+         *      @param y     \input y grid point
+         *      @param M     \input vector of whole order moments
+         *
+         */
         static double f_grid(int x, int y, const std::vector<double>& M);
+
+
         static double MOMICCoagulationRate(const state& state, size_t r);
+
+        ////////////////////////////////////////////////////////////////////////////////
+        /*! lagrangeInterp function
+         *
+         *      Calculates the Lagrange interpolated value from whole order moments.
+         *
+         *      @param x_i  \input      x value of desired interpolation
+         *      @param x    \input      vector of x values to interpolate amongst
+         *      @param y    \input      vector of y values to interpolate amongst
+         *      @param y_i  \output     interpolated y value
+         *
+         */
         static double lagrangeInterp(double x_i, const std::vector<double>& x, const std::vector<double>& y);
+
+        ////////////////////////////////////////////////////////////////////////////////
+        /*! MOMIC function
+         *
+         *      Calculates the desired fractional moment by lagrange interpolation
+         *      between whole order moments. Because it uses log moments, it will crash
+         *      if any moment is less than or equal to zero.
+         *
+         *      @param p     \input     desired interpolation value
+         *      @param M     \input     vector of whole order moments
+         *
+         */
         static double MOMIC(double p, const std::vector<double>& M);
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     public:
 
-        psdModel_MOMIC(size_t n);
+        explicit psdModel_MOMIC(size_t n);
         ~psdModel_MOMIC() override = default;
 
 

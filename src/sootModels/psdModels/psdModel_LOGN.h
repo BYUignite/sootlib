@@ -2,54 +2,58 @@
 #define PSDMODEL_LOGN_H
 
 #include "src/sootModel.h"
-//#include "psdModel.h"
 
 namespace soot {
 
-    /**
-     * An implementation of the psdModel interface following the LOGN moment-based model
+    ////////////////////////////////////////////////////////////////////////////////
+    /** An implementation of the psdModel interface following the LOGN model
      *
-     * Associated with the enum psdMech:LOGN
+     *      Associated with enum psdMech:LOGN
      */
     class psdModel_LOGN : public sootModel {
-//    class psdModel_LOGN : public psdModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
     public:
 
-        size_t nMom;
+        size_t nMom = 3;
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
     private:
 
-        /**
-         * source terms calculation function required by psdModel
+        ////////////////////////////////////////////////////////////////////////////////
+        /** getSourceTermsImplementation function
          *
-         * @param state contains soot and gas state data
-         * @param out pointer to an outstream for debugging purposes, can be null
-         * @return source terms object with computer values
+         *      Calculates soot source terms using lognormal PSD model (LOGN).
+         *      Updates soot, gas, and PAH source terms (where applicable).
+         *
+         *      NOTE: PAH source terms are updated from within the getNucleationSootRate
+         *      function associated with PAH nucleation.
+         *
+         *      @param  state    \input     thermodynamic state object
+         *
          */
         void getSourceTermsImplementation(state& state, std::ostream* out) const override;
-        /**
-         * throws exceptions if the state object is in an illegal state to calculate source terms required by psdModel
-         *
-         * @param state
-         */
-        void checkState(const state& state) const override;
 
-        // helper functions specific to this PSD
+        ////////////////////////////////////////////////////////////////////////////////
+        /** Mk function (LOGN)
+         *
+         *      Calculates fractional moment values assuming lognormal PSD
+         *
+         *      @param  k    \input     fractional moment to compute
+         *      @param  M0   \input     moment value M0
+         *      @param  M1   \input     moment value M1
+         *      @param  M2   \input     moment value M2
+         *
+         */
         static double Mk(double k, double M0, double M1, double M2);
-        static double getKfm(const state& state);
-        static double getKc( const state& state);
-        static double getKcp(const state& state);
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     public:
 
-        psdModel_LOGN(size_t n);
+        explicit psdModel_LOGN(size_t n);
         ~psdModel_LOGN() override = default;
 
 

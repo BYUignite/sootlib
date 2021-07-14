@@ -6,7 +6,7 @@ using namespace soot;
 psdModel_SECT::psdModel_SECT(size_t n) {
 
     if (n < 1)
-        throw runtime_error("Invalid number of soot moments requested");
+        throw runtime_error("Invalid number of soot sections requested");
 
     this->nBins = n;
 
@@ -22,6 +22,8 @@ void psdModel_SECT::getSourceTermsImplementation(state& state, std::ostream* out
         *out << endl;
     }
 
+    //---------- get weights and abscissas
+
     vector<double> wts(nBins, 0);
     vector<double> absc(nBins, 0);
 
@@ -33,27 +35,12 @@ void psdModel_SECT::getSourceTermsImplementation(state& state, std::ostream* out
             num = 0;
     }
 
-    if (out) {
-        *out << "weights (" << wts.size() << ")" << endl;
-        for (size_t i = 0; i < wts.size(); i++)
-            *out << i << ": " << wts.at(i) << endl;
-        *out << "abscissas (" << absc.size() << ")" << endl;
-        for (size_t i = 0; i < absc.size(); i++)
-            *out << i << ": " << absc.at(i) << endl;
-        *out << endl;
-    }
+    double Jnuc = nuc->getNucleationSootRate(state, absc, wts);
 
-    // FIXME this code is likely incorrect
-    const double Jnuc = sootModel.nuc->getNucleationSootRate(state, absc, wts);
-
-    if (out) {
-        *out << "Jnuc: " << Jnuc << endl;
-        *out << endl;
-    }
 
     vector<double> Kgrw(nBins, 0);
     for (double& num : Kgrw)
-        num = sootModel.grw->getGrowthSootRate(state); // FIXME the old code wants to use stuff with wts and absc as inputs
+        num = grw->getGrowthSootRate(state);
         // this is not how the growth model is treated anywhere else and it doesn't really work that way in this setup
 
     if (out) {
@@ -65,7 +52,7 @@ void psdModel_SECT::getSourceTermsImplementation(state& state, std::ostream* out
 
     vector<double> Koxi(nBins, 0);
     for (double& num : Koxi)
-        num = sootModel.oxi->getOxidationSootRate(state); // FIXME the old code also wants to do different stuff with these too
+        num = oxi->getOxidationSootRate(state);
         // this is not how the oxidation model is treated anywhere else and it doesn't really work that way in this setup
 
     if (out) {
@@ -80,7 +67,7 @@ void psdModel_SECT::getSourceTermsImplementation(state& state, std::ostream* out
     vector<double> divided;
     for (size_t i = 0; i < Coag.size(); i++) {
         for (size_t j = 0; j < Coag.size(); j++) {
-            leaving = 0.5 * sootModel.coa->getCoagulationRate(state, absc.at(i), absc.at(j)) * wts.at(i) * wts.at(i);
+            leaving = 0.5 * coa->getCoagulationSootRate(state, absc.at(i), absc.at(j)) * wts.at(i) * wts.at(i);
             Coag.at(i) -= leaving;
             Coag.at(j) -= leaving;
             divided = getDivision((state.sootVar[i] + state.sootVar[j]), leaving, absc);
@@ -217,6 +204,7 @@ void psdModel_SECT::getSourceTermsImplementation(state& state, std::ostream* out
 
     return sourceTermStruct(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
+
 vector<double> psdModel_SECT::getDivision(double mass, double num, const vector<double>& absc) {
     size_t loc = 0;
     bool found = false;
@@ -238,8 +226,4 @@ vector<double> psdModel_SECT::getDivision(double mass, double num, const vector<
     toReturn.at(loc) += right;
 
     return toReturn;
-}
-void psdModel_SECT::checkState(const state& state) const {
-    if (nBins < 1)
-        throw runtime_error("SECT soot model requires 1+ sections/bins");
 }

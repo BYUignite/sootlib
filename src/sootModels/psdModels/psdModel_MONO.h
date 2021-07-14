@@ -6,39 +6,36 @@
 
 namespace soot {
 
-    /**
-     *  An implementation of the psdModel interface following the MONO model
+    ////////////////////////////////////////////////////////////////////////////////
+    /** An implementation of the psdModel interface following the MONO model
      *
-     *  Associated with enum psdMech:MONO
+     *      Associated with enum psdMech:MONO
      */
     class psdModel_MONO : public sootModel {
-//    class psdModel_MONO : public psdModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
     private:
 
-        size_t nMom;
+        size_t nMom = 2;
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
     private:
 
-        /**
-         * source terms calculation function required by psdModel
+        ////////////////////////////////////////////////////////////////////////////////
+        /** getSourceTermsImplementation function
          *
-         * @param state contains soot and gas state data
-         * @param out pointer to an out stream for debugging purposes, can be null
-         * @return source terms object with computer values
+         *      Calculates soot source terms using monodispersed PSD model (MONO).
+         *      Updates soot, gas, and PAH source terms (where applicable).
+         *
+         *      NOTE: PAH source terms are updated from within the getNucleationSootRate
+         *      function associated with PAH nucleation.
+         *
+         *      @param  state    \input     thermodynamic state object
+         *
          */
         void getSourceTermsImplementation(state& state, std::ostream* out) const override;
-
-        /**
-         * throws exceptions if the state object is in an illegal state to calculate source terms required by psdModel
-         *
-         * @param state
-         */
-        void checkState(const state& state) const override;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 

@@ -106,6 +106,7 @@ namespace soot {
     public:
 
         sootModel();       // Sets default properties of the created soot model
+        virtual ~sootModel() = default;
 
     };
 }

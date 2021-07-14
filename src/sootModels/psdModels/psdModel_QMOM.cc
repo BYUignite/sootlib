@@ -3,6 +3,8 @@
 using namespace std;
 using namespace soot;
 
+////////////////////////////////////////////////////////////////////////////////
+
 psdModel_QMOM::psdModel_QMOM(size_t n) {
 
     if (n%2 == 1 || n < 1)
@@ -21,14 +23,6 @@ psdModel_QMOM::psdModel_QMOM(size_t n) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** getSourceTermsImplementation function
- *  
- *      Calculates soot source terms using quadrature method of moments
- *      (QMOM). Returns soot, gas, and PAH source terms (where applicable). 
- *
- *      @param  state    \input     thermodynamic state
- *
- */
 
 void psdModel_QMOM::getSourceTermsImplementation(state& state, std::ostream* out) const {
 
@@ -37,180 +31,98 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, std::ostream* out
         *out << endl;
     }
 
-    vector<double> weights = {0};
-    vector<double> abscissas = {0};
+    //---------- get weights and abscissas
 
-    //---------- set weights and abscissas
+    vector<double> wts = {0};
+    vector<double> absc = {0};
 
-    getWtsAbs(state.sootVar, weights, abscissas);           // wheeler algorithms applied here
+    // moment downselection and wheeler algorithm inversion applied here
+    getWtsAbs(state.sootVar, wts, absc);
 
-    for (size_t i = 0; i < weights.size(); i++) {
-        if (weights.at(i) < 0)
-            weights.at(i) = 0;
-        if (abscissas.at(i) < 0)
-            abscissas.at(i) = 0;
-    }
-
-    if (out) {
-        *out << "weights (" << weights.size() << ")" << endl;
-        for (size_t i = 0; i < weights.size(); i++)
-            *out << i << ": " << weights.at(i) << endl;
-        *out << "abscissas (" << abscissas.size() << ")" << endl;
-        for (size_t i = 0; i < abscissas.size(); i++)
-            *out << i << ": " << abscissas.at(i) << endl;
-        *out << endl;
+    for (size_t i = 0; i < wts.size(); i++) {
+        if (wts.at(i) < 0  ) { wts.at(i) = 0;  }
+        if (absc.at(i) < 0)  { absc.at(i) = 0; }
     }
 
     //---------- get chemical rates
 
-    double jNuc = sootModel.nuc->getNucleationRate(state, abscissas, weights);
-    double kGrw = sootModel.grw->getGrowthRate(state);
-    double kOxi = sootModel.oxi->getOxidationRate(state);
-    double jCoa = sootModel.coa->getCoagulationRate(state, abscissas.at(0), abscissas.at(0));
-
-    if (out) {
-        *out << "jNuc: " << jNuc << endl;
-        *out << "kGrw: " << kGrw << endl;
-        *out << "kOxi: " << kOxi << endl;
-        *out << endl;
-    }
+    double jNuc = nuc->getNucleationSootRate(state, absc, wts);
+    double kGrw = grw->getGrowthSootRate(state);
+    double kOxi = oxi->getOxidationSootRate(state);
 
     //---------- nucleation terms
 
-    vector<double> nucleationSourceM(state.sootVar.size(), 0.);                        // nucleation source terms for moments
-    const double mNuc = state.cMin * gasSpMW.at(gasSp::C) / Na;                              // mass of a nucleated particle
-    for (size_t i = 0; i < state.sootVar.size(); i++)
-        nucleationSourceM.at(i) = pow(mNuc, i) * jNuc;                          // Nuc_rate = m_nuc^r * jNuc
-
-    if (out) {
-        *out << "nucleation source terms for moments (" << nucleationSourceM.size() << ")" << endl;
-        for (size_t i = 0; i < nucleationSourceM.size(); i++)
-            *out << i << ": " << nucleationSourceM.at(i) << endl;
-        *out << endl;
-    }
+    vector<double> nucSrcM(nMom, 0.);
+    const double mNuc = state.cMin * gasSpMW.at(gasSp::C) / Na;      // mass of a nucleated particle
+    for (size_t i = 0; i < nMom; i++)
+        nucSrcM.at(i) = pow(mNuc, i) * jNuc;                            // Nuc_rate = m_nuc^r * jNuc
 
     //---------- PAH condensation terms
 
-    vector<double> condensationSourceM(state.sootVar.size(), 0);                            // PAH condensation source terms
-    if (sootModel.nucleationMechanism == nucleationMech::PAH) {      // do PAH condensation if PAH nucleation is selected
-        for (size_t i = 1; i < state.sootVar.size(); i++) {                                         // M0 = 0.0 for condensation by definition
-            for (size_t j = 0; j < abscissas.size(); j++)
-                condensationSourceM.at(i) += sootChemistry.coagulationModel->getCoagulationRate(state, state.getMDimer(), abscissas.at(j)) * pow(abscissas.at(j), i - 1) * weights.at(j);
-            condensationSourceM.at(i) *= state.getDimer() * state.getMDimer() * (double) i;
+    vector<double> cndSrcM(nMom, 0);
+    if (nucleationMechanism == nucleationMech::PAH) {
+        for (size_t i = 1; i < nMom; i++) {                             // M0 = 0.0 for condensation by definition
+            for (size_t j = 0; j < absc.size(); j++)
+                cndSrcM.at(i) += coa->getCoagulationSootRate(state, nuc->DIMER.mDimer, absc.at(j)) * pow(absc.at(j), i - 1) * wts.at(j);
+            cndSrcM.at(i) *= nuc->DIMER.nDimer * nuc->DIMER.mDimer * i;
         }
-    }
-
-    if (out) {
-        *out << "PAH condensation source terms (" << condensationSourceM.size() << ")" << endl;
-        for (size_t i = 0; i < condensationSourceM.size(); i++)
-            *out << i << ": " << condensationSourceM.at(i) << endl;
-        *out << endl;
     }
 
     //---------- growth terms
 
-    vector<double> growthSourceM(state.sootVar.size(), 0);                                      // growth source terms for moments
-    const double Acoef = M_PI * pow(abs(6 / M_PI / rhoSoot), 2.0 / 3);   // Acoef (=) kmol^2/3 / kg^2/3
-    for (size_t i = 1; i < state.sootVar.size(); i++)                                                   // M0 = 0.0 for growth by definition
-        growthSourceM.at(i) = kGrw * Acoef * (double) i * Mk((double) i - 1.0 / 3, weights, abscissas);                  // kg^k/m3*s
-
-    if (out) {
-        *out << "growth source terms for moments (" << growthSourceM.size() << ")" << endl;
-        for (size_t i = 0; i < growthSourceM.size(); i++)
-            *out << i << ": " << growthSourceM.at(i) << endl;
-        *out << endl;
-    }
+    vector<double> grwSrcM(nMom, 0);
+    const double Acoef = M_PI * pow(abs(6 / M_PI / rhoSoot), 2.0 / 3);      // Acoef (=) kmol^2/3 / kg^2/3
+    for (size_t i = 1; i < nMom; i++)                                                // M0 = 0.0 for growth by definition
+        grwSrcM.at(i) = kGrw * Acoef * i * Mk(i - 1.0 / 3, wts, absc);          // kg^k/m3*s
 
     //---------- oxidation terms
 
-    vector<double> oxidationSourceM(state.sootVar.size(), 0);                                   // oxidation source terms
-    for (size_t i = 1; i < state.sootVar.size(); i++)                                                   // M0 = 0.0 for oxidation by definition
-        oxidationSourceM.at(i) = -kOxi * Acoef * (double) i * Mk((double) i - 1.0 / 3, weights, abscissas);              // kg^k/m3*s
-
-    if (out) {
-        *out << "oxidation source terms (" << oxidationSourceM.size() << ")" << endl;
-        for (size_t i = 0; i < oxidationSourceM.size(); i++)
-            *out << i << ": " << oxidationSourceM.at(i) << endl;
-        *out << endl;
-    }
+    vector<double> oxiSrcM(nMom, 0);
+    for (size_t i = 1; i < nMom; i++)                                                // M0 = 0.0 for oxidation by definition
+        oxiSrcM.at(i) = -kOxi * Acoef * i * Mk(i - 1.0 / 3, wts, absc);         // kg^k/m3*s
 
     //---------- coagulation terms
 
-    vector<double> coagulationSourceM(state.sootVar.size(), 0);                                 // coagulation source terms: initialize to zero!
+    vector<double> coaSrcM(nMom, 0);
 
-    // there is a different case for the first moment
-    // the second moment does not need calculation
-    // the other moments are handled by the second loop
-    for (size_t i = 0; i < abscissas.size(); i++) {
-    	if (i != 0) {
-    		for (size_t j = 0; j < i; j++)
-			    coagulationSourceM.at(0) += sootModel.coa->getCoagulationRate(state, abscissas.at(i), abscissas.at(j)) * weights.at(i) * weights.at(j) * -1;
-    	}
-	    coagulationSourceM.at(0) += sootModel.coa->getCoagulationRate(state, abscissas.at(i), abscissas.at(i)) * weights.at(i) * weights.at(i) * -0.5;
-    }
-    for (size_t i = 2; i < state.sootVar.size(); i++) {
-    	for (size_t j = 0; j < abscissas.size(); j++) {
-    		if (j != 0) {
-    			for (size_t k = 0; k < j; k++)
-				    coagulationSourceM.at(i) += sootModel.coa->getCoagulationRate(state, abscissas.at(j), abscissas.at(k)) * weights.at(j) * weights.at(k) * (i == 0 ? -1 : (pow(abscissas.at(j) + abscissas.at(k), i)) - pow(abscissas.at(j), i) - pow(abscissas.at(k), i));
-    		}
-		    coagulationSourceM.at(i) += sootModel.coa->getCoagulationRate(state, abscissas.at(j), abscissas.at(j)) * weights.at(j) * weights.at(j) * (i == 0 ? -0.5 : pow(abscissas.at(j), i) * (pow(2, i - 1) - 1));
-    	}
+    for(int k=0; k < nMom; k++) {
+
+        // off-diagonal terms (looping half of them) with *2 incorporated
+        for(int ii=1; ii < absc.size(); ii++)
+            for(int j=0; j<ii; j++)
+                coaSrcM[k] += coa->getCoagulationSootRate(state, absc[ii], absc[j]) * wts[ii] * wts[j] *
+                              (k == 0 ? -1.0 : (pow(absc[ii] + absc[j], k)) - pow(absc[ii], k) - pow(absc[j], k) );      // M0 special case
+
+        // diagonal terms
+        for(int ii=0; ii < absc.size(); ii++)
+            coaSrcM[k] += coa->getCoagulationSootRate(state, absc[ii], absc[ii]) * wts[ii] * wts[ii] *
+                          (k == 0 ? -0.5 : pow(absc[ii], k) * (pow(2, k - 1) - 1) );                                  // M0 special case
     }
 
-    if (out) {
-        *out << "coagulation source terms (" << coagulationSourceM.size() << ")" << endl;
-        for (size_t i = 0; i < coagulationSourceM.size(); i++)
-            *out << i << ": " << coagulationSourceM.at(i) << endl;
-        *out << endl;
-    }
+    coaSrcM.at(1) = 0.0;    // M1 = 0.0 for coagulation by definition
 
-    //---------- combinine to make source terms
+    //---------- combine to make soot source terms
 
-    vector<double> sootSourceTerms(state.sootVar.size(), 0);
-
-    for (size_t i = 0; i < state.sootVar.size(); i++)
-        sootSourceTerms.at(i) = (nucleationSourceM.at(i) + condensationSourceM.at(i) + growthSourceM.at(i) + oxidationSourceM.at(i) + coagulationSourceM.at(i)) / state.getRhoGas();
-
-    if (out) {
-        *out << "Soot Source Terms (" << sootSourceTerms.size() << ")" << endl;
-        for (size_t i = 0; i < sootSourceTerms.size(); i++)
-            *out << i << ": " << sootSourceTerms.at(i) << endl;
-        *out << endl;
-    }
-
+    for (size_t i = 0; i < nMom; i++)
+        sourceTerms->sootSourceTerms.at(i) = (nucSrcM.at(i) + cndSrcM.at(i) + grwSrcM.at(i) + oxiSrcM.at(i) + coaSrcM.at(i)) / state.rhoGas;
+    
     //---------- get gas source terms
 
-    map<gasSp, double> gasSourceTerms = SootChemistry::getGasSourceTerms(state, massRateRatios, nucleationSourceM.at(1), growthSourceM.at(1), oxidationSourceM.at(1), 0);
-    map<size_t, double> PAHSourceTerms = SootChemistry::getPAHSourceTerms(state, massRateRatios, nucleationSourceM.at(1), 0, oxidationSourceM.at(1), 0);
+    map<gasSp, double> nucGasSrc = nuc->getNucleationGasRates(state, nucSrcM[1]).gasSourceTerms;
+    map<gasSp, double> grwGasSrc = grw->getGrowthGasRates(state, grwSrcM[1]).gasSourceTerms;
+    map<gasSp, double> oxiGasSrc = oxi->getOxidationGasRates(state, oxiSrcM[1]).gasSourceTerms;
+    // coagulation does not contribute to gas sources/sinks
 
-    if (out) {
-        *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;
-        for (const auto& [g, t] : gasSourceTerms)
-            *out << (int) g << ": " << t << endl;
-        *out << "PAH Source Terms (" << PAHSourceTerms.size() << ")" << endl;
-        for (const auto& [s, t] : PAHSourceTerms)
-            *out << s << ": " << t << endl;
-        *out << endl;
+    for (auto const& x : sourceTerms->gasSourceTerms) {
+        gasSp sp = x.first;
+        if (sp != gasSp::C)
+            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
     }
 
-    return SourceTerms(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
 }
+
 ////////////////////////////////////////////////////////////////////////////////
-/*! Wheeler algorithm for computing weights and abscissas from moments
- *
- *      From Marchisio and Fox (2013) Computational Models for Polydisperse and
- *      Multiphase Systems. Uses eispack function tql2 for eigenvalues and
- *      eigenvectors of a symmetric tridiagonal matrix. If eispack version tql2
- *      is desired, download eispack.hpp and eispack.cc. LApack's dstev
- *      function to compute eigenvalues and eigenvectors of symmetrical
- *      tridiagonal matrix.
- *
- *      @param m    \input     vector of moments (size = 2N)
- *      @param N    \input     number of quadrature nodes (abscissas)
- *      @param w    \output    weights
- *      @param x    \output    abscissas
- */
+
 void psdModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w, vector<double>& x)
 {
 	vector<vector<double>> sigma(N + 1, vector<double>(N * 2, 0));
@@ -252,85 +164,72 @@ void psdModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w
 	for (size_t i = 0; i < N; i++)
 		w.at(i) = pow(evec.at(0 + i * N), 2) * m.at(0);
 }
+
 ////////////////////////////////////////////////////////////////////////////////
-/*! getWtsAbs function
- *
- *      Calculates weights and abscissas from moments using PD algorithm or
- *      wheeler algorithm.
- *
- *      @param M        \input  vector of moments
- *      @param wts      \input  weights
- *      @param absc     \input  abscissas
- *
- *      Notes:
- *      - Use wheeler over pdalg whenever possible.
- *      - wts and abs DO NOT change size; if we downselect to a smaller number
- *      of moments, the extra values are set at and stay zero
- *      - using w_temp and a_temp means we don't have to resize wts and absc,
- *      which is more convenient when wts and absc are used to reconstitute
- *      moment source terms.
- */
+
 void psdModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, vector<double>& abscissas)
 {
-	size_t N = M.size();              // local nMom; may change with moment deselection
+	size_t N = M.size();        // local nMom; may change with moment downselection
 
-	for (double num : M) {                // if any moments are zero, return with zero wts and absc
-		if (num <= 0)
+	for (double num : M) {      // if any moments are zero,
+		if (num <= 0)           // return with zero wts and abscs
 			return;
 	}
 
-	bool negs;                          // flag for downselecting if there are negative wts/abs
+	bool bad_values;            // downselection flag
 
 	vector<double> w_temp(N / 2, 0);
 	vector<double> a_temp(N / 2, 0);
 
-	do {                                        // downselection loop
+    // downselection loop
+	do {
 
-		negs = false;                           // reset flag
+	    // reset flag
+		bad_values = false;                                   
 
-		for (size_t i = 0; i < N / 2; i++) {             // reinitialize weights and abscissas with zeros
+		// reinitialize weights and abscs with zeros
+		for (size_t i = 0; i < N / 2; i++) {            
 			w_temp.at(i) = 0;
 			a_temp.at(i) = 0;
 		}
 
-		if (N == 2) {                           // in 2 moment case, return monodisperse output
+		// in 2 moment case, return MONO output
+		if (N == 2) {                                   
 			weights.at(0) = M.at(0);
 			abscissas.at(0) = M.at(1) / M.at(0);
 			return;
 		}
 
-		//pdAlg(N,N/2,ymom,wts,absc);           // PD algorithm
-		wheeler(M, N / 2, w_temp, a_temp);        // wheeler algorithm
+		// wheeler algorithm for moment inversion
+		wheeler(M, N / 2, w_temp, a_temp);      
 
-		for (size_t i = 0; i < N / 2; i++) {
-			if (w_temp.at(i) < 0 || a_temp.at(i) < 0 || a_temp.at(i) > 1)
-				negs = true;
+		// check for bad values
+		for (size_t i = 0; i < N / 2; i++) {              
+			if (w_temp.at(i) < 0 || a_temp.at(i) < 0)     // check for negative values
+				bad_values = true;
+			if (w_temp.at(i) > 1)                         // check for weights > 1
+			    bad_values = true;
 		}
 
-		if (negs) {                     // if we found negative values
-			N = N - 2;                          // downselect to two fewer moments and try again
+		// if we find bad values, downselect to two fewer moments and try again
+		if (bad_values) {                     
+			N = N - 2;                          
 			w_temp.resize(N / 2);
 			a_temp.resize(N / 2);
 		}
 
 	}
-	while (negs);                     // end of downselection loop
+	while (bad_values); 
 
-	for (size_t i = 0; i < w_temp.size(); i++) {   // assign temporary variables to output
+	// assign temporary variables to output
+	for (size_t i = 0; i < w_temp.size(); i++) {   
 		weights.at(i) = w_temp.at(i);
 		abscissas.at(i) = a_temp.at(i);
 	}
 }
+
 ////////////////////////////////////////////////////////////////////////////////
-/** Mk function
-*
-*  calculates fractional moments from weights and abscissas.
-*
-*  @param exp  \input  fractional moment to compute, corresponds to exponent
-*  @param wts  \input  weights
-*  @param absc \input  abscissas
-*  @param Mk   \output fractional moment value
-*/
+
 double psdModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<double>& absc)
 {
 	double Mk = 0;
@@ -343,12 +242,4 @@ double psdModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<dou
 	}
 
 	return Mk;
-}
-void psdModel_QMOM::checkState(const state& state) const {
-    if (state.sootVar.size() < 2)
-        throw runtime_error("QMOM soot model requries 2, 4 or 6 moments");
-    if (state.sootVar.size() % 2 == 1)
-        throw runtime_error("QMOM soot model requires 2, 4 or 6 moments");
-    if (state.sootVar.size() > 6)
-        cerr << "QMOM soot model requires 2, 4 or 6 moments, got " << state.sootVar.size() << endl;
 }

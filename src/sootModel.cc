@@ -1,6 +1,6 @@
 #include "sootModel.h"
 
-#include "src/sootModels/psdModels/psdModel_SECT.h"
+//#include "src/sootModels/psdModels/psdModel_SECT.h"
 #include "src/sootModels/psdModels/psdModel_MONO.h"
 #include "src/sootModels/psdModels/psdModel_LOGN.h"
 #include "src/sootModels/psdModels/psdModel_QMOM.h"
@@ -29,7 +29,7 @@ void sootModel::setPsdModel(psdMech modelType, int nMoms, int nBins) {
         case psdMech::LOGN:  psd = new psdModel_LOGN(nMoms);
         case psdMech::QMOM:  psd = new psdModel_QMOM(nMoms);
         case psdMech::MOMIC: psd = new psdModel_MOMIC(nMoms);
-        case psdMech::SECT:  psd = new psdModel_SECT(nBins);
+        //case psdMech::SECT:  psd = new psdModel_SECT(nBins);
     }
 }
 
