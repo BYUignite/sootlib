@@ -5,19 +5,24 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 set(CMAKE_CXX_STANDARD 11)
-
 set(CMAKE_BINARY_DIR "${CMAKE_SOURCE_DIR}/build")
+
+#################### PROJECT OPTIONS ###############################
+
+# ---- set installation location ----
+set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/installed" CACHE STRING "installation location")
+
+# ---- options to build examples ----
+option(BUILD_EXAMPLES "Build sootlib example" OFF)
+
+# ---- options to build tests -------
+option(BUILD_TESTS "Build sootlib tests" OFF)
+
+####################### SOOTLIB ###############################
 
 project(sootlib
         VERSION 1.0
         LANGUAGES CXX)
-
-#################### PROJECT OPTIONS ###############################
-
-option(BUILD_TESTS "Build sootlib tests" ON)        # option to build tests
-option(BUILD_EXAMPLES "Build sootlib example" ON)   # option to build examples
-
-####################### SOOTLIB ###############################
 
 add_subdirectory(src ${CMAKE_CURRENT_BINARY_DIR}/src)
 
