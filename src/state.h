@@ -1,7 +1,7 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include "src/constants.h"
+#include "constants.h"
 
 namespace soot {
 
@@ -77,22 +77,7 @@ namespace soot {
          state();                    // initializes variable and sets default values for maps
         ~state() = default;
 
-
     };
 }
-
-
-
-//void pahState::printInfo(ostream& out) const {
-//    out << " === [pahState] ===" << endl;
-//
-//    out << "PAH fractions (" << PAHFractions.size() << ")" << endl;
-//    for (const auto& [p, f] : PAHFractions)
-//        out << "PAH species " << p << ": " << f << endl;
-//    out << endl;
-//}
-
-
-
 
 #endif //STATE_H
