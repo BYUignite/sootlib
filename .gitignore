@@ -1,6 +1,9 @@
 cmake-build-debug/
 cmake-build-release/
 
+build/*
+installed/
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Example user template template
 ### Example user template

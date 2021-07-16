@@ -7,16 +7,18 @@ endif()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_BINARY_DIR "${CMAKE_SOURCE_DIR}/build")
 
+include(FetchContent)
+
 #################### PROJECT OPTIONS ###############################
 
 # ---- set installation location ----
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/installed" CACHE STRING "installation location")
 
 # ---- options to build examples ----
-option(BUILD_EXAMPLES "Build sootlib example" OFF)
+option(BUILD_EXAMPLES "Build sootlib examples" OFF)
 
 # ---- options to build tests -------
-option(BUILD_TESTS "Build sootlib tests" OFF)
+option(BUILD_TESTING "Build sootlib tests" ON)
 
 ####################### SOOTLIB ###############################
 
@@ -34,8 +36,9 @@ target_include_directories(sootlib PUBLIC
 
 ######################### TESTS ###############################
 
-if (BUILD_TESTS)
-    add_subdirectory(test ${CMAKE_CURRENT_BINARY_DIR}/test)
+if (BUILD_TESTING)
+    enable_testing()
+    add_subdirectory(tests ${CMAKE_CURRENT_BINARY_DIR}/tests)
 endif()
 
 ######################## EXAMPLES ###############################
