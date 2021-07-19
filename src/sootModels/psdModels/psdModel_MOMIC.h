@@ -2,7 +2,6 @@
 #define PSDMODEL_MOMIC_H
 
 #include "src/sootModel.h"
-#include "extern/binomial/binomial.h"
 
 namespace soot {
 

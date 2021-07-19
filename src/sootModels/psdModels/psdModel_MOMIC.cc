@@ -1,11 +1,12 @@
 #include "psdModel_MOMIC.h"
+#include "extern/binomial/binomial.h"
 
 using namespace std;
 using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
- psdModel_MOMIC:: psdModel_MOMIC(size_t n) {
+ psdModel_MOMIC::psdModel_MOMIC(size_t n) {
 
      if (n < 1)
          throw runtime_error("Invalid number of soot moments requested");
@@ -207,7 +208,7 @@ double  psdModel_MOMIC::f_grid(int x, int y, const vector<double>& M)
 
 double psdModel_MOMIC::MOMICCoagulationRate(const state& state, size_t r){
 
-    // M1 = 0.0 for caogulation by definition
+    // M1 = 0.0 for coagulation by definition
 	if (r == 1)
 		return 0;
 
