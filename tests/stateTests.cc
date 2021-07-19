@@ -31,7 +31,7 @@ TEST_CASE("state object initialization with default values", "[state]") {
 
 }
 
-TEST_CASE("setState function call with 'good' values", "[state]") {
+TEST_CASE("setState function call with 'good' values", "[state][setState]") {
 
     state S = state();
 
@@ -41,7 +41,7 @@ TEST_CASE("setState function call with 'good' values", "[state]") {
 
     S.setState(2500, 101325, 0.1, 0.5, 29, yGas, yPAH, ySootVar, 150);
 
-    SECTION("correct values are assigned to scalar values") {
+    SECTION("correct values are assigned to scalar variables") {
         REQUIRE(S.T == 2500);
         REQUIRE(S.P == 101325);
         REQUIRE(S.rhoGas == 0.1);
@@ -95,20 +95,61 @@ TEST_CASE("setState function call with 'good' values", "[state]") {
     }
 }
 
-TEST_CASE("setState function call with 'bad' values", "[state]") {
+TEST_CASE("setState function call with 'bad' values", "[state][setState]") {
 
-    SECTION("negative values for scalar variables") {}
-    SECTION("incorrect gas fractions vector size") {}
-    SECTION("incorrect PAH fractions vector size") {}
+    state S = state();
+
+    vector<double> yGas0 = {0, 0, 0, 0, 0, 0, 0, 0};   // [H, H2, O, O2, OH, H2O, CO, C2H2]
+    vector<double> yPAH0 = {0, 0, 0, 0, 0, 0};                 // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
+    vector<double> ySootVar0{0, 0};
+
+    SECTION("negative or zero values for scalar variables throw errors") {
+
+        double T = 0;
+        double P = -101325;
+        double rhoGas = -0.5;
+        double muGas = -0.001;
+        double MWGas = 0;
+        double cMin = -2;
+
+        REQUIRE_THROWS(S.setState(T,    101325, 0.1,    0.5,   29,    yGas0, yPAH0, ySootVar0, 100));
+        REQUIRE_THROWS(S.setState(2500, P,      0.1,    0.5,   29,    yGas0, yPAH0, ySootVar0, 100));
+        REQUIRE_THROWS(S.setState(2500, 101325, rhoGas, 0.5,   29,    yGas0, yPAH0, ySootVar0, 100));
+        REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    muGas, 29,    yGas0, yPAH0, ySootVar0, 100));
+        REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   MWGas, yGas0, yPAH0, ySootVar0, 100));
+        REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas0, yPAH0, ySootVar0, cMin));
+    }
+
+    SECTION("negative values for gas/PAH mass fractions and soot moments/bins throw errors") {
+
+        vector<double> yGas = {0, 0, -0.02, 0, 0, 0, 0, 0};
+        vector<double> yPAH = {0, 0, 0, 0, 0, -0.0001};
+        vector<double> ySootVar{0, 0, -0.0005};
+
+        REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas, yPAH0, ySootVar0, 100));
+        REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas0, yPAH, ySootVar0, 100));
+        REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas0, yPAH0, ySootVar, 100));
+
+    }
+
+    SECTION("values >1 for gas/PAH mass fractions throw errors") {
+
+        vector<double> yGas = {1.1, 0, 0, 0, 0, 0, 0, 0};
+        vector<double> yPAH = {0, 0, 0, 0, 1.2E2, 0};
+
+        REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas, yPAH0, ySootVar0, 100));
+        REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas0, yPAH, ySootVar0, 100));
+
+    }
+
+    SECTION("incorrect vector size for gas/PAH mass fractions throws error") {
+
+        vector<double> yGas = {0, 0, 0, 0, 0, 0};       // 2 too few elements
+        vector<double> yPAH = {0, 0, 0, 0, 0, 0, 0};    // 1 too many elements
+
+        REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas, yPAH0, ySootVar0, 100));
+        REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas0, yPAH, ySootVar0, 100));
+
+    }
 
 }
-
-//WHEN("function call with 'bad' values") {
-//
-//vector<double> yGas = {0, 0.1, 0.1, 0.01, 0.02, 0.03, 0.04, 0.2};   // [H, H2, O, O2, OH, H2O, CO, C2H2]
-//vector<double> yPAH = {0, 0.1, 0.1, 0.01, 0.02, 0};                 // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-//vector<double> ySootVar{0.003, 1.5E-5};
-//
-//S.setState(2500, 101325, 0.1, 0.5, 29, yGas, yPAH, ySootVar, 150);
-//
-//}
