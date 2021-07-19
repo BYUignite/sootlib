@@ -27,47 +27,44 @@ state::state() {
 void state::setState(double T_, double P_, double rhoGas_, double muGas_, double MWGas_,
                      vector<double> yGas_, vector<double> yPAH_, vector<double> sootVar_, double cMin_) {
 
-    // scalar variable values
+    //------------ scalar variable values
 
-    if   ( T_ <= 0 ) { throw domain_error("Unphysical state value requested: T"); }
-    else { T = T_; }
+    if (T_ <= 0) throw domain_error("Unphysical state value requested: T");
+    else T = T_;
 
-    if   ( P_ <= 0 ) { throw domain_error("Unphysical state value requested: P"); }
-    else { P = P_; }
+    if (P_ <= 0) throw domain_error("Unphysical state value requested: P");
+    else P = P_;
 
-    if   (rhoGas_ <= 0) { throw domain_error("Unphysical state value requested: rhoGas"); }
-    else { rhoGas = rhoGas_; }
+    if (rhoGas_ <= 0) throw domain_error("Unphysical state value requested: rhoGas");
+    else rhoGas = rhoGas_;
 
-    if   (muGas_ <= 0) { throw domain_error("Unphysical state value requested: muGas"); }
-    else { muGas = muGas_; }
+    if (muGas_ <= 0) throw domain_error("Unphysical state value requested: muGas");
+    else muGas = muGas_;
 
-    if   (MWGas_ <= 0) { throw domain_error("Unphysical state value requested: MWGas"); }
-    else { MWGas = MWGas_; }
+    if (MWGas_ <= 0) throw domain_error("Unphysical state value requested: MWGas");
+    else MWGas = MWGas_;
 
-    if   (cMin_ <= 0) { throw domain_error("Unphysical state value requested: cMin"); }
-    else { cMin = cMin_; }
+    if (cMin_ <= 0) throw domain_error("Unphysical state value requested: cMin");
+    else cMin = cMin_;
 
-    // soot moments/bins
+    //------------ soot moments/bins
 
-    for (double s : sootVar_) {
+    for (double s : sootVar_)
         if (s < 0)
             throw domain_error("Unphysical state value requested: soot moments/bins");
-    }
 
     sootVar.resize(0);
     for (double & i : sootVar_)
         sootVar.push_back(i);
 
-    // gas species mass fractions
+    //------------ gas species mass fractions
 
-    if (yGas_.size() != (gasFractions.size()-1)) {
+    if (yGas_.size() != (gasFractions.size() - 1))
         throw domain_error("Invalid input vector size: gas species mass fractions");
-    }
 
-    for (double y : yGas_){
-        if (y < 0)
+    for (double y : yGas_)
+        if (y < 0 || y > 1)
             throw domain_error("Unphysical state value requested: gas species mass fractions");
-    }
 
     gasFractions.at(gasSp::H)    = yGas_[0];
     gasFractions.at(gasSp::H2)   = yGas_[1];
@@ -78,17 +75,14 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
     gasFractions.at(gasSp::CO)   = yGas_[6];
     gasFractions.at(gasSp::C2H2) = yGas_[7];
 
+    //------------ PAH mass fractions
 
-    // PAH mass fractions
-
-    if (yPAH_.size() != (pahFractions.size())) {
+    if (yPAH_.size() != (pahFractions.size()))
         throw domain_error("Invalid input vector size: PAH species mass fractions");
-    }
 
-    for (double y : yPAH_){
-        if (y < 0)
+    for (double y : yPAH_)
+        if (y < 0 || y > 1)
             throw domain_error("Unphysical state value requested: PAH species mass fractions");
-    }
 
     pahFractions.at(pahSp::C10H8)  = yPAH_[0];
     pahFractions.at(pahSp::C12H8)  = yPAH_[1];
@@ -96,7 +90,6 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
     pahFractions.at(pahSp::C14H10) = yPAH_[3];
     pahFractions.at(pahSp::C16H10) = yPAH_[4];
     pahFractions.at(pahSp::C18H10) = yPAH_[5];
-
 
 }
 
