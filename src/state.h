@@ -60,15 +60,18 @@ namespace soot {
             double get_pahSpP(pahSp sp) const { return pahFractions.at(sp) * MWGas / pahSpMW.at(sp) * P; };
             double get_pahSpN(pahSp sp) const { return rhoGas * pahFractions.at(sp) / pahSpMW.at(sp) * Na; };
 
+            ////////////////////////////////////////////////////////////////////////////////
+            /*! getParticleCollisionRate function
+             *
+             *      Returns the value of the collision rate function beta in m3/#*s. See
+             *      Frenklach & Wang (1994) "Detailed mechanism and modeling of soot particle
+             *      formation" in Soot Formation in Combustion, pp. 165-192.
+             *
+             *      @param m1               \input      first particle size (kg)
+             *      @param m2               \input      second particle size (kg)
+             *
+             */
             double getParticleCollisionRate(double m1, double m2) const;
-
-//            double          getsootBin(size_t i) const          { checkSize(i);return sootVar.at(i); }
-//            void            setsootBin(size_t i, double value)  { checkSize(i);sootVar.at(i) = value; }
-//            void            resetsootBins(size_t numsootBins)    { sootVar = vector<double>(numsootBins, 0); }
-//            size_t          getNumsootBins() const              { return sootVar.size(); }
-//            vector<double>  getsootBins() const                 { return sootVar; }
-
-//            virtual void printInfo(std::ostream& out) const;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 

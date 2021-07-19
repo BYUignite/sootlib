@@ -5,6 +5,8 @@
 using namespace std;
 using namespace soot;
 
+////////////////////////////////////////////////////////////////////////////////
+
 TEST_CASE("state object initialization with default values", "[state]") {
 
     state S = state();
@@ -30,6 +32,8 @@ TEST_CASE("state object initialization with default values", "[state]") {
     REQUIRE(S.sootVar.empty());
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("setState function call with 'good' values", "[state][setState]") {
 
@@ -95,6 +99,8 @@ TEST_CASE("setState function call with 'good' values", "[state][setState]") {
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 TEST_CASE("setState function call with 'bad' values", "[state][setState]") {
 
     state S = state();
@@ -151,5 +157,45 @@ TEST_CASE("setState function call with 'bad' values", "[state][setState]") {
         REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas0, yPAH, ySootVar0, 100));
 
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+//TEST_CASE("get gas/PAH C/P/N function calls", "[state]") {
+//
+//    state S = state();
+//
+//
+//}
+
+////////////////////////////////////////////////////////////////////////////////
+
+TEST_CASE("getParticleCollisionRate function call", "[state]") {
+
+    state S = state();
+
+    SECTION("throws error if state variables have not been set"){
+        REQUIRE_THROWS(S.getParticleCollisionRate(1,4));
+        REQUIRE_THROWS(S.getParticleCollisionRate(12,45));
+    }
+
+    vector<double> yGas0 = {0, 0, 0, 0, 0, 0, 0, 0};   // [H, H2, O, O2, OH, H2O, CO, C2H2]
+    vector<double> yPAH0 = {0, 0, 0, 0, 0, 0};                 // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
+    vector<double> ySootVar0{0, 0};
+
+    S.setState(2500, 101325, 0.1, 0.5, 29, yGas0, yPAH0, ySootVar0, 150);
+
+    SECTION("handles negative and/or zero input values") {
+        REQUIRE_THROWS(S.getParticleCollisionRate(-0.2,4));
+        REQUIRE_THROWS(S.getParticleCollisionRate(0.5,0));
+        REQUIRE_THROWS(S.getParticleCollisionRate(0,0));
+    }
+
+    SECTION("returns valid values of collision rate function beta in m3/#*s") {
+        REQUIRE(S.getParticleCollisionRate(12,55) >= 0);
+        REQUIRE(S.getParticleCollisionRate(0.002,0.05) >= 0);
+        REQUIRE(S.getParticleCollisionRate(0.1,45) >= 0);
+    }
+
 
 }
