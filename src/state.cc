@@ -49,39 +49,54 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
 
     // soot moments/bins
 
+    for (double s : sootVar_) {
+        if (s < 0)
+            throw domain_error("Unphysical state value requested: soot moments/bins");
+    }
+
     sootVar.resize(0);
-    for (int i=0; i<sootVar_.size(); i++)
-        sootVar.push_back(sootVar_[i]);
+    for (double & i : sootVar_)
+        sootVar.push_back(i);
 
     // gas species mass fractions
 
     if (yGas_.size() != (gasFractions.size()-1)) {
         throw domain_error("Invalid input vector size: gas species mass fractions");
     }
-    else {
-        gasFractions.at(gasSp::H)    = yGas_[0];
-        gasFractions.at(gasSp::H2)   = yGas_[1];
-        gasFractions.at(gasSp::O)    = yGas_[2];
-        gasFractions.at(gasSp::O2)   = yGas_[3];
-        gasFractions.at(gasSp::OH)   = yGas_[4];
-        gasFractions.at(gasSp::H2O)  = yGas_[5];
-        gasFractions.at(gasSp::CO)   = yGas_[6];
-        gasFractions.at(gasSp::C2H2) = yGas_[7];
+
+    for (double y : yGas_){
+        if (y < 0)
+            throw domain_error("Unphysical state value requested: gas species mass fractions");
     }
+
+    gasFractions.at(gasSp::H)    = yGas_[0];
+    gasFractions.at(gasSp::H2)   = yGas_[1];
+    gasFractions.at(gasSp::O)    = yGas_[2];
+    gasFractions.at(gasSp::O2)   = yGas_[3];
+    gasFractions.at(gasSp::OH)   = yGas_[4];
+    gasFractions.at(gasSp::H2O)  = yGas_[5];
+    gasFractions.at(gasSp::CO)   = yGas_[6];
+    gasFractions.at(gasSp::C2H2) = yGas_[7];
+
 
     // PAH mass fractions
 
     if (yPAH_.size() != (pahFractions.size())) {
         throw domain_error("Invalid input vector size: PAH species mass fractions");
     }
-    else {
-        pahFractions.at(pahSp::C10H8)  = yPAH_[0];
-        pahFractions.at(pahSp::C12H8)  = yPAH_[1];
-        pahFractions.at(pahSp::C12H10) = yPAH_[2];
-        pahFractions.at(pahSp::C14H10) = yPAH_[3];
-        pahFractions.at(pahSp::C16H10) = yPAH_[4];
-        pahFractions.at(pahSp::C18H10) = yPAH_[5];
+
+    for (double y : yPAH_){
+        if (y < 0)
+            throw domain_error("Unphysical state value requested: PAH species mass fractions");
     }
+
+    pahFractions.at(pahSp::C10H8)  = yPAH_[0];
+    pahFractions.at(pahSp::C12H8)  = yPAH_[1];
+    pahFractions.at(pahSp::C12H10) = yPAH_[2];
+    pahFractions.at(pahSp::C14H10) = yPAH_[3];
+    pahFractions.at(pahSp::C16H10) = yPAH_[4];
+    pahFractions.at(pahSp::C18H10) = yPAH_[5];
+
 
 }
 
