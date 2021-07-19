@@ -10,7 +10,9 @@ namespace soot {
      *
      *      Implementation of coagulationModel interface
      *
-     *      Returns the value of the collision rate function beta in m3/#*s.
+     *      Returns the value of the collision rate function beta in m3/#*s. See
+     *      Frenklach & Wang (1994) "Detailed mechanism and modeling of soot particle
+     *      formation" in Soot Formation in Combustion, pp. 165-192.
      *
      *      @param MomentState&     \input      local moment state; need M0 and M1
      *      @param m1               \input      first particle size (kg)

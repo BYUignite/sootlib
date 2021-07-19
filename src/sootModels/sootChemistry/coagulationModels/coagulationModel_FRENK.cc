@@ -14,7 +14,7 @@ double coagulationModel_FRENK::getCoagulationSootRate(const state& state,
     //------------ free molecular rate
 //    JUtil::checkZero(m1 + m2, "m1 + m2");
     double m12 = abs(m1 * m2 / (m1 + m2));
-    double beta_12_FM = eps_c * sqrt(M_PI * kb * state.T * 0.5 / m12) * pow(Dp1 + Dp2, 2);
+    double beta_12_FM = eps_c * sqrt(M_PI * kb * state.T * 0.5 / m12) * pow(Dp1 + Dp2, 2);  // Eq. 10.18
 
     //------------ continuum rate
     double Kn1 = 2 * state.getGasMeanFreePath() / Dp1;
