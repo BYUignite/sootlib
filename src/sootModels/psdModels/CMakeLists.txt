@@ -5,5 +5,6 @@ target_sources(sootlib PRIVATE
                 psdModel_QMOM.cc    psdModel_QMOM.h
                 psdModel_MONO.cc    psdModel_MONO.h
                 psdModel_MOMIC.cc   psdModel_MOMIC.h
-                psdModel_LOGN.cc    psdModel_LOGN.h)
+                psdModel_LOGN.cc    psdModel_LOGN.h
+                psdModel.cc         psdModel.h)
 

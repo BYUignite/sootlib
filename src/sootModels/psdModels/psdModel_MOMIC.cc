@@ -6,27 +6,27 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
- psdModel_MOMIC::psdModel_MOMIC(size_t n) {
+ psdModel_MOMIC::psdModel_MOMIC(sourceTermStruct& sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
+         : psdModel(sourceTerms, nVar, N, G, X, C) {
 
-     if (n < 1)
+     if (nVar < 1)
          throw runtime_error("Invalid number of soot moments requested");
 
-    this->nMom = n;
+    this->nMom = nVar;
 
      // initialize sourceTerms soot variable
      for (int i=0; i<nMom; i++)
-         sourceTerms->sootSourceTerms.push_back(0);
+         sourceTerms.sootSourceTerms.push_back(0);
+
+     // note nucleation mech in case PAH is needed
+     this->nucleationMechanism = N;
+     this->coagulationMechanism = C;
      
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_MOMIC::getSourceTermsImplementation(state& state, std::ostream* out) const {
-
-    if (out) {
-        *out << " === [SootModel MOMIC] ===" << endl;
-        *out << endl;
-    }
+void psdModel_MOMIC::getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const {
 
     const size_t N = downselectIfNeeded(state, state.sootVar);
 
@@ -80,7 +80,7 @@ void psdModel_MOMIC::getSourceTermsImplementation(state& state, std::ostream* ou
     //---------- combine to make soot source terms
 
     for (size_t i = 0; i < nMom; i++)
-        sourceTerms->sootSourceTerms.at(i) = (Mnuc.at(i) + Mcnd.at(i) + Mgrw.at(i) + Moxi.at(i) + Mcoa.at(i)) / state.rhoGas;
+        sourceTerms.sootSourceTerms.at(i) = (Mnuc.at(i) + Mcnd.at(i) + Mgrw.at(i) + Moxi.at(i) + Mcoa.at(i)) / state.rhoGas;
 
     //---------- get gas source terms
 
@@ -89,10 +89,10 @@ void psdModel_MOMIC::getSourceTermsImplementation(state& state, std::ostream* ou
     map<gasSp, double> oxiGasSrc = oxi->getOxidationGasRates(state, Moxi[1]).gasSourceTerms;
     // coagulation does not contribute to gas sources/sinks
 
-    for (auto const& x : sourceTerms->gasSourceTerms) {
+    for (auto const& x : sourceTerms.gasSourceTerms) {
         gasSp sp = x.first;
         if (sp != gasSp::C)
-            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
+            sourceTerms.gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
     }
 
 }

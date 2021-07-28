@@ -3,10 +3,13 @@
 using namespace std;
 using namespace soot;
 
-psdModel_MONO::psdModel_MONO(size_t n) {
+////////////////////////////////////////////////////////////////////////////////
+
+psdModel_MONO::psdModel_MONO(sourceTermStruct& sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
+             : psdModel(sourceTerms, nVar, N, G, X, C) {
 
     // warn user if wrong number of soot moments is requested
-    if (n != 2)
+    if (nVar != 2)
         cerr << "Invalid number of soot moments requested. "
                 "MONO model will use default value of 2 soot moments." << endl;
 
@@ -15,18 +18,16 @@ psdModel_MONO::psdModel_MONO(size_t n) {
 
     // initialize sourceTerms soot variable
     for (int i=0; i<nMom; i++)
-        sourceTerms->sootSourceTerms.push_back(0);
+        sourceTerms.sootSourceTerms.push_back(0);
+
+    // note nucleation mech in case PAH is needed
+    this->nucleationMechanism = N;
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_MONO::getSourceTermsImplementation(state& state, std::ostream* out) const {
-
-    if (out) {
-        *out << " === [SootModel MONO] ===" << endl;
-        *out << endl;
-    }
+void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const {
 
     vector<double> weights = {0};
     vector<double> abscissas = {0};
@@ -60,7 +61,7 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, std::ostream* out
     double Cnd0 = 0;
     double Cnd1 = 0;
 
-    if (sootModel::nucleationMechanism == nucleationMech::PAH) {
+    if (nucleationMechanism == nucleationMech::PAH) {
 
         double nDimer = nuc->DIMER.nDimer;
         double mDimer = nuc->DIMER.mDimer;
@@ -88,8 +89,8 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, std::ostream* out
 
     //---------- combine to make soot source terms
 
-    sourceTerms->sootSourceTerms.at(0) = (N0 + Cnd0 + G0 + X0 + C0) / state.rhoGas;
-    sourceTerms->sootSourceTerms.at(1) = (N1 + Cnd1 + G1 + X1 + C1) / state.rhoGas;
+    sourceTerms.sootSourceTerms.at(0) = (N0 + Cnd0 + G0 + X0 + C0) / state.rhoGas;
+    sourceTerms.sootSourceTerms.at(1) = (N1 + Cnd1 + G1 + X1 + C1) / state.rhoGas;
 
     //---------- get gas source terms
 
@@ -98,10 +99,10 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, std::ostream* out
     map<gasSp, double> oxiGasSrc = oxi->getOxidationGasRates(state, X1).gasSourceTerms;
     // coagulation does not contribute to gas sources/sinks
 
-    for (auto const& x : sourceTerms->gasSourceTerms) {
+    for (auto const& x : sourceTerms.gasSourceTerms) {
         gasSp sp = x.first;
         if (sp != gasSp::C)
-            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
+            sourceTerms.gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
     }
 
 }

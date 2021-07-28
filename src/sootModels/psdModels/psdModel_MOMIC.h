@@ -1,7 +1,7 @@
 #ifndef PSDMODEL_MOMIC_H
 #define PSDMODEL_MOMIC_H
 
-#include "src/sootModel.h"
+#include "src/sootModels/psdModels/psdModel.h"
 
 namespace soot {
 
@@ -10,11 +10,16 @@ namespace soot {
      *
      *      Associated with enum psdMech:MOMIC
      */
-    class psdModel_MOMIC : public sootModel {
+    class psdModel_MOMIC : public psdModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
+    private:
+
         size_t nMom = 4;        // default value
+
+        nucleationMech  nucleationMechanism;
+        coagulationMech coagulationMechanism;
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
@@ -32,7 +37,7 @@ namespace soot {
          *      @param  state    \input     thermodynamic state object
          *
          */
-        void getSourceTermsImplementation(state& state, std::ostream* out) const override;
+        void getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const override;
 
         ////////////////////////////////////////////////////////////////////////////////
         /*! downselectIfNeeded function
@@ -91,7 +96,12 @@ namespace soot {
 
     public:
 
-        explicit psdModel_MOMIC(size_t n);
+        explicit psdModel_MOMIC(sourceTermStruct& sourceTerms, int nVar = 2,
+                                nucleationMech N = nucleationMech::NONE,
+                                growthMech G = growthMech::NONE,
+                                oxidationMech X = oxidationMech::NONE,
+                                coagulationMech C = coagulationMech::NONE);
+
         ~psdModel_MOMIC() override = default;
 
 

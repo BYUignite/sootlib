@@ -1,7 +1,7 @@
 #ifndef PSDMODEL_MONO_H
 #define PSDMODEL_MONO_H
 
-#include "src/sootModel.h"
+#include "src/sootModels/psdModels/psdModel.h"
 //#include "psdModel.h"
 
 namespace soot {
@@ -11,13 +11,15 @@ namespace soot {
      *
      *      Associated with enum psdMech:MONO
      */
-    class psdModel_MONO : public sootModel {
+    class psdModel_MONO : public psdModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
     private:
 
         size_t nMom = 2;
+
+        nucleationMech nucleationMechanism;
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
@@ -35,13 +37,18 @@ namespace soot {
          *      @param  state    \input     thermodynamic state object
          *
          */
-        void getSourceTermsImplementation(state& state, std::ostream* out) const override;
+        void getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const override;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     public:
 
-         explicit psdModel_MONO(size_t n);
+         explicit psdModel_MONO(sourceTermStruct& sourceTerms, int nVar = 2,
+                                nucleationMech N = nucleationMech::NONE,
+                                growthMech G = growthMech::NONE,
+                                oxidationMech X = oxidationMech::NONE,
+                                coagulationMech C = coagulationMech::NONE);
+
         ~psdModel_MONO() override = default;
 
     };

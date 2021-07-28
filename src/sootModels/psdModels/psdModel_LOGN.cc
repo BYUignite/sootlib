@@ -3,10 +3,11 @@
 using namespace std;
 using namespace soot;
 
-psdModel_LOGN::psdModel_LOGN(size_t n) {
+psdModel_LOGN::psdModel_LOGN(sourceTermStruct& sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
+             : psdModel(sourceTerms, nVar, N, G, X, C) {
 
     // warn user if wrong number of soot moments is requested
-    if (n != 3)
+    if (nVar != 3)
         cerr << "Invalid number of soot moments requested. "
                 "LOGN model will use default value of 3 soot moments." << endl;
 
@@ -15,18 +16,16 @@ psdModel_LOGN::psdModel_LOGN(size_t n) {
 
     // initialize sourceTerms soot variable
     for (int i=0; i<nMom; i++)
-        sourceTerms->sootSourceTerms.push_back(0);
+        sourceTerms.sootSourceTerms.push_back(0);
+
+    // note nucleation mech in case PAH is needed
+    this->nucleationMechanism = N;
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_LOGN::getSourceTermsImplementation(state& state, std::ostream* out) const {
-
-    if (out) {
-        *out << " === [SootModel LOGN] ===" << endl;
-        *out << endl;
-    }
+void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const {
 
     double Cnd0 = 0, Cnd1 = 0, Cnd2 = 0;
 
@@ -130,9 +129,9 @@ void psdModel_LOGN::getSourceTermsImplementation(state& state, std::ostream* out
 
     //---------- combine to make soot source terms
 
-    sourceTerms->sootSourceTerms.at(0) = (N0 + G0 + Cnd0 - X0 + C0) / state.rhoGas;
-	sourceTerms->sootSourceTerms.at(1) = (N1 + G1 + Cnd1 - X1 + C1) / state.rhoGas;
-	sourceTerms->sootSourceTerms.at(2) = (N2 + G2 + Cnd2 - X2 + C2) / state.rhoGas;
+    sourceTerms.sootSourceTerms.at(0) = (N0 + G0 + Cnd0 - X0 + C0) / state.rhoGas;
+	sourceTerms.sootSourceTerms.at(1) = (N1 + G1 + Cnd1 - X1 + C1) / state.rhoGas;
+	sourceTerms.sootSourceTerms.at(2) = (N2 + G2 + Cnd2 - X2 + C2) / state.rhoGas;
 
     //---------- get gas source terms
 
@@ -141,13 +140,15 @@ void psdModel_LOGN::getSourceTermsImplementation(state& state, std::ostream* out
     map<gasSp, double> oxiGasSrc = oxi->getOxidationGasRates(state, X1).gasSourceTerms;
     // coagulation does not contribute to gas sources/sinks
 
-    for (auto const& x : sourceTerms->gasSourceTerms) {
+    for (auto const& x : sourceTerms.gasSourceTerms) {
         gasSp sp = x.first;
         if (sp != gasSp::C)
-            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
+            sourceTerms.gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
     }
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 double psdModel_LOGN::Mk(double k, double M0, double M1, double M2) {
     

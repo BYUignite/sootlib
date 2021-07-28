@@ -4,6 +4,8 @@
 #include "src/constants.h"
 #include "src/state.h"
 
+#include "src/sootModels/psdModels/psdModel.h"
+
 #include "src/sootModels/sootChemistry/nucleationModels/nucleationModel.h"
 #include "src/sootModels/sootChemistry/nucleationModels/nucleationModel_NONE.h"
 #include "src/sootModels/sootChemistry/nucleationModels/nucleationModel_LL.h"
@@ -57,11 +59,11 @@ namespace soot {
         coagulationMech     coagulationMechanism;
 
         // pointers to selected mechanisms
-        sootModel*          psd;
-        nucleationModel*    nuc;
-        growthModel*        grw;
-        oxidationModel*     oxi;
-        coagulationModel*   coa;
+        psdModel*           psd;
+//        nucleationModel*    nuc;
+//        growthModel*        grw;
+//        oxidationModel*     oxi;
+//        coagulationModel*   coa;
 
         sourceTermStruct* sourceTerms;
 
@@ -78,7 +80,7 @@ namespace soot {
          *      @param nMom          number of moments (for moment based models)
          *      @param nBin          number of bins (for sectional models)
          */
-        void setPsdModel(psdMech modelType, int nMom = 0, int nBins = 0);
+//        void setPsdModel(psdMech modelType, int nMom = 0, int nBins = 0);
 
         /** Selects soot chemistry mechanisms based on user input
          *
@@ -87,9 +89,9 @@ namespace soot {
          *      @param X     user-requested oxidation mechanism
          *      @param C     user-requested coagulation mechanism
          */
-        void setSootChemistry(nucleationMech N, growthMech G, oxidationMech X, coagulationMech C);
+//        void setSootChemistry(nucleationMech N, growthMech G, oxidationMech X, coagulationMech C);
 
-        virtual void getSourceTermsImplementation(state& state, std::ostream* out) const = 0;
+//        virtual void getSourceTermsImplementation(state& state, std::ostream* out) const;
 
             // TODO documentation
         void calcSourceTerms(state& state);
@@ -98,7 +100,12 @@ namespace soot {
 
     public:
 
-        sootModel();       // Sets default properties of the created soot model
+        sootModel(psdMech modelType = psdMech::MONO, int nVar = 0,
+                  nucleationMech N = nucleationMech::NONE,
+                  growthMech G = growthMech::NONE,
+                  oxidationMech X = oxidationMech::NONE,
+                  coagulationMech C = coagulationMech::NONE);       // Sets default properties of the created soot model
+
         virtual ~sootModel() = default;
 
     };

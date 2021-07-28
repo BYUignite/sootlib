@@ -1,7 +1,7 @@
 #ifndef PSDMODEL_LOGN_H
 #define PSDMODEL_LOGN_H
 
-#include "src/sootModel.h"
+#include "src/sootModels/psdModels/psdModel.h"
 
 namespace soot {
 
@@ -10,13 +10,15 @@ namespace soot {
      *
      *      Associated with enum psdMech:LOGN
      */
-    class psdModel_LOGN : public sootModel {
+    class psdModel_LOGN : public psdModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
     public:
 
         size_t nMom = 3;
+
+        nucleationMech nucleationMechanism;
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
@@ -34,7 +36,7 @@ namespace soot {
          *      @param  state    \input     thermodynamic state object
          *
          */
-        void getSourceTermsImplementation(state& state, std::ostream* out) const override;
+        void getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const override;
 
         ////////////////////////////////////////////////////////////////////////////////
         /** Mk function (LOGN)
@@ -53,7 +55,12 @@ namespace soot {
 
     public:
 
-        explicit psdModel_LOGN(size_t n);
+        explicit psdModel_LOGN(sourceTermStruct& sourceTerms, int nVar = 3,
+                               nucleationMech N = nucleationMech::NONE,
+                               growthMech G = growthMech::NONE,
+                               oxidationMech X = oxidationMech::NONE,
+                               coagulationMech C = coagulationMech::NONE);
+
         ~psdModel_LOGN() override = default;
 
 

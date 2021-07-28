@@ -8,7 +8,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Catch2)
 
 add_executable(sootlibTests constantsTests.cc
-                            stateTests.cc)
+                            stateTests.cc
+                            sootModelTests.cc)
 
 target_link_libraries(sootlibTests PRIVATE Catch2::Catch2 sootlib)
 

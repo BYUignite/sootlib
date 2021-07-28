@@ -5,31 +5,30 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-psdModel_QMOM::psdModel_QMOM(size_t n) {
+psdModel_QMOM::psdModel_QMOM(sourceTermStruct& sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
+        : psdModel(sourceTerms, nVar, N, G, X, C) {
 
-    if (n%2 == 1 || n < 1)
+    if (nVar%2 == 1 || nVar < 1)
         throw runtime_error("Invalid number of soot moments requested");
 
-    if (n > 6)
+    if (nVar > 6)
         cerr << "Warning: QMOM inversion algorithm may behave unpredictably with "
                 "8+ soot moments. Proceed with caution." << endl;
 
-    this->nMom = n;
+    this->nMom = nVar;
 
     // initialize sourceTerms soot variable
     for (int i=0; i<nMom; i++)
-        sourceTerms->sootSourceTerms.push_back(0);
+        sourceTerms.sootSourceTerms.push_back(0);
+
+    // note nucleation mech in case PAH is needed
+    this->nucleationMechanism = N;
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_QMOM::getSourceTermsImplementation(state& state, std::ostream* out) const {
-
-    if (out) {
-        *out << " === [SootModel QMOM] ===" << endl;
-        *out << endl;
-    }
+void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const {
 
     //---------- get weights and abscissas
 
@@ -104,7 +103,7 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, std::ostream* out
     //---------- combine to make soot source terms
 
     for (size_t i = 0; i < nMom; i++)
-        sourceTerms->sootSourceTerms.at(i) = (nucSrcM.at(i) + cndSrcM.at(i) + grwSrcM.at(i) + oxiSrcM.at(i) + coaSrcM.at(i)) / state.rhoGas;
+        sourceTerms.sootSourceTerms.at(i) = (nucSrcM.at(i) + cndSrcM.at(i) + grwSrcM.at(i) + oxiSrcM.at(i) + coaSrcM.at(i)) / state.rhoGas;
     
     //---------- get gas source terms
 
@@ -113,10 +112,10 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, std::ostream* out
     map<gasSp, double> oxiGasSrc = oxi->getOxidationGasRates(state, oxiSrcM[1]).gasSourceTerms;
     // coagulation does not contribute to gas sources/sinks
 
-    for (auto const& x : sourceTerms->gasSourceTerms) {
+    for (auto const& x : sourceTerms.gasSourceTerms) {
         gasSp sp = x.first;
         if (sp != gasSp::C)
-            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
+            sourceTerms.gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
     }
 
 }

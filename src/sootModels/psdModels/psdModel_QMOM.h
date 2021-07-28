@@ -1,7 +1,7 @@
 #ifndef PSDMODEL_QMOM_H
 #define PSDMODEL_QMOM_H
 
-#include "src/sootModel.h"
+#include "src/sootModels/psdModels/psdModel.h"
 
 namespace soot {
 
@@ -10,13 +10,15 @@ namespace soot {
      *
      *      Associated with enum psdMech:QMOM
      */
-    class psdModel_QMOM : public sootModel {
+    class psdModel_QMOM : public psdModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
     public:
 
         size_t nMom = 4;        // default value
+
+        nucleationMech nucleationMechanism;
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
@@ -34,7 +36,7 @@ namespace soot {
          *      @param  state    \input     thermodynamic state object
          *
          */
-        void getSourceTermsImplementation(state& state, std::ostream* out) const override;
+        void getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const override;
 
         ////////////////////////////////////////////////////////////////////////////////
         /*! Wheeler algorithm for computing weights and abscissas from moments
@@ -84,7 +86,12 @@ namespace soot {
 
     public:
 
-        explicit psdModel_QMOM(size_t n);
+        explicit psdModel_QMOM(sourceTermStruct& sourceTerms, int nVar = 4,
+                               nucleationMech N = nucleationMech::NONE,
+                               growthMech G = growthMech::NONE,
+                               oxidationMech X = oxidationMech::NONE,
+                               coagulationMech C = coagulationMech::NONE);
+
         ~psdModel_QMOM() override = default;
 
     };
