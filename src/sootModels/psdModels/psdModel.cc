@@ -7,44 +7,35 @@ psdModel::psdModel(sourceTermStruct& sourceTerms, int nVar, nucleationMech N, gr
 
     //---------- set nucleation model
 
-    switch (N) {
-        case nucleationMech::NONE: nuc = new nucleationModel_NONE();
-        case nucleationMech::LL:   nuc = new nucleationModel_LL();
-        case nucleationMech::LIN:  nuc = new nucleationModel_LIN();
-        case nucleationMech::PAH:  nuc = new nucleationModel_PAH();
-        default: throw domain_error("Invalid soot nucleation mechanism requested");
-    }
+    if      (N == nucleationMech::NONE) { nuc = new nucleationModel_NONE(); }
+    else if (N == nucleationMech::LL)   { nuc = new nucleationModel_LL();   }
+    else if (N == nucleationMech::LIN)  { nuc = new nucleationModel_LIN();  }
+    else if (N == nucleationMech::PAH)  { nuc = new nucleationModel_PAH();  }
+    else throw domain_error("Invalid nucleation model requested");
 
     //---------- set growth model
 
-    switch (G) {
-        case growthMech::NONE: grw = new growthModel_NONE();
-        case growthMech::LL:   grw = new growthModel_LL();
-        case growthMech::LIN:  grw = new growthModel_LIN();
-        case growthMech::HACA: grw = new growthModel_HACA();
-        default: throw domain_error("Invalid soot growth mechanism requested");
-    }
+    if      (G == growthMech::NONE) { grw = new growthModel_NONE(); }
+    else if (G == growthMech::LL)   { grw = new growthModel_LL();   }
+    else if (G == growthMech::LIN)  { grw = new growthModel_LIN();  }
+    else if (G == growthMech::HACA) { grw = new growthModel_HACA(); }
+    else throw domain_error("Invalid growth model requested");
 
     //---------- set oxidation model
 
-    switch (X) {
-        case oxidationMech::NONE:     oxi = new oxidationModel_NONE();
-        case oxidationMech::LL:       oxi = new oxidationModel_LL();
-        case oxidationMech::LEE_NEOH: oxi = new oxidationModel_LEE_NEOH();
-        case oxidationMech::NSC_NEOH: oxi = new oxidationModel_NSC_NEOH();
-        case oxidationMech::HACA:     oxi = new oxidationModel_HACA();
-        default: throw domain_error("Invalid soot oxidation model requested");
-    }
+    if      (X == oxidationMech::NONE)     { oxi = new oxidationModel_NONE();    }
+    else if (X == oxidationMech::LL)       { oxi = new oxidationModel_LL();      }
+    else if (X == oxidationMech::LEE_NEOH) { oxi = new oxidationModel_LEE_NEOH();}
+    else if (X == oxidationMech::NSC_NEOH) { oxi = new oxidationModel_NSC_NEOH();}
+    else if (X == oxidationMech::HACA)     { oxi = new oxidationModel_HACA();    }
+    else throw domain_error("Invalid oxidation model requested");
 
     //---------- set coagulation model
 
-    switch (C) {
-        case coagulationMech::NONE:  coa = new coagulationModel_NONE();
-        case coagulationMech::LL:    coa = new coagulationModel_LL();
-        case coagulationMech::FUCHS: coa = new coagulationModel_FUCHS();
-        case coagulationMech::FRENK: coa = new coagulationModel_FRENK();
-        default: throw domain_error("Invalid soot coagulation mechanism requested");
-    }
-
+    if      (C == coagulationMech::NONE)  { coa = new coagulationModel_NONE(); }
+    else if (C == coagulationMech::LL)    { coa = new coagulationModel_LL();   }
+    else if (C == coagulationMech::FUCHS) { coa = new coagulationModel_FUCHS();}
+    else if (C == coagulationMech::FRENK) { coa = new coagulationModel_FRENK();}
+    else throw domain_error("Invalid coagulation model requested");
 
 }
