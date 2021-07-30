@@ -65,7 +65,7 @@ namespace soot {
 //        oxidationModel*     oxi;
 //        coagulationModel*   coa;
 
-        sourceTermStruct* sourceTerms;
+        sourceTermStruct* sourceTerms = new sourceTermStruct();
 
         size_t nMom = 0;    // for moment models
         size_t nBin = 0;    // for sectional models
