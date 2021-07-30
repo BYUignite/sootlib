@@ -86,7 +86,7 @@ namespace soot {
 
     public:
 
-        explicit psdModel_QMOM(sourceTermStruct& sourceTerms, int nVar = 4,
+        explicit psdModel_QMOM(sourceTermStruct* sourceTerms, int nVar = 4,
                                nucleationMech N = nucleationMech::NONE,
                                growthMech G = growthMech::NONE,
                                oxidationMech X = oxidationMech::NONE,

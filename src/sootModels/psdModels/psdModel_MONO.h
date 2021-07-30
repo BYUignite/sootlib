@@ -2,7 +2,6 @@
 #define PSDMODEL_MONO_H
 
 #include "src/sootModels/psdModels/psdModel.h"
-//#include "psdModel.h"
 
 namespace soot {
 
@@ -17,7 +16,7 @@ namespace soot {
 
     private:
 
-        size_t nMom = 2;
+//        int nMom = 2;
 
         nucleationMech nucleationMechanism;
 
@@ -43,11 +42,11 @@ namespace soot {
 
     public:
 
-         explicit psdModel_MONO(sourceTermStruct& sourceTerms, int nVar = 2,
-                                nucleationMech N = nucleationMech::NONE,
-                                growthMech G = growthMech::NONE,
-                                oxidationMech X = oxidationMech::NONE,
-                                coagulationMech C = coagulationMech::NONE);
+         psdModel_MONO(sourceTermStruct* sourceTerms, int nVar,
+                       nucleationMech N,
+                       growthMech G,
+                       oxidationMech X,
+                       coagulationMech C);
 
         ~psdModel_MONO() override = default;
 

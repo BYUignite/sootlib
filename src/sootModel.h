@@ -67,8 +67,8 @@ namespace soot {
 
         sourceTermStruct* sourceTerms = new sourceTermStruct();
 
-        size_t nMom = 0;    // for moment models
-        size_t nBin = 0;    // for sectional models
+        int nMom;    // for moment models
+        int nBin;    // for sectional models
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
@@ -100,11 +100,11 @@ namespace soot {
 
     public:
 
-        sootModel(psdMech modelType = psdMech::MONO, int nVar = 0,
-                  nucleationMech N = nucleationMech::NONE,
-                  growthMech G = growthMech::NONE,
-                  oxidationMech X = oxidationMech::NONE,
-                  coagulationMech C = coagulationMech::NONE);       // Sets default properties of the created soot model
+        sootModel(psdMech modelType, int nVar,
+                  nucleationMech N,
+                  growthMech G,
+                  oxidationMech X,
+                  coagulationMech C);
 
         virtual ~sootModel() = default;
 

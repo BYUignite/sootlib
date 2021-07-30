@@ -96,7 +96,7 @@ namespace soot {
 
     public:
 
-        explicit psdModel_MOMIC(sourceTermStruct& sourceTerms, int nVar = 2,
+        explicit psdModel_MOMIC(sourceTermStruct* sourceTerms, int nVar = 2,
                                 nucleationMech N = nucleationMech::NONE,
                                 growthMech G = growthMech::NONE,
                                 oxidationMech X = oxidationMech::NONE,

@@ -3,7 +3,7 @@
 using namespace std;
 using namespace soot;
 
-psdModel_LOGN::psdModel_LOGN(sourceTermStruct& sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
+psdModel_LOGN::psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
              : psdModel(sourceTerms, nVar, N, G, X, C) {
 
     // warn user if wrong number of soot moments is requested
@@ -16,7 +16,7 @@ psdModel_LOGN::psdModel_LOGN(sourceTermStruct& sourceTerms, int nVar, nucleation
 
     // initialize sourceTerms soot variable
     for (int i=0; i<nMom; i++)
-        sourceTerms.sootSourceTerms.push_back(0);
+        sourceTerms->sootSourceTerms.push_back(0);
 
     // note nucleation mech in case PAH is needed
     this->nucleationMechanism = N;

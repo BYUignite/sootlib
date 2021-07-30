@@ -3,7 +3,6 @@
 
 #include "src/constants.h"
 #include "src/state.h"
-//#include "src/sootModel.h"
 
 #include "src/sootModels/sootChemistry/nucleationModels/nucleationModel.h"
 #include "src/sootModels/sootChemistry/nucleationModels/nucleationModel_NONE.h"
@@ -38,8 +37,8 @@ namespace soot {
 
     public:
 
-        size_t nMom = 0;    // for moment models
-        size_t nBin = 0;    // for sectional models
+        int nMom;    // for moment models
+        int nBin;    // for sectional models
 
         // pointers to selected mechanisms
         nucleationModel*    nuc;
@@ -58,7 +57,7 @@ namespace soot {
 
     public:
 
-        psdModel(sourceTermStruct& sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C);
+        psdModel(sourceTermStruct* sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C);
 
         virtual ~psdModel() = default;
 

@@ -5,7 +5,7 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-psdModel_QMOM::psdModel_QMOM(sourceTermStruct& sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
+psdModel_QMOM::psdModel_QMOM(sourceTermStruct* sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
         : psdModel(sourceTerms, nVar, N, G, X, C) {
 
     if (nVar%2 == 1 || nVar < 1)
@@ -19,7 +19,7 @@ psdModel_QMOM::psdModel_QMOM(sourceTermStruct& sourceTerms, int nVar, nucleation
 
     // initialize sourceTerms soot variable
     for (int i=0; i<nMom; i++)
-        sourceTerms.sootSourceTerms.push_back(0);
+        sourceTerms->sootSourceTerms.push_back(0);
 
     // note nucleation mech in case PAH is needed
     this->nucleationMechanism = N;

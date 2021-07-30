@@ -6,7 +6,7 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
- psdModel_MOMIC::psdModel_MOMIC(sourceTermStruct& sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
+ psdModel_MOMIC::psdModel_MOMIC(sourceTermStruct* sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
          : psdModel(sourceTerms, nVar, N, G, X, C) {
 
      if (nVar < 1)
@@ -16,7 +16,7 @@ using namespace soot;
 
      // initialize sourceTerms soot variable
      for (int i=0; i<nMom; i++)
-         sourceTerms.sootSourceTerms.push_back(0);
+         sourceTerms->sootSourceTerms.push_back(0);
 
      // note nucleation mech in case PAH is needed
      this->nucleationMechanism = N;

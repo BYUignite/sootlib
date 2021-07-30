@@ -55,7 +55,7 @@ namespace soot {
 
     public:
 
-        explicit psdModel_LOGN(sourceTermStruct& sourceTerms, int nVar = 3,
+        explicit psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar = 3,
                                nucleationMech N = nucleationMech::NONE,
                                growthMech G = growthMech::NONE,
                                oxidationMech X = oxidationMech::NONE,

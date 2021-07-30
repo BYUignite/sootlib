@@ -3,7 +3,9 @@
 using namespace std;
 using namespace soot;
 
-psdModel::psdModel(sourceTermStruct& sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C) {
+psdModel::psdModel(sourceTermStruct* sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C) {
+
+    nMom = nVar;
 
     //---------- set nucleation model
 
