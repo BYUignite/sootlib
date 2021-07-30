@@ -15,7 +15,7 @@ include(FetchContent)
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/installed" CACHE STRING "installation location")
 
 # ---- options to build examples ----
-option(BUILD_EXAMPLES "Build sootlib examples" OFF)
+option(BUILD_EXAMPLES "Build sootlib examples" ON)
 
 # ---- options to build tests -------
 option(BUILD_TESTING "Build sootlib tests" ON)

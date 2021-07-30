@@ -1,11 +1,8 @@
-# ---- list executable .cc files without their extension ----
+####################### EXAMPLES ###############################
 
-set(STANDARD_EXAMPLES
-        simple_example
-        generator_example
-        advanced_example)
+add_executable(sootlibExamples simple_example.cc)
 
-foreach (EXAMPLE ${STANDARD_EXAMPLES})
-    add_executable(${EXAMPLE} ${EXAMPLE}.cc)
-    target_link_libraries(${EXAMPLE} PRIVATE sootlib)
-endforeach ()
+target_link_libraries(sootlibExamples PRIVATE sootlib)
+
+target_include_directories(sootlibExamples PRIVATE "${CMAKE_SOURCE_DIR}/src")
+
