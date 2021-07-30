@@ -13,6 +13,8 @@ namespace soot {
 
     //////////////// DATA MEMBERS /////////////////////
 
+    private:
+
     //////////////// MEMBER FUNCTIONS /////////////////
 
     public:

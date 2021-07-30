@@ -3,13 +3,17 @@
 using namespace std;
 using namespace soot;
 
-nucleationModel_PAH::nucleationModel_PAH() {
+////////////////////////////////////////////////////////////////////////////////
+
+nucleationModel_PAH::nucleationModel_PAH() : nucleationModel () {
 
     DIMER.mDimer = 0;
     DIMER.nDimer = 0;
     DIMER.wDotD  = 0;
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 double nucleationModel_PAH::getNucleationSootRate(state& state, const vector<double> &mi, const vector<double> &wi) {
 

@@ -60,40 +60,15 @@ namespace soot {
 
         // pointers to selected mechanisms
         psdModel*           psd;
-//        nucleationModel*    nuc;
-//        growthModel*        grw;
-//        oxidationModel*     oxi;
-//        coagulationModel*   coa;
 
+        // source terms storage
         sourceTermStruct* sourceTerms = new sourceTermStruct();
-
-        int nMom;    // for moment models
-        int nBin;    // for sectional models
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
     public:
 
-        /** Sets PSD mechanism for the soot model based on user input
-         *
-         *      @param modelType     type of PSD mechanism
-         *      @param nMom          number of moments (for moment based models)
-         *      @param nBin          number of bins (for sectional models)
-         */
-//        void setPsdModel(psdMech modelType, int nMom = 0, int nBins = 0);
-
-        /** Selects soot chemistry mechanisms based on user input
-         *
-         *      @param N     user-requested nucleation mechanism
-         *      @param G     user-requested growth mechanism
-         *      @param X     user-requested oxidation mechanism
-         *      @param C     user-requested coagulation mechanism
-         */
-//        void setSootChemistry(nucleationMech N, growthMech G, oxidationMech X, coagulationMech C);
-
-//        virtual void getSourceTermsImplementation(state& state, std::ostream* out) const;
-
-            // TODO documentation
+        // TODO documentation
         void calcSourceTerms(state& state);
 
     //////////////// CONSTRUCTOR /////////////////////////////

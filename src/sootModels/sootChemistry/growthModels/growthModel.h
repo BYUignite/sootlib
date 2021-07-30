@@ -2,7 +2,6 @@
 #define GROWTHMODEL_H
 
 #include "src/state.h"
-//#include "src/sootModel.h"
 #include "src/constants.h"
 
 namespace soot {
@@ -11,9 +10,9 @@ namespace soot {
 
     //////////////// DATA MEMBERS /////////////////////
 
-    public:
+    private:
 
-        std::map<gasSp, double>   *growthRxnRatios;
+        std::map<gasSp, double>   growthRxnRatios;
 
     //////////////// MEMBER FUNCTIONS /////////////////
 

@@ -3,13 +3,17 @@
 using namespace std;
 using namespace soot;
 
-nucleationModel_LIN::nucleationModel_LIN() {
+////////////////////////////////////////////////////////////////////////////////
+
+nucleationModel_LIN::nucleationModel_LIN() : nucleationModel () {
 
     nucleationRxnRatios->at(gasSp::C2H2) = -1;
     nucleationRxnRatios->at(gasSp::H2)   =  1;
     nucleationRxnRatios->at(gasSp::C)    =  2;
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 double nucleationModel_LIN::getNucleationSootRate(state& state, const std::vector<double> &mi, const std::vector<double> &wi) {
 

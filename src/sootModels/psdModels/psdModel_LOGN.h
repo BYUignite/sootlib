@@ -36,7 +36,7 @@ namespace soot {
          *      @param  state    \input     thermodynamic state object
          *
          */
-        void getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const override;
+        void getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const override;
 
         ////////////////////////////////////////////////////////////////////////////////
         /** Mk function (LOGN)

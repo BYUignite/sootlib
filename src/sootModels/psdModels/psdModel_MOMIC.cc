@@ -12,7 +12,7 @@ using namespace soot;
      if (nVar < 1)
          throw runtime_error("Invalid number of soot moments requested");
 
-    this->nMom = nVar;
+//    this->nMom = nVar;
 
      // initialize sourceTerms soot variable
      for (int i=0; i<nMom; i++)
@@ -26,7 +26,7 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_MOMIC::getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const {
+void psdModel_MOMIC::getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const {
 
     const size_t N = downselectIfNeeded(state, state.sootVar);
 
@@ -80,7 +80,7 @@ void psdModel_MOMIC::getSourceTermsImplementation(state& state, sourceTermStruct
     //---------- combine to make soot source terms
 
     for (size_t i = 0; i < nMom; i++)
-        sourceTerms.sootSourceTerms.at(i) = (Mnuc.at(i) + Mcnd.at(i) + Mgrw.at(i) + Moxi.at(i) + Mcoa.at(i)) / state.rhoGas;
+        sourceTerms->sootSourceTerms.at(i) = (Mnuc.at(i) + Mcnd.at(i) + Mgrw.at(i) + Moxi.at(i) + Mcoa.at(i)) / state.rhoGas;
 
     //---------- get gas source terms
 
@@ -89,10 +89,10 @@ void psdModel_MOMIC::getSourceTermsImplementation(state& state, sourceTermStruct
     map<gasSp, double> oxiGasSrc = oxi->getOxidationGasRates(state, Moxi[1]).gasSourceTerms;
     // coagulation does not contribute to gas sources/sinks
 
-    for (auto const& x : sourceTerms.gasSourceTerms) {
+    for (auto const& x : sourceTerms->gasSourceTerms) {
         gasSp sp = x.first;
         if (sp != gasSp::C)
-            sourceTerms.gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
+            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
     }
 
 }

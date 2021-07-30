@@ -11,8 +11,6 @@ namespace soot {
 
     private:
 
-        std::map<gasSp, double>   *oxidationRxnRatios{};
-
     //////////////// MEMBER FUNCTIONS /////////////////
 
     public:
@@ -23,7 +21,7 @@ namespace soot {
 
     public:
 
-         oxidationModel_NONE() = default;
+         oxidationModel_NONE() : oxidationModel() {};
         ~oxidationModel_NONE() override = default;
     };
 }

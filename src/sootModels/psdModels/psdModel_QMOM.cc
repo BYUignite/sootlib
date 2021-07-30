@@ -15,7 +15,7 @@ psdModel_QMOM::psdModel_QMOM(sourceTermStruct* sourceTerms, int nVar, nucleation
         cerr << "Warning: QMOM inversion algorithm may behave unpredictably with "
                 "8+ soot moments. Proceed with caution." << endl;
 
-    this->nMom = nVar;
+//    this->nMom = nVar;
 
     // initialize sourceTerms soot variable
     for (int i=0; i<nMom; i++)
@@ -28,7 +28,7 @@ psdModel_QMOM::psdModel_QMOM(sourceTermStruct* sourceTerms, int nVar, nucleation
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const {
+void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const {
 
     //---------- get weights and abscissas
 
@@ -103,7 +103,7 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct&
     //---------- combine to make soot source terms
 
     for (size_t i = 0; i < nMom; i++)
-        sourceTerms.sootSourceTerms.at(i) = (nucSrcM.at(i) + cndSrcM.at(i) + grwSrcM.at(i) + oxiSrcM.at(i) + coaSrcM.at(i)) / state.rhoGas;
+        sourceTerms->sootSourceTerms.at(i) = (nucSrcM.at(i) + cndSrcM.at(i) + grwSrcM.at(i) + oxiSrcM.at(i) + coaSrcM.at(i)) / state.rhoGas;
     
     //---------- get gas source terms
 
@@ -112,10 +112,10 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct&
     map<gasSp, double> oxiGasSrc = oxi->getOxidationGasRates(state, oxiSrcM[1]).gasSourceTerms;
     // coagulation does not contribute to gas sources/sinks
 
-    for (auto const& x : sourceTerms.gasSourceTerms) {
+    for (auto const& x : sourceTerms->gasSourceTerms) {
         gasSp sp = x.first;
         if (sp != gasSp::C)
-            sourceTerms.gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
+            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
     }
 
 }

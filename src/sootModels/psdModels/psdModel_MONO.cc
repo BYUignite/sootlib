@@ -14,7 +14,7 @@ psdModel_MONO::psdModel_MONO(sourceTermStruct* sourceTerms, int nVar, nucleation
                 "MONO model will use default value of 2 soot moments." << endl;
 
     // specify number of soot moments for MONO model
-    psdModel::nMom = 2;
+//    psdModel::nMom = 2;
 
     // initialize sourceTerms soot variable
     sourceTerms->sootSourceTerms.resize(nMom, 0);
@@ -26,7 +26,7 @@ psdModel_MONO::psdModel_MONO(sourceTermStruct* sourceTerms, int nVar, nucleation
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const {
+void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const {
 
     vector<double> weights = {0};
     vector<double> abscissas = {0};
@@ -88,8 +88,8 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct&
 
     //---------- combine to make soot source terms
 
-    sourceTerms.sootSourceTerms.at(0) = (N0 + Cnd0 + G0 + X0 + C0) / state.rhoGas;
-    sourceTerms.sootSourceTerms.at(1) = (N1 + Cnd1 + G1 + X1 + C1) / state.rhoGas;
+    sourceTerms->sootSourceTerms.at(0) = (N0 + Cnd0 + G0 + X0 + C0) / state.rhoGas;
+    sourceTerms->sootSourceTerms.at(1) = (N1 + Cnd1 + G1 + X1 + C1) / state.rhoGas;
 
     //---------- get gas source terms
 
@@ -98,10 +98,10 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct&
     map<gasSp, double> oxiGasSrc = oxi->getOxidationGasRates(state, X1).gasSourceTerms;
     // coagulation does not contribute to gas sources/sinks
 
-    for (auto const& x : sourceTerms.gasSourceTerms) {
+    for (auto const& x : sourceTerms->gasSourceTerms) {
         gasSp sp = x.first;
         if (sp != gasSp::C)
-            sourceTerms.gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
+            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
     }
 
 }

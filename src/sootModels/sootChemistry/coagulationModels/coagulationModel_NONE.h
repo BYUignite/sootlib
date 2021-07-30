@@ -12,6 +12,8 @@ namespace soot {
 
     //////////////// DATA MEMBERS /////////////////////
 
+    private:
+
     //////////////// MEMBER FUNCTIONS /////////////////
 
     public:
@@ -29,7 +31,7 @@ namespace soot {
 
     public:
 
-        coagulationModel_NONE() = default;
+        coagulationModel_NONE() : coagulationModel() {};
         ~coagulationModel_NONE() override = default;
     };
 }

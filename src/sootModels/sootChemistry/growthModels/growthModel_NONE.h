@@ -11,8 +11,6 @@ namespace soot {
 
     private:
 
-        std::map<gasSp, double>   *growthRxnRatios{};
-
     //////////////// MEMBER FUNCTIONS /////////////////
 
     public:
@@ -23,7 +21,7 @@ namespace soot {
 
     public:
 
-         growthModel_NONE() = default;
+         growthModel_NONE() : growthModel() {};
         ~growthModel_NONE() override = default;
 
     };

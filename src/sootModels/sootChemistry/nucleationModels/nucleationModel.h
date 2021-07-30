@@ -2,7 +2,6 @@
 #define NUCLEATIONMODEL_H
 
 #include "src/state.h"
-//#include "src/sootModel.h"
 #include "src/constants.h"
 
 namespace soot {
@@ -13,12 +12,12 @@ namespace soot {
 
     public:
 
-        dimerStruct DIMER;      // used for PAH nucleation only
+        dimerStruct DIMER = dimerStruct();      // used for PAH nucleation only
 
     private:
 
-        std::map<gasSp, double>   *nucleationRxnRatios;
-        std::map<pahSp, double>   *nucleationPahRxnRatios;
+        std::map<gasSp, double>   nucleationRxnRatios;
+        std::map<pahSp, double>   nucleationPahRxnRatios;
 
     //////////////// MEMBER FUNCTIONS /////////////////
 

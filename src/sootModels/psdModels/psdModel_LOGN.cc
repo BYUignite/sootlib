@@ -12,7 +12,7 @@ psdModel_LOGN::psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar, nucleation
                 "LOGN model will use default value of 3 soot moments." << endl;
 
     // specify number of soot moments for LOGN model
-    this->nMom = 3;
+//    this->nMom = 3;
 
     // initialize sourceTerms soot variable
     for (int i=0; i<nMom; i++)
@@ -25,7 +25,7 @@ psdModel_LOGN::psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar, nucleation
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct& sourceTerms) const {
+void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const {
 
     double Cnd0 = 0, Cnd1 = 0, Cnd2 = 0;
 
@@ -129,9 +129,9 @@ void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct&
 
     //---------- combine to make soot source terms
 
-    sourceTerms.sootSourceTerms.at(0) = (N0 + G0 + Cnd0 - X0 + C0) / state.rhoGas;
-	sourceTerms.sootSourceTerms.at(1) = (N1 + G1 + Cnd1 - X1 + C1) / state.rhoGas;
-	sourceTerms.sootSourceTerms.at(2) = (N2 + G2 + Cnd2 - X2 + C2) / state.rhoGas;
+    sourceTerms->sootSourceTerms.at(0) = (N0 + G0 + Cnd0 - X0 + C0) / state.rhoGas;
+	sourceTerms->sootSourceTerms.at(1) = (N1 + G1 + Cnd1 - X1 + C1) / state.rhoGas;
+	sourceTerms->sootSourceTerms.at(2) = (N2 + G2 + Cnd2 - X2 + C2) / state.rhoGas;
 
     //---------- get gas source terms
 
@@ -140,10 +140,10 @@ void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct&
     map<gasSp, double> oxiGasSrc = oxi->getOxidationGasRates(state, X1).gasSourceTerms;
     // coagulation does not contribute to gas sources/sinks
 
-    for (auto const& x : sourceTerms.gasSourceTerms) {
+    for (auto const& x : sourceTerms->gasSourceTerms) {
         gasSp sp = x.first;
         if (sp != gasSp::C)
-            sourceTerms.gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
+            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
     }
 
 }

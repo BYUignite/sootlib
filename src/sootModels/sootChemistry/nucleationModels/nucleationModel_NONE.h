@@ -11,8 +11,6 @@ namespace soot {
 
     private:
 
-        std::map<gasSp, double>   *nucleationRxnRatios{};
-
     //////////////// MEMBER FUNCTIONS /////////////////
 
     public:
@@ -23,7 +21,7 @@ namespace soot {
 
     public:
 
-         nucleationModel_NONE() = default;
+         nucleationModel_NONE() : nucleationModel() {};
         ~nucleationModel_NONE() override = default;
 
     };

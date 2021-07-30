@@ -8,8 +8,6 @@ psdModel_SECT::psdModel_SECT(size_t n) {
     if (n < 1)
         throw runtime_error("Invalid number of soot sections requested");
 
-    this->nBins = n;
-
     // initialize sourceTerms soot variable
     for (int i=0; i<nBins; i++)
         sourceTerms->sootSourceTerms.push_back(0);
