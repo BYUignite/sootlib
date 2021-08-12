@@ -106,7 +106,7 @@ TEST_CASE("setState function call with 'bad' values", "[state][setState]") {
     state S = state();
 
     vector<double> yGas0 = {0, 0, 0, 0, 0, 0, 0, 0};   // [H, H2, O, O2, OH, H2O, CO, C2H2]
-    vector<double> yPAH0 = {0, 0, 0, 0, 0, 0};                 // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
+    vector<double> yPAH0 = {0, 0, 0, 0, 0, 0};         // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
     vector<double> ySootVar0{0, 0};
 
     SECTION("negative or zero values for scalar variables throw errors") {
@@ -152,6 +152,16 @@ TEST_CASE("setState function call with 'bad' values", "[state][setState]") {
 
         vector<double> yGas = {0, 0, 0, 0, 0, 0};       // 2 too few elements
         vector<double> yPAH = {0, 0, 0, 0, 0, 0, 0};    // 1 too many elements
+
+        REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas, yPAH0, ySootVar0, 100));
+        REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas0, yPAH, ySootVar0, 100));
+
+    }
+
+    SECTION("gas/PAH mass fractions sum to greater than zero throws error") {
+
+        vector<double> yGas = {0.5, 0, 0, 0.1, 0, 0.2, 0.4, 0};
+        vector<double> yPAH = {0, 0.6, 0.1, 0, 0.2, 0.2};
 
         REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas, yPAH0, ySootVar0, 100));
         REQUIRE_THROWS(S.setState(2500, 101325, 0.1,    0.5,   29,    yGas0, yPAH, ySootVar0, 100));

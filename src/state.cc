@@ -1,5 +1,7 @@
 #include "state.h"
 
+#include <numeric>
+
 using namespace soot;
 using namespace std;
 
@@ -70,6 +72,12 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
         if (y < 0 || y > 1)
             throw domain_error("Unphysical state value requested: gas species mass fractions");
 
+    double yGas_sum = 0;
+    for(double y :yGas_)
+        yGas_sum += y;
+    if (yGas_sum > 1.0)
+        throw domain_error("Unphysical state requested: sum of gas species mass fractions greater than one");
+
     gasFractions.at(gasSp::H)    = yGas_[0];
     gasFractions.at(gasSp::H2)   = yGas_[1];
     gasFractions.at(gasSp::O)    = yGas_[2];
@@ -87,6 +95,12 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
     for (double y : yPAH_)
         if (y < 0 || y > 1)
             throw domain_error("Unphysical state value requested: PAH species mass fractions");
+
+    double yPAH_sum = 0;
+    for(double y :yPAH_)
+        yPAH_sum += y;
+    if (yPAH_sum > 1.0)
+        throw domain_error("Unphysical state requested: sum of PAH species mass fractions greater than one");
 
     pahFractions.at(pahSp::C10H8)  = yPAH_[0];
     pahFractions.at(pahSp::C12H8)  = yPAH_[1];
