@@ -45,7 +45,7 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct 
 
     //---------- get chemical rates
 
-    double jNuc = nuc->getNucleationSootRate(state, abscissas, weights);
+    double jNuc = nuc->getNucleationSootRate(state);
     double kGrw = grw->getGrowthSootRate(state);
     double kOxi = oxi->getOxidationSootRate(state);
     double coag = coa->getCoagulationSootRate(state, abscissas.at(0), abscissas.at(0));

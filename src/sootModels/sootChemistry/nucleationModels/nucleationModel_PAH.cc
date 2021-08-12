@@ -15,7 +15,7 @@ nucleationModel_PAH::nucleationModel_PAH() : nucleationModel () {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double nucleationModel_PAH::getNucleationSootRate(state& state, const vector<double> &mi, const vector<double> &wi) {
+double nucleationModel_PAH::getNucleationSootRate(state& state) {
 
     // working variables (local)
     double wDotD  = 0.0;                 // dimer self collision (formation) rate: #/m3*s
@@ -65,8 +65,8 @@ double nucleationModel_PAH::getNucleationSootRate(state& state, const vector<dou
 
     double beta_DD = state.getParticleCollisionRate(mDimer, mDimer);        // dimer self-collision rate
     double I_beta_DS = 0.0;                                                 // sum of dimer-soot collision rates
-    for (int i = 0; i < mi.size(); i++)                                     // loop over soot "particles" (abscissas)
-        I_beta_DS += abs(wi[i]) * state.getParticleCollisionRate(mDimer, mi[i]);
+    for (int i = 0; i < state.absc.size(); i++)                                     // loop over soot "particles" (abscissas)
+        I_beta_DS += abs(state.wts.at(i)) * state.getParticleCollisionRate(mDimer, state.absc.at(i));
 
     //TODO eliminate mi and wi from function inputs; state.momentInversion function maybe?
 

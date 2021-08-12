@@ -32,7 +32,7 @@ void psdModel_MOMIC::getSourceTermsImplementation(state& state, sourceTermStruct
 
     //---------- get chemical rates
 
-    double Jnuc = nuc->getNucleationSootRate(state, {}, {});
+    double Jnuc = nuc->getNucleationSootRate(state);
     double Kgrw = grw->getGrowthSootRate(state);
     double Koxi = oxi->getOxidationSootRate(state);
 

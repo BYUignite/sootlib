@@ -32,20 +32,20 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct 
 
     //---------- get weights and abscissas
 
-    vector<double> wts = {0};
-    vector<double> absc = {0};
+//    vector<double> wts = {0};
+//    vector<double> absc = {0};
 
     // moment downselection and wheeler algorithm inversion applied here
-    getWtsAbs(state.sootVar, wts, absc);
+    getWtsAbs(state.sootVar, state.wts, state.absc);
 
-    for (size_t i = 0; i < wts.size(); i++) {
-        if (wts.at(i) < 0  ) { wts.at(i) = 0;  }
-        if (absc.at(i) < 0)  { absc.at(i) = 0; }
+    for (size_t i = 0; i < state.wts.size(); i++) {
+        if (state.wts.at(i) < 0  ) { state.wts.at(i) = 0;  }
+        if (state.absc.at(i) < 0)  { state.absc.at(i) = 0; }
     }
 
     //---------- get chemical rates
 
-    double jNuc = nuc->getNucleationSootRate(state, absc, wts);
+    double jNuc = nuc->getNucleationSootRate(state);
     double kGrw = grw->getGrowthSootRate(state);
     double kOxi = oxi->getOxidationSootRate(state);
 
@@ -61,8 +61,8 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct 
     vector<double> cndSrcM(nMom, 0);
     if (nucleationMechanism == nucleationMech::PAH) {
         for (size_t i = 1; i < nMom; i++) {                             // M0 = 0.0 for condensation by definition
-            for (size_t j = 0; j < absc.size(); j++)
-                cndSrcM.at(i) += coa->getCoagulationSootRate(state, nuc->DIMER.mDimer, absc.at(j)) * pow(absc.at(j), i - 1) * wts.at(j);
+            for (size_t j = 0; j < state.absc.size(); j++)
+                cndSrcM.at(i) += coa->getCoagulationSootRate(state, nuc->DIMER.mDimer, state.absc.at(j)) * pow(state.absc.at(j), i - 1) * state.wts.at(j);
             cndSrcM.at(i) *= nuc->DIMER.nDimer * nuc->DIMER.mDimer * i;
         }
     }
@@ -72,13 +72,13 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct 
     vector<double> grwSrcM(nMom, 0);
     const double Acoef = M_PI * pow(abs(6 / M_PI / rhoSoot), 2.0 / 3);      // Acoef (=) kmol^2/3 / kg^2/3
     for (size_t i = 1; i < nMom; i++)                                                // M0 = 0.0 for growth by definition
-        grwSrcM.at(i) = kGrw * Acoef * i * Mk(i - 1.0 / 3, wts, absc);          // kg^k/m3*s
+        grwSrcM.at(i) = kGrw * Acoef * i * Mk(i - 1.0 / 3, state.wts, state.absc);          // kg^k/m3*s
 
     //---------- oxidation terms
 
     vector<double> oxiSrcM(nMom, 0);
     for (size_t i = 1; i < nMom; i++)                                                // M0 = 0.0 for oxidation by definition
-        oxiSrcM.at(i) = -kOxi * Acoef * i * Mk(i - 1.0 / 3, wts, absc);         // kg^k/m3*s
+        oxiSrcM.at(i) = -kOxi * Acoef * i * Mk(i - 1.0 / 3, state.wts, state.absc);         // kg^k/m3*s
 
     //---------- coagulation terms
 
@@ -87,15 +87,15 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct 
     for(int k=0; k < nMom; k++) {
 
         // off-diagonal terms (looping half of them) with *2 incorporated
-        for(int ii=1; ii < absc.size(); ii++)
+        for(int ii=1; ii < state.absc.size(); ii++)
             for(int j=0; j<ii; j++)
-                coaSrcM[k] += coa->getCoagulationSootRate(state, absc[ii], absc[j]) * wts[ii] * wts[j] *
-                              (k == 0 ? -1.0 : (pow(absc[ii] + absc[j], k)) - pow(absc[ii], k) - pow(absc[j], k) );      // M0 special case
+                coaSrcM[k] += coa->getCoagulationSootRate(state, state.absc[ii], state.absc[j]) * state.wts[ii] * state.wts[j] *
+                              (k == 0 ? -1.0 : (pow(state.absc[ii] + state.absc[j], k)) - pow(state.absc[ii], k) - pow(state.absc[j], k) );      // M0 special case
 
         // diagonal terms
-        for(int ii=0; ii < absc.size(); ii++)
-            coaSrcM[k] += coa->getCoagulationSootRate(state, absc[ii], absc[ii]) * wts[ii] * wts[ii] *
-                          (k == 0 ? -0.5 : pow(absc[ii], k) * (pow(2, k - 1) - 1) );                                  // M0 special case
+        for(int ii=0; ii < state.absc.size(); ii++)
+            coaSrcM[k] += coa->getCoagulationSootRate(state, state.absc[ii], state.absc[ii]) * state.wts[ii] * state.wts[ii] *
+                          (k == 0 ? -0.5 : pow(state.absc[ii], k) * (pow(2, k - 1) - 1) );                                  // M0 special case
     }
 
     coaSrcM.at(1) = 0.0;    // M1 = 0.0 for coagulation by definition
@@ -122,56 +122,12 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w, vector<double>& x)
-{
-	vector<vector<double>> sigma(N + 1, vector<double>(N * 2, 0));
-	vector<double> a(N, 0);
-	vector<double> b(N, 0);
-	vector<double> eval(N);
-	vector<double> evec(N * N);
-	vector<double> j_diag(N);
-	vector<double> j_ldiag(N);
-
-	for (size_t i = 0; i <= N * 2 - 1; i++)
-		sigma.at(1).at(i) = m.at(i);
-
-	a.at(0) = m.at(1) / m.at(0);
-
-	for (size_t i = 1; i < N; i++) {
-		for (size_t j = i; j < N * 2 - i; j++)
-			sigma.at(i + 1).at(j) = sigma.at(i).at(j + 1) - a.at(i - 1) * sigma.at(i).at(j) - b.at(i - 1) * sigma.at(i - 1).at(j);
-		a.at(i) = -sigma.at(i).at(i) / sigma.at(i).at(i - 1) + sigma.at(i + 1).at(i + 1) / sigma.at(i + 1).at(i);
-		b.at(i) = sigma.at(i + 1).at(i) / sigma.at(i).at(i - 1);
-	}
-
-	j_diag = a;
-	for (size_t i = 1; i < N; i++)
-		j_ldiag.at(i) = -sqrt(abs(b.at(i)));
-
-	for (size_t i = 0; i < N; i++)
-		evec.at(i + N * i) = 1;
-
-//    int flag = tql2(N, &j_diag.at(0), &j_ldiag.at(0), &evec.at(0));       // for eispack
-
-	//char VorN = 'V';
-	//vector<double> work(2*N-2);
-	//int info;
-	//dstev_( &VorN, &N, &j_diag.at(0), &j_ldiag.at(1), &evec.at(0), &N, &work.at(0), &info);
-
-	x = j_diag;      // j_diag are now the vector of eigenvalues.
-
-	for (size_t i = 0; i < N; i++)
-		w.at(i) = pow(evec.at(0 + i * N), 2) * m.at(0);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 void psdModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, vector<double>& abscissas)
 {
 	size_t N = M.size();        // local nMom; may change with moment downselection
 
 	for (double num : M) {      // if any moments are zero,
-		if (num <= 0)           // return with zero wts and abscs
+		if (num <= 0)           // return with zero wts and absc
 			return;
 	}
 
@@ -186,7 +142,7 @@ void psdModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, 
 	    // reset flag
 		bad_values = false;                                   
 
-		// reinitialize weights and abscs with zeros
+		// reinitialize weights and absc with zeros
 		for (size_t i = 0; i < N / 2; i++) {            
 			w_temp.at(i) = 0;
 			a_temp.at(i) = 0;
@@ -194,13 +150,13 @@ void psdModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, 
 
 		// in 2 moment case, return MONO output
 		if (N == 2) {                                   
-			weights.at(0) = M.at(0);
-			abscissas.at(0) = M.at(1) / M.at(0);
-			return;
+			w_temp.at(0) = M.at(0);
+			a_temp.at(0) = M.at(1) / M.at(0);
+			break;
 		}
 
 		// wheeler algorithm for moment inversion
-		wheeler(M, N / 2, w_temp, a_temp);      
+		wheeler(M, N / 2, w_temp, a_temp);
 
 		// check for bad values
 		for (size_t i = 0; i < N / 2; i++) {              
@@ -227,6 +183,49 @@ void psdModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, 
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+void psdModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w, vector<double>& x) {
+
+    vector<vector<double>> sigma(N + 1, vector<double>(N * 2, 0));
+    vector<double> a(N, 0);
+    vector<double> b(N, 0);
+    vector<double> eval(N);
+    vector<double> evec(N * N);
+    vector<double> j_diag(N);
+    vector<double> j_ldiag(N);
+
+    for (size_t i = 0; i <= N * 2 - 1; i++)
+        sigma.at(1).at(i) = m.at(i);
+
+    a.at(0) = m.at(1) / m.at(0);
+
+    for (size_t i = 1; i < N; i++) {
+        for (size_t j = i; j < N * 2 - i; j++)
+            sigma.at(i + 1).at(j) = sigma.at(i).at(j + 1) - a.at(i - 1) * sigma.at(i).at(j) - b.at(i - 1) * sigma.at(i - 1).at(j);
+        a.at(i) = -sigma.at(i).at(i) / sigma.at(i).at(i - 1) + sigma.at(i + 1).at(i + 1) / sigma.at(i + 1).at(i);
+        b.at(i) = sigma.at(i + 1).at(i) / sigma.at(i).at(i - 1);
+    }
+
+    j_diag = a;
+    for (size_t i = 1; i < N; i++)
+        j_ldiag.at(i) = -sqrt(abs(b.at(i)));
+
+    for (size_t i = 0; i < N; i++)
+        evec.at(i + N * i) = 1;
+
+//    int flag = tql2(N, &j_diag.at(0), &j_ldiag.at(0), &evec.at(0));       // for eispack
+
+    //char VorN = 'V';
+    //vector<double> work(2*N-2);
+    //int info;
+    //dstev_( &VorN, &N, &j_diag.at(0), &j_ldiag.at(1), &evec.at(0), &N, &work.at(0), &info);
+
+    x = j_diag;      // j_diag are now the vector of eigenvalues.
+
+    for (size_t i = 0; i < N; i++)
+        w.at(i) = pow(evec.at(0 + i * N), 2) * m.at(0);
+}
 ////////////////////////////////////////////////////////////////////////////////
 
 double psdModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<double>& absc)

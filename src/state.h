@@ -15,6 +15,9 @@ namespace soot {
             std::map<pahSp, double>      pahFractions;
             std::vector<double>          sootVar;
 
+            std::vector<double>          absc;
+            std::vector<double>          wts;
+
             double T = 0;
             double P = 0;
             double rhoGas = 0;
@@ -73,7 +76,7 @@ namespace soot {
              */
             double getParticleCollisionRate(double m1, double m2) const;
 
-    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+        //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     public:
 

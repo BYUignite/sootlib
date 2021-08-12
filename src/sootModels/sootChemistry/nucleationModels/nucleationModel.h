@@ -21,7 +21,7 @@ namespace soot {
 
     public:
 
-        virtual double getNucleationSootRate(state& state, const std::vector<double> &mi, const std::vector<double> &wi) = 0;
+        virtual double getNucleationSootRate(state &state) = 0;
 
         sourceTermStruct getNucleationGasRates(const state& state, const double &N1) const;  //TODO override for PAH nucleation
 

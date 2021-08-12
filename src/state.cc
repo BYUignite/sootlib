@@ -3,6 +3,8 @@
 using namespace soot;
 using namespace std;
 
+////////////////////////////////////////////////////////////////////////////////
+
 state::state() {
 
     gasFractions = {{gasSp::C2H2, 0},
@@ -23,6 +25,8 @@ state::state() {
                     {pahSp::C18H10, 0}};
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 void state::setState(double T_, double P_, double rhoGas_, double muGas_, double MWGas_,
                      vector<double> yGas_, vector<double> yPAH_, vector<double> sootVar_, double cMin_) {
@@ -93,6 +97,8 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
 
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 double state::getParticleCollisionRate(double m1, double m2) const {
 
     if (m1 <= 0 || m2 <= 0)
@@ -121,3 +127,4 @@ double state::getParticleCollisionRate(double m1, double m2) const {
     return beta_12_FM * beta_12_C / (beta_12_FM + beta_12_C);
 
 }
+

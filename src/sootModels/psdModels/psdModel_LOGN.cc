@@ -57,7 +57,7 @@ void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct 
 
     //---------- nucleation terms
 
-    double Jnuc = nuc->getNucleationSootRate(state, {}, {});
+    double Jnuc = nuc->getNucleationSootRate(state);
 
     // PAH nucleation and condensation; getNucleationSootRate function call above still required to set DIMER variables
     if (nucleationMechanism == nucleationMech::PAH) {
