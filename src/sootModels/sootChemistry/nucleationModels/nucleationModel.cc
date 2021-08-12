@@ -18,12 +18,12 @@ nucleationModel::nucleationModel() {
                            {gasSp::C,    0},
                            {gasSp::C6H6, 0}};
 
-    nucleationPahRxnRatios = {{pahSp::C10H8,  0},
-                              {pahSp::C12H8,  0},
-                              {pahSp::C12H10, 0},
-                              {pahSp::C14H10, 0},
-                              {pahSp::C16H10, 0},
-                              {pahSp::C18H10, 0}};
+    nucleationPahRxnRates = {{pahSp::C10H8,  0},
+                             {pahSp::C12H8,  0},
+                             {pahSp::C12H10, 0},
+                             {pahSp::C14H10, 0},
+                             {pahSp::C16H10, 0},
+                             {pahSp::C18H10, 0}};
 }
 
 ////////////////////////////////////////////////////////////////////////////////

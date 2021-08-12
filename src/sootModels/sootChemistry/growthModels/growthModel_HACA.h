@@ -25,8 +25,6 @@ namespace soot {
 
     public:
 
-        std::map<gasSp, double>   *growthRxnRatios;
-
     //////////////// MEMBER FUNCTIONS ////////////////
 
     public:

@@ -5,9 +5,9 @@ using namespace soot;
 
 growthModel_LL::growthModel_LL() {
 
-    growthRxnRatios->at(gasSp::C2H2) = -1;
-    growthRxnRatios->at(gasSp::H2)   =  1;
-    growthRxnRatios->at(gasSp::C)    =  2;
+    growthRxnRatios.at(gasSp::C2H2) = -1;
+    growthRxnRatios.at(gasSp::H2)   =  1;
+    growthRxnRatios.at(gasSp::C)    =  2;
 
 }
 

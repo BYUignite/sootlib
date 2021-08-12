@@ -14,10 +14,8 @@ namespace soot {
 
         dimerStruct DIMER = dimerStruct();      // used for PAH nucleation only
 
-    private:
-
         std::map<gasSp, double>   nucleationRxnRatios;
-        std::map<pahSp, double>   nucleationPahRxnRatios;
+        std::map<pahSp, double>   nucleationPahRxnRates;
 
     //////////////// MEMBER FUNCTIONS /////////////////
 

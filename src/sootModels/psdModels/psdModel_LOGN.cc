@@ -3,6 +3,8 @@
 using namespace std;
 using namespace soot;
 
+////////////////////////////////////////////////////////////////////////////////
+
 psdModel_LOGN::psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
              : psdModel(sourceTerms, nVar, N, G, X, C) {
 
@@ -12,14 +14,13 @@ psdModel_LOGN::psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar, nucleation
                 "LOGN model will use default value of 3 soot moments." << endl;
 
     // specify number of soot moments for LOGN model
-//    this->nMom = 3;
+    nMom = 3;
 
     // initialize sourceTerms soot variable
-    for (int i=0; i<nMom; i++)
-        sourceTerms->sootSourceTerms.push_back(0);
+    sourceTerms->sootSourceTerms.resize(nMom, 0);
 
     // note nucleation mech in case PAH is needed
-    this->nucleationMechanism = N;
+    nucleationMechanism = N;
 
 }
 

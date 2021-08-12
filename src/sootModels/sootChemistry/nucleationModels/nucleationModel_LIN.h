@@ -22,8 +22,6 @@ namespace soot {
 
     private:
 
-        std::map<gasSp, double>   *nucleationRxnRatios;
-
     //////////////// MEMBER FUNCTIONS /////////////////
 
     public:

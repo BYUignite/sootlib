@@ -22,13 +22,6 @@ namespace soot {
 
     public:
 
-        dimerStruct DIMER;      // contains mDimer, nDimer, and wDotD
-
-    private:
-
-        std::map<gasSp, double>  *nucleationRxnRatios;
-        std::map<pahSp, double>  *nucleationPahRxnRatios;
-
     //////////////// MEMBER FUNCTIONS /////////////////
 
     public:

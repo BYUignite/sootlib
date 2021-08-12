@@ -10,7 +10,7 @@ namespace soot {
 
     //////////////// DATA MEMBERS /////////////////////
 
-    private:
+    public:
 
         std::map<gasSp, double>   growthRxnRatios;
 

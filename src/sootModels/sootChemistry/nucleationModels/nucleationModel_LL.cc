@@ -7,9 +7,9 @@ using namespace soot;
 
 nucleationModel_LL::nucleationModel_LL() : nucleationModel () {
 
-    nucleationRxnRatios->at(gasSp::C2H2) = -1;
-    nucleationRxnRatios->at(gasSp::H2)   =  1;
-    nucleationRxnRatios->at(gasSp::C)    =  2;
+    nucleationRxnRatios.at(gasSp::C2H2) = -1;
+    nucleationRxnRatios.at(gasSp::H2)   =  1;
+    nucleationRxnRatios.at(gasSp::C)    =  2;
 
 }
 

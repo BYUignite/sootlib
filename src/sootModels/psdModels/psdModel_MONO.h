@@ -16,8 +16,6 @@ namespace soot {
 
     private:
 
-//        int nMom = 2;
-
         nucleationMech nucleationMechanism;
 
     //////////////// MEMBER FUNCTIONS /////////////////

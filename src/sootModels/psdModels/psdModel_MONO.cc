@@ -14,13 +14,13 @@ psdModel_MONO::psdModel_MONO(sourceTermStruct* sourceTerms, int nVar, nucleation
                 "MONO model will use default value of 2 soot moments." << endl;
 
     // specify number of soot moments for MONO model
-//    psdModel::nMom = 2;
+    nMom = 2;
 
     // initialize sourceTerms soot variable
     sourceTerms->sootSourceTerms.resize(nMom, 0);
 
     // note nucleation mech in case PAH is needed
-    this->nucleationMechanism = N;
+    nucleationMechanism = N;
 
 }
 

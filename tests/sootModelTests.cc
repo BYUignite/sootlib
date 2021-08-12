@@ -16,19 +16,6 @@ using namespace soot;
 
 TEST_CASE("sootModel object initialization", "[sootModel]") {
 
-    SECTION("with default MONO model and NONE soot chemistry") {
-
-        sootModel SM = sootModel(psdMech::MONO, 2, nucleationMech::NONE, growthMech::NONE, oxidationMech::NONE, coagulationMech::NONE);
-
-        REQUIRE(SM.psdMechanism == psdMech::MONO);
-        REQUIRE(SM.psd->nMom == 2);
-        REQUIRE(SM.nucleationMechanism == nucleationMech::NONE);
-        REQUIRE(SM.growthMechanism == growthMech::NONE);
-        REQUIRE(SM.oxidationMechanism == oxidationMech::NONE);
-        REQUIRE(SM.coagulationMechanism == coagulationMech::NONE);
-    }
-
-
-}
+ }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -19,8 +19,6 @@ namespace soot {
 
     public:
 
-        std::map<gasSp, double>  *oxidationRxnRatios;
-
     //////////////// MEMBER FUNCTIONS /////////////////
 
     public:

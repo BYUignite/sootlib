@@ -16,7 +16,7 @@ namespace soot {
 
     public:
 
-        size_t nMom = 3;
+//        size_t nMom = 3;
 
         nucleationMech nucleationMechanism;
 
@@ -55,11 +55,11 @@ namespace soot {
 
     public:
 
-        explicit psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar = 3,
-                               nucleationMech N = nucleationMech::NONE,
-                               growthMech G = growthMech::NONE,
-                               oxidationMech X = oxidationMech::NONE,
-                               coagulationMech C = coagulationMech::NONE);
+        explicit psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar,
+                               nucleationMech N,
+                               growthMech G,
+                               oxidationMech X,
+                               coagulationMech C);
 
         ~psdModel_LOGN() override = default;
 

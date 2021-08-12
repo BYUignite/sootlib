@@ -28,7 +28,7 @@ double nucleationModel_PAH::getNucleationSootRate(state& state, const vector<dou
     double preFac = sqrt(4*M_PI*kb*state.T)*pow(6/(M_PI*rhoSoot), 2.0/3.0);
 
     // loop over PAH species list
-    for (auto const& x : *nucleationPahRxnRatios) {
+    for (auto const& x : nucleationPahRxnRates) {
 
         pahSp sp = x.first;
 
@@ -40,12 +40,12 @@ double nucleationModel_PAH::getNucleationSootRate(state& state, const vector<dou
         cMin_local += wdoti * pahSpNC.at(sp);
 
         // begin updating PAH reaction ratios
-        nucleationPahRxnRatios->at(sp) = wdoti * pahSpMW.at(sp)/Na;
+        nucleationPahRxnRates.at(sp) = wdoti * pahSpMW.at(sp) / Na;
 
     }
 
-    for (auto const& x : *nucleationPahRxnRatios)
-        nucleationPahRxnRatios->at(x.first) /= mDimer;   // now mdot_i_pah = pah_relative_rates[i]*mdot, where mdot is a total gas rate
+    for (auto const& x : nucleationPahRxnRates)
+        nucleationPahRxnRates.at(x.first) /= mDimer;   // now mdot_i_pah = pah_relative_rates[i]*mdot, where mdot is a total gas rate
 
     mDimer     *= 2.0 / wDotD;
     cMin_local *= 4.0 / wDotD;
@@ -53,10 +53,10 @@ double nucleationModel_PAH::getNucleationSootRate(state& state, const vector<dou
     state.cMin = cMin_local;            // cMin is reset here; some mechanisms have this as an input
 
     // finish updating PAH and gas species reaction ratios
-    for (auto const& x : *nucleationPahRxnRatios)
-        nucleationPahRxnRatios->at(x.first) *= -2.0 * mDimer / (state.cMin * gasSpMW.at(gasSp::C) / Na);
+    for (auto const& x : nucleationPahRxnRates)
+        nucleationPahRxnRates.at(x.first) *= -2.0 * mDimer / (state.cMin * gasSpMW.at(gasSp::C) / Na);
 
-    nucleationRxnRatios->at(gasSp::H2) = 2.0 * mDimer / (state.cMin * gasSpMW.at(gasSp::C) / Na) - 1.0;
+    nucleationRxnRatios.at(gasSp::H2) = 2.0 * mDimer / (state.cMin * gasSpMW.at(gasSp::C) / Na) - 1.0;
 
     //------------- compute the dimer concentration as solution to quadratic
     // Steady state approximation.

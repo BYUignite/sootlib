@@ -9,7 +9,12 @@ FetchContent_MakeAvailable(Catch2)
 
 add_executable(sootlibTests constantsTests.cc
                             stateTests.cc
-                            sootModelTests.cc)
+                            sootModelTests.cc
+                            psdModelTests.cc
+                            nucleationModelTests.cc
+                            growthModelTests.cc
+                            oxidationModelTests.cc
+                            coagulationModelTests.cc)
 
 target_link_libraries(sootlibTests PRIVATE Catch2::Catch2 sootlib)
 
