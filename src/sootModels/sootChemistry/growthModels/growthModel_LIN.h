@@ -5,15 +5,6 @@
 
 namespace soot {
 
-    ////////////////////////////////////////////////////////////////////////////////
-    /*! Growth by Lindstedt (1994)
-     *
-     *      Rate from Bockhorn (1994) pg. 417, "Simplified Soot Nucleation and Surface Growth Steps..."
-     *      Equation (27.35). Returns chemical surface growth rate in kg/m2*s.
-     *
-     *      @param MomentState&     /input      local moment state; need M0 and M1
-     *      @param rSoot            /output     soot growth rate (kg/m2*s)
-     */
     class growthModel_LIN : public growthModel {
 
     //////////////// DATA MEMBERS /////////////////////
@@ -24,6 +15,16 @@ namespace soot {
 
     public:
 
+        ////////////////////////////////////////////////////////////////////////////////
+        /*! Growth by Lindstedt (1994)
+         *
+         *      Rate from Bockhorn (1994) pg. 417, "Simplified Soot Nucleation and Surface Growth Steps..."
+         *      Equation (27.36). Returns chemical surface growth rate in kg/m2*s. Assumes that rate is
+         *      proportional to number of particles (M0) but independent of available surface area.
+         *
+         *      @param MomentState&     /input      local moment state; need M0 and M1
+         *      @param rSoot            /output     soot growth rate (kg/m2*s)
+         */
          double getGrowthSootRate(const state &state) const override;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////

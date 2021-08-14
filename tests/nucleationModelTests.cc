@@ -6,16 +6,14 @@
 using namespace std;
 using namespace soot;
 
-////////////////////////////////////////////////////////////////////////////////
-
-nucleationMech NONE = nucleationMech::NONE;
-nucleationMech LL  = nucleationMech::LL;
-nucleationMech LIN = nucleationMech::LIN;
-nucleationMech PAH = nucleationMech::PAH;
-
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("nucleation model initialization", "[nucleation][init]") {
+
+    nucleationMech NONE = nucleationMech::NONE;
+    nucleationMech LL  = nucleationMech::LL;
+    nucleationMech LIN = nucleationMech::LIN;
+    nucleationMech PAH = nucleationMech::PAH;
 
     growthMech      g = growthMech::NONE;
     oxidationMech   x = oxidationMech::NONE;
@@ -60,11 +58,16 @@ TEST_CASE("getNucleationSootRate function call", "[nucleation][getSootRate]") {
     // NOTE: using 'bad' (unphysical) values should throw errors in the setState function;
     // those tests are covered in stateTests.cc
 
+    nucleationMech NONE = nucleationMech::NONE;
+    nucleationMech LL  = nucleationMech::LL;
+    nucleationMech LIN = nucleationMech::LIN;
+    nucleationMech PAH = nucleationMech::PAH;
+
     growthMech      g    = growthMech::NONE;
     oxidationMech   x    = oxidationMech::NONE;
     coagulationMech c    = coagulationMech::NONE;
 
-    vector<double> yGas = {0, 0.1, 0.1, 0.01, 0.02, 0.03, 0.04, 2E-15};   // [H, H2, O, O2, OH, H2O, CO, C2H2]
+    vector<double> yGas = {0, 0.1, 0.1, 0.01, 0.02, 0.03, 0.04, 2E-15};        // [H, H2, O, O2, OH, H2O, CO, C2H2]
     vector<double> yPAH = {0, 0.001, 0.001, 0.001, 0.0002, 0};                 // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
     vector<double> ySootVar{0.003, 1.5E-5};
 
@@ -100,8 +103,15 @@ TEST_CASE("getNucleationSootRate function call", "[nucleation][getSootRate]") {
 
     SECTION("PAH nucleation model", "[PAH][nucleation][getSootRate]") {
 
+        vector<double> yGas2 = {0, 0.001, 0.001, 0.01, 0.02, 0.003, 0.04, 2E-15};        // debug
+        S.setState(2100, 101325, 0.1, 1E-5, 29, yGas2, yPAH, ySootVar); // debug
+
         sootModel SM = sootModel(psdMech::MONO, 2, PAH, g, x, c);
         double nucSootRate = SM.psd->nuc->getNucleationSootRate(S);
+
+        REQUIRE(SM.psd->nuc->DIMER.wDotD  == 1.0);      // debug
+        REQUIRE(SM.psd->nuc->DIMER.nDimer == 1.0);      // debug
+        REQUIRE(SM.psd->nuc->DIMER.mDimer == 1.0);      // debug
 
         // requires that the result is on the order of 1E7
         REQUIRE(nucSootRate/1E7 < 10.0);
