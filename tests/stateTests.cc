@@ -197,8 +197,8 @@ TEST_CASE("getParticleCollisionRate function call", "[state]") {
 
     SECTION("handles negative and/or zero input values") {
         REQUIRE_THROWS(S.getParticleCollisionRate(-0.2,4));
-        REQUIRE_THROWS(S.getParticleCollisionRate(0.5,0));
-        REQUIRE_THROWS(S.getParticleCollisionRate(0,0));
+        REQUIRE(S.getParticleCollisionRate(0.5,0) == 0);
+        REQUIRE(S.getParticleCollisionRate(0,0) == 0);
     }
 
     SECTION("returns valid values of collision rate function beta in m3/#*s") {

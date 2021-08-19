@@ -115,8 +115,10 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
 
 double state::getParticleCollisionRate(double m1, double m2) const {
 
-    if (m1 <= 0 || m2 <= 0)
+    if (m1 < 0 || m2 < 0)
         throw domain_error("Unphysical input value in getParticleCollisionRate: m1 and m2 must be greater than zero");
+    else if (m1 == 0 || m2 == 0)
+        return 0;
 
     if (isnan(getGasMeanFreePath()))
         throw domain_error("getParticleCollisionRate error: thermodynamic state variables not set");
