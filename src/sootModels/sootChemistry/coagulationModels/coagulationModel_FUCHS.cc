@@ -7,12 +7,9 @@ double coagulationModel_FUCHS::getCoagulationSootRate(const state& state,
                                                       double m1,
                                                       double m2) const {
 
-//    JUtil::checkZero(rhoSoot, "rhoSoot");
     double Dp1 = pow(6 * abs(m1) / M_PI / rhoSoot, 1.0 / 3);
     double Dp2 = pow(6 * abs(m2) / M_PI / rhoSoot, 1.0 / 3);
 
-//    JUtil::checkZero(m1, "m1");
-//    JUtil::checkZero(m2, "m2");
     double c1 = sqrt(8 * kb * state.T / M_PI / m1);
     double c2 = sqrt(8 * kb * state.T / M_PI / m2);
 

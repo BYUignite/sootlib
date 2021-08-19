@@ -73,9 +73,9 @@ TEST_CASE("getCoaglationSootRate function call", "[groth][getSootRate]") {
         sootModel SM = sootModel(psdMech::MONO, 2, n, g, x, LL);
         double coaSootRate = SM.psd->coa->getCoagulationSootRate(S, m1, m2);
 
-        // requires that the result is on the order of 1E-5
-        REQUIRE(coaSootRate/1E-5 < 10.0);
-        REQUIRE(coaSootRate/1E-5 > 1.0);
+        // requires that the result is on the order of 1E-12
+        REQUIRE(coaSootRate/1E-12 < 10.0);
+        REQUIRE(coaSootRate/1E-12 > 1.0);
     }
 
     SECTION("FUCHS coagulation model", "[FUCHS][coagulation][getSootRate]") {
@@ -83,9 +83,9 @@ TEST_CASE("getCoaglationSootRate function call", "[groth][getSootRate]") {
         sootModel SM = sootModel(psdMech::MONO, 2, n, g, x, FUCHS);
         double coaSootRate = SM.psd->coa->getCoagulationSootRate(S, m1, m2);
 
-        // requires that the result is on the order of 0.1
-        REQUIRE(coaSootRate/1E-1 < 10.0);
-        REQUIRE(coaSootRate/1E-1 > 1.0);
+        // requires that the result is on the order of 1E-14
+        REQUIRE(coaSootRate/1E-14 < 10.0);
+        REQUIRE(coaSootRate/1E-14 > 1.0);
     }
 
     SECTION("FRENK coagulation model", "[FRENK][coagulation][getSootRate]") {
@@ -94,8 +94,8 @@ TEST_CASE("getCoaglationSootRate function call", "[groth][getSootRate]") {
         double coaSootRate = SM.psd->coa->getCoagulationSootRate(S, m1, m2);
 
         // requires that the result is on the order of 0.1
-        REQUIRE(coaSootRate/1E-1 < 10.0);
-        REQUIRE(coaSootRate/1E-1 > 1.0);
+        REQUIRE(coaSootRate/1E-14 < 10.0);
+        REQUIRE(coaSootRate/1E-14 > 1.0);
     }
 }
 
