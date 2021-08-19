@@ -25,7 +25,7 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
 
     //------------ compute the dimer self collision rate wDotD and mass mDimer (kg/particle)
 
-    double preFac = sqrt(4*M_PI*kb*state.T)*pow(6/(M_PI*rhoSoot), 2.0/3.0);
+    double preFac = sqrt(4*M_PI*kb*state.T) * pow(6/(M_PI*rhoSoot), 2.0/3.0);
 
     // loop over PAH species list
     for (auto const& x : nucleationPahRxnRates) {
@@ -33,7 +33,7 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
         pahSp sp = x.first;
 
         double Ni    = state.rhoGas * state.pahFractions.at(sp) / pahSpMW.at(sp) * Na;                          // species number density (#/m3)
-        double wdoti = abs(pahSpGamma.at(sp) * preFac * pow(pahSpMW.at(sp)/Na, 1.0/6.0) * Ni * Ni);    // convenience variable
+        double wdoti = pahSpGamma.at(sp) * preFac * pow(pahSpMW.at(sp)/Na, 1.0/6.0) * Ni * Ni;    // convenience variable
 
         wDotD      += wdoti;
         mDimer     += wdoti * pahSpMW.at(sp)/Na;
@@ -47,8 +47,8 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
     for (auto const& x : nucleationPahRxnRates)
         nucleationPahRxnRates.at(x.first) /= mDimer;   // now mdot_i_pah = pah_relative_rates[i]*mdot, where mdot is a total gas rate
 
-    mDimer     *= 2.0 / wDotD;
-    cMin_local *= 4.0 / wDotD;
+    mDimer     *= wDotD > 0.0 ? 2.0 / wDotD : 0;
+    cMin_local *= wDotD > 0.0 ? 4.0 / wDotD : 0;
 
     state.cMin = cMin_local;            // cMin is reset here; some mechanisms have this as an input
 
@@ -72,7 +72,10 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
     // See Numerical Recipes 3rd ed. Sec 5.6 page 227.
     // Choosing the positive root.
 
-    nDimer = 2.0 * wDotD / (I_beta_DS + sqrt(I_beta_DS * I_beta_DS + 4 * beta_DD * wDotD));   // #/m3
+    if (wDotD == 0 || mDimer == 0)
+        nDimer = 0;
+    else
+        nDimer = 2.0 * wDotD / (I_beta_DS + sqrt(I_beta_DS * I_beta_DS + 4 * beta_DD * wDotD));   // #/m3
 
     //------------- populate DIMER structure with updated values
     DIMER.mDimer = mDimer;

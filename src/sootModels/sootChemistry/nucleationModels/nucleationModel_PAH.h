@@ -13,8 +13,6 @@ namespace soot {
      *      in Combustion Generated Fine Carbonaceous Particles ed. Bockhorn et al.
      *      Returns chemical nucleation rate in #/m3*s.
      *
-     *      @param particleSizes        /input vector of soot particle sizes
-     *      @param particleWeights      /input vector of soot particle weights
      */
     class nucleationModel_PAH : public nucleationModel {
 
