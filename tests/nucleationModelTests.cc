@@ -144,12 +144,32 @@ TEST_CASE("getNucleationSootRate function call", "[nucleation][getSootRate]") {
             REQUIRE(nucSootRate/1E17 > 1.0);
         }
 
+        SECTION("with multiple nonzero PAH species mass fractions") {
 
+            vector<double> yPAH2 = {2E-6, 3E-10, 8E-5, 0, 0, 0};          // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
+            S.setState(2100, 101325, 0.1, 1E-5, 29, yGas, yPAH2, ySootVar); // debug
+            sootModel SM = sootModel(psdMech::MONO, 2, PAH, g, x, c);
+            double nucSootRate = SM.psd->nuc->getNucleationSootRate(S);
 
+            // requires that the result is on the order of 1E17
+            REQUIRE(SM.psd->nuc->DIMER.wDotD/1E21 < 10.0);
+            REQUIRE(SM.psd->nuc->DIMER.wDotD/1E21 > 1.0);
 
+            // requires that the result is on the order of 1E-25
+            REQUIRE(SM.psd->nuc->DIMER.mDimer/1E-25 < 10.0);
+            REQUIRE(SM.psd->nuc->DIMER.mDimer/1E-25 > 1.0);
 
+            // requires that the result is on the order of 1E16
+            REQUIRE(SM.psd->nuc->DIMER.nDimer/1E18 < 10.0);
+            REQUIRE(SM.psd->nuc->DIMER.nDimer/1E18 > 1.0);
+
+            REQUIRE(round(S.cMin) == 48);
+
+            // requires that the result is on the order of 1E17
+            REQUIRE(nucSootRate/1E21 < 10.0);
+            REQUIRE(nucSootRate/1E21 > 1.0);
+        }
     }
-
 }
 
 
