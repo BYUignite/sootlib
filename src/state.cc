@@ -60,6 +60,8 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
             throw domain_error("Unphysical state value requested: soot moments/bins");
 
     sootVar.resize(0);
+    absc.resize(0);
+    wts.resize(0);
     for (double & i : sootVar_)
         sootVar.push_back(i);
 
