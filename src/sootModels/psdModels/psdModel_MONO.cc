@@ -28,9 +28,6 @@ psdModel_MONO::psdModel_MONO(sourceTermStruct* sourceTerms, int nVar, nucleation
 
 void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const {
 
-    vector<double> weights = {0};
-    vector<double> abscissas = {0};
-
     //---------- get moments
 
     double M0 = state.sootVar[0];
@@ -39,8 +36,8 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct 
     //---------- set weights and abscissas
 
     if (M0 > 0) {
-        weights.at(0) = M0;
-        abscissas.at(0) = M1 / M0;
+        state.wts.at(0) = M0;
+        state.absc.at(0) = M1 / M0;
     }
 
     //---------- get chemical rates
@@ -48,7 +45,7 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct 
     double jNuc = nuc->getNucleationSootRate(state);
     double kGrw = grw->getGrowthSootRate(state);
     double kOxi = oxi->getOxidationSootRate(state);
-    double coag = coa->getCoagulationSootRate(state, abscissas.at(0), abscissas.at(0));
+    double coag = coa->getCoagulationSootRate(state, state.absc.at(0), state.absc.at(0));
 
     //---------- nucleation terms
 
@@ -65,7 +62,7 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct 
         double nDimer = nuc->DIMER.nDimer;
         double mDimer = nuc->DIMER.mDimer;
 
-        Cnd1 = nDimer * mDimer * coa->getCoagulationSootRate(state, mDimer, abscissas.at(0)) * weights.at(0);
+        Cnd1 = nDimer * mDimer * coa->getCoagulationSootRate(state, mDimer, state.absc.at(0)) * state.wts.at(0);
 
     }
 
@@ -83,7 +80,7 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct 
 
     //---------- coagulation terms
 
-    double C0 = -0.5 * coag * weights.at(0) * weights.at(0);
+    double C0 = -0.5 * coag * state.wts.at(0) * state.wts.at(0);
     double C1 = 0;
 
     //---------- combine to make soot source terms
