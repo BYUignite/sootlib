@@ -52,8 +52,7 @@ namespace soot {
 
         virtual void getSourceTermsImplementation(state& state, sourceTermStruct* sourceTerms) const = 0;
 
-
-        //////////////// CONSTRUCTOR /////////////////////////////
+    //////////////// CONSTRUCTOR /////////////////////////////
 
     public:
 

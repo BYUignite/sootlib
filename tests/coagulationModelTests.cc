@@ -37,7 +37,7 @@ TEST_CASE("coagulation model initialization", "[coagulation][init]") {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-TEST_CASE("getCoaglationSootRate function call", "[groth][getSootRate]") {
+TEST_CASE("getCoagulationSootRate function call", "[coagulation][getSootRate]") {
 
     // NOTE: using 'bad' (unphysical) values should throw errors in the setState function;
     // those tests are covered in stateTests.cc
