@@ -29,7 +29,7 @@ TEST_CASE("state object initialization with default values", "[state]") {
     REQUIRE(S.pahFractions.at(pahSp::C16H10) == 0);
 
     // check sootVar
-    REQUIRE(S.sootVar.empty());
+    REQUIRE(S.sootMom.empty());
 
 }
 
@@ -63,9 +63,9 @@ TEST_CASE("setState function call with 'good' values", "[state][setState]") {
     }
 
     SECTION("sootVar is resized properly with correct values") {
-        REQUIRE(S.sootVar.size() == 2);
-        REQUIRE(S.sootVar.at(0) == 0.003);
-        REQUIRE(S.sootVar.at(1) == 1.5E-5);
+        REQUIRE(S.sootMom.size() == 2);
+        REQUIRE(S.sootMom.at(0) == 0.003);
+        REQUIRE(S.sootMom.at(1) == 1.5E-5);
     }
 
     SECTION("on subsequent function calls") {
@@ -91,10 +91,10 @@ TEST_CASE("setState function call with 'good' values", "[state][setState]") {
         }
 
         SECTION("sootVar sized correctly and old sootVar values do not persist") {
-            REQUIRE(S.sootVar.size() == 3);
-            REQUIRE(S.sootVar.at(0) == 0.1);
-            REQUIRE(S.sootVar.at(1) == 1.4E-3);
-            REQUIRE(S.sootVar.at(2) == 0.0006);
+            REQUIRE(S.sootMom.size() == 3);
+            REQUIRE(S.sootMom.at(0) == 0.1);
+            REQUIRE(S.sootMom.at(1) == 1.4E-3);
+            REQUIRE(S.sootMom.at(2) == 0.0006);
         }
     }
 }

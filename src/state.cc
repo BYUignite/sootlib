@@ -59,11 +59,11 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
         if (s < 0)
             throw domain_error("Unphysical state value requested: soot moments/bins");
 
-    sootVar.resize(0);
-    absc.resize(0);
-    wts.resize(0);
+    sootMom.resize(0);
+    absc.resize(sootVar_.size()/2);
+    wts.resize(sootVar_.size()/2);
     for (double & i : sootVar_)
-        sootVar.push_back(i);
+        sootMom.push_back(i);
 
     //------------ gas species mass fractions
 

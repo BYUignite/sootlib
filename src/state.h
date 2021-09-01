@@ -13,7 +13,7 @@ namespace soot {
 
             std::map<gasSp, double>      gasFractions;
             std::map<pahSp, double>      pahFractions;
-            std::vector<double>          sootVar;
+            std::vector<double>          sootMom;
 
             std::vector<double>          absc;
             std::vector<double>          wts;

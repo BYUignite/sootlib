@@ -36,7 +36,7 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct 
 //    vector<double> absc = {0};
 
     // moment downselection and wheeler algorithm inversion applied here
-    getWtsAbs(state.sootVar, state.wts, state.absc);
+    getWtsAbs(state.sootMom, state.wts, state.absc);
 
     for (size_t i = 0; i < state.wts.size(); i++) {
         if (state.wts.at(i) < 0  ) { state.wts.at(i) = 0;  }

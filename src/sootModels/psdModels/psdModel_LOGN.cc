@@ -31,9 +31,9 @@ void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct 
     double Cnd0 = 0, Cnd1 = 0, Cnd2 = 0;
 
     // get moment values
-    const double M0 = state.sootVar[0];
-    const double M1 = state.sootVar[1];
-    const double M2 = state.sootVar[2];
+    const double M0 = state.sootMom[0];
+    const double M1 = state.sootMom[1];
+    const double M2 = state.sootMom[2];
 
     // calculate coagulation constants
     const double Kfm = eps_c * sqrt(M_PI * kb * state.T / 2) * pow(6 / M_PI / rhoSoot, 2 / 3.0);

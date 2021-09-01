@@ -30,8 +30,8 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct 
 
     //---------- get moments
 
-    double M0 = state.sootVar[0];
-    double M1 = state.sootVar[1];
+    double M0 = state.sootMom[0];
+    double M1 = state.sootMom[1];
 
     //---------- set weights and abscissas
 

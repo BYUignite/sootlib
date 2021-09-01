@@ -28,7 +28,7 @@ using namespace soot;
 
 void psdModel_MOMIC::getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const {
 
-    const size_t N = downselectIfNeeded(state, state.sootVar);
+    const size_t N = downselectIfNeeded(state, state.sootMom);
 
     //---------- get chemical rates
 
@@ -59,14 +59,14 @@ void psdModel_MOMIC::getSourceTermsImplementation(state& state, sourceTermStruct
 
     const double Acoef = M_PI * pow(abs( 6 / M_PI / rhoSoot), 2.0 / 3);
     for (size_t i = 1; i < N; i++)
-        Mgrw.at(i) = Kgrw * Acoef * i * MOMIC(i - 1.0 / 3, state.sootVar);
+        Mgrw.at(i) = Kgrw * Acoef * i * MOMIC(i - 1.0 / 3, state.sootMom);
 
     //---------- oxidation terms
 
     vector<double> Moxi(nMom, 0);
 
     for (size_t i = 1; i < N; i++)
-        Moxi.at(i) = Koxi * Acoef *  i * MOMIC(i - 1.0 / 3, state.sootVar);
+        Moxi.at(i) = Koxi * Acoef *  i * MOMIC(i - 1.0 / 3, state.sootMom);
 
     //---------- coagulation terms
 
@@ -113,7 +113,7 @@ size_t  psdModel_MOMIC::downselectIfNeeded(state& state, vector<double>& M) {
         double sigL = 3.0;
         double mavg = 1.0E-21;
         M[1] = M0 * mavg * exp(0.5 * pow(sigL,2.0));     // estimate an M1 value based on M0 and lognormal distribution
-        state.sootVar.at(1) = M.at(1);
+        state.sootMom.at(1) = M.at(1);
     }
 
     // CHECK: all remaining moments <= 0.0
@@ -214,7 +214,7 @@ double psdModel_MOMIC::MOMICCoagulationRate(const state& state, size_t r){
 
     //---------- Knudsen number calculation
 
-	const double mu_1 = state.sootVar[1] / state.sootVar[2];
+	const double mu_1 = state.sootMom[1] / state.sootMom[2];
 	const double d_g = pow(6 * kb * state.T / state.P / M_PI, 1.0 / 3);
 	const double d_p = pow(6 * mu_1 / rhoSoot / M_PI, 1.0 / 3);
 	const double lambda_g = kb * state.T / (pow(2, 0.5) * M_PI * pow(d_g, 2) * state.P);
@@ -228,20 +228,20 @@ double psdModel_MOMIC::MOMICCoagulationRate(const state& state, size_t r){
     const double K_Cprime = 1.257 * lambda_g * pow(M_PI * rhoSoot / 6, 1.0 / 3);
 
 	if (r == 0) {
-		Rate_C = -K_C * ( pow(state.sootVar[0], 2) + MOMIC(1.0 / 3, state.sootVar) * MOMIC(-1.0 / 3, state.sootVar) + 
-                         K_Cprime * ( 3 * MOMIC(-1.0 / 3, state.sootVar) * state.sootVar[0] + 
-                                         MOMIC( 2.0 / 3, state.sootVar) * MOMIC(1.0 / 3, state.sootVar) ) );
+		Rate_C = -K_C * (pow(state.sootMom[0], 2) + MOMIC(1.0 / 3, state.sootMom) * MOMIC(-1.0 / 3, state.sootMom) +
+                         K_Cprime * (3 * MOMIC(-1.0 / 3, state.sootMom) * state.sootMom[0] +
+                                     MOMIC( 2.0 / 3, state.sootMom) * MOMIC(1.0 / 3, state.sootMom) ) );
 	}
 	else {
 		Rate_C = 0;
 		for (size_t k = 0; k < r; k++) {
 			if (k <= r - k)
-				Rate_C += binomial_coefficient(r, k) * ( 2 * state.sootVar[k] * state.sootVar[r-k] + 
-                          MOMIC(k + 1.0 / 3, state.sootVar) * MOMIC(r -  k - 1.0 / 3, state.sootVar) +
-                          MOMIC(k - 1.0 / 3, state.sootVar) * MOMIC(r -  k + 1.0 / 3, state.sootVar) +
-                          2 * K_Cprime * ( 2 * MOMIC(k - 1.0 / 3, state.sootVar) * state.sootVar[r-k] + 
-                                           state.sootVar[k] * MOMIC(r -  k - 1.0 / 3, state.sootVar) +
-                                           MOMIC(k - 2.0 / 3, state.sootVar) * MOMIC(r - k + 1.0 / 3, state.sootVar) ) );
+				Rate_C += binomial_coefficient(r, k) * (2 * state.sootMom[k] * state.sootMom[r - k] +
+                                                        MOMIC(k + 1.0 / 3, state.sootMom) * MOMIC(r - k - 1.0 / 3, state.sootMom) +
+                                                        MOMIC(k - 1.0 / 3, state.sootMom) * MOMIC(r - k + 1.0 / 3, state.sootMom) +
+                          2 * K_Cprime * (2 * MOMIC(k - 1.0 / 3, state.sootMom) * state.sootMom[r - k] +
+                                          state.sootMom[k] * MOMIC(r - k - 1.0 / 3, state.sootMom) +
+                                          MOMIC(k - 2.0 / 3, state.sootMom) * MOMIC(r - k + 1.0 / 3, state.sootMom) ) );
 		}
 		Rate_C *= 0.5 * K_C;
 	}
@@ -253,13 +253,13 @@ double psdModel_MOMIC::MOMICCoagulationRate(const state& state, size_t r){
 	const double K_f = 2.2 * pow(3 / (4 * M_PI * rhoSoot), 2.0 / 3) * pow(8 * M_PI * kb * state.T, 1.0 / 2);
 
 	if (r == 0) {
-		Rate_F = -0.5 * K_f * f_grid(0, 0, state.sootVar);
+		Rate_F = -0.5 * K_f * f_grid(0, 0, state.sootMom);
 	}
 	else {
 		Rate_F = 0;
 		for (size_t k = 1; k < r; k++) {
 			if (k <= r - k)
-				Rate_F += binomial_coefficient(r, k) * f_grid(k, r - k, state.sootVar);
+				Rate_F += binomial_coefficient(r, k) * f_grid(k, r - k, state.sootMom);
 		}
 		Rate_F *= 0.5 * K_f;
 	}
