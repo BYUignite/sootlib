@@ -16,8 +16,6 @@ namespace soot {
 
     private:
 
-        size_t nMom = 4;        // default value
-
         nucleationMech  nucleationMechanism;
         coagulationMech coagulationMechanism;
 

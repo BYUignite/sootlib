@@ -16,8 +16,6 @@ namespace soot {
 
     public:
 
-//        size_t nMom = 3;
-
         nucleationMech nucleationMechanism;
 
     //////////////// MEMBER FUNCTIONS /////////////////
