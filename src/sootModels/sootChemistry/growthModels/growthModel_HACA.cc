@@ -14,8 +14,8 @@ growthModel_HACA::growthModel_HACA() {
 
 double growthModel_HACA::getGrowthSootRate(const state& state) const {
 
-    double M0 = state.sootVar[0];                           // #/m3
-    double M1 = state.sootVar[1];                           // kg/m3
+    double M0 = state.sootMom[0];                           // #/m3
+    double M1 = state.sootMom[1];                           // kg/m3
 
     //---------- calculate alpha, other constants
 
