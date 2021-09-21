@@ -134,18 +134,22 @@ void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct 
 	sourceTerms->sootSourceTerms.at(1) = (N1 + G1 + Cnd1 - X1 + C1) / state.rhoGas;
 	sourceTerms->sootSourceTerms.at(2) = (N2 + G2 + Cnd2 - X2 + C2) / state.rhoGas;
 
-    //---------- get gas source terms
+	//---------- get gas source terms
 
-    map<gasSp, double> nucGasSrc = nuc->getNucleationGasRates(state, N1).gasSourceTerms;
-    map<gasSp, double> grwGasSrc = grw->getGrowthGasRates(state, G1).gasSourceTerms;
-    map<gasSp, double> oxiGasSrc = oxi->getOxidationGasRates(state, X1).gasSourceTerms;
-    // coagulation does not contribute to gas sources/sinks
+	map<gasSp, double> nucGasSrc;    // condensation lumped in with nucleation //TODO check this
+	map<gasSp, double> grwGasSrc;
+	map<gasSp, double> oxiGasSrc;
+	// coagulation does not contribute to gas sources/sinks
 
-    for (auto const& x : sourceTerms->gasSourceTerms) {
-        gasSp sp = x.first;
-        if (sp != gasSp::C)
-            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
-    }
+	for (auto const& x : sourceTerms->gasSourceTerms) {
+	    gasSp sp = x.first;
+	    if (sp != gasSp::C) {
+	        nucGasSrc.at(sp) = nuc->getNucleationGasRates(state, N1).gasSourceTerms.at(sp);
+	        grwGasSrc.at(sp) = grw->getGrowthGasRates(state, G1).gasSourceTerms.at(sp);
+	        oxiGasSrc.at(sp) = oxi->getOxidationGasRates(state, X1).gasSourceTerms.at(sp);
+	        sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
+	    }
+	}
 
 }
 

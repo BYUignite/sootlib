@@ -107,17 +107,20 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct 
     
     //---------- get gas source terms
 
-    map<gasSp, double> nucGasSrc = nuc->getNucleationGasRates(state, nucSrcM[1]).gasSourceTerms;
-    map<gasSp, double> grwGasSrc = grw->getGrowthGasRates(state, grwSrcM[1]).gasSourceTerms;
-    map<gasSp, double> oxiGasSrc = oxi->getOxidationGasRates(state, oxiSrcM[1]).gasSourceTerms;
+    map<gasSp, double> nucGasSrc;    // condensation lumped in with nucleation //TODO check this
+    map<gasSp, double> grwGasSrc;
+    map<gasSp, double> oxiGasSrc;
     // coagulation does not contribute to gas sources/sinks
 
     for (auto const& x : sourceTerms->gasSourceTerms) {
         gasSp sp = x.first;
-        if (sp != gasSp::C)
+        if (sp != gasSp::C) {
+            nucGasSrc.at(sp) = nuc->getNucleationGasRates(state, nucSrcM[1]).gasSourceTerms.at(sp);
+            grwGasSrc.at(sp) = grw->getGrowthGasRates(state, grwSrcM[1]).gasSourceTerms.at(sp);
+            oxiGasSrc.at(sp) = oxi->getOxidationGasRates(state, oxiSrcM[1]).gasSourceTerms.at(sp);
             sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
+        }
     }
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
