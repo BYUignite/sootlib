@@ -8,321 +8,132 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-TEST_CASE("psdModel object initialization", "[psdModel]") {
+TEMPLATE_TEST_CASE_SIG("psdModel object initialization", "[psdModel]", ((psdMech P, int N), P, N),
+                       (psdMech::MONO,2), (psdMech::LOGN,3), (psdMech::QMOM,2), (psdMech::QMOM,4), (psdMech::QMOM,6),
+                       (psdMech::MOMIC,2), (psdMech::MOMIC,3), (psdMech::MOMIC,4), (psdMech::MOMIC,5), (psdMech::MOMIC,6)) {
 
-    SECTION("PSD models with NONE soot chemistry") {
+    SECTION("Soot chemistry combinations","[psdModel][sootChemistry]") {
 
-        nucleationMech  n = nucleationMech::NONE;
-        growthMech      g = growthMech::NONE;
-        oxidationMech   x = oxidationMech::NONE;
-        coagulationMech c = coagulationMech::NONE;
+        SECTION("With NONE soot chemistry") {
 
-        SECTION("MONO") {
+            nucleationMech  n = nucleationMech::NONE;
+            growthMech      g = growthMech::NONE;
+            oxidationMech   x = oxidationMech::NONE;
+            coagulationMech c = coagulationMech::NONE;
 
-            sootModel SM = sootModel(psdMech::MONO, 2, n, g, x, c);
+            sootModel SM = sootModel(P, N, n, g, x, c);
 
-            REQUIRE(SM.psdMechanism == psdMech::MONO);
-            REQUIRE(SM.psd->nMom == 2);
-            REQUIRE(SM.nucleationMechanism == nucleationMech::NONE);
-            REQUIRE(SM.growthMechanism == growthMech::NONE);
-            REQUIRE(SM.oxidationMechanism == oxidationMech::NONE);
-            REQUIRE(SM.coagulationMechanism == coagulationMech::NONE);
+            REQUIRE(SM.psdMechanism == P);
+            REQUIRE(SM.psd->nMom == N);
+            REQUIRE(SM.nucleationMechanism == n);
+            REQUIRE(SM.growthMechanism == g);
+            REQUIRE(SM.oxidationMechanism == x);
+            REQUIRE(SM.coagulationMechanism == c);
         }
 
-        SECTION("LOGN") {
+        SECTION("With LL soot chemistry") {
 
-            sootModel SM = sootModel(psdMech::LOGN, 3, n, g, x, c);
+            nucleationMech  n = nucleationMech::LL;
+            growthMech      g = growthMech::LL;
+            oxidationMech   x = oxidationMech::LL;
+            coagulationMech c = coagulationMech::LL;
 
-            REQUIRE(SM.psdMechanism == psdMech::LOGN);
-            REQUIRE(SM.psd->nMom == 3);
-            REQUIRE(SM.nucleationMechanism == nucleationMech::NONE);
-            REQUIRE(SM.growthMechanism == growthMech::NONE);
-            REQUIRE(SM.oxidationMechanism == oxidationMech::NONE);
-            REQUIRE(SM.coagulationMechanism == coagulationMech::NONE);
+            sootModel SM = sootModel(P, N, n, g, x, c);
+
+            REQUIRE(SM.psdMechanism == P);
+            REQUIRE(SM.psd->nMom == N);
+            REQUIRE(SM.nucleationMechanism == n);
+            REQUIRE(SM.growthMechanism == g);
+            REQUIRE(SM.oxidationMechanism == x);
+            REQUIRE(SM.coagulationMechanism == c);
         }
 
-        SECTION("QMOM (4 moments)") {
-
-            sootModel SM = sootModel(psdMech::QMOM, 4, n, g, x, c);
-
-            REQUIRE(SM.psdMechanism == psdMech::QMOM);
-            REQUIRE(SM.psd->nMom == 4);
-            REQUIRE(SM.nucleationMechanism == nucleationMech::NONE);
-            REQUIRE(SM.growthMechanism == growthMech::NONE);
-            REQUIRE(SM.oxidationMechanism == oxidationMech::NONE);
-            REQUIRE(SM.coagulationMechanism == coagulationMech::NONE);
-        }
-
-        SECTION("MOMIC (5 moments)") {
-
-            sootModel SM = sootModel(psdMech::MOMIC, 5, n, g, x, c);
-
-            REQUIRE(SM.psdMechanism == psdMech::MOMIC);
-            REQUIRE(SM.psd->nMom == 5);
-            REQUIRE(SM.nucleationMechanism == nucleationMech::NONE);
-            REQUIRE(SM.growthMechanism == growthMech::NONE);
-            REQUIRE(SM.oxidationMechanism == oxidationMech::NONE);
-            REQUIRE(SM.coagulationMechanism == coagulationMech::NONE);
-        }
-    }
-
-    SECTION("PSD models with LL soot chemistry") {
-
-        nucleationMech  n = nucleationMech::LL;
-        growthMech      g = growthMech::LL;
-        oxidationMech   x = oxidationMech::LL;
-        coagulationMech c = coagulationMech::LL;
-
-        SECTION("MONO") {
-
-            sootModel SM = sootModel(psdMech::MONO, 2, n, g, x, c);
-
-            REQUIRE(SM.psdMechanism == psdMech::MONO);
-            REQUIRE(SM.psd->nMom == 2);
-            REQUIRE(SM.nucleationMechanism == nucleationMech::LL);
-            REQUIRE(SM.growthMechanism == growthMech::LL);
-            REQUIRE(SM.oxidationMechanism == oxidationMech::LL);
-            REQUIRE(SM.coagulationMechanism == coagulationMech::LL);
-        }
-
-        SECTION("LOGN") {
-
-            sootModel SM = sootModel(psdMech::LOGN, 3, n, g, x, c);
-
-            REQUIRE(SM.psdMechanism == psdMech::LOGN);
-            REQUIRE(SM.psd->nMom == 3);
-            REQUIRE(SM.nucleationMechanism == nucleationMech::LL);
-            REQUIRE(SM.growthMechanism == growthMech::LL);
-            REQUIRE(SM.oxidationMechanism == oxidationMech::LL);
-            REQUIRE(SM.coagulationMechanism == coagulationMech::LL);
-        }
-
-        SECTION("QMOM (4 moments)") {
-
-            sootModel SM = sootModel(psdMech::QMOM, 4, n, g, x, c);
-
-            REQUIRE(SM.psdMechanism == psdMech::QMOM);
-            REQUIRE(SM.psd->nMom == 4);
-            REQUIRE(SM.nucleationMechanism == nucleationMech::LL);
-            REQUIRE(SM.growthMechanism == growthMech::LL);
-            REQUIRE(SM.oxidationMechanism == oxidationMech::LL);
-            REQUIRE(SM.coagulationMechanism == coagulationMech::LL);
-        }
-
-        SECTION("MOMIC (5 moments)") {
-
-            sootModel SM = sootModel(psdMech::MOMIC, 5, n, g, x, c);
-
-            REQUIRE(SM.psdMechanism == psdMech::MOMIC);
-            REQUIRE(SM.psd->nMom == 5);
-            REQUIRE(SM.nucleationMechanism == nucleationMech::LL);
-            REQUIRE(SM.growthMechanism == growthMech::LL);
-            REQUIRE(SM.oxidationMechanism == oxidationMech::LL);
-            REQUIRE(SM.coagulationMechanism == coagulationMech::LL);
-        }
-    }
-
-    SECTION("PSD models with other soot chemistry") {
-
-        SECTION("MONO: LIN, LIN, LEE_NEOH, FUCHS") {
+        SECTION("With LIN/LIN/LEE_NEOH/FUCHS soot chemistry") {
 
             nucleationMech  n = nucleationMech::LIN;
             growthMech      g = growthMech::LIN;
             oxidationMech   x = oxidationMech::LEE_NEOH;
             coagulationMech c = coagulationMech::FUCHS;
 
-            sootModel SM = sootModel(psdMech::MONO, 2, n, g, x, c);
+            sootModel SM = sootModel(P, N, n, g, x, c);
 
-            REQUIRE(SM.psdMechanism == psdMech::MONO);
-            REQUIRE(SM.psd->nMom == 2);
-            REQUIRE(SM.nucleationMechanism == nucleationMech::LIN);
-            REQUIRE(SM.growthMechanism == growthMech::LIN);
-            REQUIRE(SM.oxidationMechanism == oxidationMech::LEE_NEOH);
-            REQUIRE(SM.coagulationMechanism == coagulationMech::FUCHS);
+            REQUIRE(SM.psdMechanism == P);
+            REQUIRE(SM.psd->nMom == N);
+            REQUIRE(SM.nucleationMechanism == n);
+            REQUIRE(SM.growthMechanism == g);
+            REQUIRE(SM.oxidationMechanism == x);
+            REQUIRE(SM.coagulationMechanism == c);
         }
 
-        SECTION("LOGN: PAH, HACA, HACA, FRENK") {
+        SECTION("With PAH/HACA/HACA/FRENK soot chemistry") {
 
             nucleationMech  n = nucleationMech::PAH;
             growthMech      g = growthMech::HACA;
             oxidationMech   x = oxidationMech::HACA;
             coagulationMech c = coagulationMech::FRENK;
 
-            sootModel SM = sootModel(psdMech::LOGN, 3, n, g, x, c);
+            sootModel SM = sootModel(P, N, n, g, x, c);
 
-            REQUIRE(SM.psdMechanism == psdMech::LOGN);
-            REQUIRE(SM.psd->nMom == 3);
-            REQUIRE(SM.nucleationMechanism == nucleationMech::PAH);
-            REQUIRE(SM.growthMechanism == growthMech::HACA);
-            REQUIRE(SM.oxidationMechanism == oxidationMech::HACA);
-            REQUIRE(SM.coagulationMechanism == coagulationMech::FRENK);
+            REQUIRE(SM.psdMechanism == P);
+            REQUIRE(SM.psd->nMom == N);
+            REQUIRE(SM.nucleationMechanism == n);
+            REQUIRE(SM.growthMechanism == g);
+            REQUIRE(SM.oxidationMechanism == x);
+            REQUIRE(SM.coagulationMechanism == c);
         }
 
-        SECTION("QMOM 4: LL, HACA, NSC_NEOH, FUCHS") {
+        SECTION("With LL/HACA/NSC_NEOH/FUCHS soot chemistry") {
 
             nucleationMech  n = nucleationMech::LL;
             growthMech      g = growthMech::HACA;
             oxidationMech   x = oxidationMech::NSC_NEOH;
             coagulationMech c = coagulationMech::FUCHS;
 
-            sootModel SM = sootModel(psdMech::QMOM, 4, n, g, x, c);
+            sootModel SM = sootModel(P, N, n, g, x, c);
 
-            REQUIRE(SM.psdMechanism == psdMech::QMOM);
-            REQUIRE(SM.psd->nMom == 4);
-            REQUIRE(SM.nucleationMechanism == nucleationMech::LL);
-            REQUIRE(SM.growthMechanism == growthMech::HACA);
-            REQUIRE(SM.oxidationMechanism == oxidationMech::NSC_NEOH);
-            REQUIRE(SM.coagulationMechanism == coagulationMech::FUCHS);
+            REQUIRE(SM.psdMechanism == P);
+            REQUIRE(SM.psd->nMom == N);
+            REQUIRE(SM.nucleationMechanism == n);
+            REQUIRE(SM.growthMechanism == g);
+            REQUIRE(SM.oxidationMechanism == x);
+            REQUIRE(SM.coagulationMechanism == c);
         }
     }
 
     SECTION("sourceTerms structure initialization") {
+
+        // NOTE: source terms variable is owned by sootModel but initialized by psdModel
 
         nucleationMech  n = nucleationMech::LL;
         growthMech      g = growthMech::LL;
         oxidationMech   x = oxidationMech::LL;
         coagulationMech c = coagulationMech::LL;
 
-        SECTION("sootSourceTerms") {
+        sootModel SM = sootModel(P, N, n, g, x, c);
 
-            SECTION("MONO") {
+        // soot source terms
+        for (int i=0; i<N; i++)
+            REQUIRE(SM.sourceTerms->sootSourceTerms.at(i) == 0);
 
-                sootModel SM = sootModel(psdMech::MONO, 2, n, g, x, c);
-
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(0) == 0);
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(1) == 0);
-
-            }
-
-            SECTION("LOGN") {
-
-                sootModel SM = sootModel(psdMech::LOGN, 3, n, g, x, c);
-
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(0) == 0);
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(1) == 0);
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(2) == 0);
-
-            }
-
-            SECTION("QMOM (4 moments)") {
-
-                sootModel SM = sootModel(psdMech::QMOM, 6, n, g, x, c);
-
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(0) == 0);
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(1) == 0);
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(2) == 0);
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(3) == 0);
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(4) == 0);
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(5) == 0);
-
-            }
-
-            SECTION("MOMIC (5 moments)") {
-
-                sootModel SM = sootModel(psdMech::MOMIC, 5, n, g, x, c);
-
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(0) == 0);
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(1) == 0);
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(2) == 0);
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(3) == 0);
-                REQUIRE(SM.sourceTerms->sootSourceTerms.at(4) == 0);
-
-            }
+        // gas source terms
+        for (auto const& x : SM.sourceTerms->gasSourceTerms) {
+            gasSp sp = x.first;
+            REQUIRE(SM.sourceTerms->gasSourceTerms.at(sp) == 0);
         }
 
-        SECTION("gasSourceTerms") {
-
-            SECTION("MONO") {
-
-                sootModel SM = sootModel(psdMech::MONO, 2, n, g, x, c);
-
-                for (auto const& x : SM.sourceTerms->gasSourceTerms) {
-                    gasSp sp = x.first;
-                    REQUIRE(SM.sourceTerms->gasSourceTerms.at(sp) == 0);
-                }
-            }
-
-            SECTION("LOGN") {
-
-                sootModel SM = sootModel(psdMech::LOGN, 3, n, g, x, c);
-
-                for (auto const& x : SM.sourceTerms->gasSourceTerms) {
-                    gasSp sp = x.first;
-                    REQUIRE(SM.sourceTerms->gasSourceTerms.at(sp) == 0);
-                }
-            }
-
-            SECTION("QMOM (6 moments)") {
-
-                sootModel SM = sootModel(psdMech::QMOM, 6, n, g, x, c);
-
-                for (auto const& x : SM.sourceTerms->gasSourceTerms) {
-                    gasSp sp = x.first;
-                    REQUIRE(SM.sourceTerms->gasSourceTerms.at(sp) == 0);
-                }
-            }
-
-            SECTION("MOMIC (5 moments)") {
-
-                sootModel SM = sootModel(psdMech::MOMIC, 5, n, g, x, c);
-
-                for (auto const& x : SM.sourceTerms->gasSourceTerms) {
-                    gasSp sp = x.first;
-                    REQUIRE(SM.sourceTerms->gasSourceTerms.at(sp) == 0);
-                }
-            }
-        }
-
-        SECTION("pahSourceTerms") {
-
-            SECTION("MONO") {
-
-                sootModel SM = sootModel(psdMech::MONO, 2, n, g, x, c);
-
-                for (auto const& x : SM.sourceTerms->pahSourceTerms) {
-                    pahSp sp = x.first;
-                    REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == 0);
-                }
-            }
-
-            SECTION("LOGN") {
-
-                sootModel SM = sootModel(psdMech::LOGN, 3, n, g, x, c);
-
-                for (auto const& x : SM.sourceTerms->pahSourceTerms) {
-                    pahSp sp = x.first;
-                    REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == 0);
-                }
-            }
-
-            SECTION("QMOM (6 moments)") {
-
-                sootModel SM = sootModel(psdMech::QMOM, 6, n, g, x, c);
-
-                for (auto const& x : SM.sourceTerms->pahSourceTerms) {
-                    pahSp sp = x.first;
-                    REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == 0);
-                }
-            }
-
-            SECTION("MOMIC (5 moments)") {
-
-                sootModel SM = sootModel(psdMech::MOMIC, 5, n, g, x, c);
-
-                for (auto const& x : SM.sourceTerms->pahSourceTerms) {
-                    pahSp sp = x.first;
-                    REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == 0);
-                }
-            }
+        // PAH source terms
+        for (auto const& x : SM.sourceTerms->pahSourceTerms) {
+            pahSp sp = x.first;
+            REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == 0);
         }
     }
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 TEMPLATE_TEST_CASE_SIG("getSourceTermImplementation function call", "[psdModel][getSourceTerms]", ((psdMech P, int N), P, N),
-                        (psdMech::MONO,2), (psdMech::LOGN,3), (psdMech::QMOM,4), (psdMech::MOMIC,5)) {
+                       (psdMech::MONO,2), (psdMech::LOGN,3), (psdMech::QMOM,2), (psdMech::QMOM,4), (psdMech::QMOM,6),
+                       (psdMech::MOMIC,2), (psdMech::MOMIC,3), (psdMech::MOMIC,4), (psdMech::MOMIC,5), (psdMech::MOMIC,6)) {
 
     SECTION("with NONE soot chemistry") {
 
@@ -360,4 +171,3 @@ TEMPLATE_TEST_CASE_SIG("getSourceTermImplementation function call", "[psdModel][
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
