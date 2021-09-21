@@ -321,26 +321,40 @@ TEST_CASE("psdModel object initialization", "[psdModel]") {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-TEST_CASE("getSourceTermImplementation function call", "[psdModel][getSourceTerms]") {
+TEMPLATE_TEST_CASE_SIG("getSourceTermImplementation function call", "[psdModel][getSourceTerms]", ((psdMech P, int N), P, N),
+                        (psdMech::MONO,2), (psdMech::LOGN,3), (psdMech::QMOM,4), (psdMech::MOMIC,5)) {
 
-    SECTION("MONO with NONE soot chemistry") {
+    SECTION("with NONE soot chemistry") {
 
         nucleationMech  n = nucleationMech::NONE;
         growthMech      g = growthMech::NONE;
         oxidationMech   x = oxidationMech::NONE;
         coagulationMech c = coagulationMech::NONE;
 
-        vector<double> yGas = {0, 0.1, 0.1, 0.01, 0.02, 0.03, 0.04, 2E-15};        // [H, H2, O, O2, OH, H2O, CO, C2H2]
-        vector<double> yPAH = {0, 0, 0, 0, 0, 0};                 // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-        vector<double> ySootVar{0.003, 1.5E-5};
+        vector<double> yGas = {0, 0.1, 0.1, 0.01, 0.02, 0.03, 0.04, 2E-15};     // [H, H2, O, O2, OH, H2O, CO, C2H2]
+        vector<double> yPAH = {0, 0, 0, 0, 0, 0};                               // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
+        vector<double> ySootVar{0.003, 1.5E-5};                                 // if PSD needs more moments, additional ones initialize to zero
 
         state S = state();
         S.setState(2100, 101325, 0.1, 1E-5, 29, yGas, yPAH, ySootVar);
 
-        sootModel SM = sootModel(psdMech::MONO, 2, n, g, x, c);
+        sootModel SM = sootModel(P, N, n, g, x, c);
 
-        sourceTermStruct ST;
-//        SM.psd->getSourceTermsImplementation(state,)
+        SM.psd->getSourceTermsImplementation(S, SM.sourceTerms);
+
+        REQUIRE(SM.sourceTerms->sootSourceTerms.at(0) == Approx(0).margin(1E-10));      // -0.0 == 0.0 fails comparison; Approx(0).margin passes it since difference doesn't matter for this case
+        REQUIRE(SM.sourceTerms->sootSourceTerms.at(1) == Approx(0).margin(1E-10));
+
+        for (auto const& x : SM.sourceTerms->gasSourceTerms) {
+            gasSp sp = x.first;
+            if (sp != gasSp::C)
+                REQUIRE(SM.sourceTerms->gasSourceTerms.at(sp) == 0);
+        }
+
+        for (auto const& x : SM.sourceTerms->pahSourceTerms) {
+            pahSp sp = x.first;
+            REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == 0);
+        }
 
     }
 }
