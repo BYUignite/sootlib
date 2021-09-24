@@ -13,6 +13,10 @@ using namespace soot;
 
 sootModel::sootModel(psdMech modelType, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C) {
 
+    //---------- init sourceTermStruct
+
+    sourceTerms = new sourceTermStruct();
+
     //---------- store requested mechanisms
 
     psdMechanism = modelType;

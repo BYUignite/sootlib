@@ -62,7 +62,7 @@ namespace soot {
         psdModel*           psd;
 
         // source terms storage
-        sourceTermStruct* sourceTerms = new sourceTermStruct();
+        sourceTermStruct* sourceTerms;
 
     //////////////// MEMBER FUNCTIONS /////////////////
 

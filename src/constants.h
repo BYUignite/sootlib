@@ -71,15 +71,29 @@ namespace soot {
     // custom structures
 
     struct sourceTermStruct {
-        std::vector<double>       sootSourceTerms;
-        std::map<gasSp, double>   gasSourceTerms;
-        std::map<pahSp, double>   pahSourceTerms;
+        std::vector<double>     sootSourceTerms;
+        std::map<gasSp, double> gasSourceTerms = {{gasSp::C2H2,0},
+                                                  {gasSp::O,   0},
+                                                  {gasSp::O2,  0},
+                                                  {gasSp::H,   0},
+                                                  {gasSp::H2,  0},
+                                                  {gasSp::OH,  0},
+                                                  {gasSp::H2O, 0},
+                                                  {gasSp::CO,  0},
+                                                  {gasSp::C,   0},
+                                                  {gasSp::C6H6,0}};
+        std::map<pahSp, double> pahSourceTerms = {{pahSp::C10H8,  0},
+                                                  {pahSp::C12H8,  0},
+                                                  {pahSp::C12H10, 0},
+                                                  {pahSp::C14H10, 0},
+                                                  {pahSp::C16H10, 0},
+                                                  {pahSp::C18H10, 0}};
     };
 
     struct dimerStruct {
-        double mDimer;
-        double nDimer;
-        double wDotD;
+        double mDimer = 0;
+        double nDimer = 0;
+        double wDotD  = 0;
     };
 
 }
