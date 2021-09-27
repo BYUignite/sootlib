@@ -71,7 +71,7 @@ namespace soot {
     // custom structures
 
     struct sourceTermStruct {
-        std::vector<double>     sootSourceTerms;
+        std::vector<double>     sootSourceTerms{0, 0};      // default to 2 moments
         std::map<gasSp, double> gasSourceTerms = {{gasSp::C2H2,0},
                                                   {gasSp::O,   0},
                                                   {gasSp::O2,  0},
