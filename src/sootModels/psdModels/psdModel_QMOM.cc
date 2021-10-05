@@ -104,12 +104,42 @@ void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct 
 
     for (size_t i = 0; i < nMom; i++)
         sourceTerms->sootSourceTerms.at(i) = (nucSrcM.at(i) + cndSrcM.at(i) + grwSrcM.at(i) + oxiSrcM.at(i) + coaSrcM.at(i)) / state.rhoGas;
-    
+
     //---------- get gas source terms
 
-    map<gasSp, double> nucGasSrc;    // condensation lumped in with nucleation //TODO check this
-    map<gasSp, double> grwGasSrc;
-    map<gasSp, double> oxiGasSrc;
+    // dummy variables
+    map<gasSp, double> nucGasSrc = {{gasSp::C2H2,0},
+                                    {gasSp::O,   0},
+                                    {gasSp::O2,  0},
+                                    {gasSp::H,   0},
+                                    {gasSp::H2,  0},
+                                    {gasSp::OH,  0},
+                                    {gasSp::H2O, 0},
+                                    {gasSp::CO,  0},
+                                    {gasSp::C,   0},
+                                    {gasSp::C6H6,0}};
+
+    map<gasSp, double> grwGasSrc= {{gasSp::C2H2,0},
+                                   {gasSp::O,   0},
+                                   {gasSp::O2,  0},
+                                   {gasSp::H,   0},
+                                   {gasSp::H2,  0},
+                                   {gasSp::OH,  0},
+                                   {gasSp::H2O, 0},
+                                   {gasSp::CO,  0},
+                                   {gasSp::C,   0},
+                                   {gasSp::C6H6,0}};
+
+    map<gasSp, double> oxiGasSrc= {{gasSp::C2H2,0},
+                                   {gasSp::O,   0},
+                                   {gasSp::O2,  0},
+                                   {gasSp::H,   0},
+                                   {gasSp::H2,  0},
+                                   {gasSp::OH,  0},
+                                   {gasSp::H2O, 0},
+                                   {gasSp::CO,  0},
+                                   {gasSp::C,   0},
+                                   {gasSp::C6H6,0}};
     // coagulation does not contribute to gas sources/sinks
 
     for (auto const& x : sourceTerms->gasSourceTerms) {
@@ -143,16 +173,16 @@ void psdModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, 
 	do {
 
 	    // reset flag
-		bad_values = false;                                   
+		bad_values = false;
 
 		// reinitialize weights and absc with zeros
-		for (size_t i = 0; i < N / 2; i++) {            
+		for (size_t i = 0; i < N / 2; i++) {
 			w_temp.at(i) = 0;
 			a_temp.at(i) = 0;
 		}
 
 		// in 2 moment case, return MONO output
-		if (N == 2) {                                   
+		if (N == 2) {
 			w_temp.at(0) = M.at(0);
 			a_temp.at(0) = M.at(1) / M.at(0);
 			break;
@@ -162,7 +192,7 @@ void psdModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, 
 		wheeler(M, N / 2, w_temp, a_temp);
 
 		// check for bad values
-		for (size_t i = 0; i < N / 2; i++) {              
+		for (size_t i = 0; i < N / 2; i++) {
 			if (w_temp.at(i) < 0 || a_temp.at(i) < 0)     // check for negative values
 				bad_values = true;
 			if (w_temp.at(i) > 1)                         // check for weights > 1
@@ -170,17 +200,17 @@ void psdModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, 
 		}
 
 		// if we find bad values, downselect to two fewer moments and try again
-		if (bad_values) {                     
-			N = N - 2;                          
+		if (bad_values) {
+			N = N - 2;
 			w_temp.resize(N / 2);
 			a_temp.resize(N / 2);
 		}
 
 	}
-	while (bad_values); 
+	while (bad_values);
 
 	// assign temporary variables to output
-	for (size_t i = 0; i < w_temp.size(); i++) {   
+	for (size_t i = 0; i < w_temp.size(); i++) {
 		weights.at(i) = w_temp.at(i);
 		abscissas.at(i) = a_temp.at(i);
 	}

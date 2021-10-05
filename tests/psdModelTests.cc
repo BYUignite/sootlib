@@ -166,8 +166,40 @@ TEMPLATE_TEST_CASE_SIG("getSourceTermImplementation function call", "[psdModel][
             pahSp sp = x.first;
             REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == 0);
         }
-
     }
+
+//    SECTION("with LL soot chemistry") {
+//
+//        nucleationMech  n = nucleationMech::LL;
+//        growthMech      g = growthMech::LL;
+//        oxidationMech   x = oxidationMech::LL;
+//        coagulationMech c = coagulationMech::LL;
+//
+//        vector<double> yGas = {0, 0.1, 0.1, 0.01, 0.02, 0.03, 0.04, 2E-15};     // [H, H2, O, O2, OH, H2O, CO, C2H2]
+//        vector<double> yPAH = {0, 0, 0, 0, 0, 0};                               // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
+//        vector<double> ySootVar{0.003, 1.5E-5};                                 // if PSD needs more moments than given, additional ones initialize to zero
+//
+//        state S = state();
+//        S.setState(2100, 101325, 0.1, 1E-5, 29, yGas, yPAH, ySootVar);
+//
+//        sootModel SM = sootModel(P, N, n, g, x, c);
+//
+//        SM.psd->getSourceTermsImplementation(S, SM.sourceTerms);
+//
+//        REQUIRE(SM.sourceTerms->sootSourceTerms.at(0)/1E8 < 10.0);      // ORDER(1E8)
+//        REQUIRE(SM.sourceTerms->sootSourceTerms.at(0)/1E8 > 1.0);       // TODO why do all psd combos give exact same source term values? they shouldn't do that
+//
+//        for (auto const& x : SM.sourceTerms->gasSourceTerms) {
+//            gasSp sp = x.first;
+//            if (sp != gasSp::C)
+//                REQUIRE(SM.sourceTerms->gasSourceTerms.at(sp) == 10);   // TODO this always passes but shouldn't
+//        }
+//
+//        for (auto const& x : SM.sourceTerms->pahSourceTerms) {
+//            pahSp sp = x.first;
+//            REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == 0);        // TODO this always passes but shouldn't
+//        }
+//    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

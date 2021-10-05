@@ -21,7 +21,7 @@ using namespace soot;
      // note nucleation mech in case PAH is needed
      this->nucleationMechanism = N;
      this->coagulationMechanism = C;
-     
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -84,9 +84,39 @@ void psdModel_MOMIC::getSourceTermsImplementation(state& state, sourceTermStruct
 
     //---------- get gas source terms
 
-    map<gasSp, double> nucGasSrc;    // condensation lumped in with nucleation //TODO check this
-    map<gasSp, double> grwGasSrc;
-    map<gasSp, double> oxiGasSrc;
+    // dummy variables
+    map<gasSp, double> nucGasSrc = {{gasSp::C2H2,0},
+                                    {gasSp::O,   0},
+                                    {gasSp::O2,  0},
+                                    {gasSp::H,   0},
+                                    {gasSp::H2,  0},
+                                    {gasSp::OH,  0},
+                                    {gasSp::H2O, 0},
+                                    {gasSp::CO,  0},
+                                    {gasSp::C,   0},
+                                    {gasSp::C6H6,0}};
+
+    map<gasSp, double> grwGasSrc= {{gasSp::C2H2,0},
+                                   {gasSp::O,   0},
+                                   {gasSp::O2,  0},
+                                   {gasSp::H,   0},
+                                   {gasSp::H2,  0},
+                                   {gasSp::OH,  0},
+                                   {gasSp::H2O, 0},
+                                   {gasSp::CO,  0},
+                                   {gasSp::C,   0},
+                                   {gasSp::C6H6,0}};
+
+    map<gasSp, double> oxiGasSrc= {{gasSp::C2H2,0},
+                                   {gasSp::O,   0},
+                                   {gasSp::O2,  0},
+                                   {gasSp::H,   0},
+                                   {gasSp::H2,  0},
+                                   {gasSp::OH,  0},
+                                   {gasSp::H2O, 0},
+                                   {gasSp::CO,  0},
+                                   {gasSp::C,   0},
+                                   {gasSp::C6H6,0}};
     // coagulation does not contribute to gas sources/sinks
 
     for (auto const& x : sourceTerms->gasSourceTerms) {
@@ -225,7 +255,7 @@ double psdModel_MOMIC::MOMICCoagulationRate(const state& state, size_t r){
 	const double Kn = lambda_g / d_p;
 
     //---------- continuum regime
-    
+
     double Rate_C;
 
     const double K_C = 2 * kb * state.T / (3 * state.muGas);
@@ -251,9 +281,9 @@ double psdModel_MOMIC::MOMICCoagulationRate(const state& state, size_t r){
 	}
 
     //---------- free-molecular regime
-    
+
 	double Rate_F;
-	
+
 	const double K_f = 2.2 * pow(3 / (4 * M_PI * rhoSoot), 2.0 / 3) * pow(8 * M_PI * kb * state.T, 1.0 / 2);
 
 	if (r == 0) {
@@ -269,9 +299,9 @@ double psdModel_MOMIC::MOMICCoagulationRate(const state& state, size_t r){
 	}
 
     //---------- return weighted average
-    
+
 	return Rate_F / (1.0 + 1 / Kn) + Rate_C / (1 + Kn);
-	
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////

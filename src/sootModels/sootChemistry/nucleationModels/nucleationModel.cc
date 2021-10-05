@@ -15,7 +15,7 @@ nucleationModel::nucleationModel() {
                            {gasSp::OH,   0},
                            {gasSp::H2O,  0},
                            {gasSp::CO,   0},
-                           {gasSp::C,    0},
+                           {gasSp::C,    1},
                            {gasSp::C6H6, 0}};
 
     nucleationPahRxnRates = {{pahSp::C10H8,  0},
@@ -37,13 +37,12 @@ sourceTermStruct nucleationModel::getNucleationGasRates(const state& state, cons
 
         gasSp sp = x.first;
 
-        if (sp != gasSp::C)
+        if (sp != gasSp::C) {
             nucGasSourceTerms.gasSourceTerms.at(sp) += N1 * nucleationRxnRatios.at(sp) * gasSpMW.at(sp)
                                                        / (nucleationRxnRatios.at(gasSp::C) * gasSpMW.at(gasSp::C))
                                                        / state.rhoGas;
+        }
     }
 
     return nucGasSourceTerms;
 }
-
-

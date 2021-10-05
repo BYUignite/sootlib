@@ -15,7 +15,7 @@ oxidationModel::oxidationModel() {
                           {gasSp::OH,   0},
                           {gasSp::H2O,  0},
                           {gasSp::CO,   0},
-                          {gasSp::C,    0},
+                          {gasSp::C,    1},
                           {gasSp::C6H6, 0}};
 }
 

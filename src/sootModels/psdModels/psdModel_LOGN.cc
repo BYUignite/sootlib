@@ -28,6 +28,10 @@ psdModel_LOGN::psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar, nucleation
 
 void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const {
 
+    double N0 = 0, N1 = 0, N2 = 0;
+    double G0 = 0, G1 = 0, G2 = 0;
+    double X0 = 0, X1 = 0, X2 = 0;
+    double C0 = 0, C1 = 0, C2 = 0;
     double Cnd0 = 0, Cnd1 = 0, Cnd2 = 0;
 
     // get moment values
@@ -93,25 +97,25 @@ void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct 
 
     } // end PAH nucleation/condensation block
 
-    double N0 = Jnuc;
-    double N1 = Jnuc * mMin;
-    double N2 = Jnuc * mMin * mMin;
+    N0 = Jnuc;
+    N1 = Jnuc * mMin;
+    N2 = Jnuc * mMin * mMin;
 
     //---------- growth terms
 
     double Kgrw = grw->getGrowthSootRate(state);
 
-    double G0 = 0;
-    double G1 = Kgrw * M_PI * pow(6 / rhoSoot / M_PI, 2.0 / 3) * M23;
-    double G2 = Kgrw * M_PI * pow(6 / rhoSoot / M_PI, 2.0 / 3) * M53;
+    G0 = 0;
+    G1 = Kgrw * M_PI * pow(6 / rhoSoot / M_PI, 2.0 / 3) * M23;
+    G2 = Kgrw * M_PI * pow(6 / rhoSoot / M_PI, 2.0 / 3) * M53;
 
     //---------- oxidation terms
 
     double Koxi = oxi->getOxidationSootRate(state);
 
-    const double X0 = 0;
-    const double X1 = Koxi * M_PI * pow(6.0 / rhoSoot / M_PI, 2.0 / 3) * M23;
-    const double X2 = Koxi * M_PI * pow(6.0 / rhoSoot / M_PI, 2.0 / 3) * M53 * 2;
+    X0 = 0;
+    X1 = Koxi * M_PI * pow(6.0 / rhoSoot / M_PI, 2.0 / 3) * M23;
+    X2 = Koxi * M_PI * pow(6.0 / rhoSoot / M_PI, 2.0 / 3) * M53 * 2;
 
     //---------- coagulation terms
 
@@ -124,9 +128,9 @@ void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct 
     double C2_c = 2 * Kc * (M1 * M1 + M23 * M43 + Kcp * (M1 * M23 + M13 * M43));
 
     // harmonic mean
-    double C0 = C0_fm * C0_c / (C0_fm + C0_c);
-    double C1 = 0;
-    double C2 = C2_fm * C2_c / (C2_fm + C2_c);
+    C0 = C0_fm * C0_c / (C0_fm + C0_c);
+    C1 = 0;
+    C2 = C2_fm * C2_c / (C2_fm + C2_c);
 
     //---------- combine to make soot source terms
 
@@ -136,9 +140,39 @@ void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct 
 
 	//---------- get gas source terms
 
-	map<gasSp, double> nucGasSrc;    // condensation lumped in with nucleation //TODO check this
-	map<gasSp, double> grwGasSrc;
-	map<gasSp, double> oxiGasSrc;
+    // dummy variables
+    map<gasSp, double> nucGasSrc = {{gasSp::C2H2,0},
+                                    {gasSp::O,   0},
+                                    {gasSp::O2,  0},
+                                    {gasSp::H,   0},
+                                    {gasSp::H2,  0},
+                                    {gasSp::OH,  0},
+                                    {gasSp::H2O, 0},
+                                    {gasSp::CO,  0},
+                                    {gasSp::C,   0},
+                                    {gasSp::C6H6,0}};
+
+    map<gasSp, double> grwGasSrc= {{gasSp::C2H2,0},
+                                   {gasSp::O,   0},
+                                   {gasSp::O2,  0},
+                                   {gasSp::H,   0},
+                                   {gasSp::H2,  0},
+                                   {gasSp::OH,  0},
+                                   {gasSp::H2O, 0},
+                                   {gasSp::CO,  0},
+                                   {gasSp::C,   0},
+                                   {gasSp::C6H6,0}};
+
+    map<gasSp, double> oxiGasSrc= {{gasSp::C2H2,0},
+                                   {gasSp::O,   0},
+                                   {gasSp::O2,  0},
+                                   {gasSp::H,   0},
+                                   {gasSp::H2,  0},
+                                   {gasSp::OH,  0},
+                                   {gasSp::H2O, 0},
+                                   {gasSp::CO,  0},
+                                   {gasSp::C,   0},
+                                   {gasSp::C6H6,0}};
 	// coagulation does not contribute to gas sources/sinks
 
 	for (auto const& x : sourceTerms->gasSourceTerms) {
@@ -156,13 +190,13 @@ void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct 
 ////////////////////////////////////////////////////////////////////////////////
 
 double psdModel_LOGN::Mk(double k, double M0, double M1, double M2) {
-    
+
     double M0_exp = 1 + 0.5 * k * (k - 3);
     double M1_exp = k * (2 - k);
     double M2_exp = 0.5 * k * (k - 1);
 
     if (M2 == 0 && M2_exp < 0)
         M2_exp = 0;
-    
+
     return pow(M0, M0_exp) * pow(M1, M1_exp) * pow(M2, M2_exp);
 }

@@ -14,7 +14,7 @@ namespace soot {
 
     //////////////// DATA MEMBERS /////////////////////
 
-    public:
+    private:
 
         nucleationMech nucleationMechanism;
 
@@ -53,11 +53,11 @@ namespace soot {
 
     public:
 
-        explicit psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar,
-                               nucleationMech N,
-                               growthMech G,
-                               oxidationMech X,
-                               coagulationMech C);
+        psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar,
+                      nucleationMech N,
+                      growthMech G,
+                      oxidationMech X,
+                      coagulationMech C);
 
         ~psdModel_LOGN() override = default;
 

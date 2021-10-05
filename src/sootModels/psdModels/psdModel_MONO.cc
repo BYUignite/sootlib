@@ -49,8 +49,11 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct 
 
     //---------- nucleation terms
 
-    double N0 = jNuc;
-    double N1 = jNuc * state.cMin * gasSpMW.at(gasSp::C) / Na;
+    double N0 = 0;
+    double N1 = 0;
+
+    N0 = jNuc;
+    N1 = jNuc * state.cMin * gasSpMW.at(gasSp::C) / Na;
 
     //---------- PAH condensation terms
 
@@ -68,20 +71,26 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct 
 
     //---------- growth terms
 
+    double G0 = 0;
+    double G1 = 0;
+
     double Am2m3 = M0 > 0 ? M_PI * pow(abs(6 / (M_PI * rhoSoot) * M1 / M0), 2.0 / 3) * abs(M0) : 0;
 
-    double G0 = 0;
-    double G1 = kGrw * Am2m3;
+    G1 = kGrw * Am2m3;
 
     //---------- oxidation terms
 
     double X0 = 0;
-    double X1 = -kOxi * Am2m3;
+    double X1 = 0;
+
+    X1 = -kOxi * Am2m3;
 
     //---------- coagulation terms
 
-    double C0 = -0.5 * coag * state.wts.at(0) * state.wts.at(0);
+    double C0 = 0;
     double C1 = 0;
+
+    C0 = -0.5 * coag * state.wts.at(0) * state.wts.at(0);
 
     //---------- combine to make soot source terms
 
@@ -90,9 +99,40 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct 
 
     //---------- get gas source terms
 
-    map<gasSp, double> nucGasSrc;    // condensation lumped in with nucleation //TODO check this
-    map<gasSp, double> grwGasSrc;
-    map<gasSp, double> oxiGasSrc;
+    // dummy variables
+    map<gasSp, double> nucGasSrc = {{gasSp::C2H2,0},
+                                    {gasSp::O,   0},
+                                    {gasSp::O2,  0},
+                                    {gasSp::H,   0},
+                                    {gasSp::H2,  0},
+                                    {gasSp::OH,  0},
+                                    {gasSp::H2O, 0},
+                                    {gasSp::CO,  0},
+                                    {gasSp::C,   0},
+                                    {gasSp::C6H6,0}};
+
+    map<gasSp, double> grwGasSrc= {{gasSp::C2H2,0},
+                                   {gasSp::O,   0},
+                                   {gasSp::O2,  0},
+                                   {gasSp::H,   0},
+                                   {gasSp::H2,  0},
+                                   {gasSp::OH,  0},
+                                   {gasSp::H2O, 0},
+                                   {gasSp::CO,  0},
+                                   {gasSp::C,   0},
+                                   {gasSp::C6H6,0}};
+
+    map<gasSp, double> oxiGasSrc= {{gasSp::C2H2,0},
+                                   {gasSp::O,   0},
+                                   {gasSp::O2,  0},
+                                   {gasSp::H,   0},
+                                   {gasSp::H2,  0},
+                                   {gasSp::OH,  0},
+                                   {gasSp::H2O, 0},
+                                   {gasSp::CO,  0},
+                                   {gasSp::C,   0},
+                                   {gasSp::C6H6,0}};
+
     // coagulation does not contribute to gas sources/sinks
 
     for (auto const& x : sourceTerms->gasSourceTerms) {
