@@ -14,8 +14,73 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-TEST_CASE("sootModel object initialization", "[sootModel]") {
+TEMPLATE_TEST_CASE_SIG("sootModel object initialization", "[sootModel]", ((psdMech P, int N), P, N),
+                       (psdMech::MONO,2), (psdMech::LOGN,3), (psdMech::QMOM,2), (psdMech::QMOM,4), (psdMech::QMOM,6),
+                       (psdMech::MOMIC,2), (psdMech::MOMIC,3), (psdMech::MOMIC,4), (psdMech::MOMIC,5), (psdMech::MOMIC,6)) {
+
+    nucleationMech  n = nucleationMech::NONE;
+    growthMech      g = growthMech::NONE;
+    oxidationMech   x = oxidationMech::NONE;
+    coagulationMech c = coagulationMech::NONE;
+
+    sootModel SM = sootModel(P, N, n, g, x, c);
+
+    REQUIRE(SM.psdMechanism == P);
+    REQUIRE(SM.psd->nMom == N);
 
  }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+TEMPLATE_TEST_CASE_SIG("get and set values of sourceTermStruct from sootModel object", "[sootModel][sourceTerms]", ((psdMech P, int N), P, N),
+                       (psdMech::MONO,2), (psdMech::LOGN,3), (psdMech::QMOM,2), (psdMech::QMOM,4), (psdMech::QMOM,6),
+                       (psdMech::MOMIC,2), (psdMech::MOMIC,3), (psdMech::MOMIC,4), (psdMech::MOMIC,5), (psdMech::MOMIC,6)) {
+
+    nucleationMech  n = nucleationMech::NONE;
+    growthMech      g = growthMech::NONE;
+    oxidationMech   x = oxidationMech::NONE;
+    coagulationMech c = coagulationMech::NONE;
+
+    sootModel SM = sootModel(P, N, n, g, x, c);
+
+    // set sootSourceTerms
+    for(int i=0; i<SM.psd->nMom; i++)
+        SM.sourceTerms->sootSourceTerms.at(i) = i+5;
+
+    // set gasSourceTerms
+    for (auto const& x : SM.sourceTerms->gasSourceTerms) {
+        gasSp sp = x.first;
+        int i=0;
+        SM.sourceTerms->gasSourceTerms.at(sp) = i;
+        i++;
+    }
+
+    // set pahSourceTerms
+    for (auto const& x : SM.sourceTerms->pahSourceTerms) {
+        pahSp sp = x.first;
+        int i=10;
+        SM.sourceTerms->pahSourceTerms.at(sp) = i;
+        i++;
+    }
+
+    // check sootSourceTerms
+    for(int i=0; i<SM.psd->nMom; i++)
+        REQUIRE(SM.sourceTerms->sootSourceTerms.at(i) == i+5);
+
+    // check gasSourceTerms
+    for (auto const& x : SM.sourceTerms->gasSourceTerms) {
+        gasSp sp = x.first;
+        double i=0;
+        double temp = SM.sourceTerms->gasSourceTerms.at(sp);
+        REQUIRE(temp == i);
+        i++;
+    }
+
+    // check pahSourceTerms
+    for (auto const& x : SM.sourceTerms->pahSourceTerms) {
+        pahSp sp = x.first;
+        int i=10;
+        REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == i);
+        i++;
+    }
+}

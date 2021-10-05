@@ -23,8 +23,6 @@ TEMPLATE_TEST_CASE_SIG("psdModel object initialization", "[psdModel]", ((psdMech
 
             sootModel SM = sootModel(P, N, n, g, x, c);
 
-            REQUIRE(SM.psdMechanism == P);
-            REQUIRE(SM.psd->nMom == N);
             REQUIRE(SM.nucleationMechanism == n);
             REQUIRE(SM.growthMechanism == g);
             REQUIRE(SM.oxidationMechanism == x);
@@ -40,8 +38,6 @@ TEMPLATE_TEST_CASE_SIG("psdModel object initialization", "[psdModel]", ((psdMech
 
             sootModel SM = sootModel(P, N, n, g, x, c);
 
-            REQUIRE(SM.psdMechanism == P);
-            REQUIRE(SM.psd->nMom == N);
             REQUIRE(SM.nucleationMechanism == n);
             REQUIRE(SM.growthMechanism == g);
             REQUIRE(SM.oxidationMechanism == x);
@@ -57,8 +53,6 @@ TEMPLATE_TEST_CASE_SIG("psdModel object initialization", "[psdModel]", ((psdMech
 
             sootModel SM = sootModel(P, N, n, g, x, c);
 
-            REQUIRE(SM.psdMechanism == P);
-            REQUIRE(SM.psd->nMom == N);
             REQUIRE(SM.nucleationMechanism == n);
             REQUIRE(SM.growthMechanism == g);
             REQUIRE(SM.oxidationMechanism == x);
@@ -74,8 +68,6 @@ TEMPLATE_TEST_CASE_SIG("psdModel object initialization", "[psdModel]", ((psdMech
 
             sootModel SM = sootModel(P, N, n, g, x, c);
 
-            REQUIRE(SM.psdMechanism == P);
-            REQUIRE(SM.psd->nMom == N);
             REQUIRE(SM.nucleationMechanism == n);
             REQUIRE(SM.growthMechanism == g);
             REQUIRE(SM.oxidationMechanism == x);
@@ -91,8 +83,6 @@ TEMPLATE_TEST_CASE_SIG("psdModel object initialization", "[psdModel]", ((psdMech
 
             sootModel SM = sootModel(P, N, n, g, x, c);
 
-            REQUIRE(SM.psdMechanism == P);
-            REQUIRE(SM.psd->nMom == N);
             REQUIRE(SM.nucleationMechanism == n);
             REQUIRE(SM.growthMechanism == g);
             REQUIRE(SM.oxidationMechanism == x);
