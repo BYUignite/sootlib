@@ -32,9 +32,14 @@ TEMPLATE_TEST_CASE_SIG("sootModel object initialization", "[sootModel]", ((psdMe
 
 ////////////////////////////////////////////////////////////////////////////////
 
-TEMPLATE_TEST_CASE_SIG("get and set values of sourceTermStruct from sootModel object", "[sootModel][sourceTerms]", ((psdMech P, int N), P, N),
+TEMPLATE_TEST_CASE_SIG("get/set values of sourceTerms from sootModel object", "[sootModel][sourceTerms]", ((psdMech P, int N), P, N),
                        (psdMech::MONO,2), (psdMech::LOGN,3), (psdMech::QMOM,2), (psdMech::QMOM,4), (psdMech::QMOM,6),
                        (psdMech::MOMIC,2), (psdMech::MOMIC,3), (psdMech::MOMIC,4), (psdMech::MOMIC,5), (psdMech::MOMIC,6)) {
+
+//TEST_CASE("getSourceTermImplementation function call", "[psdModel][getSourceTerms]") {
+//
+//    psdMech P = psdMech::MOMIC;
+//    int N = 6;
 
     nucleationMech  n = nucleationMech::NONE;
     growthMech      g = growthMech::NONE;
