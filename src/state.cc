@@ -59,11 +59,11 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
         if (s < 0)
             throw domain_error("Unphysical state value requested: soot moments/bins");
 
-    sootMom.resize(0);
+    sootMom.resize(sootVar_.size());
     absc.resize(sootVar_.size()/2);
     wts.resize(sootVar_.size()/2);
-    for (double & i : sootVar_)
-        sootMom.push_back(i);
+    for (int i=0; i<sootVar_.size(); i++)
+        sootMom.at(i) = sootVar_.at(i);
 
     //------------ gas species mass fractions
 
@@ -145,4 +145,3 @@ double state::getParticleCollisionRate(double m1, double m2) const {
     return beta_12_FM * beta_12_C / (beta_12_FM + beta_12_C);
 
 }
-

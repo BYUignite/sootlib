@@ -71,6 +71,8 @@ namespace soot {
         // TODO documentation
         void calcSourceTerms(state& state);
 
+        void resetSourceTerms();
+
     //////////////// CONSTRUCTOR /////////////////////////////
 
     public:

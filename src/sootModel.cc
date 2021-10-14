@@ -38,10 +38,19 @@ sootModel::sootModel(psdMech modelType, int nVar, nucleationMech N, growthMech G
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// TODO update this
 void sootModel::calcSourceTerms(state& state) {
 
-    //-------------------- reset sourceTerms variables
+    // reset sourceTerms variable
+    resetSourceTerms();
+
+    // calculate new source terms
+    psd->getSourceTermsImplementation(state, sourceTerms);
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void sootModel::resetSourceTerms() {
 
     // soot source terms
     for(int i=0; i < psd->nMom; i++)
@@ -58,9 +67,5 @@ void sootModel::calcSourceTerms(state& state) {
         pahSp sp = x.first;
         sourceTerms->pahSourceTerms.at(sp) = 0;
     }
-
-    //-------------------- calculate new source terms
-
-    psd->getSourceTermsImplementation(state, sourceTerms);
 
 }
