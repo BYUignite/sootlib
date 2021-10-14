@@ -125,6 +125,11 @@ TEMPLATE_TEST_CASE_SIG("getSourceTermImplementation function call", "[psdModel][
                        (psdMech::MONO,2), (psdMech::LOGN,3), (psdMech::QMOM,2), (psdMech::QMOM,4), (psdMech::QMOM,6),
                        (psdMech::MOMIC,2), (psdMech::MOMIC,3), (psdMech::MOMIC,4), (psdMech::MOMIC,5), (psdMech::MOMIC,6)) {
 
+//TEST_CASE("getSourceTermImplementation function call", "[psdModel][getSourceTerms]") {
+//
+//    psdMech P = psdMech::MOMIC;
+//    int N = 6;
+
     SECTION("with NONE soot chemistry") {
 
         nucleationMech  n = nucleationMech::NONE;
@@ -134,7 +139,7 @@ TEMPLATE_TEST_CASE_SIG("getSourceTermImplementation function call", "[psdModel][
 
         vector<double> yGas = {0, 0.1, 0.1, 0.01, 0.02, 0.03, 0.04, 2E-15};     // [H, H2, O, O2, OH, H2O, CO, C2H2]
         vector<double> yPAH = {0, 0, 0, 0, 0, 0};                               // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-        vector<double> ySootVar{0.003, 1.5E-5};                                 // if PSD needs more moments, additional ones initialize to zero
+        vector<double> ySootVar = {0.003, 1.5E-5, 1E-7, 1E-10, 1E-11, 1E-12};
 
         state S = state();
         S.setState(2100, 101325, 0.1, 1E-5, 29, yGas, yPAH, ySootVar);
@@ -158,38 +163,44 @@ TEMPLATE_TEST_CASE_SIG("getSourceTermImplementation function call", "[psdModel][
         }
     }
 
-//    SECTION("with LL soot chemistry") {
-//
-//        nucleationMech  n = nucleationMech::LL;
-//        growthMech      g = growthMech::LL;
-//        oxidationMech   x = oxidationMech::LL;
-//        coagulationMech c = coagulationMech::LL;
-//
-//        vector<double> yGas = {0, 0.1, 0.1, 0.01, 0.02, 0.03, 0.04, 2E-15};     // [H, H2, O, O2, OH, H2O, CO, C2H2]
-//        vector<double> yPAH = {0, 0, 0, 0, 0, 0};                               // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-//        vector<double> ySootVar{0.003, 1.5E-5};                                 // if PSD needs more moments than given, additional ones initialize to zero
-//
-//        state S = state();
-//        S.setState(2100, 101325, 0.1, 1E-5, 29, yGas, yPAH, ySootVar);
-//
-//        sootModel SM = sootModel(P, N, n, g, x, c);
-//
-//        SM.psd->getSourceTermsImplementation(S, SM.sourceTerms);
-//
-//        REQUIRE(SM.sourceTerms->sootSourceTerms.at(0)/1E8 < 10.0);      // ORDER(1E8)
-//        REQUIRE(SM.sourceTerms->sootSourceTerms.at(0)/1E8 > 1.0);       // TODO why do all psd combos give exact same source term values? they shouldn't do that
-//
-//        for (auto const& x : SM.sourceTerms->gasSourceTerms) {
-//            gasSp sp = x.first;
-//            if (sp != gasSp::C)
-//                REQUIRE(SM.sourceTerms->gasSourceTerms.at(sp) == 10);   // TODO this always passes but shouldn't
-//        }
-//
-//        for (auto const& x : SM.sourceTerms->pahSourceTerms) {
-//            pahSp sp = x.first;
-//            REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == 0);        // TODO this always passes but shouldn't
-//        }
-//    }
+    SECTION("with LL soot chemistry") {
+
+        nucleationMech  n = nucleationMech::LL;
+        growthMech      g = growthMech::LL;
+        oxidationMech   x = oxidationMech::LL;
+        coagulationMech c = coagulationMech::LL;
+
+        vector<double> yGas = {0, 0.01, 0.01, 0.01, 0.02, 0.03, 0.04, 2E-15};     // [H, H2, O, O2, OH, H2O, CO, C2H2]
+        vector<double> yPAH = {0, 0, 0, 0, 0, 0};                                 // [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
+        vector<double> ySootVar = {0.003, 1.5E-5, 1E-7, 1E-10, 1E-11, 1E-12};
+
+        sootModel SM = sootModel(P, N, n, g, x, c);
+
+        state S = state();
+        S.setState(2100, 101325, 0.1, 1E-5, 29, yGas, yPAH, ySootVar);
+
+        SM.psd->getSourceTermsImplementation(S, SM.sourceTerms);
+
+        REQUIRE(SM.sourceTerms->sootSourceTerms.at(0)/1E8 < 10.0);      // ORDER(1E8)
+        REQUIRE(SM.sourceTerms->sootSourceTerms.at(0)/1E8 > 1.0);
+
+        // species not affected by LL chemistry stay exactly zero; others are just very small
+        REQUIRE(SM.sourceTerms->gasSourceTerms.at(gasSp::C2H2) == Approx(0).margin(1E-10));
+        REQUIRE(SM.sourceTerms->gasSourceTerms.at(gasSp::O) == 0);
+        REQUIRE(SM.sourceTerms->gasSourceTerms.at(gasSp::O2) == Approx(0).margin(1E-10));
+        REQUIRE(SM.sourceTerms->gasSourceTerms.at(gasSp::H) == 0);
+        REQUIRE(SM.sourceTerms->gasSourceTerms.at(gasSp::H2) == Approx(0).margin(1E-10));
+        REQUIRE(SM.sourceTerms->gasSourceTerms.at(gasSp::OH) == 0);
+        REQUIRE(SM.sourceTerms->gasSourceTerms.at(gasSp::H2O) == 0);
+        REQUIRE(SM.sourceTerms->gasSourceTerms.at(gasSp::CO) == Approx(0).margin(1E-10));
+        REQUIRE(SM.sourceTerms->gasSourceTerms.at(gasSp::C) == Approx(0).margin(1E-10));
+        REQUIRE(SM.sourceTerms->gasSourceTerms.at(gasSp::C6H6) == 0);
+
+        for (auto const& x : SM.sourceTerms->pahSourceTerms) {
+            pahSp sp = x.first;
+            REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == 0);
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -15,11 +15,10 @@ psdModel_QMOM::psdModel_QMOM(sourceTermStruct* sourceTerms, int nVar, nucleation
         cerr << "Warning: QMOM inversion algorithm may behave unpredictably with "
                 "8+ soot moments. Proceed with caution." << endl;
 
-//    this->nMom = nVar;
+    nMom = nVar;
 
     // initialize sourceTerms soot variable
-    for (int i=0; i<nMom; i++)
-        sourceTerms->sootSourceTerms.push_back(0);
+    sourceTerms->sootSourceTerms.resize(nMom, 0);
 
     // note nucleation mech in case PAH is needed
     this->nucleationMechanism = N;
