@@ -32,11 +32,11 @@ TEMPLATE_TEST_CASE_SIG("sootModel object initialization", "[sootModel]", ((psdMe
 
 ////////////////////////////////////////////////////////////////////////////////
 
-TEMPLATE_TEST_CASE_SIG("get/set values of sourceTerms from sootModel object", "[sootModel][sourceTerms]", ((psdMech P, int N), P, N),
+TEMPLATE_TEST_CASE_SIG("set/get/reset values of sourceTerms from sootModel object", "[sootModel][sourceTerms]", ((psdMech P, int N), P, N),
                        (psdMech::MONO,2), (psdMech::LOGN,3), (psdMech::QMOM,2), (psdMech::QMOM,4), (psdMech::QMOM,6),
                        (psdMech::MOMIC,2), (psdMech::MOMIC,3), (psdMech::MOMIC,4), (psdMech::MOMIC,5), (psdMech::MOMIC,6)) {
 
-//TEST_CASE("getSourceTermImplementation function call", "[psdModel][getSourceTerms]") {
+//TEST_CASE("getSourceTermImplementation function call", "[sootModel][sourceTerms]") {
 //
 //    psdMech P = psdMech::MOMIC;
 //    int N = 6;
@@ -88,4 +88,37 @@ TEMPLATE_TEST_CASE_SIG("get/set values of sourceTerms from sootModel object", "[
         REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == i);
         i++;
     }
+
+    // reset sourceTerms
+    SM.resetSourceTerms();
+
+    // check reset sootSourceTerms
+    for(int i=0; i<SM.psd->nMom; i++)
+        REQUIRE(SM.sourceTerms->sootSourceTerms.at(i) == 0);
+
+    // check reset gasSourceTerms
+    for (auto const& x : SM.sourceTerms->gasSourceTerms) {
+        gasSp sp = x.first;
+        REQUIRE(SM.sourceTerms->gasSourceTerms.at(sp) == 0);
+    }
+
+    // check reset pahSourceTerms
+    for (auto const& x : SM.sourceTerms->pahSourceTerms) {
+        pahSp sp = x.first;
+        REQUIRE(SM.sourceTerms->pahSourceTerms.at(sp) == 0);
+    }
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+TEMPLATE_TEST_CASE_SIG("calcSourceTerms function call", "[sootModel][getSourceTerms]", ((psdMech P, int N), P, N),
+                       (psdMech::MONO,2), (psdMech::LOGN,3), (psdMech::QMOM,2), (psdMech::QMOM,4), (psdMech::QMOM,6),
+                       (psdMech::MOMIC,2), (psdMech::MOMIC,3), (psdMech::MOMIC,4), (psdMech::MOMIC,5), (psdMech::MOMIC,6)) {
+
+//TEST_CASE("getSourceTermImplementation function call", "[sootModel][getSourceTerms]") {
+//
+//    psdMech P = psdMech::MOMIC;
+//    int N = 6;
+
 }
