@@ -12,11 +12,10 @@ using namespace soot;
      if (nVar < 1)
          throw runtime_error("Invalid number of soot moments requested");
 
-//    this->nMom = nVar;
+     nMom = nVar;
 
      // initialize sourceTerms soot variable
-     for (int i=0; i<nMom; i++)
-         sourceTerms->sootSourceTerms.push_back(0);
+     sourceTerms->sootSourceTerms.resize(nMom, 0);
 
      // note nucleation mech in case PAH is needed
      this->nucleationMechanism = N;
@@ -28,7 +27,13 @@ using namespace soot;
 
 void psdModel_MOMIC::getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const {
 
-    const size_t N = downselectIfNeeded(state, state.sootMom);
+    //---------- get moment values
+    vector<double> Mtemp(nMom,0);
+    for (int i=0; i<nMom; i++)
+        Mtemp.at(i) = state.sootMom.at(i);
+
+    downselectIfNeeded(Mtemp);
+    int N = Mtemp.size();
 
     //---------- get chemical rates
 
@@ -133,12 +138,12 @@ void psdModel_MOMIC::getSourceTermsImplementation(state& state, sourceTermStruct
 
 ////////////////////////////////////////////////////////////////////////////////
 
-size_t  psdModel_MOMIC::downselectIfNeeded(state& state, vector<double>& M) {
+void psdModel_MOMIC::downselectIfNeeded(vector<double> &M) const {
 
     // CHECK: M0 <= 0.0
 
      if (M[0] <= 0)
-		return 0;
+		return;
 
     // CHECK: M1 <= 0.0
 
@@ -147,7 +152,7 @@ size_t  psdModel_MOMIC::downselectIfNeeded(state& state, vector<double>& M) {
         double sigL = 3.0;
         double mavg = 1.0E-21;
         M[1] = M0 * mavg * exp(0.5 * pow(sigL,2.0));     // estimate an M1 value based on M0 and lognormal distribution
-        state.sootMom.at(1) = M.at(1);
+//        state.sootMom.at(1) = M.at(1);
     }
 
     // CHECK: all remaining moments <= 0.0
@@ -164,7 +169,7 @@ size_t  psdModel_MOMIC::downselectIfNeeded(state& state, vector<double>& M) {
 
 	} while (N > 2 && zeros);                               // will not downselect below 2 moments
 
-	return N;
+	return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -46,7 +46,7 @@ namespace soot {
          *      @param M          \input      vector of moment values
          *
          */
-        static size_t downselectIfNeeded(state& state, std::vector<double>& M);
+        void downselectIfNeeded(std::vector<double> &M) const;
 
         ////////////////////////////////////////////////////////////////////////////////
         /*! f_grid function
