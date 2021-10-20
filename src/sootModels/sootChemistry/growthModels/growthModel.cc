@@ -25,7 +25,6 @@ sourceTermStruct growthModel::getGrowthGasRates(const state &state, const double
 
     sourceTermStruct grwGasSourceTerms;
 
-    //TODO verify that this works and loops over gas species properly
     for (auto const& x : growthRxnRatios) {
 
         gasSp sp = x.first;

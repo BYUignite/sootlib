@@ -20,7 +20,7 @@ namespace soot {
 
         virtual double getOxidationSootRate(const state &state) const = 0;
 
-        sourceTermStruct getOxidationGasRates(const state& state, const double &X1) const;  //TODO override for PAH nucleation
+        sourceTermStruct getOxidationGasRates(const state& state, const double &X1) const;
 
 //        virtual void getOxidationPahRates(state& state) const = 0;
 

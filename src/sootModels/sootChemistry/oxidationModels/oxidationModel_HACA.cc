@@ -8,7 +8,7 @@ oxidationModel_HACA::oxidationModel_HACA() {
     oxidationRxnRatios.at(gasSp::C2H2) = -1;
     oxidationRxnRatios.at(gasSp::OH)   = -1;
     oxidationRxnRatios.at(gasSp::CO)   =  1;
-    oxidationRxnRatios.at(gasSp::C)    =  1;      //TODO check this; should be -1?
+    oxidationRxnRatios.at(gasSp::C)    =  1;
 
 }
 

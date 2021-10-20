@@ -25,7 +25,6 @@ sourceTermStruct oxidationModel::getOxidationGasRates(const state& state, const 
 
     sourceTermStruct oxiGasSourceTerms;
 
-    //TODO verify that this works and loops over gas species properly
     for (auto const& x : oxidationRxnRatios) {
 
         gasSp sp = x.first;

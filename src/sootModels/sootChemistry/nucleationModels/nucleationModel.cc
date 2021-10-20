@@ -32,7 +32,6 @@ sourceTermStruct nucleationModel::getNucleationGasRates(const state& state, cons
 
     sourceTermStruct nucGasSourceTerms;
 
-    //TODO verify that this works properly
     for (auto const& x : nucleationRxnRatios) {
 
         gasSp sp = x.first;
