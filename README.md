@@ -1,49 +1,44 @@
-# Build Requirments
+# Building SootLib
 
-Sootlib requires C++17
+--------------------------------------------------------------
+## Dependencies
 
-# Build Instructions
+The code is intended to be built on Linux and MacOS systems (or the Linux subsystem for Windows).
 
-Run `cmake .` to generate the sootlib build files in the current directory while inside of the top level sootlib directory.
+Required software:
+* C++11 or higher
+* CMake 3.15+
 
-This will generate the necessary Makefiles and you can now run `make` to build the project.
+Optional software for testing:
+* Catch2 (installation automated by SootLib package)
 
-Use the options described below to customize your build. If you run `cmake .` and then change your build options, you will
-need to either delete `CMakeCache.txt` or ensure that you have removed the cached values you changed.
+Optional software for building documentation:
+* Doxygen
+* graphviz
 
-# Build options
+## Build instructions
 
-In the top level `CMakeLists.txt` you can enable/disable `BUILD_TESTS`. This will:
-* Determine if gtest tests are built
-* To build tests on Mac you need Google Test installed system wide
+1. Create a directory ```build``` and navigate to it.
+2. Run CMake: ```cmake ..```
+3. Build SootLib: ```make```
+4. Install SootLib: ```make install```
+5. (OPTIONAL) Build documentation: ```make docs```
+6. (CLEANUP) Clean build files: run ```git clean -d -f -x``` from top-level directory
 
-In the top level `CMakeLists.txt` you can enable/disable `BUILD_EXAMPLES`. This will:
-* Determine if examples are built
+## Build options
+Build options are located under the ```PROJECT OPTIONS``` heading in the top-level ```CMakeLists.txt``` file. They can also be specified from the command line during the CMake configuration step.
 
-You can add .cc source files to `example/`. Add these files to
-`example/CMakeLists.txt`. Add
-`example_src.cc` as `example_src`. These files will be built as standalone executables.
+| Option               | Default value                 | Function                        |
+|----------------------|-------------------------------|---------------------------------|
+| ```CMAKE_INSTALL_PREFIX``` | ```${CMAKE_SOURCE_DIR}/installed``` | Specifies installation location |
+| ```BUILD_EXAMPLES```       | ```ON```                            | Builds SootLib examples         |
+| ```BUILD_TESTS```          | ```ON```                            | Builds SootLib tests            |
+| ```BUILD_DOCS```           | ```ON```                            | Builds SootLib documentation    |
 
-You can add .cc source files to `test/tests/`. Add these files to
-`test/tests/CMakeLists.txt` . Add
-`example_test.cc` as `example_test`. These files will be built as standalone executables with Google Test. Files in
-`test/tests/` will be added to the test list `standardTests`.
+## Default installation locations
 
-We should roughly follow the [Cantera contributions stype guide](https://github.com/Cantera/cantera/blob/main/CONTRIBUTING.md)
-in this project.
-
-# TODO
-
-### Short Term Design
-
-* Perhaps add warnings when running into 0 or having illegal calculations to guide people in NAN situations
-  
-### Long Term Design
-
-* Optimized higher dimentional models
-* Determine needed state constructor / generator features
-
-### Broken / Not Building
-
-* SECT model was highly broken in old code so current interpretation is probably not accurate
-* MOMIC throws vector out of bounds errors in all situations
+* C++
+    * library: ```libsootlib.a``` is located in ```installed/lib```
+    * header files: ```constants.h```, ```sootModel.h```, and ```state.h``` are located in ```installed/include```
+* CMake
+    * Relocatable package ```sootlib.cmake``` is located in ```installed/cmake/sootlib```

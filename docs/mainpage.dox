@@ -1,0 +1,55 @@
+/**
+
+@mainpage
+
+<!-- #################################################################### -->
+
+# Overview
+
+[Sootlib](https://github.com/BYUignite/sootlib.git) is an open-source library that computes soot source terms using moment-based particle size distribution models for combustion CFD simulations.
+
+# Examples
+
+Sootlib is written in C++ and includes example codes that illustrate its use.
+
+# Models
+
+## Particle Size Distribution (PSD)
+
+fadfdsfadf
+
+## Nucleation
+
+## Condensation
+
+## Surface Growth
+
+## Oxidation
+
+## Coagulation
+
+# Required software, building, and installing the library
+
+The code is intended to be built on Linux and MacOS systems, (or the Linux subsystem for Windows). The build directory includes a readme file that describes the build and installation process. Required software includes:
+* CMake and a C++ compiler,
+* Doxygen and graphviz to build the (optional) documentation,
+
+To build the code, the user creates and enters a top-level ```build``` directory, then runs
+```
+cmake ..
+make
+make install
+```
+
+The top-level ```CMakeLists.txt``` file has build options that can be set at the top of the file. These options can also be set at the command line, for instance
+```
+cmake -DBUILD_EXAMPLES=OFF ..
+```
+
+The default installation directory is ```sootlib/installed```, but this can be changed through the ```CMAKE_INSTALL_PREFIX``` variable.
+
+
+
+
+
+*/

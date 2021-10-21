@@ -20,6 +20,9 @@ option(BUILD_EXAMPLES "Build sootlib examples" ON)
 # ---- options to build tests -------
 option(BUILD_TESTING "Build sootlib tests" ON)
 
+# ---- options to build documentation -------
+option(BUILD_DOCS "Build sootlib documentation" OFF)
+
 ####################### SOOTLIB ###############################
 
 project(sootlib
@@ -45,4 +48,10 @@ endif()
 
 if (BUILD_EXAMPLES)
     add_subdirectory(examples ${CMAKE_CURRENT_BINARY_DIR}/examples)
+endif()
+
+######################## DOCUMENTATION ###########################
+
+if (BUILD_DOCS)
+    add_subdirectory(docs "${CMAKE_CURRENT_BINARY_DIR}/docs")
 endif()
