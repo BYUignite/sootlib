@@ -11,10 +11,7 @@ namespace soot {
      *      Rate from Lindstedt (2005), Proc. Comb. Inst. 30:775
      *      Returns chemical nucleation rate in #/m3*s.
      *
-     *      C2H2 --> C(s) + H2
-     *      C6H6 --> 6C(s) + 3H2
-     *
-     *      NOTE: second reaction ignored here
+     *      C2H2 --> 2C(s) + H2
      */
     class nucleationModel_LIN : public nucleationModel {
 
