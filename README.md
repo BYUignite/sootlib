@@ -30,7 +30,7 @@ Build options are located under the ```PROJECT OPTIONS``` heading in the top-lev
 
 | Option               | Default value                 | Function                        |
 |----------------------|-------------------------------|---------------------------------|
-| ```CMAKE_INSTALL_PREFIX``` | ```${CMAKE_SOURCE_DIR}/installed``` | Specifies installation location |
+| ```CMAKE_INSTALL_PREFIX``` | ```${PROJECT_SOURCE_DIR}/installed``` | Specifies installation location |
 | ```BUILD_EXAMPLES```       | ```ON```                            | Builds SootLib examples         |
 | ```BUILD_TESTS```          | ```ON```                            | Builds SootLib tests            |
 | ```BUILD_DOCS```           | ```ON```                            | Builds SootLib documentation    |

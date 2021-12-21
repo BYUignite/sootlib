@@ -7,7 +7,7 @@ if(DOXYGEN_FOUND)
         COMMAND rm -rf doxygen/html
         COMMAND mkdir  doxygen/html
         COMMAND doxygen -s Doxyfile
-        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
         VERBATIM
     )
 else()

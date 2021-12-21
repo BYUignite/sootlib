@@ -1,57 +1,48 @@
+################### PREAMBLE ###############################
+
 cmake_minimum_required(VERSION 3.15)
+
+project(sootlib VERSION 0.1.0
+        LANGUAGES CXX)
+
+################### PROJECT SETUP ##########################
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)       # Release or Debug
 endif()
 
+# ---- set C++ language standard ----
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_BINARY_DIR "${CMAKE_SOURCE_DIR}/build")
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_EXTENSIONS NO)
 
-include(FetchContent)
+# ---- installation location ----
+set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}")
 
-#################### PROJECT OPTIONS ###############################
-
-# ---- set installation location ----
-set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/installed" CACHE STRING "installation location")
-
-# ---- options to build examples ----
+# ---- build options ----
 option(BUILD_EXAMPLES "Build sootlib examples" ON)
-
-# ---- options to build tests -------
 option(BUILD_TESTING "Build sootlib tests" ON)
-
-# ---- options to build documentation -------
 option(BUILD_DOCS "Build sootlib documentation" OFF)
 
-####################### SOOTLIB ###############################
+################### MAIN PROJECT TARGETS #####################
 
-project(sootlib
-        VERSION 1.0
-        LANGUAGES CXX)
+add_subdirectory(src)
 
-add_subdirectory(src ${CMAKE_CURRENT_BINARY_DIR}/src)
+################### OPTIONAL PROJECT TARGETS #################
 
-# ---- allow sootlib to be used in other targets ----
-target_include_directories(sootlib PUBLIC
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
-        "$<INSTALL_INTERFACE:include>"
-        )
-
-######################### TESTS ###############################
-
+# -------- TESTING --------
 if (BUILD_TESTING)
     enable_testing()
-    add_subdirectory(tests ${CMAKE_CURRENT_BINARY_DIR}/tests)
+    add_subdirectory(tests)
 endif()
 
-######################## EXAMPLES ###############################
-
+# -------- EXAMPLES --------
 if (BUILD_EXAMPLES)
-    add_subdirectory(examples ${CMAKE_CURRENT_BINARY_DIR}/examples)
+    add_subdirectory(examples)
 endif()
 
-######################## DOCUMENTATION ###########################
+# -------- DOCUMENTATION --------
 
 if (BUILD_DOCS)
-    add_subdirectory(docs "${CMAKE_CURRENT_BINARY_DIR}/docs")
+    add_subdirectory(docs)
 endif()
