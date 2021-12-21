@@ -1,7 +1,7 @@
 #ifndef PSDMODEL_MONO_H
 #define PSDMODEL_MONO_H
 
-#include "src/sootModels/psdModels/psdModel.h"
+#include "psdModel.h"
 
 namespace soot {
 

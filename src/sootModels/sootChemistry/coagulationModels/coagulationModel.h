@@ -1,8 +1,8 @@
 #ifndef COAGULATIONMODEL_H
 #define COAGULATIONMODEL_H
 
-#include "src/state.h"
-#include "src/constants.h"
+#include "../../../state.h"
+#include "../../../constants.h"
 
 namespace soot {
 

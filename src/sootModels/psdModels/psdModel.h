@@ -1,33 +1,33 @@
 #ifndef PSDMODEL_H
 #define PSDMODEL_H
 
-#include "src/constants.h"
-#include "src/state.h"
+#include "../../constants.h"
+#include "../../state.h"
 
-#include "src/sootModels/sootChemistry/nucleationModels/nucleationModel.h"
-#include "src/sootModels/sootChemistry/nucleationModels/nucleationModel_NONE.h"
-#include "src/sootModels/sootChemistry/nucleationModels/nucleationModel_LL.h"
-#include "src/sootModels/sootChemistry/nucleationModels/nucleationModel_LIN.h"
-#include "src/sootModels/sootChemistry/nucleationModels/nucleationModel_PAH.h"
+#include "../sootChemistry/nucleationModels/nucleationModel.h"
+#include "../sootChemistry/nucleationModels/nucleationModel_NONE.h"
+#include "../sootChemistry/nucleationModels/nucleationModel_LL.h"
+#include "../sootChemistry/nucleationModels/nucleationModel_LIN.h"
+#include "../sootChemistry/nucleationModels/nucleationModel_PAH.h"
 
-#include "src/sootModels/sootChemistry/growthModels/growthModel.h"
-#include "src/sootModels/sootChemistry/growthModels/growthModel_NONE.h"
-#include "src/sootModels/sootChemistry/growthModels/growthModel_LL.h"
-#include "src/sootModels/sootChemistry/growthModels/growthModel_LIN.h"
-#include "src/sootModels/sootChemistry/growthModels/growthModel_HACA.h"
+#include "../sootChemistry/growthModels/growthModel.h"
+#include "../sootChemistry/growthModels/growthModel_NONE.h"
+#include "../sootChemistry/growthModels/growthModel_LL.h"
+#include "../sootChemistry/growthModels/growthModel_LIN.h"
+#include "../sootChemistry/growthModels/growthModel_HACA.h"
+          
+#include "../sootChemistry/oxidationModels/oxidationModel.h"
+#include "../sootChemistry/oxidationModels/oxidationModel_NONE.h"
+#include "../sootChemistry/oxidationModels/oxidationModel_LL.h"
+#include "../sootChemistry/oxidationModels/oxidationModel_HACA.h"
+#include "../sootChemistry/oxidationModels/oxidationModel_LEE_NEOH.h"
+#include "../sootChemistry/oxidationModels/oxidationModel_NSC_NEOH.h"
 
-#include "src/sootModels/sootChemistry/oxidationModels/oxidationModel.h"
-#include "src/sootModels/sootChemistry/oxidationModels/oxidationModel_NONE.h"
-#include "src/sootModels/sootChemistry/oxidationModels/oxidationModel_LL.h"
-#include "src/sootModels/sootChemistry/oxidationModels/oxidationModel_HACA.h"
-#include "src/sootModels/sootChemistry/oxidationModels/oxidationModel_LEE_NEOH.h"
-#include "src/sootModels/sootChemistry/oxidationModels/oxidationModel_NSC_NEOH.h"
-
-#include "src/sootModels/sootChemistry/coagulationModels/coagulationModel.h"
-#include "src/sootModels/sootChemistry/coagulationModels/coagulationModel_NONE.h"
-#include "src/sootModels/sootChemistry/coagulationModels/coagulationModel_LL.h"
-#include "src/sootModels/sootChemistry/coagulationModels/coagulationModel_FUCHS.h"
-#include "src/sootModels/sootChemistry/coagulationModels/coagulationModel_FRENK.h"
+#include "../sootChemistry/coagulationModels/coagulationModel.h"
+#include "../sootChemistry/coagulationModels/coagulationModel_NONE.h"
+#include "../sootChemistry/coagulationModels/coagulationModel_LL.h"
+#include "../sootChemistry/coagulationModels/coagulationModel_FUCHS.h"
+#include "../sootChemistry/coagulationModels/coagulationModel_FRENK.h"
 
 namespace soot {
 

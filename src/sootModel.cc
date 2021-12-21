@@ -1,10 +1,10 @@
 #include "sootModel.h"
 
 //#include "src/sootModels/psdModels/psdModel_SECT.h"
-#include "src/sootModels/psdModels/psdModel_MONO.h"
-#include "src/sootModels/psdModels/psdModel_LOGN.h"
-#include "src/sootModels/psdModels/psdModel_QMOM.h"
-#include "src/sootModels/psdModels/psdModel_MOMIC.h"
+#include "sootModels/psdModels/psdModel_MONO.h"
+#include "sootModels/psdModels/psdModel_LOGN.h"
+#include "sootModels/psdModels/psdModel_QMOM.h"
+#include "sootModels/psdModels/psdModel_MOMIC.h"
 
 using namespace std;
 using namespace soot;

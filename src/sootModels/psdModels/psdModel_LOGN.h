@@ -1,7 +1,7 @@
 #ifndef PSDMODEL_LOGN_H
 #define PSDMODEL_LOGN_H
 
-#include "src/sootModels/psdModels/psdModel.h"
+#include "psdModel.h"
 
 namespace soot {
 

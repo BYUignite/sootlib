@@ -1,8 +1,8 @@
 #ifndef GROWTHMODEL_H
 #define GROWTHMODEL_H
 
-#include "src/state.h"
-#include "src/constants.h"
+#include "../../../state.h"
+#include "../../../constants.h"
 
 namespace soot {
 

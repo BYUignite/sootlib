@@ -1,7 +1,7 @@
 #ifndef PSDMODEL_MOMIC_H
 #define PSDMODEL_MOMIC_H
 
-#include "src/sootModels/psdModels/psdModel.h"
+#include "psdModel.h"
 
 namespace soot {
 

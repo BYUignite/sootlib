@@ -1,7 +1,7 @@
 #ifndef PSDMODEL_QMOM_H
 #define PSDMODEL_QMOM_H
 
-#include "src/sootModels/psdModels/psdModel.h"
+#include "psdModel.h"
 
 namespace soot {
 
