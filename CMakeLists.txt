@@ -20,9 +20,9 @@ set(CMAKE_CXX_EXTENSIONS NO)
 set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}")
 
 # ---- build options ----
-option(BUILD_EXAMPLES "Build sootlib examples" ON)
-option(BUILD_TESTING "Build sootlib tests" ON)
-option(BUILD_DOCS "Build sootlib documentation" OFF)
+option(BUILD_EXAMPLES   "Build sootlib examples"        OFF)
+option(BUILD_TESTING    "Build sootlib tests"           OFF)
+option(BUILD_DOCS       "Build sootlib documentation"   OFF)
 
 ################### MAIN PROJECT TARGETS #####################
 
