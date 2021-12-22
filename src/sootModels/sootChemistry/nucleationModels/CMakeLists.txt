@@ -1,6 +1,6 @@
 #------ src/sootModel/sootChemistry/nucleationModels files ------------------
 
-target_sources(sootlib PRIVATE
+target_sources(sootModel PRIVATE
                 nucleationModel.h        nucleationModel.cc
                 nucleationModel_PAH.h    nucleationModel_PAH.cc
                 nucleationModel_LIN.h    nucleationModel_LIN.cc

@@ -1,6 +1,6 @@
 #------ src/sootModel/sootChemistry/oxidationModels files ------------------
 
-target_sources(sootlib PRIVATE
+target_sources(sootModel PRIVATE
                 oxidationModel.cc           oxidationModel.h
                 oxidationModel_HACA.cc      oxidationModel_HACA.h
                 oxidationModel_LL.cc        oxidationModel_LL.h
