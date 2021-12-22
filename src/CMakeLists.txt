@@ -34,13 +34,13 @@ target_include_directories(sootModel
 
 install(TARGETS sootModel
         EXPORT sootlib
+        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
         LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
         ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
         PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
         )
 
 install(EXPORT sootlib
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}cmake/sootlib
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sootlib
         NAMESPACE sootlib::
         )
