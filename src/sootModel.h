@@ -1,7 +1,6 @@
 #ifndef SOOTMODEL_H
 #define SOOTMODEL_H
 
-#include "constants.h"
 #include "state.h"
 
 #include "sootModels/psdModels/psdModel.h"
