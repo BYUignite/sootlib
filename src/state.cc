@@ -70,9 +70,14 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
     if (yGas_.size() != (gasFractions.size() - 1))
         throw domain_error("Invalid input vector size: gas species mass fractions");
 
-    for (double y : yGas_)
-        if (y < 0 || y > 1)
-            throw domain_error("Unphysical state value requested: gas species mass fractions");
+    for (double y : yGas_) {
+        if (y < 0) {
+            if (y > -1.0E-15) y = 0;
+            else throw domain_error("Unphysical state value requested: gas species mass fractions < 0.0");
+        }
+        if (y > 1)
+            throw domain_error("Unphysical state value requested: gas species mass fraction > 1.0");
+    }
 
     double yGas_sum = 0;
     for(double y : yGas_)
