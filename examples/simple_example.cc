@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 
 #include "constants.h"
 #include "sootModel.h"
@@ -19,7 +20,7 @@ int main(int argc, char** argv) {
 
     // define particle size distribution (PSD) treatment
     psdMech         PSD = psdMech::QMOM;                  // PSD mechanisms: MONO, LOGN, QMOM, MOMIC
-    int             N = 6;                              // number of soot moments
+    int             N = 4;                              // number of soot moments
 
     // create sootModel object with desired mechanisms
     sootModel SM = sootModel(PSD, N, n, g, x, c);
@@ -37,7 +38,7 @@ int main(int argc, char** argv) {
     double muGas = 1E-5;    // gas viscosity in Pa*s
     double MWGas = 29;      // gas molar weight in kg/kmol
 
-    vector<double> yGas = {0, 0.01, 0.01, 0.01, 0.02, 0.03, 0.04, 2E-15};     // gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
+    vector<double> yGas = {0, 0.01, 0.01, 0.5, 0.02, 0.03, 0.04, 2E-15};     // gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
     vector<double> yPAH = {0, 0, 0, 0, 0, 0};                                 // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
     vector<double> ySootVar = {0.003, 1.5E-5, 1E-7, 1E-10};                   // soot moment values [M0, M1, M2, M3]
 
@@ -75,8 +76,45 @@ int main(int argc, char** argv) {
     double S_C16H10 = SM.sourceTerms->pahSourceTerms.at(pahSp::C16H10);
     double S_C18H10 = SM.sourceTerms->pahSourceTerms.at(pahSp::C18H10);
 
-    //---------- display results
+    //---------- output results
+    cout << setprecision(2) << fixed;
 
+    cout << endl << "T (K)  = " << setw(14) << T;
+    cout << endl << "P (Pa) = " << setw(14) << P;
+    cout << endl;
+
+    cout << setprecision(4) << scientific;
+
+    cout << endl << "Soot source terms" << endl;
+    cout << endl << "M0 = " << setw(14) << S_M0;
+    cout << endl << "M1 = " << setw(14) << S_M1;
+    cout << endl << "M2 = " << setw(14) << S_M2;
+    cout << endl << "M3 = " << setw(14) << S_M3;
+    cout << endl;
+
+    cout << endl << "Gas source terms" << endl;
+    cout << endl << "xC2H2 = " << setw(14) << S_C2H2;
+    cout << endl << "xH    = " << setw(14) << S_H;
+    cout << endl << "xH2   = " << setw(14) << S_H2;
+    cout << endl << "xO    = " << setw(14) << S_O;
+    cout << endl << "xO2   = " << setw(14) << S_O2;
+    cout << endl << "xCO   = " << setw(14) << S_CO;
+    cout << endl << "xH2O  = " << setw(14) << S_H2O;
+    cout << endl << "xOH   = " << setw(14) << S_OH;
+    cout << endl;
+
+    if(n==nucleationMech::PAH){
+        cout << endl << "PAH source terms" << endl;
+        cout << endl << "xC10H8  = " << setw(14) << S_C10H8 ;
+        cout << endl << "xC12H8  = " << setw(14) << S_C12H8 ;
+        cout << endl << "xC12H10 = " << setw(14) << S_C12H10;
+        cout << endl << "xC14H10 = " << setw(14) << S_C14H10;
+        cout << endl << "xC16H10 = " << setw(14) << S_C16H10;
+        cout << endl << "xC18H10 = " << setw(14) << S_C18H10;
+        cout << endl;
+    }
+
+    //----------------- cleanup
 
     return 0;
 }
