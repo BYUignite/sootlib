@@ -14,6 +14,7 @@ namespace soot {
             std::map<gasSp, double>      gasFractions;
             std::map<pahSp, double>      pahFractions;
             std::vector<double>          sootMom;
+            int                          nMom;
 
             std::vector<double>          absc;
             std::vector<double>          wts;
@@ -52,7 +53,7 @@ namespace soot {
              *      and will be ignored.
              */
             void setState(double T_, double P_, double rhoGas_, double muGas_, double MWGas_,
-                          std::vector<double> yGas_, std::vector<double> yPAH_, std::vector<double> sootVar_, double cMin_ = 100);
+                          std::vector<double> yGas_, std::vector<double> yPAH_, std::vector<double> sootVar_, int nMom, double cMin_ = 100);
 
             double getGasSpC(gasSp sp)  const { return rhoGas * gasFractions.at(sp) / gasSpMW.at(sp); };
             double getGasSpP(gasSp sp)  const { return gasFractions.at(sp) * MWGas / gasSpMW.at(sp) * P; };

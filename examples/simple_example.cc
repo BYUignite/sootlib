@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
     vector<double> ySootVar = {0.003, 1.5E-5, 1E-7, 1E-10};                   // soot moment values [M0, M1, M2, M3]
 
     // set the thermodynamic state
-    S.setState(T, P, rhoGas, muGas, MWGas, yGas, yPAH, ySootVar);
+    S.setState(T, P, rhoGas, muGas, MWGas, yGas, yPAH, ySootVar, N);
 
     //---------- calculate source terms
 

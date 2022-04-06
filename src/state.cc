@@ -31,7 +31,7 @@ state::state() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void state::setState(double T_, double P_, double rhoGas_, double muGas_, double MWGas_,
-                     vector<double> yGas_, vector<double> yPAH_, vector<double> sootVar_, double cMin_) {
+                     vector<double> yGas_, vector<double> yPAH_, vector<double> sootVar_, int nMom_, double cMin_) {
 
     //------------ scalar variable values
 
@@ -55,14 +55,15 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
 
     //------------ soot moments/bins
 
+    nMom = nMom_;
     for (double s : sootVar_)
         if (s < 0)
             throw domain_error("Unphysical state value requested: negative soot moment value(s)");
 
-    sootMom.resize(sootVar_.size());
-    absc.resize(sootVar_.size()/2);
-    wts.resize(sootVar_.size()/2);
-    for (int i=0; i<sootVar_.size(); i++)
+    sootMom.resize(nMom);
+    absc.resize(nMom/2);
+    wts.resize(nMom/2);
+    for (int i=0; i<nMom; i++)
         sootMom.at(i) = sootVar_.at(i);
 
     //------------ gas species mass fractions
