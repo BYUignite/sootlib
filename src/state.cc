@@ -35,22 +35,22 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
 
     //------------ scalar variable values
 
-    if (T_ <= 0) throw domain_error("Unphysical state value requested: T");
+    if (T_ <= 0) throw domain_error("Unphysical state value input: T");
     else T = T_;
 
-    if (P_ <= 0) throw domain_error("Unphysical state value requested: P");
+    if (P_ <= 0) throw domain_error("Unphysical state value input: P");
     else P = P_;
 
-    if (rhoGas_ <= 0) throw domain_error("Unphysical state value requested: rhoGas");
+    if (rhoGas_ <= 0) throw domain_error("Unphysical state value input: rhoGas");
     else rhoGas = rhoGas_;
 
-    if (muGas_ <= 0) throw domain_error("Unphysical state value requested: muGas");
+    if (muGas_ <= 0) throw domain_error("Unphysical state value input: muGas");
     else muGas = muGas_;
 
-    if (MWGas_ <= 0) throw domain_error("Unphysical state value requested: MWGas");
+    if (MWGas_ <= 0) throw domain_error("Unphysical state value input: MWGas");
     else MWGas = MWGas_;
 
-    if (cMin_ <= 0) throw domain_error("Unphysical state value requested: cMin");
+    if (cMin_ <= 0) throw domain_error("Unphysical state value input: cMin");
     else cMin = cMin_;
 
     //------------ soot moments/bins
@@ -58,7 +58,7 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
     nMom = nMom_;
     for (double s : sootVar_)
         if (s < 0)
-            throw domain_error("Unphysical state value requested: negative soot moment value(s)");
+            throw domain_error("Unphysical state value input: negative soot moment(s)");
 
     sootMom.resize(nMom);
     absc.resize(nMom/2);
@@ -76,14 +76,14 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
             y = 0;
         }
         if (y > 1)
-            throw domain_error("Unphysical state value requested: gas species mass fraction > 1.0");
+            throw domain_error("Unphysical state value input: gas species mass fraction > 1.0");
     }
 
     double yGas_sum = 0;
     for(double y : yGas_)
         yGas_sum += y;
     if (yGas_sum > 1.0)
-        throw domain_error("Unphysical state requested: sum of gas species mass fractions greater than one");
+        throw domain_error("Unphysical state value input: sum of gas species mass fractions greater than one");
 
     gasFractions.at(gasSp::H)    = yGas_[0];
     gasFractions.at(gasSp::H2)   = yGas_[1];
@@ -101,13 +101,13 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
 
     for (double y : yPAH_)
         if (y < 0 || y > 1)
-            throw domain_error("Unphysical state value requested: PAH species mass fractions");
+            throw domain_error("Unphysical state value input: PAH species mass fraction(s)");
 
     double yPAH_sum = 0;
     for(double y :yPAH_)
         yPAH_sum += y;
     if (yPAH_sum > 1.0)
-        throw domain_error("Unphysical state requested: sum of PAH species mass fractions greater than one");
+        throw domain_error("Unphysical state value input: sum of PAH species mass fractions greater than one");
 
     pahFractions.at(pahSp::C10H8)  = yPAH_[0];
     pahFractions.at(pahSp::C12H8)  = yPAH_[1];
