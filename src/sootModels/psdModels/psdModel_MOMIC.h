@@ -62,7 +62,7 @@ namespace soot {
         static double f_grid(int x, int y, const std::vector<double>& M);
 
 
-        static double MOMICCoagulationRate(const state& state, size_t r);
+        static double MOMICCoagulationRate(const state& state, size_t r, std::vector<double>& M);
 
         ////////////////////////////////////////////////////////////////////////////////
         /*! lagrangeInterp function
