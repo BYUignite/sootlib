@@ -2,7 +2,8 @@ cmake-build-debug/
 cmake-build-release/
 
 build/*
-installed/
+include
+lib
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Example user template template
@@ -46,4 +47,3 @@ gen
 *.exe
 *.out
 *.app
-
