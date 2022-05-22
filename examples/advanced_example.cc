@@ -1,16 +1,54 @@
 #include <iostream>
 #include <iomanip>
+#include <fstream>
+#include <string>
 
 #include "constants.h"
 #include "sootModel.h"
 #include "state.h"
+#include "cantera/base/Solution.h"
+#include "cantera/thermo.h"
+#include "cantera/transport.h"
+#include "cantera/kinetics.h"
+
+//#include "cantera/thermo/IdealGasPhase.h" // defines class IdealGasPhase
+//#include "cantera/kinetics/GasKinetics.h"
+//#include "cantera/transport.h" // transport properties
+//#include <cstdio>
+
+//#include "cantera/zerodim.h"
+//#include "cantera/thermo/IdealGasPhase.h"
+
 
 using namespace std;
 using namespace soot;
+using namespace Cantera;
 
 int main(int argc, char** argv) {
 
-    //---------- set up and create a soot model
+    //---------- variables setup
+
+    string gases[] = {"H", "H2", "O", "O2", "OH", "H2O", "CO", "C2H2"};
+    string PAHs[]  = {"C10H8", "C12H8", "C12H10", "C14H10", "C16H10", "C18H10"};
+    map<string, double> yGasSrc = {{"C2H2", 0},
+                                   {"O",    0},
+                                   {"O2",   0},
+                                   {"H",    0},
+                                   {"H2",   0},
+                                   {"OH",   0},
+                                   {"H2O",  0},
+                                   {"CO",   0},
+                                   {"C",    0},
+                                   {"C6H6", 0}};
+
+    double tend = 1.0;
+    double tstep = 0.005;
+    double tnow = 0.0;
+
+    //---------- cantera setup
+    shared_ptr<Solution> gas(newSolution("gri30.yaml","gri30","Mix"));
+
+    //---------- soot model setup
 
     // define soot chemistry mechanisms to be used
     nucleationMech  n = nucleationMech::LL;             // Nucleation: NONE, LL, LIN, PAH
@@ -19,106 +57,95 @@ int main(int argc, char** argv) {
     coagulationMech c = coagulationMech::LL;            // Coagulation: NONE, LL, FUCHS, FRENK
 
     // define particle size distribution (PSD) treatment
-    psdMech         PSD = psdMech::MOMIC;                  // PSD mechanisms: MONO, LOGN, QMOM, MOMIC
-    int             N = 6;                              // number of soot moments
+    psdMech         PSD = psdMech::MONO;                  // PSD mechanisms: MONO, LOGN, QMOM, MOMIC
+    int             N = 2;                              // number of soot moments
 
     // create sootModel object with desired mechanisms
     sootModel SM = sootModel(PSD, N, n, g, x, c);
 
-    //---------- set up thermodynamic state variables
-
     // create state object
     state S = state();
 
-    // specify some state variables
+    // soot moment storage
+    vector<double> Msoot(N, 0.0);
 
-    double T = 2100;        // temperature in K
-    double P = 101325;      // pressure in Pa
-    double rhoGas = 0.1;    // gas density in kg/m^3
-    double muGas = 1E-5;    // gas viscosity in Pa*s
-    double MWGas = 29;      // gas molar weight in kg/kmol
+    //---------- set up output file
+    ofstream f_out("soot_example.csv");
+    f_out << "time(s), T(K), ";
+    for (const auto& sp : gases)
+        f_out << "y" << sp << ", ";
+    for (int i=0; i<N; i++)
+        f_out << "M" << i << ", ";
+    f_out << endl;
 
-    vector<double> yGas = {0, 0.01, 0.01, 0.5, 0.02, 0.03, 0.04, 2E-15};     // gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
-    vector<double> yPAH = {0, 0, 0, 0, 0, 0};                                // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-    vector<double> ySootVar = {0.003, 1.5E-5, 1E-7, 1E-10, 0, 0};            // soot moment values [M0, M1, M2, M3]
+    //---------- initial conditions
+    map<string, double> yGasInit = {{"C2H4", 0.1},     // stoichiometric ethylene/air mixture
+                                    {"O2", 0.20},
+                                    {"N2", 0.70}};
+    gas->thermo()->setState_TPY(298, OneAtm, yGasInit);
+    Msoot[0] = 1E6;
 
-    // set the thermodynamic state
-    S.setState(T, P, rhoGas, muGas, MWGas, yGas, yPAH, ySootVar, N);
+    //---------- output initial conditions
+    f_out << tnow << ", " << gas->thermo()->temperature() << ", ";
+    for (const auto& sp : gases)
+        f_out << yGasInit[sp] << ", ";
+    for (int i=0; i<N; i++)
+        f_out << Msoot[i] << ", ";
+    f_out << endl;
 
-    //---------- calculate source terms
+    //---------- loop over time
+    while (tnow < tend) {
+        tnow += tstep;
 
-    SM.calcSourceTerms(S);
+        // equilibrate via cantera
+//        gas->thermo()->equilibrate("TP");
+        gas->thermo()->equilibrate("HP");
 
-    //---------- accessing source term results
+        // get cantera mass fractions
+        vector<double> yGas;
+        for (const auto& sp : gases)
+            yGas.push_back(gas->thermo()->massFraction(sp));
 
-    // soot source terms
-    double S_M0 = SM.sourceTerms->sootSourceTerms.at(0);      // #/m^3*s
-    double S_M1 = SM.sourceTerms->sootSourceTerms.at(1);      // kg/m^3*s
-    double S_M2 = SM.sourceTerms->sootSourceTerms.at(2);      // kg^2/m^3*s
-    double S_M3 = SM.sourceTerms->sootSourceTerms.at(3);      // kg^3/m^3*s
-    double S_M4 = SM.sourceTerms->sootSourceTerms.at(4);      // kg^4/m^3*s
-    double S_M5 = SM.sourceTerms->sootSourceTerms.at(5);      // kg^5/m^3*s
+        vector<double> yPAH(6,0);
+        if (n == nucleationMech::PAH) {
+            for (const auto& pahSp : PAHs) {
+                yPAH.erase(yPAH.begin());                           // remove first vector element
+                yPAH.push_back(gas->thermo()->massFraction(pahSp));   // add PAH mass fraction to end of vector
+            }
+        }
 
-    // gas source terms (kg sp)/(kg gas * s)
-    double S_C2H2 = SM.sourceTerms->gasSourceTerms.at(gasSp::C2H2);
-    double S_H    = SM.sourceTerms->gasSourceTerms.at(gasSp::H);
-    double S_H2   = SM.sourceTerms->gasSourceTerms.at(gasSp::H2);
-    double S_O    = SM.sourceTerms->gasSourceTerms.at(gasSp::O);
-    double S_O2   = SM.sourceTerms->gasSourceTerms.at(gasSp::O2);
-    double S_CO   = SM.sourceTerms->gasSourceTerms.at(gasSp::CO);
-    double S_H2O  = SM.sourceTerms->gasSourceTerms.at(gasSp::H2O);
-    double S_OH   = SM.sourceTerms->gasSourceTerms.at(gasSp::OH);
-    double S_C6H6 = SM.sourceTerms->gasSourceTerms.at(gasSp::C6H6);
+        // calculate soot source terms
+        S.setState(gas->thermo()->temperature(),
+                   gas->thermo()->pressure(),
+                   gas->thermo()->density(),
+                   gas->transport()->viscosity(),
+                   gas->thermo()->meanMolecularWeight(),
+                   yGas, yPAH, Msoot, N);
 
-    // PAH source terms (kg sp)/(kg gas * s)
-    double S_C10H8  = SM.sourceTerms->pahSourceTerms.at(pahSp::C10H8);
-    double S_C12H8  = SM.sourceTerms->pahSourceTerms.at(pahSp::C12H8);
-    double S_C12H10 = SM.sourceTerms->pahSourceTerms.at(pahSp::C12H10);
-    double S_C14H10 = SM.sourceTerms->pahSourceTerms.at(pahSp::C14H10);
-    double S_C16H10 = SM.sourceTerms->pahSourceTerms.at(pahSp::C16H10);
-    double S_C18H10 = SM.sourceTerms->pahSourceTerms.at(pahSp::C18H10);
+        SM.calcSourceTerms(S);
 
-    //---------- output results
-    cout << setprecision(2) << fixed;
+        //---------- apply soot source terms
+        for (int m=0; m<N; m++)
+            Msoot[m] += SM.sourceTerms->sootSourceTerms[m];
 
-    cout << endl << "T (K)  = " << setw(14) << T;
-    cout << endl << "P (Pa) = " << setw(14) << P;
-    cout << endl;
+        //---------- apply gas source terms from soot reactions
+        for (const auto& sp : gases)
+            yGasSrc[sp] += SM.sourceTerms->gasSourceTerms[str2gasSp(sp)];
 
-    cout << setprecision(4) << scientific;
+        map<string, double> yGasNew = gas->thermo()->getMassFractionsByName();
+        for (const auto& sp : gases)
+            yGasNew[sp] += yGasSrc[sp];
 
-    cout << endl << "Soot source terms" << endl;
-    cout << endl << "M0 = " << setw(14) << S_M0;
-    cout << endl << "M1 = " << setw(14) << S_M1;
-    cout << endl << "M2 = " << setw(14) << S_M2;
-    cout << endl << "M3 = " << setw(14) << S_M3;
-    cout << endl << "M4 = " << setw(14) << S_M4;
-    cout << endl << "M5 = " << setw(14) << S_M5;
-    cout << endl;
+        gas->thermo()->setMassFractionsByName(yGasNew);
 
-    cout << endl << "Gas source terms" << endl;
-    cout << endl << "xC2H2 = " << setw(14) << S_C2H2;
-    cout << endl << "xH    = " << setw(14) << S_H;
-    cout << endl << "xH2   = " << setw(14) << S_H2;
-    cout << endl << "xO    = " << setw(14) << S_O;
-    cout << endl << "xO2   = " << setw(14) << S_O2;
-    cout << endl << "xCO   = " << setw(14) << S_CO;
-    cout << endl << "xH2O  = " << setw(14) << S_H2O;
-    cout << endl << "xOH   = " << setw(14) << S_OH;
-    cout << endl;
-
-    if(n==nucleationMech::PAH){
-        cout << endl << "PAH source terms" << endl;
-        cout << endl << "xC10H8  = " << setw(14) << S_C10H8 ;
-        cout << endl << "xC12H8  = " << setw(14) << S_C12H8 ;
-        cout << endl << "xC12H10 = " << setw(14) << S_C12H10;
-        cout << endl << "xC14H10 = " << setw(14) << S_C14H10;
-        cout << endl << "xC16H10 = " << setw(14) << S_C16H10;
-        cout << endl << "xC18H10 = " << setw(14) << S_C18H10;
-        cout << endl;
+        //---------- output time step results
+        f_out << tnow << ", " << gas->thermo()->temperature() << ", ";
+        for (const auto& sp : gases)
+            f_out << yGasNew[sp] << ", ";
+        for (int i=0; i<N; i++)
+            f_out << Msoot[i] << ", ";
+        f_out << endl;
     }
-
-    //----------------- cleanup
 
     return 0;
 }

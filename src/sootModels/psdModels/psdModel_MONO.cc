@@ -133,8 +133,7 @@ void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct 
                                    {gasSp::C,   0},
                                    {gasSp::C6H6,0}};
 
-    // coagulation does not contribute to gas sources/sinks
-
+    // NOTE: coagulation does not contribute to gas sources/sinks
     for (auto const& x : sourceTerms->gasSourceTerms) {
         gasSp sp = x.first;
         if (sp != gasSp::C) {

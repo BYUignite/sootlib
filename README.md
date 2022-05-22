@@ -5,25 +5,31 @@
 
 The code is intended to be built on Linux and MacOS systems (or the Linux subsystem for Windows).
 
-Required software:
-* C++11 or higher
+Required:
+* C++11
 * CMake 3.15+
 
-Optional software for testing:
-* Catch2 (installation automated by SootLib package)
+Testing (optional):
+* Catch2 (can be locally installed via CMake)
 
-Optional software for building documentation:
+Examples (optional):
+* Cantera 2.5.1 (can be locally installed via CMake)
+
+Documentation (optional):
 * Doxygen
 * graphviz
 
 ## Build instructions
 
-1. Create a directory ```build``` and navigate to it.
-2. Run CMake: ```cmake ..```
-3. Build SootLib: ```make```
-4. Install SootLib: ```make install```
-5. (OPTIONAL) Build documentation: ```make docs```
-6. (CLEANUP) Clean build files: run ```git clean -d -f -x``` from top-level directory
+If working from the command line, first create a `build` directory and navigate into it. From there, build as follows:
+1. Configure CMake: `cmake ..`
+2. Build SootLib: `make`
+3. Install SootLib: `make install`
+4. Clean build files: run ```git clean -d -f -x``` from top-level directory
+
+To build documentation (optional)
+5. Build documentation: ```make docs```
+
 
 ## Build options
 Build options are located under the ```PROJECT OPTIONS``` heading in the top-level ```CMakeLists.txt``` file. They can also be specified from the command line during the CMake configuration step.

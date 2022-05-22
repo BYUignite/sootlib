@@ -16,9 +16,9 @@ add_subdirectory(sootModels/sootChemistry/oxidationModels)
 add_subdirectory(sootModels/sootChemistry/coagulationModels)
 
 #------ external content ------------------
-target_sources(sootModel PRIVATE ${PROJECT_SOURCE_DIR}/ext/eispack/eispack.h
-                                 ${PROJECT_SOURCE_DIR}/ext/eispack/eispack.cc
-                                 ${PROJECT_SOURCE_DIR}/ext/binomial/binomial.h
+target_sources(sootModel PRIVATE ext/eispack/eispack.h
+        ext/eispack/eispack.cc
+        ext/binomial/binomial.h
               )
 
 ############# LIBRARY INSTALLATION ################
