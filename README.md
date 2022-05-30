@@ -1,44 +1,49 @@
-# Building SootLib
+# SootLib overview
 
---------------------------------------------------------------
-## Dependencies
+[Sootlib](https://github.com/BYUignite/sootlib.git) is an open-source C++ library that computes soot source terms using moment-based particle size distribution models for combustion CFD simulations.
 
-The code is intended to be built on Linux and MacOS systems (or the Linux subsystem for Windows).
+# Dependencies and installation
+
+The code is intended to be built and used on Linux-like systems, including MacOS and the Linux subsystem for Windows.
 
 Required software:
-* C++11 or higher
 * CMake 3.15+
+* C++11
 
-Optional software for testing:
-* Catch2 (installation automated by SootLib package)
+Optional software:
+* Doxygen (for building documentation)
+* graphviz (for Doxygen)
+* Catch2 (for building tests; will be locally installed automatically via CMake if `SOOTLIB_BUILD_TESTS` is true)
 
-Optional software for building documentation:
-* Doxygen
-* graphviz
+## Build and installation instructions
+1. Create and navigate into a top-level `build` directory
+2. Configure CMake: `cmake ..`
+3. Build SootLib: `make`
+4. Install SootLib: `make install`
 
-## Build instructions
+## CMake configuration variables
+The default CMake configuration should be adequate for users that do not immediately require the examples, tests, or documentation. CMake configuration options can be set by editing the top-level `CMakeLists.txt` file, editing the `CMakeCache.txt` file (generated in the `build` directory after running CMake at least once), or specifying them on the command line during step 2 as follows:
+```
+cmake -DSOOTLIB_BUILD_EXAMPLES=ON ..
+```
 
-1. Create a directory ```build``` and navigate to it.
-2. Run CMake: ```cmake ..```
-3. Build SootLib: ```make```
-4. Install SootLib: ```make install```
-5. (OPTIONAL) Build documentation: ```make docs```
-6. (CLEANUP) Clean build files: run ```git clean -d -f -x``` from top-level directory
+The following project-specific CMake configuration variables can be specified by the user; their default values are also indicated.
+* `CMAKE_INSTALL_PREFIX = ..\`     Installation location 
+* `SOOTLIB_BUILD_EXAMPLES = OFF`  Builds SootLib examples 
+* `SOOTLIB_BUILD_TESTING = OFF`  Builds SootLib tests; uses Catch2 
+* `SOOTLIB_BUILD_DOCS = OFF`  Builds SootLib documentation via Doxygen 
 
-## Build options
-Build options are located under the ```PROJECT OPTIONS``` heading in the top-level ```CMakeLists.txt``` file. They can also be specified from the command line during the CMake configuration step.
+# Using SootLib
 
-| Option               | Default value                 | Function                        |
-|----------------------|-------------------------------|---------------------------------|
-| ```CMAKE_INSTALL_PREFIX``` | ```${PROJECT_SOURCE_DIR}/installed``` | Specifies installation location |
-| ```BUILD_EXAMPLES```       | ```ON```                            | Builds SootLib examples         |
-| ```BUILD_TESTS```          | ```ON```                            | Builds SootLib tests            |
-| ```BUILD_DOCS```           | ```ON```                            | Builds SootLib documentation    |
+The SootLib library consists of two main object classes that users can interact with: `sootModel` and `state`, both of which are contained within the `soot` namespace. The `state` object holds user-specified details about the current thermodynamic state in which the soot chemistry occurs, including variables such as temperature, pressure, and gas species mass fractions. The `sootModel` object contains information about the selected models and mechanisms and performs the calculations that generate moment source terms. In the context of a traditional CFD simulation, the `state` object would be updated via the `setState` function at each individual time step and/or grid point, while the `sootModel` parameters only need to be specified once when the object is created, and then its `calcSourceTerms` function invoked at each step following the `setState` update. The resulting moment source terms and gas species source terms can be accessed via the `sootModel` object. Refer to `examples/simple_example.cc` for a basic example of setting up the objects, calculating source terms, and retrieving values.
 
-## Default installation locations
+## Example workflow
+1. Create `sootModel` object, specifying the desired soot chemistry and PSD mechanism.
+2. Create an empty `state` object.
+3. Populate the `state` object with the thermodynamic conditions using the `setState` function.
+4. Calculate the soot source terms using the `calcSourceTerms` function, which takes a reference to a `state` object as its input. 
+5. Retrieve the desired source terms from the `sootModel` object. 
 
-* C++
-    * library: ```libsootlib.a``` is located in ```installed/lib```
-    * header files: ```constants.h```, ```sootModel.h```, and ```state.h``` are located in ```installed/include```
-* CMake
-    * Relocatable package ```sootlib.cmake``` is located in ```installed/cmake/sootlib```
+In the case of a temporally or spatially evolving simulation, only steps 3–5 need be performed at each individual step. SootLib does not store previously calculated values, so source terms must be retrieved at each step or otherwise lost.  
+
+*/
