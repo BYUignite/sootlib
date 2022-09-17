@@ -44,11 +44,15 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
 
     }
 
-    for (auto const& x : nucleationPahRxnRates)
-        nucleationPahRxnRates.at(x.first) /= mDimer;   // now mdot_i_pah = pah_relative_rates[i]*mdot, where mdot is a total gas rate
+    if (mDimer > 0.0) {
+        for (auto const &x: nucleationPahRxnRates)
+            nucleationPahRxnRates.at(x.first) /= mDimer;   // now mdot_i_pah = pah_relative_rates[i]*mdot, where mdot is a total gas rate
+    }
 
-    mDimer     *= wDotD > 0.0 ? 2.0 / wDotD : 0;
-    cMin_local *= wDotD > 0.0 ? 4.0 / wDotD : 0;
+    if (wDotD > 0.0) {
+        mDimer     *= wDotD > 0.0 ? 2.0 / wDotD : 0;
+        cMin_local *= wDotD > 0.0 ? 4.0 / wDotD : 0;
+    }
 
     state.cMin = cMin_local;            // cMin is reset here; some mechanisms have this as an input
 

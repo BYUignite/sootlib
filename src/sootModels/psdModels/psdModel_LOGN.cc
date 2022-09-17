@@ -185,6 +185,15 @@ void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct 
 	    }
 	}
 
+    //---------- get PAH source terms
+
+    if(nucleationMechanism == nucleationMech::PAH) {
+        for (auto const& x : sourceTerms->pahSourceTerms) {
+            pahSp sp = x.first;
+            sourceTerms->pahSourceTerms.at(sp) = nuc->getNucleationPahRates(state).pahSourceTerms.at(sp);
+        }
+    }
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////

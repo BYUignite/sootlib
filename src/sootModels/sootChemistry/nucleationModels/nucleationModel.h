@@ -25,7 +25,7 @@ namespace soot {
 
         sourceTermStruct getNucleationGasRates(const state& state, const double &N1) const;
 
-//        virtual void    getNucleationPahRates(state& state) const = 0;
+        sourceTermStruct getNucleationPahRates(const state& state) const;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 

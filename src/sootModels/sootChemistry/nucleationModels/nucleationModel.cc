@@ -45,3 +45,17 @@ sourceTermStruct nucleationModel::getNucleationGasRates(const state& state, cons
 
     return nucGasSourceTerms;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
+sourceTermStruct nucleationModel::getNucleationPahRates(const state& state) const {
+
+    sourceTermStruct nucPahSourceTerms;
+
+    for (auto const& x : nucleationPahRxnRates) {
+        pahSp sp = x.first;
+        nucPahSourceTerms.pahSourceTerms.at(sp) = nucleationPahRxnRates.at(sp);
+    }
+
+    return nucPahSourceTerms;
+}
