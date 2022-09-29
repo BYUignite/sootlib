@@ -72,6 +72,8 @@ namespace soot {
 
         void resetSourceTerms();
 
+        nucleationMech getNucMech() { return nucleationMechanism; };
+
     //////////////// CONSTRUCTOR /////////////////////////////
 
     public:
