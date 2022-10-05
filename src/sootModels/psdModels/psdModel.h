@@ -1,5 +1,4 @@
-#ifndef PSDMODEL_H
-#define PSDMODEL_H
+#pragma once
 
 #include "../../constants.h"
 #include "../../state.h"
@@ -31,38 +30,34 @@
 
 namespace soot {
 
-    class psdModel {
+class psdModel {
 
-    //////////////// DATA MEMBERS /////////////////////
+//////////////// DATA MEMBERS /////////////////////
 
-    public:
+public:
 
-        int nMom;    // for moment models
-        int nBin;    // for sectional models
+    int nMom;    // for moment models
+    int nBin;    // for sectional models
 
-        // pointers to selected mechanisms
-        nucleationModel*    nuc;
-        growthModel*        grw;
-        oxidationModel*     oxi;
-        coagulationModel*   coa;
+    // pointers to selected mechanisms
+    nucleationModel*    nuc;
+    growthModel*        grw;
+    oxidationModel*     oxi;
+    coagulationModel*   coa;
 
-    //////////////// MEMBER FUNCTIONS /////////////////
+//////////////// MEMBER FUNCTIONS /////////////////
 
-    public:
+public:
 
-        virtual void getSourceTermsImplementation(state& state, sourceTermStruct* sourceTerms) const = 0;
+    virtual void getSourceTermsImplementation(state& state, sourceTermStruct* sourceTerms) const = 0;
 
-    //////////////// CONSTRUCTOR /////////////////////////////
+//////////////// CONSTRUCTOR /////////////////////////////
 
-    public:
+public:
 
-        psdModel(sourceTermStruct* sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C);
+    psdModel(sourceTermStruct* sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C);
 
-        virtual ~psdModel() = default;
+    virtual ~psdModel() = default;
 
-    };
-
-}
-
-
-#endif //PSDMODEL_H
+};
+} // namespace soot

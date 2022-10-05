@@ -1,54 +1,51 @@
-#ifndef PSDMODEL_MONO_H
-#define PSDMODEL_MONO_H
+#pragma once
 
 #include "psdModel.h"
 
 namespace soot {
 
+////////////////////////////////////////////////////////////////////////////////
+/** An implementation of the psdModel interface following the MONO model
+ *
+ *      Associated with enum psdMech:MONO
+ */
+class psdModel_MONO : public psdModel {
+
+//////////////// DATA MEMBERS /////////////////////
+
+private:
+
+    nucleationMech nucleationMechanism;
+
+//////////////// MEMBER FUNCTIONS /////////////////
+
+private:
+
     ////////////////////////////////////////////////////////////////////////////////
-    /** An implementation of the psdModel interface following the MONO model
+    /** getSourceTermsImplementation function
      *
-     *      Associated with enum psdMech:MONO
+     *      Calculates soot source terms using monodispersed PSD model (MONO).
+     *      Updates soot, gas, and PAH source terms (where applicable).
+     *
+     *      NOTE: PAH source terms are updated from within the getNucleationSootRate
+     *      function associated with PAH nucleation.
+     *
+     *      @param  state    \input     thermodynamic state object
+     *
      */
-    class psdModel_MONO : public psdModel {
+    void getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const override;
 
-    //////////////// DATA MEMBERS /////////////////////
+//////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    private:
+public:
 
-        nucleationMech nucleationMechanism;
+     psdModel_MONO(sourceTermStruct* sourceTerms, int nVar,
+                   nucleationMech N,
+                   growthMech G,
+                   oxidationMech X,
+                   coagulationMech C);
 
-    //////////////// MEMBER FUNCTIONS /////////////////
+    ~psdModel_MONO() override = default;
 
-    private:
-
-        ////////////////////////////////////////////////////////////////////////////////
-        /** getSourceTermsImplementation function
-         *
-         *      Calculates soot source terms using monodispersed PSD model (MONO).
-         *      Updates soot, gas, and PAH source terms (where applicable).
-         *
-         *      NOTE: PAH source terms are updated from within the getNucleationSootRate
-         *      function associated with PAH nucleation.
-         *
-         *      @param  state    \input     thermodynamic state object
-         *
-         */
-        void getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const override;
-
-    //////////////// CONSTRUCTOR FUNCTIONS ////////////
-
-    public:
-
-         psdModel_MONO(sourceTermStruct* sourceTerms, int nVar,
-                       nucleationMech N,
-                       growthMech G,
-                       oxidationMech X,
-                       coagulationMech C);
-
-        ~psdModel_MONO() override = default;
-
-    };
-}
-
-#endif //PSDMODEL_MONO_H
+};
+} // namespace soot

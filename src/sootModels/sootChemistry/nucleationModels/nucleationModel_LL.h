@@ -1,38 +1,35 @@
-#ifndef NUCLEATIONMODEL_LL_H
-#define NUCLEATIONMODEL_LL_H
+#pragma once
 
 #include "nucleationModel.h"
 
 namespace soot {
 
-    ////////////////////////////////////////////////////////////////////////////////
-    /*! Nucleation by Leung_Lindstedt (1991)
-     *
-     *      Rate from Leung & Lindstedt (1991), Comb. & Flame 87:289-305.
-     *      Returns chemical nucleation rate in #/m3*s.
-     *
-     *      C2H2 --> C(s) + H2
-     */
-    class nucleationModel_LL : public nucleationModel {
+////////////////////////////////////////////////////////////////////////////////
+/*! Nucleation by Leung_Lindstedt (1991)
+ *
+ *      Rate from Leung & Lindstedt (1991), Comb. & Flame 87:289-305.
+ *      Returns chemical nucleation rate in #/m3*s.
+ *
+ *      C2H2 --> C(s) + H2
+ */
+class nucleationModel_LL : public nucleationModel {
 
-    //////////////// DATA MEMBERS /////////////////////
+//////////////// DATA MEMBERS /////////////////////
 
-    public:
+public:
 
-    //////////////// MEMBER FUNCTIONS /////////////////
+//////////////// MEMBER FUNCTIONS /////////////////
 
-    public:
+public:
 
-        double getNucleationSootRate(state &state) override;
+    double getNucleationSootRate(state &state) override;
 
-    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+//////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    public:
+public:
 
-        nucleationModel_LL();
-        ~nucleationModel_LL() override = default;
+    nucleationModel_LL();
+    ~nucleationModel_LL() override = default;
 
-    };
-}
-
-#endif //NUCLEATIONMODEL_LL_H
+};
+} // namespace soot

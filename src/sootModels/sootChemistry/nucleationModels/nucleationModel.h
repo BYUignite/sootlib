@@ -1,40 +1,37 @@
-#ifndef NUCLEATIONMODEL_H
-#define NUCLEATIONMODEL_H
+#pragma once
 
 #include "../../../state.h"
 #include "../../../constants.h"
 
 namespace soot {
 
-    class nucleationModel {
+class nucleationModel {
 
-    //////////////// DATA MEMBERS /////////////////////
+//////////////// DATA MEMBERS /////////////////////
 
-    public:
+public:
 
-        dimerStruct DIMER = dimerStruct();      // used for PAH nucleation only
+    dimerStruct DIMER = dimerStruct();      // used for PAH nucleation only
 
-        std::map<gasSp, double>   nucleationRxnRatios;
-        std::map<pahSp, double>   nucleationPahRxnRates;
+    std::map<gasSp, double>   nucleationRxnRatios;
+    std::map<pahSp, double>   nucleationPahRxnRates;
 
-    //////////////// MEMBER FUNCTIONS /////////////////
+//////////////// MEMBER FUNCTIONS /////////////////
 
-    public:
+public:
 
-        virtual double getNucleationSootRate(state &state) = 0;
+    virtual double getNucleationSootRate(state &state) = 0;
 
-        sourceTermStruct getNucleationGasRates(const state& state, const double &N1) const;
+    sourceTermStruct getNucleationGasRates(const state& state, const double &N1) const;
 
-        sourceTermStruct getNucleationPahRates(const state& state) const;
+    sourceTermStruct getNucleationPahRates(const state& state) const;
 
-    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+//////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    public:
+public:
 
-        nucleationModel();
-        virtual ~nucleationModel() = default;
+    nucleationModel();
+    virtual ~nucleationModel() = default;
 
-    };
-}
-
-#endif //NUCLEATIONMODEL_H
+};
+} // namespace soot

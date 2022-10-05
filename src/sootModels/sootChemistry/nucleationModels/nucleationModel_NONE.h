@@ -1,31 +1,28 @@
-#ifndef NUCLEATIONMODEL_NONE_H
-#define NUCLEATIONMODEL_NONE_H
+#pragma once
 
 #include "nucleationModel.h"
 
 namespace soot {
 
-    class nucleationModel_NONE : public nucleationModel {
+class nucleationModel_NONE : public nucleationModel {
 
-    //////////////// DATA MEMBERS /////////////////////
+//////////////// DATA MEMBERS /////////////////////
 
-    private:
+private:
 
-    //////////////// MEMBER FUNCTIONS /////////////////
+//////////////// MEMBER FUNCTIONS /////////////////
 
-    public:
+public:
 
-         double getNucleationSootRate(state &state) override { return 0; };
+     double getNucleationSootRate(state &state) override { return 0; };
 
-    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+//////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    public:
+public:
 
-         nucleationModel_NONE() : nucleationModel() {};
-        ~nucleationModel_NONE() override = default;
+     nucleationModel_NONE() : nucleationModel() {};
+    ~nucleationModel_NONE() override = default;
 
-    };
+};
 
-}
-
-#endif //NUCLEATIONMODEL_NONE_H
+} // namespace soot

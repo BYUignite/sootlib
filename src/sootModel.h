@@ -1,5 +1,4 @@
-#ifndef SOOTMODEL_H
-#define SOOTMODEL_H
+#pragma once
 
 #include "state.h"
 
@@ -44,49 +43,47 @@
  */
 namespace soot {
 
-    class sootModel {
+class sootModel {
 
-    //////////////// DATA MEMBERS /////////////////////
+//////////////// DATA MEMBERS /////////////////////
 
-    public:
+public:
 
-        // stored values for mechanism selections
-        psdMech             psdMechanism;
-        nucleationMech      nucleationMechanism;
-        growthMech          growthMechanism;
-        oxidationMech       oxidationMechanism;
-        coagulationMech     coagulationMechanism;
+    // stored values for mechanism selections
+    psdMech             psdMechanism;
+    nucleationMech      nucleationMechanism;
+    growthMech          growthMechanism;
+    oxidationMech       oxidationMechanism;
+    coagulationMech     coagulationMechanism;
 
-        // pointers to selected mechanisms
-        psdModel*           psd;
+    // pointers to selected mechanisms
+    psdModel*           psd;
 
-        // source terms storage
-        sourceTermStruct* sourceTerms;
+    // source terms storage
+    sourceTermStruct* sourceTerms;
 
-    //////////////// MEMBER FUNCTIONS /////////////////
+//////////////// MEMBER FUNCTIONS /////////////////
 
-    public:
+public:
 
-        // TODO documentation
-        void calcSourceTerms(state& state);
+    // TODO documentation
+    void calcSourceTerms(state& state);
 
-        void resetSourceTerms();
+    void resetSourceTerms();
 
-        nucleationMech getNucMech() { return nucleationMechanism; };
+    nucleationMech getNucMech() { return nucleationMechanism; };
 
-    //////////////// CONSTRUCTOR /////////////////////////////
+//////////////// CONSTRUCTOR /////////////////////////////
 
-    public:
+public:
 
-        sootModel(psdMech modelType, int nVar,
-                  nucleationMech N,
-                  growthMech G,
-                  oxidationMech X,
-                  coagulationMech C);
+    sootModel(psdMech modelType, int nVar,
+              nucleationMech N,
+              growthMech G,
+              oxidationMech X,
+              coagulationMech C);
 
-        virtual ~sootModel() = default;
+    virtual ~sootModel() = default;
 
-    };
-}
-
-#endif //SOOTMODEL_H
+};
+} // namespace soot

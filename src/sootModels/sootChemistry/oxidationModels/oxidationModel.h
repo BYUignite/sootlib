@@ -1,36 +1,33 @@
-#ifndef OXIDATIONMODEL_H
-#define OXIDATIONMODEL_H
+#pragma once
 
 #include "../../../state.h"
 #include "../../../constants.h"
 
 namespace soot {
 
-    class oxidationModel {
+class oxidationModel {
 
-    //////////////// DATA MEMBERS /////////////////////
+//////////////// DATA MEMBERS /////////////////////
 
-    public:
+public:
 
-        std::map<gasSp, double>   oxidationRxnRatios;
+    std::map<gasSp, double>   oxidationRxnRatios;
 
-    //////////////// MEMBER FUNCTIONS /////////////////
+//////////////// MEMBER FUNCTIONS /////////////////
 
-    public:
+public:
 
-        virtual double getOxidationSootRate(const state &state) const = 0;
+    virtual double getOxidationSootRate(const state &state) const = 0;
 
-        sourceTermStruct getOxidationGasRates(const state& state, const double &X1) const;
+    sourceTermStruct getOxidationGasRates(const state& state, const double &X1) const;
 
 //        virtual void getOxidationPahRates(state& state) const = 0;
 
-    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+//////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    public:
+public:
 
-        oxidationModel();
-        virtual ~oxidationModel() = default;
-    };
-}
-
-#endif //OXIDATIONMODEL_H
+    oxidationModel();
+    virtual ~oxidationModel() = default;
+};
+} // namespace soot

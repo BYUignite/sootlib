@@ -1,36 +1,33 @@
-#ifndef GROWTHMODEL_H
-#define GROWTHMODEL_H
+#pragma once
 
 #include "../../../state.h"
 #include "../../../constants.h"
 
 namespace soot {
 
-    class growthModel {
+class growthModel {
 
-    //////////////// DATA MEMBERS /////////////////////
+//////////////// DATA MEMBERS /////////////////////
 
-    public:
+public:
 
-        std::map<gasSp, double>   growthRxnRatios;
+    std::map<gasSp, double>   growthRxnRatios;
 
-    //////////////// MEMBER FUNCTIONS /////////////////
+//////////////// MEMBER FUNCTIONS /////////////////
 
-    public:
+public:
 
-        virtual double getGrowthSootRate(const state& state) const = 0;
+    virtual double getGrowthSootRate(const state& state) const = 0;
 
-        sourceTermStruct getGrowthGasRates(const state &state, const double &G1) const;
+    sourceTermStruct getGrowthGasRates(const state &state, const double &G1) const;
 
 //        virtual void getGrowthPahRates(state& state) const = 0;
 
-    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+//////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    public:
+public:
 
-        growthModel();
-        virtual ~growthModel() = default;
-    };
-}
-
-#endif //GROWTHMODEL_H
+    growthModel();
+    virtual ~growthModel() = default;
+};
+} // namespace soot

@@ -1,38 +1,35 @@
-#ifndef OXIDATIONMODEL_LL_H
-#define OXIDATIONMODEL_LL_H
+#pragma once
 
 #include "oxidationModel.h"
 
 namespace soot {
 
-    ////////////////////////////////////////////////////////////////////////////////
-    /*! Oxidation by Leung_Lindstedt (1991)
-     *
-     *      Rate from Leung & Lindstedt (1991), Comb. & Flame 87:289-305.
-     *      Returns chemical soot oxidation rate in kg/m2*s.
-     *
-     *      C + 0.5 O2 --> CO
-     */
-    class oxidationModel_LL : public oxidationModel {
+////////////////////////////////////////////////////////////////////////////////
+/*! Oxidation by Leung_Lindstedt (1991)
+ *
+ *      Rate from Leung & Lindstedt (1991), Comb. & Flame 87:289-305.
+ *      Returns chemical soot oxidation rate in kg/m2*s.
+ *
+ *      C + 0.5 O2 --> CO
+ */
+class oxidationModel_LL : public oxidationModel {
 
-    //////////////// DATA MEMBERS /////////////////////
+//////////////// DATA MEMBERS /////////////////////
 
-    public:
+public:
 
-    //////////////// MEMBER FUNCTIONS /////////////////
+//////////////// MEMBER FUNCTIONS /////////////////
 
-    public:
+public:
 
-         double getOxidationSootRate(const state &state) const override;
+     double getOxidationSootRate(const state &state) const override;
 
-    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+//////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    public:
+public:
 
-         oxidationModel_LL();
-        ~oxidationModel_LL() override = default;
+     oxidationModel_LL();
+    ~oxidationModel_LL() override = default;
 
-    };
-}
-
-#endif //OXIDATIONMODEL_LL_H
+};
+} // namespace soot

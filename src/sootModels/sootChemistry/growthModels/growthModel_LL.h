@@ -1,38 +1,35 @@
-#ifndef GROWTHMODEL_LL_H
-#define GROWTHMODEL_LL_H
+#pragma once
 
 #include "growthModel.h"
 
 namespace soot {
 
-    ////////////////////////////////////////////////////////////////////////////////
-    /*! Growth by Leung_Lindstedt (1991)
-     *
-     *      Rate from Leung & Lindstedt (1991), Comb. & Flame 87:289-305.
-     *      Returns chemical surface growth rate in kg/m2*s.
-     *
-     *      C2H2 + nC(s) --> (n+2)C(s) + H2
-     */
-    class growthModel_LL : public growthModel {
+////////////////////////////////////////////////////////////////////////////////
+/*! Growth by Leung_Lindstedt (1991)
+ *
+ *      Rate from Leung & Lindstedt (1991), Comb. & Flame 87:289-305.
+ *      Returns chemical surface growth rate in kg/m2*s.
+ *
+ *      C2H2 + nC(s) --> (n+2)C(s) + H2
+ */
+class growthModel_LL : public growthModel {
 
-    //////////////// DATA MEMBERS /////////////////////
+//////////////// DATA MEMBERS /////////////////////
 
-    private:
+private:
 
-    //////////////// MEMBER FUNCTIONS /////////////////
+//////////////// MEMBER FUNCTIONS /////////////////
 
-    public:
+public:
 
-         double getGrowthSootRate(const state &state) const override;
+     double getGrowthSootRate(const state &state) const override;
 
-    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+//////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    public:
+public:
 
-        growthModel_LL();
-        ~growthModel_LL() override = default;
+    growthModel_LL();
+    ~growthModel_LL() override = default;
 
-    };
-}
-
-#endif //GROWTHMODEL_LL_H
+};
+} // namespace soot

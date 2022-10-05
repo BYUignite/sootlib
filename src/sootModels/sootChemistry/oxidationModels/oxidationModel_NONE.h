@@ -1,29 +1,26 @@
-#ifndef OXIDATIONMODEL_NONE_H
-#define OXIDATIONMODEL_NONE_H
+#pragma once
 
 #include "oxidationModel.h"
 
 namespace soot {
 
-    class oxidationModel_NONE : public oxidationModel {
+class oxidationModel_NONE : public oxidationModel {
 
-    //////////////// DATA MEMBERS /////////////////////
+//////////////// DATA MEMBERS /////////////////////
 
-    private:
+private:
 
-    //////////////// MEMBER FUNCTIONS /////////////////
+//////////////// MEMBER FUNCTIONS /////////////////
 
-    public:
+public:
 
-         double getOxidationSootRate(const state &state) const override { return 0; }
+     double getOxidationSootRate(const state &state) const override { return 0; }
 
-    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+//////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    public:
+public:
 
-         oxidationModel_NONE() : oxidationModel() {};
-        ~oxidationModel_NONE() override = default;
-    };
-}
-
-#endif //OXIDATIONMODEL_NONE_H
+     oxidationModel_NONE() : oxidationModel() {};
+    ~oxidationModel_NONE() override = default;
+};
+} // namespace soot

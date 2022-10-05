@@ -1,30 +1,27 @@
-#ifndef GROWTHMODEL_NONE_H
-#define GROWTHMODEL_NONE_H
+#pragma once
 
 #include "growthModel.h"
 
 namespace soot {
 
-    class growthModel_NONE : public growthModel {
+class growthModel_NONE : public growthModel {
 
-    //////////////// DATA MEMBERS /////////////////////
+//////////////// DATA MEMBERS /////////////////////
 
-    private:
+private:
 
-    //////////////// MEMBER FUNCTIONS /////////////////
+//////////////// MEMBER FUNCTIONS /////////////////
 
-    public:
+public:
 
-         double getGrowthSootRate(const state &state) const override { return 0; }
+     double getGrowthSootRate(const state &state) const override { return 0; }
 
-    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+//////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    public:
+public:
 
-         growthModel_NONE() : growthModel() {};
-        ~growthModel_NONE() override = default;
+     growthModel_NONE() : growthModel() {};
+    ~growthModel_NONE() override = default;
 
-    };
-}
-
-#endif //GROWTHMODEL_NONE_H
+};
+} // namespace soot
