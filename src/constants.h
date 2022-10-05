@@ -10,9 +10,9 @@
 namespace soot {
 
 // universal constants
-const double Na = 6.02214086E26;    ///< Avogadro's constant: #/kmol
-const double kb = 1.38064852E-23;   ///< Boltzmann constant = Rg/Na: J/#*K
-const double Rg = 8314.46;          ///< Universal gas constant
+const double Na = 6.02214076E26;    ///< Avogadro's constant: #/kmol
+const double kb = 1.380649E-23;     ///< Boltzmann constant = Rg/Na: J/#*K
+const double Rg = Na*kb;            ///< Universal gas constant
 const double eps_c = 2.2;           ///< coagulation constant/van der Waals enhancement factor
 const double Df = 1.8;              ///< soot fractal dimension
 const double rhoSoot = 1850;        ///< soot particle density

@@ -79,10 +79,10 @@ class state {
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-public:
+    public:
 
-     state();                    // initializes variable and sets default values for maps
-    ~state() = default;
+         state();                    // initializes variable and sets default values for maps
+        ~state() = default;
 
 };
 }     // namespace soot
