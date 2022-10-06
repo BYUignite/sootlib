@@ -1,4 +1,4 @@
-#include "nucleationModel_LL.h"
+#include "sootModels/sootChemistry/nucleationModels/nucleationModel_LL.h"
 
 using namespace std;
 using namespace soot;

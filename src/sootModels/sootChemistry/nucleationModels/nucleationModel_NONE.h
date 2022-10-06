@@ -1,6 +1,6 @@
 #pragma once
 
-#include "nucleationModel.h"
+#include "sootModels/sootChemistry/nucleationModels/nucleationModel.h"
 
 namespace soot {
 

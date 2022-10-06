@@ -1,4 +1,4 @@
-#include "psdModel_SECT.h"
+#include "sootModels/sootChemistry/psdModels/psdModel_SECT.h"
 
 using namespace std;
 using namespace soot;

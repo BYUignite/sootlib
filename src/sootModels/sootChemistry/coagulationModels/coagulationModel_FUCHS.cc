@@ -1,4 +1,4 @@
-#include "coagulationModel_FUCHS.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel_FUCHS.h"
 
 using namespace std;
 using namespace soot;

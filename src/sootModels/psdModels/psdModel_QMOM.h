@@ -1,6 +1,6 @@
 #pragma once
 
-#include "psdModel.h"
+#include "sootModels/psdModels/psdModel.h"
 
 namespace soot {
 

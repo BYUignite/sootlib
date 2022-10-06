@@ -1,6 +1,6 @@
 #pragma once
 
-#include "coagulationModel.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel.h"
 
 namespace soot {
 

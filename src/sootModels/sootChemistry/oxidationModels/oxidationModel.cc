@@ -1,4 +1,4 @@
-#include "oxidationModel.h"
+#include "sootModels/sootChemistry/oxidationModels/oxidationModel.h"
 
 using namespace std;
 using namespace soot;

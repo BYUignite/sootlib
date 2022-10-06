@@ -1,4 +1,4 @@
-#include "psdModel_LOGN.h"
+#include "sootModels/psdModels/psdModel_LOGN.h"
 
 using namespace std;
 using namespace soot;

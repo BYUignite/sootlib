@@ -1,4 +1,4 @@
-#include "coagulationModel_FRENK.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel_FRENK.h"
 
 using namespace std;
 using namespace soot;

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../../constants.h"
-#include "../../state.h"
+#include "constants.h"
+#include "state.h"
 
-#include "../sootChemistry/nucleationModels/nucleationModel.h"
-#include "../sootChemistry/growthModels/growthModel.h"
-#include "../sootChemistry/oxidationModels/oxidationModel.h"
-#include "../sootChemistry/coagulationModels/coagulationModel.h"
+#include "sootModels/sootChemistry/nucleationModels/nucleationModel.h"
+#include "sootModels/sootChemistry/growthModels/growthModel.h"
+#include "sootModels/sootChemistry/oxidationModels/oxidationModel.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel.h"
 
 namespace soot {
 

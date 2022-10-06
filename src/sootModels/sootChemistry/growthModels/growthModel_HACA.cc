@@ -1,4 +1,4 @@
-#include "growthModel_HACA.h"
+#include "sootModels/sootChemistry/growthModels/growthModel_HACA.h"
 
 using namespace std;
 using namespace soot;

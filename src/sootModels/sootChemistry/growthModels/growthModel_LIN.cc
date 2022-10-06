@@ -1,4 +1,4 @@
-#include "growthModel_LIN.h"
+#include "sootModels/sootChemistry/growthModels/growthModel_LIN.h"
 
 using namespace std;
 using namespace soot;

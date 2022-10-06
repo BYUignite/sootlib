@@ -1,4 +1,4 @@
-#include "psdModel_QMOM.h"
+#include "sootModels/psdModels/psdModel_QMOM.h"
 
 using namespace std;
 using namespace soot;

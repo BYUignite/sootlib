@@ -1,4 +1,4 @@
-#include "coagulationModel_LL.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel_LL.h"
 
 using namespace std;
 using namespace soot;

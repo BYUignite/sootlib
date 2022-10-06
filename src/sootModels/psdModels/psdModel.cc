@@ -1,25 +1,25 @@
-#include "psdModel.h"
+#include "sootModels/psdModels/psdModel.h"
 
-#include "../sootChemistry/nucleationModels/nucleationModel_NONE.h"
-#include "../sootChemistry/nucleationModels/nucleationModel_LL.h"
-#include "../sootChemistry/nucleationModels/nucleationModel_LIN.h"
-#include "../sootChemistry/nucleationModels/nucleationModel_PAH.h"
+#include "sootModels/sootChemistry/nucleationModels/nucleationModel_NONE.h"
+#include "sootModels/sootChemistry/nucleationModels/nucleationModel_LL.h"
+#include "sootModels/sootChemistry/nucleationModels/nucleationModel_LIN.h"
+#include "sootModels/sootChemistry/nucleationModels/nucleationModel_PAH.h"
 
-#include "../sootChemistry/growthModels/growthModel_NONE.h"
-#include "../sootChemistry/growthModels/growthModel_LL.h"
-#include "../sootChemistry/growthModels/growthModel_LIN.h"
-#include "../sootChemistry/growthModels/growthModel_HACA.h"
-          
-#include "../sootChemistry/oxidationModels/oxidationModel_NONE.h"
-#include "../sootChemistry/oxidationModels/oxidationModel_LL.h"
-#include "../sootChemistry/oxidationModels/oxidationModel_HACA.h"
-#include "../sootChemistry/oxidationModels/oxidationModel_LEE_NEOH.h"
-#include "../sootChemistry/oxidationModels/oxidationModel_NSC_NEOH.h"
+#include "sootModels/sootChemistry/growthModels/growthModel_NONE.h"
+#include "sootModels/sootChemistry/growthModels/growthModel_LL.h"
+#include "sootModels/sootChemistry/growthModels/growthModel_LIN.h"
+#include "sootModels/sootChemistry/growthModels/growthModel_HACA.h"
 
-#include "../sootChemistry/coagulationModels/coagulationModel_NONE.h"
-#include "../sootChemistry/coagulationModels/coagulationModel_LL.h"
-#include "../sootChemistry/coagulationModels/coagulationModel_FUCHS.h"
-#include "../sootChemistry/coagulationModels/coagulationModel_FRENK.h"
+#include "sootModels/sootChemistry/oxidationModels/oxidationModel_NONE.h"
+#include "sootModels/sootChemistry/oxidationModels/oxidationModel_LL.h"
+#include "sootModels/sootChemistry/oxidationModels/oxidationModel_HACA.h"
+#include "sootModels/sootChemistry/oxidationModels/oxidationModel_LEE_NEOH.h"
+#include "sootModels/sootChemistry/oxidationModels/oxidationModel_NSC_NEOH.h"
+
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel_NONE.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel_LL.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel_FUCHS.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel_FRENK.h"
 
 using namespace std;
 using namespace soot;

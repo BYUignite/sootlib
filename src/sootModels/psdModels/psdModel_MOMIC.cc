@@ -1,4 +1,4 @@
-#include "psdModel_MOMIC.h"
+#include "sootModels/psdModels/psdModel_MOMIC.h"
 #include "sootModels/psdModels/binomial.h"
 
 using namespace std;

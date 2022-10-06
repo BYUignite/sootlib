@@ -1,6 +1,6 @@
 #pragma once
 
-#include "growthModel.h"
+#include "sootModels/sootChemistry/growthModels/growthModel.h"
 
 namespace soot {
 

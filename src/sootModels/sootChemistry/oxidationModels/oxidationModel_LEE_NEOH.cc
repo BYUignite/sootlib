@@ -1,4 +1,4 @@
-#include "oxidationModel_LEE_NEOH.h"
+#include "sootModels/sootChemistry/oxidationModels/oxidationModel_LEE_NEOH.h"
 
 using namespace soot;
 

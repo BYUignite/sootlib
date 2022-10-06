@@ -1,4 +1,4 @@
-#include "oxidationModel_NSC_NEOH.h"
+#include "sootModels/sootChemistry/oxidationModels/oxidationModel_NSC_NEOH.h"
 
 using namespace std;
 using namespace soot;
