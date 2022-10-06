@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
 
     vector<double> yGas = {0, 0.01, 0.01, 0.5, 0.02, 0.03, 0.04, 2E-15};  // gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
     vector<double> yPAH = {0, 0, 0, 0, 0, 0};                             // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-    vector<double> sootvar = {0.003, 1.5E-5, 1E-7, 1E-10};                // soot moment values [M0, M1, M2, M3]
+    vector<double> sootVar = {0.003, 1.5E-5, 1E-7, 1E-10};                // soot moment values [M0, M1, M2, M3]
 
     // set the thermodynamic state
     S.setState(T, P, rhoGas, muGas, MWGas, yGas, yPAH, sootVar, N);

@@ -27,13 +27,14 @@ sootModel::sootModel(psdMech modelType, int nVar, nucleationMech N, growthMech G
 
     //---------- set PSD model type
 
-    if      (psdMechanism == psdMech::MONO)  { psd = new psdModel_MONO (sourceTerms, nVar, N, G, X, C);}
-    else if (psdMechanism == psdMech::LOGN)  { psd = new psdModel_LOGN (sourceTerms, nVar, N, G, X, C);}
-    else if (psdMechanism == psdMech::QMOM)  { psd = new psdModel_QMOM (sourceTerms, nVar, N, G, X, C);}
-    else if (psdMechanism == psdMech::MOMIC) { psd = new psdModel_MOMIC(sourceTerms, nVar, N, G, X, C);}
-//    else if (psdMechanism == psdMech::SECT) {psd = new psdModel_SECT(sourceTerms, nVar, N, G, X, C);}
-    else throw domain_error("Invalid PSD model type requested");
-
+    switch (psdMechanism) {
+        case psdMech::MONO  : psd = new psdModel_MONO (sourceTerms, nVar, N, G, X, C); break;
+        case psdMech::LOGN  : psd = new psdModel_LOGN (sourceTerms, nVar, N, G, X, C); break;
+        case psdMech::QMOM  : psd = new psdModel_QMOM (sourceTerms, nVar, N, G, X, C); break;
+        case psdMech::MOMIC : psd = new psdModel_MOMIC(sourceTerms, nVar, N, G, X, C); break;
+        //case psdMech::SECT  : psd = new psdModel_SECT (sourceTerms, nVar, N, G, X, C); break;
+        default: throw domain_error("Invalid PSD model type requested");
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +42,7 @@ sootModel::sootModel(psdMech modelType, int nVar, nucleationMech N, growthMech G
 void sootModel::calcSourceTerms(state& state) {
 
     // reset sourceTerms variable
-    resetSourceTerms();
+    setSourceTerms();
 
     // calculate new source terms
     psd->getSourceTermsImplementation(state, sourceTerms);
@@ -50,7 +51,7 @@ void sootModel::calcSourceTerms(state& state) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void sootModel::resetSourceTerms() {
+void sootModel::setSourceTerms() {
 
     // soot source terms
     for(int i=0; i < psd->nMom; i++)
