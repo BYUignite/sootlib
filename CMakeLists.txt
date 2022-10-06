@@ -12,14 +12,17 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # ---- set C++ language standard ----
+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
 
 # ---- installation location ----
+
 set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}")
 
 # ---- build options ----
+
 option(SOOTLIB_BUILD_EXAMPLES   "Build sootlib examples"        ON)
 option(SOOTLIB_BUILD_TESTING    "Build sootlib tests"           OFF)
 option(SOOTLIB_BUILD_DOCS       "Build sootlib documentation"   OFF)
@@ -31,12 +34,14 @@ add_subdirectory(src)
 ################### OPTIONAL PROJECT TARGETS #################
 
 # -------- TESTING --------
+
 if (SOOTLIB_BUILD_TESTING)
     enable_testing()
     add_subdirectory(tests)
 endif()
 
 # -------- EXAMPLES --------
+
 if (SOOTLIB_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
