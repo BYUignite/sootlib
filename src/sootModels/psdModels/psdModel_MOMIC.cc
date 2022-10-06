@@ -1,5 +1,5 @@
 #include "psdModel_MOMIC.h"
-#include "../../../ext/binomial/binomial.h"
+#include "sootModels/psdModels/binomial.h"
 
 using namespace std;
 using namespace soot;

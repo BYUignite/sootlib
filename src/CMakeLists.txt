@@ -10,6 +10,9 @@ set_target_properties(sootModel PROPERTIES PUBLIC_HEADER "state.h;sootModel.h;co
 set_target_properties(sootModel PROPERTIES PRIVATE_HEADER "sootModels/psdModels/psdModel_QMOM.h;sootModels/psdModels/psdModel_MONO.h;sootModels/psdModels/psdModel_MOMIC.h;sootModels/psdModels/psdModel_LOGN.h;sootModels/psdModels/psdModel.h;sootModels/sootChemistry/coagulationModels/coagulationModel.h;sootModels/sootChemistry/coagulationModels/coagulationModel_NONE.h;sootModels/sootChemistry/coagulationModels/coagulationModel_LL.h;sootModels/sootChemistry/coagulationModels/coagulationModel_FUCHS.h;sootModels/sootChemistry/coagulationModels/coagulationModel_FRENK.h;sootModels/sootChemistry/growthModels/growthModel.h;sootModels/sootChemistry/growthModels/growthModel_NONE.h;sootModels/sootChemistry/growthModels/growthModel_LL.h;sootModels/sootChemistry/growthModels/growthModel_LIN.h;sootModels/sootChemistry/growthModels/growthModel_HACA.h;sootModels/sootChemistry/nucleationModels/nucleationModel.h;sootModels/sootChemistry/nucleationModels/nucleationModel_PAH.h;sootModels/sootChemistry/nucleationModels/nucleationModel_LIN.h;sootModels/sootChemistry/nucleationModels/nucleationModel_LL.h;sootModels/sootChemistry/nucleationModels/nucleationModel_NONE.h;sootModels/sootChemistry/oxidationModels/oxidationModel.h;sootModels/sootChemistry/oxidationModels/oxidationModel_HACA.h;sootModels/sootChemistry/oxidationModels/oxidationModel_LL.h;sootModels/sootChemistry/oxidationModels/oxidationModel_LEE_NEOH.h;sootModels/sootChemistry/oxidationModels/oxidationModel_NSC_NEOH.h;sootModels/sootChemistry/oxidationModels/oxidationModel_NONE.h")
 
 #------ src files ------------------
+
+target_include_directories(sootModel PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
 add_subdirectory(sootModels/psdModels)
 add_subdirectory(sootModels/sootChemistry/nucleationModels)
 add_subdirectory(sootModels/sootChemistry/growthModels)
@@ -18,8 +21,7 @@ add_subdirectory(sootModels/sootChemistry/coagulationModels)
 
 #------ external content ------------------
 target_sources(sootModel PRIVATE ${PROJECT_SOURCE_DIR}/ext/eispack/eispack.h
-                                 ${PROJECT_SOURCE_DIR}/ext/eispack/eispack.cc
-                                 ${PROJECT_SOURCE_DIR}/ext/binomial/binomial.h)
+                                 ${PROJECT_SOURCE_DIR}/ext/eispack/eispack.cc)
 
 ############# LIBRARY INSTALLATION ################
 
