@@ -27,8 +27,6 @@ public:
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-public:
-
     nucleationModel_LIN();
     ~nucleationModel_LIN() override = default;
 };

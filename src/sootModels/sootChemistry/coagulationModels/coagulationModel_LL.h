@@ -41,8 +41,6 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-public:
-
     coagulationModel_LL() = default;
     ~coagulationModel_LL() override = default;
 };

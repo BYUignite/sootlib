@@ -27,8 +27,6 @@ class state {
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
-    public:
-
         /** Sets the thermodynamic state based on user input
          *
          *      Only point of contact between users and the state class. User provides
@@ -78,8 +76,6 @@ class state {
         double getParticleCollisionRate(double m1, double m2) const;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
-
-    public:
 
          state();                    // initializes variable and sets default values for maps
         ~state() = default;

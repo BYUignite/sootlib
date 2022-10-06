@@ -38,8 +38,6 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-public:
-
      coagulationModel_FRENK() = default;
     ~coagulationModel_FRENK() override = default;
 };

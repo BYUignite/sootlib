@@ -29,8 +29,6 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-public:
-
     coagulationModel_NONE() : coagulationModel() {};
     ~coagulationModel_NONE() override = default;
 };

@@ -27,13 +27,9 @@ public:
 
 //////////////// MEMBER FUNCTIONS ////////////////
 
-public:
-
     double getGrowthSootRate(const state& state) const override;
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
-
-public:
 
     growthModel_HACA();
     ~growthModel_HACA() override = default;

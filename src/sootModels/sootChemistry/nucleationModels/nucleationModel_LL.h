@@ -21,13 +21,9 @@ public:
 
 //////////////// MEMBER FUNCTIONS /////////////////
 
-public:
-
     double getNucleationSootRate(state &state) override;
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
-
-public:
 
     nucleationModel_LL();
     ~nucleationModel_LL() override = default;

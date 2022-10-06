@@ -19,11 +19,8 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-public:
-
      nucleationModel_NONE() : nucleationModel() {};
     ~nucleationModel_NONE() override = default;
 
 };
-
 } // namespace soot

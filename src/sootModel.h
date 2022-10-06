@@ -40,14 +40,10 @@ public:
 
 //////////////// MEMBER FUNCTIONS /////////////////
 
-public:
-
     // TODO documentation
     void setSourceTerms(state& state);
 
 //////////////// CONSTRUCTOR /////////////////////////////
-
-public:
 
     sootModel(psdMech modelType, int nVar,
               nucleationMech N,

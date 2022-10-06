@@ -44,8 +44,6 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-public:
-
      coagulationModel_FUCHS() = default;
     ~coagulationModel_FUCHS() override = default;
 };

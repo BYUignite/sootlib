@@ -22,8 +22,6 @@ private:
 
 //////////////// MEMBER FUNCTIONS /////////////////
 
-private:
-
     /**
      * source terms calculation function required by psdModel
      *

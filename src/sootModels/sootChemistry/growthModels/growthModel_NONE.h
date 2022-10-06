@@ -19,8 +19,6 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-public:
-
      growthModel_NONE() : growthModel() {};
     ~growthModel_NONE() override = default;
 

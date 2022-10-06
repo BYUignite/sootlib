@@ -26,13 +26,9 @@ public:
 
 //////////////// MEMBER FUNCTIONS /////////////////
 
-public:
-
     virtual void setSourceTerms(state& state, sourceTermStruct* sourceTerms) const = 0;
 
 //////////////// CONSTRUCTOR /////////////////////////////
-
-public:
 
     psdModel(sourceTermStruct* sourceTerms, int nVar, 
              nucleationMech N, growthMech G, 

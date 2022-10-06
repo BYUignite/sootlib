@@ -27,8 +27,6 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-public:
-
     growthModel_LL();
     ~growthModel_LL() override = default;
 

@@ -13,8 +13,6 @@ public:
 
 //////////////// MEMBER FUNCTIONS /////////////////
 
-public:
-
     ////////////////////////////////////////////////////////////////////////////////
     /*! Growth by Lindstedt (1994)
      *
@@ -28,8 +26,6 @@ public:
      double getGrowthSootRate(const state &state) const override;
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
-
-public:
 
     growthModel_LIN();
     ~growthModel_LIN() override = default;

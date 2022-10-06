@@ -22,14 +22,10 @@ public:
 
 //////////////// MEMBER FUNCTIONS /////////////////
 
-public:
-
     double getNucleationSootRate(state &state) override;
 //        void getNucleationPahRates(state &state) override;
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
-
-public:
 
      nucleationModel_PAH();
     ~nucleationModel_PAH() override = default;

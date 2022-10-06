@@ -30,8 +30,6 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-public:
-
     coagulationModel() = default;
     virtual ~coagulationModel() = default;      // Virtual deconstructor since interface will be used in the form of pointers
 

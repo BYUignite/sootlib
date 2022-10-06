@@ -18,8 +18,6 @@ public:
 
 //////////////// MEMBER FUNCTIONS /////////////////
 
-public:
-
     virtual double getNucleationSootRate(state &state) = 0;
 
     sourceTermStruct getNucleationGasRates(const state& state, const double &N1) const;
@@ -27,8 +25,6 @@ public:
     sourceTermStruct getNucleationPahRates(const state& state) const;
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
-
-public:
 
     nucleationModel();
     virtual ~nucleationModel() = default;

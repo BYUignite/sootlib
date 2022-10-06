@@ -15,8 +15,6 @@ public:
 
 //////////////// MEMBER FUNCTIONS /////////////////
 
-public:
-
     virtual double getGrowthSootRate(const state& state) const = 0;
 
     sourceTermStruct getGrowthGasRates(const state &state, const double &G1) const;
@@ -24,8 +22,6 @@ public:
 //        virtual void getGrowthPahRates(state& state) const = 0;
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
-
-public:
 
     growthModel();
     virtual ~growthModel() = default;
