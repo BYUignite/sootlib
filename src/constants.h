@@ -9,16 +9,18 @@
 
 namespace soot {
 
-// universal constants
+//////////////////// constants
+
 const double Na = 6.02214076E26;    ///< Avogadro's constant: #/kmol
 const double kb = 1.380649E-23;     ///< Boltzmann constant = Rg/Na: J/#*K
 const double Rg = Na*kb;            ///< Universal gas constant
+
 const double eps_c = 2.2;           ///< coagulation constant/van der Waals enhancement factor
 const double Df = 1.8;              ///< soot fractal dimension
 const double rhoSoot = 1850;        ///< soot particle density
 const double bCoag = 0.8536;        ///< coagulation constant, bounded 1/sqrt(2) < bCoag < 1
 
-// gas species list and properties
+//////////////////// gas species list and properties
 
 enum class gasSp { C2H2, O, O2, H, H2, OH, H2O, CO, C, C6H6 };
 inline gasSp str2gasSp(const std::string& str) {
@@ -46,7 +48,7 @@ const std::map<gasSp, double> gasSpMW = {{gasSp::C2H2, 26.038},      ///< molar 
                                          {gasSp::C,    12.011},
                                          {gasSp::C6H6, 78.114}};
 
-// PAH species list and properties for PAH nucleation and condensation
+//////////////////// PAH species list and properties for PAH nucleation and condensation
 // See Blanquart & Pitsch (2009) "A joint volume-surface-hydrogen
 // multi-variate model for soot formation"
 
@@ -82,9 +84,10 @@ const std::map<pahSp, double> pahSpGamma = {{pahSp::C10H8,  0.0010},      ///< u
                                             {pahSp::C16H10, 0.0250},
                                             {pahSp::C18H10, 0.0390}};
 
-// custom structures
+//////////////////// custom structures
 
 struct sourceTermStruct {
+
     std::vector<double>     sootSourceTerms{0, 0};      // default to 2 moments
     std::map<gasSp, double> gasSourceTerms = {{gasSp::C2H2,0},
                                               {gasSp::O,   0},
@@ -104,13 +107,15 @@ struct sourceTermStruct {
                                               {pahSp::C18H10, 0}};
 };
 
+//----------------------
+
 struct dimerStruct {
     double mDimer = 0;
     double nDimer = 0;
     double wDotD  = 0;
 };
 
-// model options and string conversion functions
+//////////////////// model options and string conversion functions
 
 enum class nucleationMech { NONE, LL, LIN, PAH };
 inline nucleationMech str2nucMech(const std::string& str) {

@@ -43,9 +43,7 @@ public:
 public:
 
     // TODO documentation
-    void calcSourceTerms(state& state);
-
-    void setSourceTerms();
+    void setSourceTerms(state& state);
 
 //////////////// CONSTRUCTOR /////////////////////////////
 

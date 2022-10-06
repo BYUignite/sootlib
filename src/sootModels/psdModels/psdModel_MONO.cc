@@ -26,7 +26,7 @@ psdModel_MONO::psdModel_MONO(sourceTermStruct* sourceTerms, int nVar, nucleation
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_MONO::getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const {
+void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) const {
 
     //---------- get moments
 

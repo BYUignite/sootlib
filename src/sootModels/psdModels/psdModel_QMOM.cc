@@ -27,7 +27,7 @@ psdModel_QMOM::psdModel_QMOM(sourceTermStruct* sourceTerms, int nVar, nucleation
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_QMOM::getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const {
+void psdModel_QMOM::setSourceTerms(state& state, sourceTermStruct *sourceTerms) const {
 
     //---------- get weights and abscissas
 

@@ -24,7 +24,7 @@ private:
 private:
 
     ////////////////////////////////////////////////////////////////////////////////
-    /** getSourceTermsImplementation function
+    /** setSourceTerms function
      *
      *      Calculates soot source terms using monodispersed PSD model (MONO).
      *      Updates soot, gas, and PAH source terms (where applicable).
@@ -35,7 +35,7 @@ private:
      *      @param  state    \input     thermodynamic state object
      *
      */
-    void getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const override;
+    void setSourceTerms(state& state, sourceTermStruct *sourceTerms) const override;
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 

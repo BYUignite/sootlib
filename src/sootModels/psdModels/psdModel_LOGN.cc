@@ -26,7 +26,7 @@ psdModel_LOGN::psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar, nucleation
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_LOGN::getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const {
+void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) const {
 
     double N0 = 0, N1 = 0, N2 = 0;
     double G0 = 0, G1 = 0, G2 = 0;

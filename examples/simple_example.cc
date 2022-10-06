@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
 
     //---------- calculate source terms
 
-    SM.calcSourceTerms(S);
+    SM.setSourceTerms(S);
 
     //---------- accessing source term results
 

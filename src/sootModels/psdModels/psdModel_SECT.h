@@ -31,7 +31,7 @@ private:
      * @param out pointer to an outstream for debugging purposes, can be null
      * @return source terms object with computer values
      */
-    void getSourceTermsImplementation(state& state, std::ostream* out) const override;
+    void setSourceTerms(state& state, std::ostream* out) const override;
     /**
      * throws exceptions if the state object is in an illegal state to calculate source terms required by psdModel
      *

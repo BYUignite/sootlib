@@ -28,7 +28,7 @@ public:
 
 public:
 
-    virtual void getSourceTermsImplementation(state& state, sourceTermStruct* sourceTerms) const = 0;
+    virtual void setSourceTerms(state& state, sourceTermStruct* sourceTerms) const = 0;
 
 //////////////// CONSTRUCTOR /////////////////////////////
 

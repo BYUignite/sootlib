@@ -25,7 +25,7 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_MOMIC::getSourceTermsImplementation(state& state, sourceTermStruct *sourceTerms) const {
+void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms) const {
 
     //---------- get moment values
     vector<double> Mtemp(nMom,0);

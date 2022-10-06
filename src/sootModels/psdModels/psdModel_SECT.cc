@@ -13,7 +13,7 @@ psdModel_SECT::psdModel_SECT(size_t n) {
         sourceTerms->sootSourceTerms.push_back(0);
 }
 
-void psdModel_SECT::getSourceTermsImplementation(state& state, std::ostream* out) const {
+void psdModel_SECT::setSourceTerms(state& state, std::ostream* out) const {
 
     if (out) {
         *out << " === [SootModel SECT] ===" << endl;
