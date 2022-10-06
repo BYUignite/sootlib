@@ -1,4 +1,5 @@
 #include "sootModels/sootChemistry/nucleationModels/nucleationModel_LL.h"
+#include "constants.h"
 
 using namespace std;
 using namespace soot;

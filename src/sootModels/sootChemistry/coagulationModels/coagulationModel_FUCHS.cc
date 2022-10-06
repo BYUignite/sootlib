@@ -1,4 +1,5 @@
 #include "sootModels/sootChemistry/coagulationModels/coagulationModel_FUCHS.h"
+#include "constants.h"
 
 using namespace std;
 using namespace soot;

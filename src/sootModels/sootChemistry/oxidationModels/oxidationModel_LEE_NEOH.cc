@@ -1,4 +1,5 @@
 #include "sootModels/sootChemistry/oxidationModels/oxidationModel_LEE_NEOH.h"
+#include "constants.h"
 
 using namespace soot;
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "state.h"
-#include "constants.h"
 
 namespace soot {
 

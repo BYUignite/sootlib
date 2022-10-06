@@ -1,6 +1,7 @@
 #pragma once
 
 #include "oxidationModel.h"
+#include "state.h"
 
 namespace soot {
 
