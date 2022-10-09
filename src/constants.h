@@ -154,8 +154,9 @@ inline coagulationMech str2coaMech(const std::string& str) {
     else throw std::domain_error ("Invalid value provided to str2coaMech function");
 };
 
-enum class psdMech { MONO, LOGN, QMOM, MOMIC, SECT };
+enum class psdMech { NONE, MONO, LOGN, QMOM, MOMIC, SECT };
 inline psdMech str2psdMech(const std::string& str) {
+    if(str == "NONE")       return psdMech::NONE;
     if(str == "MONO")       return psdMech::MONO;
     else if(str == "LOGN")  return psdMech::LOGN;
     else if(str == "QMOM")  return psdMech::QMOM;

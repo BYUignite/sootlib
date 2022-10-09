@@ -45,6 +45,8 @@ public:
 
 //////////////// CONSTRUCTOR /////////////////////////////
 
+    sootModel(){};
+
     sootModel(psdMech modelType, int nVar,
               nucleationMech N,
               growthMech G,
