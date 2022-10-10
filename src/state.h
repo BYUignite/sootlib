@@ -12,8 +12,8 @@ class state {
 
     public:
 
-        std::map<gasSp, double>      gasFractions;
-        std::map<pahSp, double>      pahFractions;
+        std::map<gasSp, double>      yGas;
+        std::map<pahSp, double>      yPah;
         std::vector<double>          sootVar;
         int                          nsoot;
 
@@ -57,14 +57,14 @@ class state {
                       std::vector<double> yGas_, std::vector<double> yPAH_, 
                       std::vector<double> sootVar_, int nsoot, double cMin_ = 100);
 
-        double getGasSpC(gasSp sp)  const { return rhoGas * gasFractions.at(sp) / gasSpMW.at(sp); }
-        double getGasSpP(gasSp sp)  const { return gasFractions.at(sp) * MWGas / gasSpMW.at(sp) * P; }
+        double getGasSpC(gasSp sp)  const { return rhoGas * yGas.at(sp) / gasSpMW.at(sp); }
+        double getGasSpP(gasSp sp)  const { return yGas.at(sp) * MWGas / gasSpMW.at(sp) * P; }
 
         double getGasMeanFreePath() const { return muGas / rhoGas * sqrt(M_PI * MWGas / (2.0 * Rg * T)); }
 
-        double get_pahSpC(pahSp sp) const { return rhoGas * pahFractions.at(sp) / pahSpMW.at(sp); }
-        double get_pahSpP(pahSp sp) const { return pahFractions.at(sp) * MWGas / pahSpMW.at(sp) * P; }
-        double get_pahSpN(pahSp sp) const { return rhoGas * pahFractions.at(sp) / pahSpMW.at(sp) * Na; }
+        double get_pahSpC(pahSp sp) const { return rhoGas * yPah.at(sp) / pahSpMW.at(sp); }
+        double get_pahSpP(pahSp sp) const { return yPah.at(sp) * MWGas / pahSpMW.at(sp) * P; }
+        double get_pahSpN(pahSp sp) const { return rhoGas * yPah.at(sp) / pahSpMW.at(sp) * Na; }
 
         void setSootScales(std::vector<double> &sootScales_) { sootScales = sootScales_; }
 

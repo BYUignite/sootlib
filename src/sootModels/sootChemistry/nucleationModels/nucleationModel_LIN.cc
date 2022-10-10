@@ -18,6 +18,6 @@ nucleationModel_LIN::nucleationModel_LIN() : nucleationModel () {
 
 double nucleationModel_LIN::getNucleationSootRate(state &state) {
 
-    return 0.63E4 * exp(-21100 / state.T) * state.getGasSpC(gasSp::C2H2) * 2 * Na / state.cMin;
+    return 0.63E4 * exp(-21100 / state.T) * state.getGasSpC(gasSp::C2H2) * 2.0 * Na / state.cMin;
 
 }

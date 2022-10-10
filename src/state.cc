@@ -14,7 +14,7 @@ state::state(size_t nsoot_) :
     absc(vector<double>(nsoot_/2, 0.0)),
     wts(vector<double>(nsoot_/2, 0.0)) {
 
-    gasFractions = {{gasSp::C2H2, 0},
+    yGas = {{gasSp::C2H2, 0},
                     {gasSp::O,    0},
                     {gasSp::O2,   0},
                     {gasSp::H,    0},
@@ -24,7 +24,7 @@ state::state(size_t nsoot_) :
                     {gasSp::CO,   0},
                     {gasSp::C,    0}};
 
-    pahFractions = {{pahSp::C10H8,  0},
+    yPah = {{pahSp::C10H8,  0},
                     {pahSp::C12H8,  0},
                     {pahSp::C12H10, 0},
                     {pahSp::C14H10, 0},
@@ -68,7 +68,7 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
 
     //------------ gas species mass fractions
 
-    if (yGas_.size() != (gasFractions.size() - 1))
+    if (yGas_.size() != (yGas.size() - 1))
         throw domain_error("Invalid input vector size: gas species mass fractions");
 
     for (double y : yGas_) {
@@ -85,18 +85,18 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
     if (yGas_sum > 1.0)
         throw domain_error("Unphysical state value input: sum of gas species mass fractions greater than one");
 
-    gasFractions.at(gasSp::H)    = yGas_[0];
-    gasFractions.at(gasSp::H2)   = yGas_[1];
-    gasFractions.at(gasSp::O)    = yGas_[2];
-    gasFractions.at(gasSp::O2)   = yGas_[3];
-    gasFractions.at(gasSp::OH)   = yGas_[4];
-    gasFractions.at(gasSp::H2O)  = yGas_[5];
-    gasFractions.at(gasSp::CO)   = yGas_[6];
-    gasFractions.at(gasSp::C2H2) = yGas_[7];
+    yGas.at(gasSp::H)    = yGas_[0];
+    yGas.at(gasSp::H2)   = yGas_[1];
+    yGas.at(gasSp::O)    = yGas_[2];
+    yGas.at(gasSp::O2)   = yGas_[3];
+    yGas.at(gasSp::OH)   = yGas_[4];
+    yGas.at(gasSp::H2O)  = yGas_[5];
+    yGas.at(gasSp::CO)   = yGas_[6];
+    yGas.at(gasSp::C2H2) = yGas_[7];
 
     //------------ PAH mass fractions
 
-    if (yPAH_.size() != (pahFractions.size()))
+    if (yPAH_.size() != (yPah.size()))
         throw domain_error("Invalid input vector size: PAH species mass fractions");
 
     for (double y : yPAH_)
@@ -109,12 +109,12 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
     if (yPAH_sum > 1.0)
         throw domain_error("Unphysical state value input: sum of PAH species mass fractions greater than one");
 
-    pahFractions.at(pahSp::C10H8)  = yPAH_[0];
-    pahFractions.at(pahSp::C12H8)  = yPAH_[1];
-    pahFractions.at(pahSp::C12H10) = yPAH_[2];
-    pahFractions.at(pahSp::C14H10) = yPAH_[3];
-    pahFractions.at(pahSp::C16H10) = yPAH_[4];
-    pahFractions.at(pahSp::C18H10) = yPAH_[5];
+    yPah.at(pahSp::C10H8)  = yPAH_[0];
+    yPah.at(pahSp::C12H8)  = yPAH_[1];
+    yPah.at(pahSp::C12H10) = yPAH_[2];
+    yPah.at(pahSp::C14H10) = yPAH_[3];
+    yPah.at(pahSp::C16H10) = yPAH_[4];
+    yPah.at(pahSp::C18H10) = yPAH_[5];
 
 }
 
