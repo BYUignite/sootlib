@@ -7,7 +7,12 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-state::state() {
+state::state(size_t nsoot_) :
+    nsoot(nsoot_), 
+    sootVar(vector<double>(nsoot_, 0.0)),
+    sootScales(vector<double>(nsoot_, 1.0)),
+    absc(vector<double>(nsoot_/2, 0.0)),
+    wts(vector<double>(nsoot_/2, 0.0)) {
 
     gasFractions = {{gasSp::C2H2, 0},
                     {gasSp::O,    0},
@@ -25,13 +30,12 @@ state::state() {
                     {pahSp::C14H10, 0},
                     {pahSp::C16H10, 0},
                     {pahSp::C18H10, 0}};
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void state::setState(double T_, double P_, double rhoGas_, double muGas_, double MWGas_,
-                     vector<double> yGas_, vector<double> yPAH_, vector<double> sootVar_, int nMom_, double cMin_) {
+                     vector<double> yGas_, vector<double> yPAH_, vector<double> sootVar_, int nsoot_, double cMin_) {
 
     //------------ scalar variable values
 
@@ -55,16 +59,12 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
 
     //------------ soot moments/bins
 
-    nMom = nMom_;
+    nsoot = nsoot_;
     for (double s : sootVar_)
         if (s < 0)
             throw domain_error("Unphysical state value input: negative soot moment(s)");
 
-    sootMom.resize(nMom);
-    absc.resize(nMom/2);
-    wts.resize(nMom/2);
-    for (int i=0; i<nMom; i++)
-        sootMom.at(i) = sootVar_.at(i);
+    sootVar = sootVar_;
 
     //------------ gas species mass fractions
 

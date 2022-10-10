@@ -15,8 +15,8 @@ oxidationModel_HACA::oxidationModel_HACA() {
 
 double oxidationModel_HACA::getOxidationSootRate(const state &state) const {
 
-    double M0 = state.sootMom[0];                           // #/m3
-    double M1 = state.sootMom[1];                           // kg/m3
+    double M0 = state.sootVar[0];                           // #/m3
+    double M1 = state.sootVar[1];                           // kg/m3
 
     //---------- calculate alpha, other constants
     double RT = 1.9872036E-3 * state.T;            // R (=) kcal/mol

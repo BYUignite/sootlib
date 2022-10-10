@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
     //---------- set up thermodynamic state variables
 
     // create state object
-    state S = state();
+    state S = state(N);
 
     // specify some state variables
 

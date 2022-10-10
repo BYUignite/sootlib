@@ -6,16 +6,16 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
- psdModel_MOMIC::psdModel_MOMIC(sourceTermStruct* sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
-         : psdModel(sourceTerms, nVar, N, G, X, C) {
+ psdModel_MOMIC::psdModel_MOMIC(sourceTermStruct* sourceTerms, int nsoot_, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
+         : psdModel(sourceTerms, nsoot_, N, G, X, C) {
 
-     if (nVar < 1)
+     if (nsoot_ < 1)
          throw runtime_error("Invalid number of soot moments requested");
 
-     nMom = nVar;
+     nsoot = nsoot_;
 
      // initialize sourceTerms soot variable
-     sourceTerms->sootSourceTerms.resize(nMom, 0);
+     sourceTerms->sootSourceTerms.resize(nsoot, 0);
 
      // note nucleation mech in case PAH is needed
      this->nucleationMechanism = N;
@@ -28,9 +28,9 @@ using namespace soot;
 void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms) const {
 
     //---------- get moment values
-    vector<double> Mtemp(nMom,0);
-    for (int i=0; i<nMom; i++)
-        Mtemp.at(i) = state.sootMom.at(i);
+    vector<double> Mtemp(nsoot,0);
+    for (int i=0; i<nsoot; i++)
+        Mtemp.at(i) = state.sootVar.at(i);
 
     downselectIfNeeded(Mtemp);
     int N = Mtemp.size();

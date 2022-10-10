@@ -18,7 +18,7 @@ class psdModel_SECT : public sootModel {
 
 private:
 
-    size_t nBins;
+    size_t nsoot;
 
 //////////////// MEMBER FUNCTIONS /////////////////
 

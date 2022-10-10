@@ -43,7 +43,7 @@ void sootModel::setSourceTerms(state& state) {
 
     //-----------  reset source term variable values to zero
 
-    for(int i=0; i < psd->nMom; i++)
+    for(int i=0; i < psd->nsoot; i++)
         sourceTerms->sootSourceTerms.at(i) = 0;
 
     for (auto const& x : sourceTerms->gasSourceTerms) {

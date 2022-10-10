@@ -14,6 +14,6 @@ growthModel_LIN::growthModel_LIN() {
 
 double growthModel_LIN::getGrowthSootRate(const state &state) const {
 
-    return 0.1E-11 * exp(-12100.0 / state.T) * state.getGasSpC(gasSp::C2H2) * state.sootMom[0] * 2 * gasSpMW.at(gasSp::C);     // kg/m2*s;
+    return 0.1E-11 * exp(-12100.0 / state.T) * state.getGasSpC(gasSp::C2H2) * state.sootVar[0] * 2 * gasSpMW.at(gasSp::C);     // kg/m2*s;
 
 }

@@ -26,11 +26,11 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-psdModel::psdModel(sourceTermStruct* sourceTerms, int nVar, 
+psdModel::psdModel(sourceTermStruct* sourceTerms, int nsoot_, 
                    nucleationMech N, growthMech G, 
                    oxidationMech X, coagulationMech C) {
 
-    nMom = nVar;
+    nsoot = nsoot_;
 
     //---------- set nucleation model
 

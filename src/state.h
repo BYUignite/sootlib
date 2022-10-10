@@ -2,6 +2,8 @@
 
 #include "constants.h"
 
+#include <vector>
+
 namespace soot {
 
 class state {
@@ -12,11 +14,13 @@ class state {
 
         std::map<gasSp, double>      gasFractions;
         std::map<pahSp, double>      pahFractions;
-        std::vector<double>          sootMom;
-        int                          nMom;
+        std::vector<double>          sootVar;
+        int                          nsoot;
 
-        std::vector<double>          absc;
-        std::vector<double>          wts;
+        std::vector<double>          absc;                 // moment abscissas
+        std::vector<double>          wts;                  // moment weights
+
+        std::vector<double>          sootScales;           // for external numerical solvers
 
         double T = 0;
         double P = 0;
@@ -51,16 +55,18 @@ class state {
          */
         void setState(double T_, double P_, double rhoGas_, double muGas_, double MWGas_,
                       std::vector<double> yGas_, std::vector<double> yPAH_, 
-                      std::vector<double> sootVar_, int nMom, double cMin_ = 100);
+                      std::vector<double> sootVar_, int nsoot, double cMin_ = 100);
 
-        double getGasSpC(gasSp sp)  const { return rhoGas * gasFractions.at(sp) / gasSpMW.at(sp); };
-        double getGasSpP(gasSp sp)  const { return gasFractions.at(sp) * MWGas / gasSpMW.at(sp) * P; };
+        double getGasSpC(gasSp sp)  const { return rhoGas * gasFractions.at(sp) / gasSpMW.at(sp); }
+        double getGasSpP(gasSp sp)  const { return gasFractions.at(sp) * MWGas / gasSpMW.at(sp) * P; }
 
-        double getGasMeanFreePath() const { return muGas / rhoGas * sqrt(M_PI * MWGas / (2.0 * Rg * T)); };
+        double getGasMeanFreePath() const { return muGas / rhoGas * sqrt(M_PI * MWGas / (2.0 * Rg * T)); }
 
-        double get_pahSpC(pahSp sp) const { return rhoGas * pahFractions.at(sp) / pahSpMW.at(sp); };
-        double get_pahSpP(pahSp sp) const { return pahFractions.at(sp) * MWGas / pahSpMW.at(sp) * P; };
-        double get_pahSpN(pahSp sp) const { return rhoGas * pahFractions.at(sp) / pahSpMW.at(sp) * Na; };
+        double get_pahSpC(pahSp sp) const { return rhoGas * pahFractions.at(sp) / pahSpMW.at(sp); }
+        double get_pahSpP(pahSp sp) const { return pahFractions.at(sp) * MWGas / pahSpMW.at(sp) * P; }
+        double get_pahSpN(pahSp sp) const { return rhoGas * pahFractions.at(sp) / pahSpMW.at(sp) * Na; }
+
+        void setSootScales(std::vector<double> &sootScales_) { sootScales = sootScales_; }
 
         ////////////////////////////////////////////////////////////////////////////////
         /*! getParticleCollisionRate function
@@ -77,7 +83,7 @@ class state {
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-         state();                    // initializes variable and sets default values for maps
+         state(size_t nsoot_);      // initializes variable and sets default values for maps
         ~state() = default;
 
 };

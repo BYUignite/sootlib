@@ -16,8 +16,7 @@ class psdModel {
 
 public:
 
-    int nMom;                   // for moment models
-    int nBin;                   // for sectional models
+    int nsoot;                  // number of soot variables: moments or sections
 
     nucleationModel*    nuc;    // pointers to mechanisms
     growthModel*        grw;

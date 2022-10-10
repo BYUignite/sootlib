@@ -5,19 +5,19 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-psdModel_MONO::psdModel_MONO(sourceTermStruct* sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
-             : psdModel(sourceTerms, nVar, N, G, X, C) {
+psdModel_MONO::psdModel_MONO(sourceTermStruct* sourceTerms, int nsoot_, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
+             : psdModel(sourceTerms, nsoot_, N, G, X, C) {
 
     // warn user if wrong number of soot moments is requested
-    if (nVar != 2)
+    if (nsoot_ != 2)
         cerr << "Invalid number of soot moments requested. "
                 "MONO model will use default value of 2 soot moments." << endl;
 
     // specify number of soot moments for MONO model
-    nMom = 2;
+    nsoot = 2;
 
     // initialize sourceTerms soot variable
-    sourceTerms->sootSourceTerms.resize(nMom, 0);
+    sourceTerms->sootSourceTerms.resize(nsoot, 0);
 
     // note nucleation mech in case PAH is needed
     nucleationMechanism = N;
@@ -30,8 +30,8 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     //---------- get moments
 
-    double M0 = state.sootMom[0];
-    double M1 = state.sootMom[1];
+    double M0 = state.sootVar[0];
+    double M1 = state.sootVar[1];
 
     //---------- set weights and abscissas
 
