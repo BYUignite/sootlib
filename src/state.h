@@ -83,7 +83,7 @@ class state {
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-         state(size_t nsoot_);      // initializes variable and sets default values for maps
+         state(size_t nsoot_=0);      // initializes variable and sets default values for maps
         ~state() = default;
 
 };
