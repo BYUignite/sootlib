@@ -120,33 +120,3 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double state::getParticleCollisionRate(double m1, double m2) const {
-
-    if (m1 < 0 || m2 < 0)
-        throw domain_error("Unphysical input value in getParticleCollisionRate: m1 and m2 must be greater than zero");
-    else if (m1 == 0 || m2 == 0)
-        return 0;
-
-    if (isnan(getGasMeanFreePath()))
-        throw domain_error("getParticleCollisionRate error: thermodynamic state variables not set");
-
-    double Dp1 = pow(6 * abs(m1) / M_PI / rhoSoot, 1.0 / 3);
-    double Dp2 = pow(6 * abs(m2) / M_PI / rhoSoot, 1.0 / 3);
-
-    //------------ free molecular rate
-    double m12 = m1+m2 != 0 ? abs(m1 * m2 / (m1 + m2)) : 0;
-    double beta_12_FM = eps_c * sqrt(M_PI * kb * T * 0.5 / m12) * pow(Dp1 + Dp2, 2);
-
-    //------------ continuum rate
-    double Kn1 = 2 * getGasMeanFreePath() / Dp1;
-    double Kn2 = 2 * getGasMeanFreePath() / Dp2;
-
-    double Cc1 = 1 + Kn1 * (1.257 + 0.4 * exp(-1.1 / Kn1));   // Seinfeld p. 372 eq. 9.34. This is for air at 298 K, 1 atm
-    double Cc2 = 1 + Kn2 * (1.257 + 0.4 * exp(-1.1 / Kn2));   // for D<<mfp_g, Cc = 1 + 1.657*Kn; Seinfeld p. 380: 10% error at Kn=1, 0% at Kn=0.01, 100
-
-    double beta_12_C = 2 * kb * T / (3 * muGas) * (Cc1 / Dp1 + Cc2 / Dp1) * (Dp1 + Dp2);
-
-    //------------ return harmonic mean
-    return beta_12_FM * beta_12_C / (beta_12_FM + beta_12_C);
-
-}

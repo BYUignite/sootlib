@@ -68,19 +68,6 @@ class state {
 
         void setSootScales(std::vector<double> &sootScales_) { sootScales = sootScales_; }
 
-        ////////////////////////////////////////////////////////////////////////////////
-        /*! getParticleCollisionRate function
-         *
-         *      Returns the value of the collision rate function beta in m3/#*s. See
-         *      Frenklach & Wang (1994) "Detailed mechanism and modeling of soot particle
-         *      formation" in Soot Formation in Combustion, pp. 165-192.
-         *
-         *      @param m1               \input      first particle size (kg)
-         *      @param m2               \input      second particle size (kg)
-         *
-         */
-        double getParticleCollisionRate(double m1, double m2) const;
-
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
          state(size_t nsoot_=0);      // initializes variable and sets default values for maps

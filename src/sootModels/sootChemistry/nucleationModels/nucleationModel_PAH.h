@@ -2,6 +2,7 @@
 
 #include "sootModels/sootChemistry/nucleationModels/nucleationModel.h"
 #include "state.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel_HM.h"
 
 namespace soot {
 
@@ -19,6 +20,7 @@ class nucleationModel_PAH : public nucleationModel {
 //////////////// DATA MEMBERS /////////////////////
 
 public:
+    coagulationModel_HM coagHM;
 
 //////////////// MEMBER FUNCTIONS /////////////////
 

@@ -69,10 +69,10 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
     // Dimer creation rate = dimer destruction from self collision + from soot collision
     // wDotD = beta_DD*[D]^2 + sum(beta_DS*w_i)*[D]
 
-    double beta_DD = state.getParticleCollisionRate(mDimer, mDimer);        // dimer self-collision rate
+    double beta_DD = coagHM.getCoagulationSootRate(state, mDimer, mDimer);        // dimer self-collision rate
     double I_beta_DS = 0.0;                                                 // sum of dimer-soot collision rates
     for (int i = 0; i < state.absc.size(); i++)                                     // loop over soot "particles" (abscissas)
-        I_beta_DS += abs(state.wts.at(i)) * state.getParticleCollisionRate(mDimer, state.absc.at(i));
+        I_beta_DS += abs(state.wts.at(i)) * coagHM.getCoagulationSootRate(state, mDimer, state.absc.at(i));
 
     //------------- solve quadratic for D: beta_DD*(D^2) + I_beta_DS*(D) - wDotD = 0
     // See Numerical Recipes 3rd ed. Sec 5.6 page 227.
