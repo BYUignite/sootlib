@@ -60,7 +60,7 @@ class state {
         double getGasSpC(gasSp sp)  const { return rhoGas * yGas.at(sp) / gasSpMW.at(sp); }
         double getGasSpP(gasSp sp)  const { return yGas.at(sp) * MWGas / gasSpMW.at(sp) * P; }
 
-        double getGasMeanFreePath() const { return muGas / rhoGas * sqrt(M_PI * MWGas / (2.0 * Rg * T)); }
+        double getGasMeanFreePath() const { return muGas/rhoGas*sqrt(M_PI*MWGas/(2.0*Rg*T)); }
 
         double get_pahSpC(pahSp sp) const { return rhoGas * yPah.at(sp) / pahSpMW.at(sp); }
         double get_pahSpP(pahSp sp) const { return yPah.at(sp) * MWGas / pahSpMW.at(sp) * P; }

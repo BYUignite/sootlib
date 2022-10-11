@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     nucleationMech  n = nucleationMech::LL;             // Nucleation: NONE, LL, LIN, PAH
     growthMech      g = growthMech::LL;                 // Surface growth: NONE, LL, LIN, HACA
     oxidationMech   x = oxidationMech::LL;              // Oxidation: NONE, LL, LEE_NEOH, NSC_NEOH, HACA
-    coagulationMech c = coagulationMech::LL;            // Coagulation: NONE, LL, FUCHS, FRENK
+    coagulationMech c = coagulationMech::FM;            // Coagulation: NONE, LL, FUCHS, FRENK
 
     // define particle size distribution (PSD) treatment
     psdMech         PSD = psdMech::MOMIC;                  // PSD mechanisms: MONO, LOGN, QMOM, MOMIC

@@ -17,9 +17,10 @@
 #include "sootModels/sootChemistry/oxidationModels/oxidationModel_NSC_NEOH.h"
 
 #include "sootModels/sootChemistry/coagulationModels/coagulationModel_NONE.h"
-#include "sootModels/sootChemistry/coagulationModels/coagulationModel_LL.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel_FM.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel_CONTINUUM.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel_HM.h"
 #include "sootModels/sootChemistry/coagulationModels/coagulationModel_FUCHS.h"
-#include "sootModels/sootChemistry/coagulationModels/coagulationModel_FRENK.h"
 
 using namespace std;
 using namespace soot;
@@ -66,10 +67,11 @@ psdModel::psdModel(sourceTermStruct* sourceTerms, int nsoot_,
     //---------- set coagulation model
 
     switch (C) {
-        case coagulationMech::NONE  : coa = new coagulationModel_NONE();  break;
-        case coagulationMech::LL    : coa = new coagulationModel_LL();    break;
-        case coagulationMech::FUCHS : coa = new coagulationModel_FUCHS(); break;
-        case coagulationMech::FRENK : coa = new coagulationModel_FRENK(); break;
+        case coagulationMech::NONE      : coa = new coagulationModel_NONE();      break;
+        case coagulationMech::FM        : coa = new coagulationModel_FM();        break;
+        case coagulationMech::CONTINUUM : coa = new coagulationModel_CONTINUUM(); break;
+        case coagulationMech::HM        : coa = new coagulationModel_HM();        break;
+        case coagulationMech::FUCHS     : coa = new coagulationModel_FUCHS();     break;
         default: throw domain_error("Invalid coagulation model requested");
     }
 }

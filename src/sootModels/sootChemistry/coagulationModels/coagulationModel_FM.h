@@ -6,20 +6,20 @@
 namespace soot {
 
 ////////////////////////////////////////////////////////////////////////////////
-/*! Coagulation by Frenklach
+/*! Coagulation: Free Molecular Regime
  *
  *      Implementation of coagulationModel interface
  *
- *      Returns the value of the collision rate function beta in m3/#*s. See
- *      Frenklach (2002) "Reaction mechanism of soot formation in flames"
- *      Phys. Chem. Chem. Phys. 4 p 2028–2037.
+ *      Returns the value of the collision rate function (beta, or K12) (=) m3/#*s.
+
+ *      From Seinfeld and Pandis Atmospheric Chemistry book (2016), pg. 548, chp 13.
  *
  *      @param MomentState&     \input      local moment state; need M0 and M1
  *      @param m1               \input      first particle size (kg)
  *      @param m2               \input      second particle size (kg)
  *
  */
-class coagulationModel_FRENK : public coagulationModel {
+class coagulationModel_FM : public coagulationModel {
 
 //////////////// DATA MEMBERS /////////////////////
 
@@ -38,7 +38,7 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-     coagulationModel_FRENK() = default;
-    ~coagulationModel_FRENK() override = default;
+    coagulationModel_FM() = default;
+    ~coagulationModel_FM() override = default;
 };
 } // namespace soot

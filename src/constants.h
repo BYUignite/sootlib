@@ -20,6 +20,11 @@ const double Df = 1.8;              ///< soot fractal dimension
 const double rhoSoot = 1850;        ///< soot particle density
 const double bCoag = 0.8536;        ///< coagulation constant, bounded 1/sqrt(2) < bCoag < 1
 
+const double onethird = 1.0/3.0;
+const double twothird = 2.0/3.0;
+const double root2    = sqrt(2.0);
+const double mmin = 2E-26;          ///< mass of a carbon atom (kg)
+
 //////////////////// gas species list and properties
 
 enum class gasSp { C2H2, O, O2, H, H2, OH, H2O, CO, C, C6H6 };
@@ -145,12 +150,13 @@ inline oxidationMech str2oxiMech(const std::string& str) {
     else throw std::domain_error ("Invalid value provided to str2oxiMech function");
 };
 
-enum class coagulationMech { NONE, LL, FUCHS, FRENK };
+enum class coagulationMech { NONE, FM, CONTINUUM, HM, FUCHS };
 inline coagulationMech str2coaMech(const std::string& str) {
-    if(str == "NONE")       return coagulationMech::NONE;
-    else if(str == "LL")    return coagulationMech::LL;
-    else if(str == "FUCHS") return coagulationMech::FUCHS;
-    else if(str == "FRENK") return coagulationMech::FRENK;
+    if(str == "NONE")           return coagulationMech::NONE;
+    else if(str == "FM")        return coagulationMech::FM;
+    else if(str == "CONTINUUM") return coagulationMech::CONTINUUM;
+    else if(str == "HM")        return coagulationMech::HM;
+    else if(str == "FUCHS")     return coagulationMech::FUCHS;
     else throw std::domain_error ("Invalid value provided to str2coaMech function");
 };
 
