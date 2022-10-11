@@ -15,7 +15,7 @@ const double Na = 6.02214076E26;    ///< Avogadro's constant: #/kmol
 const double kb = 1.380649E-23;     ///< Boltzmann constant = Rg/Na: J/#*K
 const double Rg = Na*kb;            ///< Universal gas constant
 
-const double eps_c = 2.2;           ///< coagulation constant/van der Waals enhancement factor
+const double eps_c = 2.2;           ///< coagulation constant/van der Waals enhancement factor: Harris and Kennedy CST 59:443-454 (1988) https://doi.org/10.1080/00102208808947110
 const double Df = 1.8;              ///< soot fractal dimension
 const double rhoSoot = 1850;        ///< soot particle density
 const double bCoag = 0.8536;        ///< coagulation constant, bounded 1/sqrt(2) < bCoag < 1
