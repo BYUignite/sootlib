@@ -1,6 +1,6 @@
 #pragma once
 
-#include "constants.h"
+#include "sootDefs.h"
 #include "state.h"
 
 #include "sootModels/sootChemistry/nucleationModels/nucleationModel.h"

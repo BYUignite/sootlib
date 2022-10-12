@@ -1,5 +1,5 @@
 #include "sootModels/sootChemistry/growthModels/growthModel.h"
-#include "constants.h"
+#include "sootDefs.h"
 
 using namespace std;
 using namespace soot;

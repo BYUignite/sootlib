@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "constants.h"
+#include "sootDefs.h"
 #include "sootModel.h"
 #include "state.h"
 

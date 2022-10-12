@@ -1,7 +1,7 @@
 #pragma once
 
 #include "sootModels/psdModels/psdModel.h"
-#include "constants.h"
+#include "sootDefs.h"
 #include "state.h"
 
 namespace soot {

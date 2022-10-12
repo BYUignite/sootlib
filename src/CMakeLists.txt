@@ -2,14 +2,14 @@
 
 # -------- library targets --------
 
-add_library(sootModel constants.h state.cc state.h sootModel.cc sootModel.h)
+add_library(sootModel sootDefs.h state.cc state.h sootModel.cc sootModel.h)
 add_library(sootlib::sootModel ALIAS sootModel)    # alias for use as imported target
 
 # -------- target properties --------
 
 target_compile_features(sootModel PUBLIC cxx_std_11)
 
-set_target_properties(sootModel PROPERTIES PUBLIC_HEADER "state.h;sootModel.h;constants.h")
+set_target_properties(sootModel PROPERTIES PUBLIC_HEADER "state.h;sootModel.h;sootDefs.h")
 
 #------ src files ------------------
 

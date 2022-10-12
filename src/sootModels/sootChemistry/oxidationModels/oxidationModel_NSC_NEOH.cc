@@ -1,5 +1,5 @@
 #include "sootModels/sootChemistry/oxidationModels/oxidationModel_NSC_NEOH.h"
-#include "constants.h"
+#include "sootDefs.h"
 
 using namespace std;
 using namespace soot;

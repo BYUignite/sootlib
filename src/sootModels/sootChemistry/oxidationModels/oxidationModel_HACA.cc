@@ -1,5 +1,5 @@
 #include "sootModels/sootChemistry/oxidationModels/oxidationModel_HACA.h"
-#include "constants.h"
+#include "sootDefs.h"
 
 using namespace std;
 using namespace soot;
