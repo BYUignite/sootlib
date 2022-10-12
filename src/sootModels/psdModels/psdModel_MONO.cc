@@ -90,12 +90,13 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     double C0 = 0;
     double C1 = 0;
 
-    C0 = -0.5 * coag * state.wts.at(0) * state.wts.at(0);
+    //C0 = -0.5 * coag * state.wts.at(0) * state.wts.at(0);
+    C0 = -coag * state.wts.at(0) * state.wts.at(0);
 
     //---------- combine to make soot source terms
 
-    sourceTerms->sootSourceTerms.at(0) = (N0 + Cnd0 + G0 + X0 + C0) / state.rhoGas;
-    sourceTerms->sootSourceTerms.at(1) = (N1 + Cnd1 + G1 + X1 + C1) / state.rhoGas;
+    sourceTerms->sootSourceTerms.at(0) = (N0 + Cnd0 + G0 + X0 + C0);      // #/m3*s
+    sourceTerms->sootSourceTerms.at(1) = (N1 + Cnd1 + G1 + X1 + C1);      // kg/m3*s
 
     //---------- get gas source terms
 

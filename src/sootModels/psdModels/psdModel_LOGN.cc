@@ -134,9 +134,9 @@ void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     //---------- combine to make soot source terms
 
-    sourceTerms->sootSourceTerms.at(0) = (N0 + G0 + Cnd0 - X0 + C0) / state.rhoGas;
-	sourceTerms->sootSourceTerms.at(1) = (N1 + G1 + Cnd1 - X1 + C1) / state.rhoGas;
-	sourceTerms->sootSourceTerms.at(2) = (N2 + G2 + Cnd2 - X2 + C2) / state.rhoGas;
+    sourceTerms->sootSourceTerms.at(0) = (N0 + G0 + Cnd0 - X0 + C0);
+	sourceTerms->sootSourceTerms.at(1) = (N1 + G1 + Cnd1 - X1 + C1);
+	sourceTerms->sootSourceTerms.at(2) = (N2 + G2 + Cnd2 - X2 + C2);
 
 	//---------- get gas source terms
 
