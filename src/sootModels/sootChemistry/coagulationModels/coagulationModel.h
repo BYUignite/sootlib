@@ -9,11 +9,11 @@ namespace soot {
  */
 class coagulationModel {
 
-//////////////// DATA MEMBERS /////////////////////
+    //////////////// DATA MEMBERS /////////////////////
 
 private:
 
-//////////////// MEMBER FUNCTIONS /////////////////
+    //////////////// MEMBER FUNCTIONS /////////////////
 
 public:
 
@@ -26,9 +26,11 @@ public:
      * @param m2
      * @return
      */
-     virtual double getCoagulationSootRate(const state& state, double m1, double m2) const = 0;
+    virtual double getCoagulationSootRate(const state& state, double m1, double m2) const = 0;
 
-//////////////// CONSTRUCTOR FUNCTIONS ////////////
+    coagulationMech mechType;
+
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     coagulationModel() = default;
     virtual ~coagulationModel() = default;      // Virtual deconstructor since interface will be used in the form of pointers

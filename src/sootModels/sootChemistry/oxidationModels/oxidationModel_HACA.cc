@@ -11,6 +11,7 @@ oxidationModel_HACA::oxidationModel_HACA() {
     oxidationRxnRatios.at(gasSp::CO)   =  1;
     oxidationRxnRatios.at(gasSp::C)    =  1;
 
+    mechType = oxidationMech::HACA;
 }
 
 double oxidationModel_HACA::getOxidationSootRate(const state &state) const {

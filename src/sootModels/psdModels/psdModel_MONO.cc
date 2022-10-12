@@ -5,23 +5,21 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-psdModel_MONO::psdModel_MONO(sourceTermStruct* sourceTerms, int nsoot_, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
+psdModel_MONO::psdModel_MONO(sourceTermStruct* sourceTerms, int nsoot_, 
+                             nucleationMech N, 
+                             growthMech G, 
+                             oxidationMech X, 
+                             coagulationMech C)
              : psdModel(sourceTerms, nsoot_, N, G, X, C) {
 
-    // warn user if wrong number of soot moments is requested
     if (nsoot_ != 2)
         cerr << "Invalid number of soot moments requested. "
                 "MONO model will use default value of 2 soot moments." << endl;
 
-    // specify number of soot moments for MONO model
     nsoot = 2;
-
-    // initialize sourceTerms soot variable
     sourceTerms->sootSourceTerms.resize(nsoot, 0);
 
-    // note nucleation mech in case PAH is needed
-    nucleationMechanism = N;
-
+    mechType = psdMech::MONO;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +58,7 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     double Cnd0 = 0;
     double Cnd1 = 0;
 
-    if (nucleationMechanism == nucleationMech::PAH) {
+    if (nuc->mechType == nucleationMech::PAH) {
 
         double nDimer = nuc->DIMER.nDimer;
         double mDimer = nuc->DIMER.mDimer;
@@ -148,7 +146,7 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     //---------- get PAH source terms
 
-    if(nucleationMechanism == nucleationMech::PAH) {
+    if(nuc->mechType == nucleationMech::PAH) {
         for (auto const& x : sourceTerms->pahSourceTerms) {
             pahSp sp = x.first;
             sourceTerms->pahSourceTerms.at(sp) = nuc->getNucleationPahRates(state).pahSourceTerms.at(sp);

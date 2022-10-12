@@ -13,6 +13,8 @@ public:
 
     std::map<gasSp, double>   growthRxnRatios;
 
+    growthMech mechType;
+
 //////////////// MEMBER FUNCTIONS /////////////////
 
     virtual double getGrowthSootRate(const state& state) const = 0;

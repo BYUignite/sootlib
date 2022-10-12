@@ -19,9 +19,7 @@ psdModel_LOGN::psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar, nucleation
     // initialize sourceTerms soot variable
     sourceTerms->sootSourceTerms.resize(nsoot, 0);
 
-    // note nucleation mech in case PAH is needed
-    nucleationMechanism = N;
-
+    mechType = psdMech::LOGN;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +62,7 @@ void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     double Jnuc = nuc->getNucleationSootRate(state);
 
     // PAH nucleation and condensation; getNucleationSootRate function call above still required to set DIMER variables
-    if (nucleationMechanism == nucleationMech::PAH) {
+    if (nuc->mechType == nucleationMech::PAH) {
 
         double mDimer = nuc->DIMER.mDimer;
         double nDimer = nuc->DIMER.nDimer;
@@ -187,7 +185,7 @@ void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     //---------- get PAH source terms
 
-    if(nucleationMechanism == nucleationMech::PAH) {
+    if(nuc->mechType == nucleationMech::PAH) {
         for (auto const& x : sourceTerms->pahSourceTerms) {
             pahSp sp = x.first;
             sourceTerms->pahSourceTerms.at(sp) = nuc->getNucleationPahRates(state).pahSourceTerms.at(sp);

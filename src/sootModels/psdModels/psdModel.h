@@ -23,6 +23,8 @@ public:
     oxidationModel*     oxi;
     coagulationModel*   coa;
 
+    psdMech mechType;
+
 //////////////// MEMBER FUNCTIONS /////////////////
 
     virtual void setSourceTerms(state& state, sourceTermStruct* sourceTerms) const = 0;

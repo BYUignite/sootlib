@@ -13,6 +13,8 @@ public:
 
     std::map<gasSp, double>   oxidationRxnRatios;
 
+    oxidationMech mechType;
+
 //////////////// MEMBER FUNCTIONS /////////////////
 
     virtual double getOxidationSootRate(const state &state) const = 0;

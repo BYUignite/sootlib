@@ -12,6 +12,7 @@ nucleationModel_PAH::nucleationModel_PAH() : nucleationModel () {
     DIMER.nDimer = 0;
     DIMER.wDotD  = 0;
 
+    mechType = nucleationMech::PAH;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

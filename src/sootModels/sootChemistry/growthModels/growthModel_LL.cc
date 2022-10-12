@@ -10,6 +10,7 @@ growthModel_LL::growthModel_LL() {
     growthRxnRatios.at(gasSp::H2)   =  1;
     growthRxnRatios.at(gasSp::C)    =  2;
 
+    mechType = growthMech::LL;
 }
 
 double growthModel_LL::getGrowthSootRate(const state &state) const {

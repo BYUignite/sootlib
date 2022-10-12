@@ -11,6 +11,7 @@ growthModel_HACA::growthModel_HACA() {
     growthRxnRatios.at(gasSp::CO)   =  3;
     growthRxnRatios.at(gasSp::C)    =  2;
 
+    mechType = growthMech::HACA;
 }
 
 double growthModel_HACA::getGrowthSootRate(const state& state) const {

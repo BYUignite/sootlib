@@ -12,6 +12,7 @@ oxidationModel_NSC_NEOH::oxidationModel_NSC_NEOH() {
     oxidationRxnRatios.at(gasSp::O2) = -0.5;
     oxidationRxnRatios.at(gasSp::C)  = -2;
 
+    mechType = oxidationMech::NSC_NEOH;
 }
 
 double oxidationModel_NSC_NEOH::getOxidationSootRate(const state &state) const {

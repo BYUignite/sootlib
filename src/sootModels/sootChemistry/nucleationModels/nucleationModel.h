@@ -16,6 +16,8 @@ public:
     std::map<gasSp, double>   nucleationRxnRatios;
     std::map<pahSp, double>   nucleationPahRxnRates;
 
+    nucleationMech mechType;
+
 //////////////// MEMBER FUNCTIONS /////////////////
 
     virtual double getNucleationSootRate(state &state) = 0;

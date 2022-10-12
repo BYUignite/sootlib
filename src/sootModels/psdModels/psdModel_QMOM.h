@@ -15,10 +15,6 @@ class psdModel_QMOM : public psdModel {
 
 //////////////// DATA MEMBERS /////////////////////
 
-public:
-
-    nucleationMech nucleationMechanism;
-
 //////////////// MEMBER FUNCTIONS /////////////////
 
 private:

@@ -17,9 +17,6 @@ class psdModel_MOMIC : public psdModel {
 
 private:
 
-    nucleationMech  nucleationMechanism;
-    coagulationMech coagulationMechanism;
-
 //////////////// MEMBER FUNCTIONS /////////////////
 
     ////////////////////////////////////////////////////////////////////////////////

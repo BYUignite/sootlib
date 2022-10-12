@@ -40,7 +40,9 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-     coagulationModel_HM() = default;
+     coagulationModel_HM() {
+        mechType = coagulationMech::HM;
+    }
     ~coagulationModel_HM() override = default;
 };
 } // namespace soot

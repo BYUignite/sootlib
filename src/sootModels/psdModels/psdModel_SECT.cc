@@ -11,6 +11,8 @@ psdModel_SECT::psdModel_SECT(size_t n) {
     // initialize sourceTerms soot variable
     for (int i=0; i<nsoot; i++)
         sourceTerms->sootSourceTerms.push_back(0);
+
+    mechType = psdMech::SECT;
 }
 
 void psdModel_SECT::setSourceTerms(state& state, std::ostream* out) const {

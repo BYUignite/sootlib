@@ -17,10 +17,7 @@ using namespace soot;
      // initialize sourceTerms soot variable
      sourceTerms->sootSourceTerms.resize(nsoot, 0);
 
-     // note nucleation mech in case PAH is needed
-     this->nucleationMechanism = N;
-     this->coagulationMechanism = C;
-
+    mechType = psdMech::MOMIC;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +50,7 @@ void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms)
 
     vector<double> Mcnd(N, 0);
 
-    if (nucleationMechanism == nucleationMech::PAH) {
+    if (nuc->mechType == nucleationMech::PAH) {
         for (size_t i = 1; i < N; i++)
             Mcnd.at(i) = MOMICCoagulationRate(state, (int) i, Mtemp) * nuc->DIMER.nDimer * nuc->DIMER.mDimer * i;
     }
@@ -77,7 +74,7 @@ void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms)
 
     vector<double> Mcoa(N, 0);
 
-    if (coagulationMechanism != coagulationMech::NONE) {
+    if (coa->mechType != coagulationMech::NONE) {
         for (size_t i = 0; i < N; i++)
             Mcoa.at(i) = MOMICCoagulationRate(state, i, Mtemp);
     }
@@ -136,7 +133,7 @@ void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms)
 
 	//---------- get PAH source terms
 
-	if(nucleationMechanism == nucleationMech::PAH) {
+	if(nuc->mechType == nucleationMech::PAH) {
 		for (auto const& x : sourceTerms->pahSourceTerms) {
 			pahSp sp = x.first;
 			sourceTerms->pahSourceTerms.at(sp) = nuc->getNucleationPahRates(state).pahSourceTerms.at(sp);

@@ -21,9 +21,9 @@ namespace soot {
  */
 class coagulationModel_CONTINUUM : public coagulationModel {
 
-//////////////// DATA MEMBERS /////////////////////
+    //////////////// DATA MEMBERS /////////////////////
 
-//////////////// MEMBER FUNCTIONS /////////////////
+    //////////////// MEMBER FUNCTIONS /////////////////
 
 public:
     /**
@@ -34,11 +34,13 @@ public:
      * @param m2
      * @return
      */
-     double getCoagulationSootRate(const state& state, double m1, double m2) const override;
+    double getCoagulationSootRate(const state& state, double m1, double m2) const override;
 
-//////////////// CONSTRUCTOR FUNCTIONS ////////////
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    coagulationModel_CONTINUUM() = default;
+    coagulationModel_CONTINUUM() {
+        mechType = coagulationMech::CONTINUUM;
+    }
     ~coagulationModel_CONTINUUM() override = default;
 };
 } // namespace soot

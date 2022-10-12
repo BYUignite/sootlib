@@ -12,6 +12,7 @@ nucleationModel_LIN::nucleationModel_LIN() : nucleationModel () {
     nucleationRxnRatios.at(gasSp::H2)   =  1;
     nucleationRxnRatios.at(gasSp::C)    =  2;
 
+    mechType = nucleationMech::LIN;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

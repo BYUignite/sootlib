@@ -20,9 +20,7 @@ psdModel_QMOM::psdModel_QMOM(sourceTermStruct* sourceTerms, int nsoot_, nucleati
     // initialize sourceTerms soot variable
     sourceTerms->sootSourceTerms.resize(nsoot, 0);
 
-    // note nucleation mech in case PAH is needed
-    this->nucleationMechanism = N;
-
+    mechType = psdMech::QMOM;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -58,7 +56,7 @@ void psdModel_QMOM::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     //---------- PAH condensation terms
 
     vector<double> cndSrcM(nsoot, 0);
-    if (nucleationMechanism == nucleationMech::PAH) {
+    if (nuc->mechType == nucleationMech::PAH) {
         for (size_t i = 1; i < nsoot; i++) {                             // M0 = 0.0 for condensation by definition
             for (size_t j = 0; j < state.absc.size(); j++)
                 cndSrcM.at(i) += coa->getCoagulationSootRate(state, nuc->DIMER.mDimer, state.absc.at(j)) * pow(state.absc.at(j), i - 1) * state.wts.at(j);
@@ -153,7 +151,7 @@ void psdModel_QMOM::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     //---------- get PAH source terms
 
-    if(nucleationMechanism == nucleationMech::PAH) {
+    if(nuc->mechType == nucleationMech::PAH) {
         for (auto const& x : sourceTerms->pahSourceTerms) {
             pahSp sp = x.first;
             sourceTerms->pahSourceTerms.at(sp) = nuc->getNucleationPahRates(state).pahSourceTerms.at(sp);

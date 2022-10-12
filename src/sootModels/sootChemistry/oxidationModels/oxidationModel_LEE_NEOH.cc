@@ -11,6 +11,7 @@ oxidationModel_LEE_NEOH::oxidationModel_LEE_NEOH() {
     oxidationRxnRatios.at(gasSp::O2) = -0.5;
     oxidationRxnRatios.at(gasSp::C)  = -2;
 
+    mechType = oxidationMech::LEE_NEOH;
 }
 
 double oxidationModel_LEE_NEOH::getOxidationSootRate(const state &state) const {

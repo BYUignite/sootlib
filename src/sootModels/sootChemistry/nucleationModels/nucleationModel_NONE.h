@@ -7,19 +7,21 @@ namespace soot {
 
 class nucleationModel_NONE : public nucleationModel {
 
-//////////////// DATA MEMBERS /////////////////////
+    //////////////// DATA MEMBERS /////////////////////
 
 private:
 
-//////////////// MEMBER FUNCTIONS /////////////////
+    //////////////// MEMBER FUNCTIONS /////////////////
 
 public:
 
-     double getNucleationSootRate(state &state) override { return 0; };
+    double getNucleationSootRate(state &state) override { return 0; };
 
-//////////////// CONSTRUCTOR FUNCTIONS ////////////
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-     nucleationModel_NONE() : nucleationModel() {};
+    nucleationModel_NONE() : nucleationModel() {
+        mechType = soot::nucleationMech::NONE;
+    };
     ~nucleationModel_NONE() override = default;
 
 };
