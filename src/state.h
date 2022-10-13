@@ -62,9 +62,9 @@ class state {
 
         double getGasMeanFreePath() const { return muGas/rhoGas*sqrt(M_PI*MWGas/(2.0*Rg*T)); }
 
-        double get_pahSpC(pahSp sp) const { return rhoGas * yPah.at(sp) / pahSpMW.at(sp); }
-        double get_pahSpP(pahSp sp) const { return yPah.at(sp) * MWGas / pahSpMW.at(sp) * P; }
-        double get_pahSpN(pahSp sp) const { return rhoGas * yPah.at(sp) / pahSpMW.at(sp) * Na; }
+        double get_pahSpC(pahSp sp) const { return rhoGas * yPah.at(sp) / pahSpMW[(int)sp]; }
+        double get_pahSpP(pahSp sp) const { return yPah.at(sp) * MWGas  / pahSpMW[(int)sp] * P; }
+        double get_pahSpN(pahSp sp) const { return rhoGas * yPah.at(sp) / pahSpMW[(int)sp] * Na; }
 
         void setSootScales(std::vector<double> &sootScales_) { sootScales = sootScales_; }
 

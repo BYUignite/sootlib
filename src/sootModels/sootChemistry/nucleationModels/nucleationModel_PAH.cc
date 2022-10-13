@@ -34,15 +34,15 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
 
         pahSp sp = x.first;
 
-        double Ni    = state.rhoGas * state.yPah.at(sp) / pahSpMW.at(sp) * Na;                          // species number density (#/m3)
-        double wdoti = pahSpGamma.at(sp) * preFac * pow(pahSpMW.at(sp)/Na, 1.0/6.0) * Ni * Ni;    // convenience variable
+        double Ni    = state.rhoGas * state.yPah.at(sp) / pahSpMW[(int)sp] * Na;                          // species number density (#/m3)
+        double wdoti = pahSpGamma.at(sp) * preFac * pow(pahSpMW[(int)sp]/Na, 1.0/6.0) * Ni * Ni;    // convenience variable
 
         wDotD      += wdoti;
-        mDimer     += wdoti * pahSpMW.at(sp)/Na;
+        mDimer     += wdoti * pahSpMW[(int)sp]/Na;
         cMin_local += wdoti * pahSpNC.at(sp);
 
         // begin updating PAH reaction ratios
-        nucleationPahRxnRates.at(sp) = wdoti * pahSpMW.at(sp) / Na;
+        nucleationPahRxnRates.at(sp) = wdoti * pahSpMW[(int)sp] / Na;
 
     }
 

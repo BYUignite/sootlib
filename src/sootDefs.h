@@ -50,32 +50,19 @@ const std::vector<double> gasSpMW{      // (kg/kmol); make sure the order corres
     12.011     // C
 };
 
-// const std::map<gasSp, double> gasSpMW = {    // (kg/kmol)
-//     {gasSp::O2,   31.998},
-//     {gasSp::O,    15.999},
-//     {gasSp::H2,   2.016},
-//     {gasSp::H,    1.008},
-//     {gasSp::OH,   17.007},
-//     {gasSp::H2O,  18.015},
-//     {gasSp::CO,   28.010},
-//     {gasSp::C2H2, 26.038},
-//     {gasSp::C6H6, 78.114},
-//     {gasSp::C,    12.011}
-// };
-
 //////////////////// PAH species list and properties for PAH nucleation and condensation
 // See Blanquart & Pitsch (2009) "A joint volume-surface-hydrogen
 // multi-variate model for soot formation"
 
 enum class pahSp{ C10H8, C12H8, C12H10, C14H10, C16H10, C18H10, size };
 
-const std::map<pahSp, double> pahSpMW = {
-    {pahSp::C10H8,  128.173},      ///< molar weight (kg/kmol)
-    {pahSp::C12H8,  152.195},
-    {pahSp::C12H10, 154.211},
-    {pahSp::C14H10, 178.233},
-    {pahSp::C16H10, 202.255},
-    {pahSp::C18H10, 226.277}
+const std::vector<double> pahSpMW = {     // (kg/kmol)
+    128.173,   // C10H8
+    152.195,   // C12H8
+    154.211,   // C12H10
+    178.233,   // C14H10
+    202.255,   // C16H10
+    226.277    // C18H10
 };
 
 const std::map<pahSp, int> pahSpNC = {{pahSp::C10H8,  10},      ///< number of carbon atoms per PAH species
