@@ -146,10 +146,7 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     //---------- get PAH source terms
 
-    if(nuc->mechType == nucleationMech::PAH) {
-        for (auto const& x : sourceTerms->pahSourceTerms) {
-            pahSp sp = x.first;
-            sourceTerms->pahSourceTerms.at(sp) = nuc->getNucleationPahRates(state).pahSourceTerms.at(sp);
-        }
-    }
+    if(nuc->mechType == nucleationMech::PAH)
+        for (int sp=0; sp<(int)pahSp::size; sp++)
+            sourceTerms->pahSourceTerms[sp] = nuc->getNucleationPahRates(state).pahSourceTerms[sp];
 }

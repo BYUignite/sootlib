@@ -71,12 +71,12 @@ int main(int argc, char** argv) {
     double S_C6H6 = SM.sourceTerms->gasSourceTerms.at(gasSp::C6H6);
 
     // PAH source terms (kg sp)/(kg gas * s)
-    double S_C10H8  = SM.sourceTerms->pahSourceTerms.at(pahSp::C10H8);
-    double S_C12H8  = SM.sourceTerms->pahSourceTerms.at(pahSp::C12H8);
-    double S_C12H10 = SM.sourceTerms->pahSourceTerms.at(pahSp::C12H10);
-    double S_C14H10 = SM.sourceTerms->pahSourceTerms.at(pahSp::C14H10);
-    double S_C16H10 = SM.sourceTerms->pahSourceTerms.at(pahSp::C16H10);
-    double S_C18H10 = SM.sourceTerms->pahSourceTerms.at(pahSp::C18H10);
+    double S_C10H8  = SM.sourceTerms->pahSourceTerms.at((int)pahSp::C10H8);
+    double S_C12H8  = SM.sourceTerms->pahSourceTerms.at((int)pahSp::C12H8);
+    double S_C12H10 = SM.sourceTerms->pahSourceTerms.at((int)pahSp::C12H10);
+    double S_C14H10 = SM.sourceTerms->pahSourceTerms.at((int)pahSp::C14H10);
+    double S_C16H10 = SM.sourceTerms->pahSourceTerms.at((int)pahSp::C16H10);
+    double S_C18H10 = SM.sourceTerms->pahSourceTerms.at((int)pahSp::C18H10);
 
     //---------- output results
     cout << setprecision(2) << fixed;

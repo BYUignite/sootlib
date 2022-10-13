@@ -51,10 +51,7 @@ void sootModel::setSourceTerms(state& state) {
         sourceTerms->gasSourceTerms.at(sp) = 0;
     }
 
-    for (auto const& x : sourceTerms->pahSourceTerms) {
-        pahSp sp = x.first;
-        sourceTerms->pahSourceTerms.at(sp) = 0;
-    }
+    sourceTerms->pahSourceTerms = vector<double>{(int)pahSp::size, 0.0};
 
     //-----------  calculate new source terms
 

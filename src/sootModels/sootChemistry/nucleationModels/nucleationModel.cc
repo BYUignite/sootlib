@@ -53,10 +53,8 @@ sourceTermStruct nucleationModel::getNucleationPahRates(const state& state) cons
 
     sourceTermStruct nucPahSourceTerms;
 
-    for (auto const& x : nucleationPahRxnRates) {
-        pahSp sp = x.first;
-        nucPahSourceTerms.pahSourceTerms.at(sp) = nucleationPahRxnRates.at(sp);
-    }
+    for (int sp=0; sp<(int)pahSp::size; sp++)
+        nucPahSourceTerms.pahSourceTerms[sp] = nucleationPahRxnRates[sp];
 
     return nucPahSourceTerms;
 }
