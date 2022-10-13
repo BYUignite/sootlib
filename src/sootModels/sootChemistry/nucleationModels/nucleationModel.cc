@@ -6,7 +6,7 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-nucleationModel::nucleationModel() {
+nucleationModel::nucleationModel() : nucleationPahRxnRates{vector<double>{(int)pahSp::size, 0.0}} {
 
     nucleationRxnRatios = {{gasSp::C2H2, 0},
                            {gasSp::O,    0},
@@ -18,13 +18,6 @@ nucleationModel::nucleationModel() {
                            {gasSp::CO,   0},
                            {gasSp::C,    1},
                            {gasSp::C6H6, 0}};
-
-    nucleationPahRxnRates = {{pahSp::C10H8,  0},
-                             {pahSp::C12H8,  0},
-                             {pahSp::C12H10, 0},
-                             {pahSp::C14H10, 0},
-                             {pahSp::C16H10, 0},
-                             {pahSp::C18H10, 0}};
 }
 
 ////////////////////////////////////////////////////////////////////////////////

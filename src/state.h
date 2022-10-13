@@ -12,8 +12,8 @@ class state {
 
     public:
 
-        std::map<gasSp, double>      yGas;
-        std::map<pahSp, double>      yPah;
+        std::vector<double>          yGas;
+        std::vector<double>          yPah;
         std::vector<double>          sootVar;
         int                          nsoot;
 
@@ -57,21 +57,28 @@ class state {
                       std::vector<double> yGas_, std::vector<double> yPAH_, 
                       std::vector<double> sootVar_, int nsoot, double cMin_ = 100);
 
-        double getGasSpC(gasSp sp)  const { return rhoGas * yGas.at(sp) / gasSpMW[(int)sp]; }
-        double getGasSpP(gasSp sp)  const { return yGas.at(sp) * MWGas / gasSpMW[(int)sp] * P; }
+        double getGasSpC(gasSp sp)  const { return rhoGas * yGas[(int)sp] / gasSpMW[(int)sp]; }
+        double getGasSpP(gasSp sp)  const { return yGas[(int)sp] * MWGas / gasSpMW[(int)sp] * P; }
 
         double getGasMeanFreePath() const { return muGas/rhoGas*sqrt(M_PI*MWGas/(2.0*Rg*T)); }
 
-        double get_pahSpC(pahSp sp) const { return rhoGas * yPah.at(sp) / pahSpMW[(int)sp]; }
-        double get_pahSpP(pahSp sp) const { return yPah.at(sp) * MWGas  / pahSpMW[(int)sp] * P; }
-        double get_pahSpN(pahSp sp) const { return rhoGas * yPah.at(sp) / pahSpMW[(int)sp] * Na; }
+        double get_pahSpC(pahSp sp) const { return rhoGas * yPah[(int)sp] / pahSpMW[(int)sp]; }
+        double get_pahSpP(pahSp sp) const { return yPah[(int)sp] * MWGas  / pahSpMW[(int)sp] * P; }
+        double get_pahSpN(pahSp sp) const { return rhoGas * yPah[(int)sp] / pahSpMW[(int)sp] * Na; }
 
         void setSootScales(std::vector<double> &sootScales_) { sootScales = sootScales_; }
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-         state(size_t nsoot_=0);      // initializes variable and sets default values for maps
-        ~state() = default;
+    state(size_t nsoot_=0) :
+        nsoot(nsoot_), 
+        sootVar(std::vector<double>(   nsoot_,           0.0)),
+        sootScales(std::vector<double>(nsoot_,           1.0)),
+        absc(std::vector<double>(      nsoot_/2,         0.0)),
+        wts(std::vector<double>(       nsoot_/2,         0.0)),
+        yGas(std::vector<double>(      (int)gasSp::size, 0.0)),
+        yPah(std::vector<double>(      (int)pahSp::size, 0.0)) { }
+    ~state() = default;
 
 };
 }     // namespace soot
