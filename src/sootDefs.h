@@ -25,22 +25,17 @@ const double twothird = 2.0/3.0;
 const double root2    = sqrt(2.0);
 const double mmin = 2E-26;          ///< mass of a carbon atom (kg)
 
+//////////////////// mechanism types
+
+enum class nucleationMech  { NONE, LL,   LIN,        PAH,             size };
+enum class growthMech      { NONE, LL,   LIN,        HACA,            size };
+enum class oxidationMech   { NONE, LL,   LEE_NEOH,   NSC_NEOH, HACA,  size };
+enum class coagulationMech { NONE, FM,   CONTINUUM,  HM,       FUCHS, size };
+enum class psdMech         { NONE, MONO, LOGN, QMOM, MOMIC,    SECT,  size };
+
 //////////////////// gas species list and properties
 
-enum class gasSp { C2H2, O, O2, H, H2, OH, H2O, CO, C, C6H6 };
-inline gasSp str2gasSp(const std::string& str) {
-    if(str == "C2H2")       return gasSp::C2H2;
-    else if(str == "O")     return gasSp::O;
-    else if(str == "O2")    return gasSp::O2;
-    else if(str == "H")     return gasSp::H;
-    else if(str == "H2")    return gasSp::H2;
-    else if(str == "OH")    return gasSp::OH;
-    else if(str == "H2O")   return gasSp::H2O;
-    else if(str == "CO")    return gasSp::CO;
-    else if(str == "C")     return gasSp::C;
-    else if(str == "C6H6")  return gasSp::C6H6;
-    else throw std::domain_error ("Invalid value provided to str2gasSp function");
-};
+enum class gasSp { C2H2, O, O2, H, H2, OH, H2O, CO, C, C6H6, size };
 
 const std::map<gasSp, double> gasSpMW = {{gasSp::C2H2, 26.038},      ///< molar weight (kg/kmol)
                                          {gasSp::O,    15.999},
@@ -57,16 +52,7 @@ const std::map<gasSp, double> gasSpMW = {{gasSp::C2H2, 26.038},      ///< molar 
 // See Blanquart & Pitsch (2009) "A joint volume-surface-hydrogen
 // multi-variate model for soot formation"
 
-enum class pahSp { C10H8, C12H8, C12H10, C14H10, C16H10, C18H10 };
-inline pahSp str2pahSp(const std::string& str) {
-    if(str == "C10H8")       return pahSp::C10H8;
-    else if(str == "C12H8")  return pahSp::C12H8;
-    else if(str == "C12H10") return pahSp::C12H10;
-    else if(str == "C14H10") return pahSp::C14H10;
-    else if(str == "C16H10") return pahSp::C16H10;
-    else if(str == "C18H10") return pahSp::C18H10;
-    else throw std::domain_error ("Invalid value provided to str2gasSp function");
-};
+enum class pahSp { C10H8, C12H8, C12H10, C14H10, C16H10, C18H10, size };
 
 const std::map<pahSp, double> pahSpMW = {{pahSp::C10H8,  128},      ///< molar weight (kg/kmol)
                                          {pahSp::C12H8,  152},
@@ -122,25 +108,22 @@ struct dimerStruct {
 
 //////////////////// model options and string conversion functions
 
-enum class nucleationMech { NONE, LL, LIN, PAH };
 inline nucleationMech str2nucMech(const std::string& str) {
     if(str == "NONE")     return nucleationMech::NONE;
     else if(str == "LL")  return nucleationMech::LL;
     else if(str == "LIN") return nucleationMech::LIN;
     else if(str == "PAH") return nucleationMech::PAH;
     else throw std::domain_error ("Invalid value provided to str2nucMech function");
-};
+}
 
-enum class growthMech { NONE, LL, LIN, HACA };
 inline growthMech str2grwMech(const std::string& str) {
     if(str == "NONE")     return growthMech::NONE;
     else if(str == "LL")  return growthMech::LL;
     else if(str == "LIN") return growthMech::LIN;
     else if(str == "HACA") return growthMech::HACA;
     else throw std::domain_error ("Invalid value provided to str2grwMech function");
-};
+}
 
-enum class oxidationMech { NONE, LL, LEE_NEOH, NSC_NEOH, HACA };
 inline oxidationMech str2oxiMech(const std::string& str) {
     if(str == "NONE")           return oxidationMech::NONE;
     else if(str == "LL")        return oxidationMech::LL;
@@ -148,9 +131,8 @@ inline oxidationMech str2oxiMech(const std::string& str) {
     else if(str == "NSC_NEOH")  return oxidationMech::NSC_NEOH;
     else if(str == "HACA")      return oxidationMech::HACA;
     else throw std::domain_error ("Invalid value provided to str2oxiMech function");
-};
+}
 
-enum class coagulationMech { NONE, FM, CONTINUUM, HM, FUCHS };
 inline coagulationMech str2coaMech(const std::string& str) {
     if(str == "NONE")           return coagulationMech::NONE;
     else if(str == "FM")        return coagulationMech::FM;
@@ -158,9 +140,8 @@ inline coagulationMech str2coaMech(const std::string& str) {
     else if(str == "HM")        return coagulationMech::HM;
     else if(str == "FUCHS")     return coagulationMech::FUCHS;
     else throw std::domain_error ("Invalid value provided to str2coaMech function");
-};
+}
 
-enum class psdMech { NONE, MONO, LOGN, QMOM, MOMIC, SECT };
 inline psdMech str2psdMech(const std::string& str) {
     if(str == "NONE")       return psdMech::NONE;
     if(str == "MONO")       return psdMech::MONO;
@@ -169,5 +150,30 @@ inline psdMech str2psdMech(const std::string& str) {
     else if(str == "MOMIC") return psdMech::MOMIC;
     else if(str == "SECT")  return psdMech::SECT;
     else throw std::domain_error ("Invalid value provided to str2psdMech function");
-};
+}
+
+inline gasSp str2gasSp(const std::string& str) {
+    if(str == "C2H2")       return gasSp::C2H2;
+    else if(str == "O")     return gasSp::O;
+    else if(str == "O2")    return gasSp::O2;
+    else if(str == "H")     return gasSp::H;
+    else if(str == "H2")    return gasSp::H2;
+    else if(str == "OH")    return gasSp::OH;
+    else if(str == "H2O")   return gasSp::H2O;
+    else if(str == "CO")    return gasSp::CO;
+    else if(str == "C")     return gasSp::C;
+    else if(str == "C6H6")  return gasSp::C6H6;
+    else throw std::domain_error ("Invalid value provided to str2gasSp function");
+}
+
+inline pahSp str2pahSp(const std::string& str) {
+    if(str == "C10H8")       return pahSp::C10H8;
+    else if(str == "C12H8")  return pahSp::C12H8;
+    else if(str == "C12H10") return pahSp::C12H10;
+    else if(str == "C14H10") return pahSp::C14H10;
+    else if(str == "C16H10") return pahSp::C16H10;
+    else if(str == "C18H10") return pahSp::C18H10;
+    else throw std::domain_error ("Invalid value provided to str2gasSp function");
+}
+
 }  // namespace soot
