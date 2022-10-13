@@ -33,7 +33,7 @@ double oxidationModel_HACA::getOxidationSootRate(const state &state) const {
     double fR3 = 2.0E13 * state.getGasSpC(gasSp::H) / 1000;
     double fR4 = 8.00E7 * pow(state.T, 1.56) * exp(-3.8 / RT) * state.getGasSpC(gasSp::C2H2) / 1000;
     double fR5 = 2.2E12 * exp(-7.5 / RT) * state.getGasSpC(gasSp::O2) / 1000;
-    double fR6 = 1290 * 0.13 * state.P * (state.getGasSpC(gasSp::OH) / state.rhoGas * gasSpMW.at(gasSp::OH)) / sqrt(state.T);    // gamma = 0.13 from Neoh et al.
+    double fR6 = 1290 * 0.13 * state.P * (state.getGasSpC(gasSp::OH) / state.rhoGas * gasSpMW[(int)gasSp::OH]) / sqrt(state.T);    // gamma = 0.13 from Neoh et al.
 
     //---------- Steady state calculation of chi for soot radical; see Frenklach 1990 pg. 1561
     double denom = rR1 + rR2 + fR3 + fR4 + fR5;
@@ -45,6 +45,6 @@ double oxidationModel_HACA::getOxidationSootRate(const state &state) const {
     double c_soot_H = alpha * chi_soot * 1E4;              // sites/m2-mixture
     double c_soot_rad = alpha * chi_rad * 1E4;              // sites/m2-mixture
 
-    return (c_soot_rad * (rR1 + rR2 + fR3 + fR4) - c_soot_H * (fR1 + fR2 + fR6)) / Na * gasSpMW.at(gasSp::C) ;       // kg/m2*s
+    return (c_soot_rad * (rR1 + rR2 + fR3 + fR4) - c_soot_H * (fR1 + fR2 + fR6)) / Na * gasSpMW[(int)gasSp::C] ;       // kg/m2*s
 
 }

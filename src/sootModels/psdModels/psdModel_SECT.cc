@@ -28,7 +28,7 @@ void psdModel_SECT::setSourceTerms(state& state, std::ostream* out) const {
     vector<double> absc(nsoot, 0);
 
     for (size_t k = 0; k < nsoot; k++)
-        absc.at(k) = state.cMin * pow(2, k) * gasSpMW.at(gasSp::C) / Na;
+        absc.at(k) = state.cMin * pow(2, k) * gasSpMW[(int)gasSp::C] / Na;
 
     for (double& num : wts) {
         if (num < 0)
@@ -85,7 +85,7 @@ void psdModel_SECT::setSourceTerms(state& state, std::ostream* out) const {
 
     vector<double> N0(state.nsoot, 0);
     N0.at(0) = Jnuc;
-    const double N_tot = Jnuc * state.cMin * gasSpMW.at(gasSp::C) / Na;
+    const double N_tot = Jnuc * state.cMin * gasSpMW[(int)gasSp::C] / Na;
 
     if (out) {
         *out << "N0 (" << N0.size() << ")" << endl;

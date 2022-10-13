@@ -38,8 +38,8 @@ sourceTermStruct nucleationModel::getNucleationGasRates(const state& state, cons
         gasSp sp = x.first;
 
         if (sp != gasSp::C) {
-            nucGasSourceTerms.gasSourceTerms.at(sp) += N1 * nucleationRxnRatios.at(sp) * gasSpMW.at(sp)
-                                                       / (nucleationRxnRatios.at(gasSp::C) * gasSpMW.at(gasSp::C))
+            nucGasSourceTerms.gasSourceTerms.at(sp) += N1 * nucleationRxnRatios.at(sp) * gasSpMW[(int)sp]
+                                                       / (nucleationRxnRatios.at(gasSp::C) * gasSpMW[(int)gasSp::C])
                                                        / state.rhoGas;
         }
     }

@@ -51,7 +51,7 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     double N1 = 0;
 
     N0 = jNuc;
-    N1 = jNuc * state.cMin * gasSpMW.at(gasSp::C) / Na;
+    N1 = jNuc * state.cMin * gasSpMW[(int)gasSp::C] / Na;
 
     //---------- PAH condensation terms
 

@@ -41,7 +41,7 @@ void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     const double Kfm = eps_c * sqrt(M_PI * kb * state.T / 2) * pow(6 / M_PI / rhoSoot, 2 / 3.0);
     const double Kc = 2 * kb * state.T / (3 / state.muGas);
     const double Kcp = 2 * 1.657 * state.getGasMeanFreePath() * pow(M_PI / 6 * rhoSoot, 1.0 / 3);
-    const double mMin = state.cMin * gasSpMW.at(gasSp::C) / Na;
+    const double mMin = state.cMin * gasSpMW[(int)gasSp::C] / Na;
 
     // reused Mk function results here
     const double M13 =  Mk( 1.0 / 3, M0, M1, M2);

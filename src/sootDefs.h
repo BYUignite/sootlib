@@ -15,46 +15,59 @@ const double Na = 6.02214076E26;    ///< Avogadro's constant: #/kmol
 const double kb = 1.380649E-23;     ///< Boltzmann constant = Rg/Na: J/#*K
 const double Rg = Na*kb;            ///< Universal gas constant
 
-const double eps_c = 2.2;           ///< coagulation constant/van der Waals enhancement factor: Harris and Kennedy CST 59:443-454 (1988) https://doi.org/10.1080/00102208808947110
-const double Df = 1.8;              ///< soot fractal dimension
+const double eps_c   = 2.2;         ///< coagulation constant/van der Waals enhancement factor: Harris and Kennedy CST 59:443-454 (1988) https://doi.org/10.1080/00102208808947110
+const double Df      = 1.8;         ///< soot fractal dimension
 const double rhoSoot = 1850;        ///< soot particle density
-const double bCoag = 0.8536;        ///< coagulation constant, bounded 1/sqrt(2) < bCoag < 1
+const double bCoag   = 0.8536;      ///< coagulation constant, bounded 1/sqrt(2) < bCoag < 1
 
 const double onethird = 1.0/3.0;
 const double twothird = 2.0/3.0;
 const double root2    = sqrt(2.0);
-const double mmin = 2E-26;          ///< mass of a carbon atom (kg)
+const double mmin     = 2E-26;      ///< mass of a carbon atom (kg)
 
 //////////////////// mechanism types
 
-enum class nucleationMech  { NONE, LL,   LIN,        PAH,             size };
-enum class growthMech      { NONE, LL,   LIN,        HACA,            size };
-enum class oxidationMech   { NONE, LL,   LEE_NEOH,   NSC_NEOH, HACA,  size };
-enum class coagulationMech { NONE, FM,   CONTINUUM,  HM,       FUCHS, size };
-enum class psdMech         { NONE, MONO, LOGN, QMOM, MOMIC,    SECT,  size };
+enum class nucleationMech { NONE, LL,   LIN,        PAH,             size };
+enum class growthMech     { NONE, LL,   LIN,        HACA,            size };
+enum class oxidationMech  { NONE, LL,   LEE_NEOH,   NSC_NEOH, HACA,  size };
+enum class coagulationMech{ NONE, FM,   CONTINUUM,  HM,       FUCHS, size };
+enum class psdMech        { NONE, MONO, LOGN, QMOM, MOMIC,    SECT,  size };
 
 //////////////////// gas species list and properties
 
-enum class gasSp { O2, O, H2, H, OH, H2O, CO, C2H2, C6H6, C, size };
+enum class gasSp{ O2, O, H2, H, OH, H2O, CO, C2H2, C6H6, C, size };
 
-const std::map<gasSp, double> gasSpMW = {    // (kg/kmol)
-    {gasSp::O2,   31.998},
-    {gasSp::O,    15.999},
-    {gasSp::H2,   2.016},
-    {gasSp::H,    1.008},
-    {gasSp::OH,   17.007},
-    {gasSp::H2O,  18.015},
-    {gasSp::CO,   28.010},
-    {gasSp::C2H2, 26.038},
-    {gasSp::C6H6, 78.114},
-    {gasSp::C,    12.011}
+const std::vector<double> gasSpMW{      // (kg/kmol); make sure the order corresponds to the gasSp enum
+    31.998,    // O2
+    15.999,    // O
+    2.016,     // H2
+    1.008,     // H
+    17.007,    // OH
+    18.015,    // H2O
+    28.010,    // CO
+    26.038,    // C2H2
+    78.114,    // C6H6
+    12.011     // C
 };
+
+// const std::map<gasSp, double> gasSpMW = {    // (kg/kmol)
+//     {gasSp::O2,   31.998},
+//     {gasSp::O,    15.999},
+//     {gasSp::H2,   2.016},
+//     {gasSp::H,    1.008},
+//     {gasSp::OH,   17.007},
+//     {gasSp::H2O,  18.015},
+//     {gasSp::CO,   28.010},
+//     {gasSp::C2H2, 26.038},
+//     {gasSp::C6H6, 78.114},
+//     {gasSp::C,    12.011}
+// };
 
 //////////////////// PAH species list and properties for PAH nucleation and condensation
 // See Blanquart & Pitsch (2009) "A joint volume-surface-hydrogen
 // multi-variate model for soot formation"
 
-enum class pahSp { C10H8, C12H8, C12H10, C14H10, C16H10, C18H10, size };
+enum class pahSp{ C10H8, C12H8, C12H10, C14H10, C16H10, C18H10, size };
 
 const std::map<pahSp, double> pahSpMW = {
     {pahSp::C10H8,  128.173},      ///< molar weight (kg/kmol)

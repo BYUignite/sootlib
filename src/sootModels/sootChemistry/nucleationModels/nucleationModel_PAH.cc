@@ -60,10 +60,10 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
 
     // finish updating PAH and gas species reaction ratios
     for (auto const& x : nucleationPahRxnRates)
-        nucleationPahRxnRates.at(x.first) *= -2.0 * mDimer / (state.cMin * gasSpMW.at(gasSp::C) / Na);
+        nucleationPahRxnRates.at(x.first) *= -2.0 * mDimer / (state.cMin * gasSpMW[(int)gasSp::C] / Na);
 
     if (mDimer != 0 && state.cMin != 0)
-        nucleationRxnRatios.at(gasSp::H2) = 2.0 * mDimer / (state.cMin * gasSpMW.at(gasSp::C) / Na) - 1.0;
+        nucleationRxnRatios.at(gasSp::H2) = 2.0 * mDimer / (state.cMin * gasSpMW[(int)gasSp::C] / Na) - 1.0;
 
     //------------- compute the dimer concentration as solution to quadratic
     // Steady state approximation.

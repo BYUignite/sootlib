@@ -49,7 +49,7 @@ void psdModel_QMOM::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     //---------- nucleation terms
 
     vector<double> nucSrcM(nsoot, 0.);
-    const double mNuc = state.cMin * gasSpMW.at(gasSp::C) / Na;      // mass of a nucleated particle
+    const double mNuc = state.cMin * gasSpMW[(int)gasSp::C] / Na;      // mass of a nucleated particle
     for (size_t i = 0; i < nsoot; i++)
         nucSrcM.at(i) = pow(mNuc, i) * jNuc;                            // Nuc_rate = m_nuc^r * jNuc
 

@@ -57,8 +57,8 @@ class state {
                       std::vector<double> yGas_, std::vector<double> yPAH_, 
                       std::vector<double> sootVar_, int nsoot, double cMin_ = 100);
 
-        double getGasSpC(gasSp sp)  const { return rhoGas * yGas.at(sp) / gasSpMW.at(sp); }
-        double getGasSpP(gasSp sp)  const { return yGas.at(sp) * MWGas / gasSpMW.at(sp) * P; }
+        double getGasSpC(gasSp sp)  const { return rhoGas * yGas.at(sp) / gasSpMW[(int)sp]; }
+        double getGasSpP(gasSp sp)  const { return yGas.at(sp) * MWGas / gasSpMW[(int)sp] * P; }
 
         double getGasMeanFreePath() const { return muGas/rhoGas*sqrt(M_PI*MWGas/(2.0*Rg*T)); }
 

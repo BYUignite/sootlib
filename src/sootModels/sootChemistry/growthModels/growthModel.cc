@@ -31,8 +31,8 @@ sourceTermStruct growthModel::getGrowthGasRates(const state &state, const double
         gasSp sp = x.first;
 
         if (sp != gasSp::C)
-            grwGasSourceTerms.gasSourceTerms.at(sp) += G1 * growthRxnRatios.at(sp) * gasSpMW.at(sp)
-                                                       / (growthRxnRatios.at(gasSp::C) * gasSpMW.at(gasSp::C))
+            grwGasSourceTerms.gasSourceTerms.at(sp) += G1 * growthRxnRatios.at(sp) * gasSpMW[(int)sp]
+                                                       / (growthRxnRatios.at(gasSp::C) * gasSpMW[(int)gasSp::C])
                                                        / state.rhoGas;
 
     }

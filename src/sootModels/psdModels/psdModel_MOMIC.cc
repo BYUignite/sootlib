@@ -42,7 +42,7 @@ void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms)
 
     vector<double> Mnuc(N, 0);
 
-    double m_nuc = state.cMin * gasSpMW.at(gasSp::C) / Na;
+    double m_nuc = state.cMin * gasSpMW[(int)gasSp::C] / Na;
     for (size_t i = 0; i < N; i++)
         Mnuc.at(i) = pow(m_nuc, i) * Jnuc;
 

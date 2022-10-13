@@ -31,8 +31,8 @@ sourceTermStruct oxidationModel::getOxidationGasRates(const state& state, const 
         gasSp sp = x.first;
 
         if (sp != gasSp::C)
-            oxiGasSourceTerms.gasSourceTerms.at(sp) += X1 * oxidationRxnRatios.at(sp) * gasSpMW.at(sp)
-                                                       / (oxidationRxnRatios.at(gasSp::C) * gasSpMW.at(gasSp::C))
+            oxiGasSourceTerms.gasSourceTerms.at(sp) += X1 * oxidationRxnRatios.at(sp) * gasSpMW[(int)sp]
+                                                       / (oxidationRxnRatios.at(gasSp::C) * gasSpMW[(int)gasSp::C])
                                                        / state.rhoGas;
 
     }
