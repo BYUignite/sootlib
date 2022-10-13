@@ -74,12 +74,14 @@ const std::vector<int> pahSpNC = {         // # carbon atoms per PAH species
     18         // C18H10
 };
 
-const std::map<pahSp, double> pahSpGamma = {{pahSp::C10H8,  0.0010},      ///< unitless sticking coefficient
-                                            {pahSp::C12H8,  0.0030},
-                                            {pahSp::C12H10, 0.0085},
-                                            {pahSp::C14H10, 0.0150},
-                                            {pahSp::C16H10, 0.0250},
-                                            {pahSp::C18H10, 0.0390}};
+const std::vector<double> pahSpGamma = {   ///< unitless sticking coefficient
+    0.0010,    // C10H8, 
+    0.0030,    // C12H8, 
+    0.0085,    // C12H10,
+    0.0150,    // C14H10,
+    0.0250,    // C16H10,
+    0.0390     // C18H10,
+};
 
 //////////////////// custom structures
 
