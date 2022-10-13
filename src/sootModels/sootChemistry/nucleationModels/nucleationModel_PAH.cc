@@ -39,7 +39,7 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
 
         wDotD      += wdoti;
         mDimer     += wdoti * pahSpMW[(int)sp]/Na;
-        cMin_local += wdoti * pahSpNC.at(sp);
+        cMin_local += wdoti * pahSpNC[(int)sp];
 
         // begin updating PAH reaction ratios
         nucleationPahRxnRates.at(sp) = wdoti * pahSpMW[(int)sp] / Na;

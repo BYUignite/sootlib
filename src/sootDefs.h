@@ -65,12 +65,14 @@ const std::vector<double> pahSpMW = {     // (kg/kmol)
     226.277    // C18H10
 };
 
-const std::map<pahSp, int> pahSpNC = {{pahSp::C10H8,  10},      ///< number of carbon atoms per PAH species
-                                      {pahSp::C12H8,  12},
-                                      {pahSp::C12H10, 12},
-                                      {pahSp::C14H10, 14},
-                                      {pahSp::C16H10, 16},
-                                      {pahSp::C18H10, 18}};
+const std::vector<int> pahSpNC = {         // # carbon atoms per PAH species
+    10,        // C10H8
+    12,        // C12H8
+    12,        // C12H10
+    14,        // C14H10
+    16,        // C16H10
+    18         // C18H10
+};
 
 const std::map<pahSp, double> pahSpGamma = {{pahSp::C10H8,  0.0010},      ///< unitless sticking coefficient
                                             {pahSp::C12H8,  0.0030},
