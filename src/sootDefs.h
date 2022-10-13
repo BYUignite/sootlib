@@ -35,18 +35,20 @@ enum class psdMech         { NONE, MONO, LOGN, QMOM, MOMIC,    SECT,  size };
 
 //////////////////// gas species list and properties
 
-enum class gasSp { C2H2, O, O2, H, H2, OH, H2O, CO, C, C6H6, size };
+enum class gasSp { O2, O, H2, H, OH, H2O, CO, C2H2, C6H6, C, size };
 
-const std::map<gasSp, double> gasSpMW = {{gasSp::C2H2, 26.038},      ///< molar weight (kg/kmol)
-                                         {gasSp::O,    15.999},
-                                         {gasSp::O2,   31.998},
-                                         {gasSp::H,    1.008},
-                                         {gasSp::H2,   2.016},
-                                         {gasSp::OH,   17.007},
-                                         {gasSp::H2O,  18.015},
-                                         {gasSp::CO,   28.010},
-                                         {gasSp::C,    12.011},
-                                         {gasSp::C6H6, 78.114}};
+const std::map<gasSp, double> gasSpMW = {    // (kg/kmol)
+    {gasSp::O2,   31.998},
+    {gasSp::O,    15.999},
+    {gasSp::H2,   2.016},
+    {gasSp::H,    1.008},
+    {gasSp::OH,   17.007},
+    {gasSp::H2O,  18.015},
+    {gasSp::CO,   28.010},
+    {gasSp::C2H2, 26.038},
+    {gasSp::C6H6, 78.114},
+    {gasSp::C,    12.011}
+};
 
 //////////////////// PAH species list and properties for PAH nucleation and condensation
 // See Blanquart & Pitsch (2009) "A joint volume-surface-hydrogen
@@ -54,12 +56,14 @@ const std::map<gasSp, double> gasSpMW = {{gasSp::C2H2, 26.038},      ///< molar 
 
 enum class pahSp { C10H8, C12H8, C12H10, C14H10, C16H10, C18H10, size };
 
-const std::map<pahSp, double> pahSpMW = {{pahSp::C10H8,  128},      ///< molar weight (kg/kmol)
-                                         {pahSp::C12H8,  152},
-                                         {pahSp::C12H10, 154},
-                                         {pahSp::C14H10, 178},
-                                         {pahSp::C16H10, 202},
-                                         {pahSp::C18H10, 226}};
+const std::map<pahSp, double> pahSpMW = {
+    {pahSp::C10H8,  128.173},      ///< molar weight (kg/kmol)
+    {pahSp::C12H8,  152.195},
+    {pahSp::C12H10, 154.211},
+    {pahSp::C14H10, 178.233},
+    {pahSp::C16H10, 202.255},
+    {pahSp::C18H10, 226.277}
+};
 
 const std::map<pahSp, int> pahSpNC = {{pahSp::C10H8,  10},      ///< number of carbon atoms per PAH species
                                       {pahSp::C12H8,  12},

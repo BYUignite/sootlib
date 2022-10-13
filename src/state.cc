@@ -14,22 +14,27 @@ state::state(size_t nsoot_) :
     absc(vector<double>(nsoot_/2, 0.0)),
     wts(vector<double>(nsoot_/2, 0.0)) {
 
-    yGas = {{gasSp::C2H2, 0},
-                    {gasSp::O,    0},
-                    {gasSp::O2,   0},
-                    {gasSp::H,    0},
-                    {gasSp::H2,   0},
-                    {gasSp::OH,   0},
-                    {gasSp::H2O,  0},
-                    {gasSp::CO,   0},
-                    {gasSp::C,    0}};
+    yGas = {
+        {gasSp::O2,   0},
+        {gasSp::O,    0},
+        {gasSp::H2,   0},
+        {gasSp::H,    0},
+        {gasSp::OH,   0},
+        {gasSp::H2O,  0},
+        {gasSp::CO,   0},
+        {gasSp::C2H2, 0},
+        {gasSp::C6H6, 0},
+        {gasSp::C,    0}
+    };
 
-    yPah = {{pahSp::C10H8,  0},
-                    {pahSp::C12H8,  0},
-                    {pahSp::C12H10, 0},
-                    {pahSp::C14H10, 0},
-                    {pahSp::C16H10, 0},
-                    {pahSp::C18H10, 0}};
+    yPah = {
+        {pahSp::C10H8,  0},
+        {pahSp::C12H8,  0},
+        {pahSp::C12H10, 0},
+        {pahSp::C14H10, 0},
+        {pahSp::C16H10, 0},
+        {pahSp::C18H10, 0}
+    };
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,9 +73,6 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
 
     //------------ gas species mass fractions
 
-    if (yGas_.size() != (yGas.size() - 1))
-        throw domain_error("Invalid input vector size: gas species mass fractions");
-
     for (double y : yGas_) {
         if (y < 0) {
             y = 0;
@@ -85,14 +87,16 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_, double
     if (yGas_sum > 1.0)
         throw domain_error("Unphysical state value input: sum of gas species mass fractions greater than one");
 
-    yGas.at(gasSp::H)    = yGas_[0];
-    yGas.at(gasSp::H2)   = yGas_[1];
-    yGas.at(gasSp::O)    = yGas_[2];
-    yGas.at(gasSp::O2)   = yGas_[3];
+    yGas.at(gasSp::O2)   = yGas_[0];
+    yGas.at(gasSp::O)    = yGas_[1];
+    yGas.at(gasSp::H2)   = yGas_[2];
+    yGas.at(gasSp::H)    = yGas_[3];
     yGas.at(gasSp::OH)   = yGas_[4];
     yGas.at(gasSp::H2O)  = yGas_[5];
     yGas.at(gasSp::CO)   = yGas_[6];
     yGas.at(gasSp::C2H2) = yGas_[7];
+    yGas.at(gasSp::C6H6) = yGas_[8];
+    yGas.at(gasSp::C)    = yGas_[9];
 
     //------------ PAH mass fractions
 

@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
     double muGas = 1E-5;    // gas viscosity in Pa*s
     double MWGas = 29;      // gas molar weight in kg/kmol
 
-    vector<double> yGas = {0, 0.01, 0.01, 0.5, 0.02, 0.03, 0.04, 2E-15};  // gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
+    vector<double> yGas = {0.05, 0.001, 0.002, 3E-4, 0.003, 0.07, 0.1, 0.002, 0.0, 0.0};  // gas species mass fractions [O2,O,H2,H,OH,H2O,CO,C2H2,C6H6,C]
     vector<double> yPAH = {0, 0, 0, 0, 0, 0};                             // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
     vector<double> sootVar = {0.003, 1.5E-5, 1E-7, 1E-10};                // soot moment values [M0, M1, M2, M3]
 
