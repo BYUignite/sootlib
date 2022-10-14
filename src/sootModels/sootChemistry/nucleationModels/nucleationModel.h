@@ -3,6 +3,8 @@
 #include "state.h"
 #include "sootDefs.h"
 
+#include <vector>
+
 namespace soot {
 
 class nucleationModel {
@@ -28,7 +30,10 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    nucleationModel();
+    nucleationModel() : nucleationPahRxnRates(std::vector<double>((int)pahSp::size, 0.0)),
+                        nucleationRxnRatios(  std::vector<double>((int)gasSp::size, 0.0)) {
+        nucleationRxnRatios[(int)gasSp::C] = 1.0;
+    }
     virtual ~nucleationModel() = default;
 
 };

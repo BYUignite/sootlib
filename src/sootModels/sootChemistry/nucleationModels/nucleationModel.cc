@@ -6,14 +6,6 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-nucleationModel::nucleationModel() : nucleationPahRxnRates{vector<double>{(int)pahSp::size, 0.0}} {
-
-    nucleationRxnRatios = vector<double>((int)gasSp::size, 0.0);
-    nucleationRxnRatios[(int)gasSp::C] = 1.0;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 sourceTermStruct nucleationModel::getNucleationGasRates(const state& state, const double &N1) const {
 
     sourceTermStruct nucGasSourceTerms;

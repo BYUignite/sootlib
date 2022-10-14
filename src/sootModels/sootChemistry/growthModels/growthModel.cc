@@ -6,14 +6,6 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-growthModel::growthModel() {
-
-    growthRxnRatios = vector<double>((int)gasSp::size, 0.0);
-    growthRxnRatios[(int)gasSp::C] = 1.0;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 sourceTermStruct growthModel::getGrowthGasRates(const state &state, const double &G1) const {
 
     sourceTermStruct grwGasSourceTerms;

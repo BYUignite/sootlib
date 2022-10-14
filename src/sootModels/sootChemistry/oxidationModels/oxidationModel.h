@@ -3,6 +3,8 @@
 #include "state.h"
 #include "sootDefs.h"
 
+#include <vector>
+
 namespace soot {
 
 class oxidationModel {
@@ -25,7 +27,9 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    oxidationModel();
+    oxidationModel() : oxidationRxnRatios(std::vector<double>((int)gasSp::size, 0.0)) {
+        oxidationRxnRatios[(int)gasSp::C] = 1.0;
+    }
     virtual ~oxidationModel() = default;
 };
 } // namespace soot
