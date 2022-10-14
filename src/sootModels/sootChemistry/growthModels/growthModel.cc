@@ -10,17 +10,6 @@ growthModel::growthModel() {
 
     growthRxnRatios = vector<double>((int)gasSp::size, 0.0);
     growthRxnRatios[(int)gasSp::C] = 1.0;
-
-    // growthRxnRatios = {{gasSp::C2H2, 0},
-    //                    {gasSp::O,    0},
-    //                    {gasSp::O2,   0},
-    //                    {gasSp::H,    0},
-    //                    {gasSp::H2,   0},
-    //                    {gasSp::OH,   0},
-    //                    {gasSp::H2O,  0},
-    //                    {gasSp::CO,   0},
-    //                    {gasSp::C,    1},
-    //                    {gasSp::C6H6, 0}};
 }
 
 ////////////////////////////////////////////////////////////////////////////////

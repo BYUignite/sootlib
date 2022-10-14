@@ -8,16 +8,8 @@ using namespace soot;
 
 oxidationModel::oxidationModel() {
 
-    oxidationRxnRatios = {{gasSp::C2H2, 0},
-                          {gasSp::O,    0},
-                          {gasSp::O2,   0},
-                          {gasSp::H,    0},
-                          {gasSp::H2,   0},
-                          {gasSp::OH,   0},
-                          {gasSp::H2O,  0},
-                          {gasSp::CO,   0},
-                          {gasSp::C,    1},
-                          {gasSp::C6H6, 0}};
+    oxidationRxnRatios = vector<double>((int)gasSp::size, 0.0);
+    oxidationRxnRatios[(int)gasSp::C] = 1.0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -26,13 +18,13 @@ sourceTermStruct oxidationModel::getOxidationGasRates(const state& state, const 
 
     sourceTermStruct oxiGasSourceTerms;
 
-    for (auto const& x : oxidationRxnRatios) {
+    for (auto const& x : ggg) {
 
         gasSp sp = x.first;
 
         if (sp != gasSp::C)
-            oxiGasSourceTerms.gasSourceTerms.at(sp) += X1 * oxidationRxnRatios.at(sp) * gasSpMW[(int)sp]
-                                                       / (oxidationRxnRatios.at(gasSp::C) * gasSpMW[(int)gasSp::C])
+            oxiGasSourceTerms.gasSourceTerms.at(sp) += X1 * oxidationRxnRatios[(int)sp] * gasSpMW[(int)sp]
+                                                       / (oxidationRxnRatios[(int)gasSp::C] * gasSpMW[(int)gasSp::C])
                                                        / state.rhoGas;
 
     }

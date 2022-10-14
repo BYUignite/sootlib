@@ -11,7 +11,7 @@ class oxidationModel {
 
 public:
 
-    std::map<gasSp, double>   oxidationRxnRatios;
+    std::vector<double> oxidationRxnRatios;
 
     oxidationMech mechType;
 
