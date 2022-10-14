@@ -139,7 +139,7 @@ void psdModel_QMOM::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
                                    {gasSp::C6H6,0}};
     // coagulation does not contribute to gas sources/sinks
 
-    for (auto const& x : sourceTerms->gasSourceTerms) {
+    for (auto const& x : ggg) {
         gasSp sp = x.first;
         if (sp != gasSp::C) {
             nucGasSrc[sp] = nuc->getNucleationGasRates(state, nucSrcM[1]).gasSourceTerms[sp];

@@ -46,7 +46,7 @@ void sootModel::setSourceTerms(state& state) {
     for(int i=0; i < psd->nsoot; i++)
         sourceTerms->sootSourceTerms[i] = 0;
 
-    for (auto const& x : sourceTerms->gasSourceTerms) {
+    for (auto const& x : ggg) {
         gasSp sp = x.first;
         sourceTerms->gasSourceTerms[sp] = 0;
     }
