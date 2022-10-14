@@ -6,9 +6,9 @@ using namespace soot;
 
 oxidationModel_LL::oxidationModel_LL() {
 
-    oxidationRxnRatios.at(gasSp::CO) =  1;
-    oxidationRxnRatios.at(gasSp::O2) = -0.5;
-    oxidationRxnRatios.at(gasSp::C)  = -1;
+    oxidationRxnRatios[gasSp::CO] =  1;
+    oxidationRxnRatios[gasSp::O2] = -0.5;
+    oxidationRxnRatios[gasSp::C]  = -1;
 
     mechType = oxidationMech::LL;
 }

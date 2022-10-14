@@ -44,11 +44,11 @@ void sootModel::setSourceTerms(state& state) {
     //-----------  reset source term variable values to zero
 
     for(int i=0; i < psd->nsoot; i++)
-        sourceTerms->sootSourceTerms.at(i) = 0;
+        sourceTerms->sootSourceTerms[i] = 0;
 
     for (auto const& x : sourceTerms->gasSourceTerms) {
         gasSp sp = x.first;
-        sourceTerms->gasSourceTerms.at(sp) = 0;
+        sourceTerms->gasSourceTerms[sp] = 0;
     }
 
     sourceTerms->pahSourceTerms = vector<double>{(int)pahSp::size, 0.0};

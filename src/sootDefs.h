@@ -87,7 +87,8 @@ const std::vector<double> pahSpGamma = {   ///< unitless sticking coefficient
 
 struct sourceTermStruct {
 
-    std::vector<double>     sootSourceTerms{0, 0};      // default to 2 moments
+    std::vector<double> sootSourceTerms{0, 0};      // default to 2 moments
+    std::vector<double> pahSourceTerms{(int)pahSp::size, 0.0};
     std::map<gasSp, double> gasSourceTerms = {{gasSp::C2H2,0},
                                               {gasSp::O,   0},
                                               {gasSp::O2,  0},
@@ -98,7 +99,6 @@ struct sourceTermStruct {
                                               {gasSp::CO,  0},
                                               {gasSp::C,   0},
                                               {gasSp::C6H6,0}};
-    std::vector<double> pahSourceTerms{(int)pahSp::size, 0.0};
 };
 
 //----------------------

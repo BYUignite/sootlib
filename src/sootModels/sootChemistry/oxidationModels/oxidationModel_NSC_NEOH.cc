@@ -6,11 +6,11 @@ using namespace soot;
 
 oxidationModel_NSC_NEOH::oxidationModel_NSC_NEOH() {
 
-    oxidationRxnRatios.at(gasSp::CO) =  2;
-    oxidationRxnRatios.at(gasSp::H) =   1;
-    oxidationRxnRatios.at(gasSp::OH) = -1;
-    oxidationRxnRatios.at(gasSp::O2) = -0.5;
-    oxidationRxnRatios.at(gasSp::C)  = -2;
+    oxidationRxnRatios[gasSp::CO] =  2;
+    oxidationRxnRatios[gasSp::H] =   1;
+    oxidationRxnRatios[gasSp::OH] = -1;
+    oxidationRxnRatios[gasSp::O2] = -0.5;
+    oxidationRxnRatios[gasSp::C]  = -2;
 
     mechType = oxidationMech::NSC_NEOH;
 }

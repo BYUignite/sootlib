@@ -27,7 +27,7 @@ void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms)
     //---------- get moment values
     vector<double> Mtemp(nsoot,0);
     for (int i=0; i<nsoot; i++)
-        Mtemp.at(i) = state.sootVar.at(i);
+        Mtemp[i] = state.sootVar[i];
 
     downselectIfNeeded(Mtemp);
     int N = Mtemp.size();
@@ -44,7 +44,7 @@ void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms)
 
     double m_nuc = state.cMin * gasSpMW[(int)gasSp::C] / Na;
     for (size_t i = 0; i < N; i++)
-        Mnuc.at(i) = pow(m_nuc, i) * Jnuc;
+        Mnuc[i] = pow(m_nuc, i) * Jnuc;
 
     //---------- PAH condensation terms
 
@@ -52,7 +52,7 @@ void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms)
 
     if (nuc->mechType == nucleationMech::PAH) {
         for (size_t i = 1; i < N; i++)
-            Mcnd.at(i) = MOMICCoagulationRate(state, (int) i, Mtemp) * nuc->DIMER.nDimer * nuc->DIMER.mDimer * i;
+            Mcnd[i] = MOMICCoagulationRate(state, (int) i, Mtemp) * nuc->DIMER.nDimer * nuc->DIMER.mDimer * i;
     }
 
     //---------- growth terms
@@ -61,14 +61,14 @@ void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms)
 
     const double Acoef = M_PI * pow(abs( 6 / M_PI / rhoSoot), 2.0 / 3);
     for (size_t i = 1; i < N; i++)
-        Mgrw.at(i) = Kgrw * Acoef * i * MOMIC(i - 1.0 / 3, Mtemp);
+        Mgrw[i] = Kgrw * Acoef * i * MOMIC(i - 1.0 / 3, Mtemp);
 
     //---------- oxidation terms
 
     vector<double> Moxi(N, 0);
 
     for (size_t i = 1; i < N; i++)
-        Moxi.at(i) = Koxi * Acoef *  i * MOMIC(i - 1.0 / 3, Mtemp);
+        Moxi[i] = Koxi * Acoef *  i * MOMIC(i - 1.0 / 3, Mtemp);
 
     //---------- coagulation terms
 
@@ -76,13 +76,13 @@ void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms)
 
     if (coa->mechType != coagulationMech::NONE) {
         for (size_t i = 0; i < N; i++)
-            Mcoa.at(i) = MOMICCoagulationRate(state, i, Mtemp);
+            Mcoa[i] = MOMICCoagulationRate(state, i, Mtemp);
     }
 
     //---------- combine to make soot source terms
 
     for (size_t i = 0; i < N; i++)
-        sourceTerms->sootSourceTerms.at(i) = (Mnuc.at(i) + Mcnd.at(i) + Mgrw.at(i) + Moxi.at(i) + Mcoa.at(i));
+        sourceTerms->sootSourceTerms[i] = (Mnuc[i] + Mcnd[i] + Mgrw[i] + Moxi[i] + Mcoa[i]);
 
     //---------- get gas source terms
 
@@ -124,10 +124,10 @@ void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms)
     for (auto const& x : sourceTerms->gasSourceTerms) {
         gasSp sp = x.first;
         if (sp != gasSp::C) {
-            nucGasSrc.at(sp) = nuc->getNucleationGasRates(state, Mnuc[1]).gasSourceTerms.at(sp);
-            grwGasSrc.at(sp) = grw->getGrowthGasRates(state, Mgrw[1]).gasSourceTerms.at(sp);
-            oxiGasSrc.at(sp) = oxi->getOxidationGasRates(state, Moxi[1]).gasSourceTerms.at(sp);
-            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
+            nucGasSrc[sp] = nuc->getNucleationGasRates(state, Mnuc[1]).gasSourceTerms[sp];
+            grwGasSrc[sp] = grw->getGrowthGasRates(state, Mgrw[1]).gasSourceTerms[sp];
+            oxiGasSrc[sp] = oxi->getOxidationGasRates(state, Moxi[1]).gasSourceTerms[sp];
+            sourceTerms->gasSourceTerms[sp] = nucGasSrc[sp] + grwGasSrc[sp] + oxiGasSrc[sp];
         }
     }
 
@@ -333,10 +333,10 @@ double psdModel_MOMIC::lagrangeInterp(double x_i, const vector<double>& x, const
 		L = 1;
 		for (size_t m = 0; m < x.size(); m++) {
 			if (m != j) {
-				L *= (x_i - x.at(m)) / (x.at(j) - x.at(m));
+				L *= (x_i - x[m]) / (x[j] - x[m]);
 			}
 		}
-		y_i += y.at(j) * L;
+		y_i += y[j] * L;
 	}
 
 	return y_i;
@@ -346,11 +346,11 @@ double psdModel_MOMIC::lagrangeInterp(double x_i, const vector<double>& x, const
 
 double psdModel_MOMIC::MOMIC(double p, const vector<double>& M) {
 
-    if (M.at(0) <= 0)
+    if (M[0] <= 0)
         return 0;
 
 	if (p == 0)
-		return M.at(0);
+		return M[0];
 
 	size_t size = M.size();
 	if (p < 0 && M.size() != 2)
@@ -360,11 +360,11 @@ double psdModel_MOMIC::MOMIC(double p, const vector<double>& M) {
 	vector<double> x(size, 0);
 
 	for (size_t i = 0; i < size; i++) {
-		log_mu.at(i) = log10(M.at(i) / M.at(0));
-		x.at(i) =  i;
+		log_mu[i] = log10(M[i] / M[0]);
+		x[i] =  i;
 	}
 
 	const double log_mu_p = lagrangeInterp(p, x, log_mu);
 
-	return pow(10, log_mu_p) * M.at(0);
+	return pow(10, log_mu_p) * M[0];
 }

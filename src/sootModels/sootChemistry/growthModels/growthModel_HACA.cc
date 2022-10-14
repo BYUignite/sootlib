@@ -6,10 +6,10 @@ using namespace soot;
 
 growthModel_HACA::growthModel_HACA() {
 
-    growthRxnRatios.at(gasSp::O2)   = -1;
-    growthRxnRatios.at(gasSp::OH)   = -1;
-    growthRxnRatios.at(gasSp::CO)   =  3;
-    growthRxnRatios.at(gasSp::C)    =  2;
+    growthRxnRatios[gasSp::O2]   = -1;
+    growthRxnRatios[gasSp::OH]   = -1;
+    growthRxnRatios[gasSp::CO]   =  3;
+    growthRxnRatios[gasSp::C]    =  2;
 
     mechType = growthMech::HACA;
 }

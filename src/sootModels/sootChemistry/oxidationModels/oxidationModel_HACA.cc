@@ -6,10 +6,10 @@ using namespace soot;
 
 oxidationModel_HACA::oxidationModel_HACA() {
 
-    oxidationRxnRatios.at(gasSp::C2H2) = -1;
-    oxidationRxnRatios.at(gasSp::OH)   = -1;
-    oxidationRxnRatios.at(gasSp::CO)   =  1;
-    oxidationRxnRatios.at(gasSp::C)    =  1;
+    oxidationRxnRatios[gasSp::C2H2] = -1;
+    oxidationRxnRatios[gasSp::OH]   = -1;
+    oxidationRxnRatios[gasSp::CO]   =  1;
+    oxidationRxnRatios[gasSp::C]    =  1;
 
     mechType = oxidationMech::HACA;
 }

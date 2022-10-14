@@ -61,7 +61,7 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
         nucleationPahRxnRates[sp] *= -2.0 * mDimer / (state.cMin * gasSpMW[(int)gasSp::C] / Na);
 
     if (mDimer != 0 && state.cMin != 0)
-        nucleationRxnRatios.at(gasSp::H2) = 2.0 * mDimer / (state.cMin * gasSpMW[(int)gasSp::C] / Na) - 1.0;
+        nucleationRxnRatios[gasSp::H2] = 2.0 * mDimer / (state.cMin * gasSpMW[(int)gasSp::C] / Na) - 1.0;
 
     //------------- compute the dimer concentration as solution to quadratic
     // Steady state approximation.
@@ -71,7 +71,7 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
     double beta_DD = coagHM.getCoagulationSootRate(state, mDimer, mDimer);        // dimer self-collision rate
     double I_beta_DS = 0.0;                                                 // sum of dimer-soot collision rates
     for (int i = 0; i < state.absc.size(); i++)                                     // loop over soot "particles" (abscissas)
-        I_beta_DS += abs(state.wts.at(i)) * coagHM.getCoagulationSootRate(state, mDimer, state.absc.at(i));
+        I_beta_DS += abs(state.wts[i]) * coagHM.getCoagulationSootRate(state, mDimer, state.absc[i]);
 
     //------------- solve quadratic for D: beta_DD*(D^2) + I_beta_DS*(D) - wDotD = 0
     // See Numerical Recipes 3rd ed. Sec 5.6 page 227.

@@ -132,9 +132,9 @@ void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     //---------- combine to make soot source terms
 
-    sourceTerms->sootSourceTerms.at(0) = (N0 + G0 + Cnd0 - X0 + C0);
-	sourceTerms->sootSourceTerms.at(1) = (N1 + G1 + Cnd1 - X1 + C1);
-	sourceTerms->sootSourceTerms.at(2) = (N2 + G2 + Cnd2 - X2 + C2);
+    sourceTerms->sootSourceTerms[0] = (N0 + G0 + Cnd0 - X0 + C0);
+	sourceTerms->sootSourceTerms[1] = (N1 + G1 + Cnd1 - X1 + C1);
+	sourceTerms->sootSourceTerms[2] = (N2 + G2 + Cnd2 - X2 + C2);
 
 	//---------- get gas source terms
 
@@ -176,10 +176,10 @@ void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 	for (auto const& x : sourceTerms->gasSourceTerms) {
 	    gasSp sp = x.first;
 	    if (sp != gasSp::C) {
-	        nucGasSrc.at(sp) = nuc->getNucleationGasRates(state, N1).gasSourceTerms.at(sp);
-	        grwGasSrc.at(sp) = grw->getGrowthGasRates(state, G1).gasSourceTerms.at(sp);
-	        oxiGasSrc.at(sp) = oxi->getOxidationGasRates(state, X1).gasSourceTerms.at(sp);
-	        sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
+	        nucGasSrc[sp] = nuc->getNucleationGasRates(state, N1).gasSourceTerms[sp];
+	        grwGasSrc[sp] = grw->getGrowthGasRates(state, G1).gasSourceTerms[sp];
+	        oxiGasSrc[sp] = oxi->getOxidationGasRates(state, X1).gasSourceTerms[sp];
+	        sourceTerms->gasSourceTerms[sp] = nucGasSrc[sp] + grwGasSrc[sp] + oxiGasSrc[sp];
 	    }
 	}
 
