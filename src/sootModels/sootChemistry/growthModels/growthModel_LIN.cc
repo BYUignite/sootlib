@@ -6,9 +6,9 @@ using namespace soot;
 
 growthModel_LIN::growthModel_LIN() {
 
-    growthRxnRatios[gasSp::C2H2] = -1;
-    growthRxnRatios[gasSp::H2]   =  1;
-    growthRxnRatios[gasSp::C]    =  2;
+    growthRxnRatios[(int)gasSp::C2H2] = -1;
+    growthRxnRatios[(int)gasSp::H2]   =  1;
+    growthRxnRatios[(int)gasSp::C]    =  2;
 
     mechType = growthMech::LIN;
 }

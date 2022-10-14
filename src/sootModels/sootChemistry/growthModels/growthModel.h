@@ -11,7 +11,7 @@ class growthModel {
 
 public:
 
-    std::map<gasSp, double>   growthRxnRatios;
+    std::vector<double> growthRxnRatios;
 
     growthMech mechType;
 
