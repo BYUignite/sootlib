@@ -13,8 +13,8 @@ public:
 
     dimerStruct DIMER = dimerStruct();      // used for PAH nucleation only
 
-    std::map<gasSp, double>   nucleationRxnRatios;
-    std::vector<double>       nucleationPahRxnRates;
+    std::vector<double> nucleationRxnRatios;
+    std::vector<double> nucleationPahRxnRates;
 
     nucleationMech mechType;
 
