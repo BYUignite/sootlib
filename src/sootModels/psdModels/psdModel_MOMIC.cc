@@ -86,48 +86,12 @@ void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms)
 
     //---------- get gas source terms
 
-    // dummy variables
-    map<gasSp, double> nucGasSrc = {{gasSp::C2H2,0},
-                                    {gasSp::O,   0},
-                                    {gasSp::O2,  0},
-                                    {gasSp::H,   0},
-                                    {gasSp::H2,  0},
-                                    {gasSp::OH,  0},
-                                    {gasSp::H2O, 0},
-                                    {gasSp::CO,  0},
-                                    {gasSp::C,   0},
-                                    {gasSp::C6H6,0}};
-
-    map<gasSp, double> grwGasSrc= {{gasSp::C2H2,0},
-                                   {gasSp::O,   0},
-                                   {gasSp::O2,  0},
-                                   {gasSp::H,   0},
-                                   {gasSp::H2,  0},
-                                   {gasSp::OH,  0},
-                                   {gasSp::H2O, 0},
-                                   {gasSp::CO,  0},
-                                   {gasSp::C,   0},
-                                   {gasSp::C6H6,0}};
-
-    map<gasSp, double> oxiGasSrc= {{gasSp::C2H2,0},
-                                   {gasSp::O,   0},
-                                   {gasSp::O2,  0},
-                                   {gasSp::H,   0},
-                                   {gasSp::H2,  0},
-                                   {gasSp::OH,  0},
-                                   {gasSp::H2O, 0},
-                                   {gasSp::CO,  0},
-                                   {gasSp::C,   0},
-                                   {gasSp::C6H6,0}};
-    // coagulation does not contribute to gas sources/sinks
-
     for (auto const& x : ggg) {
         gasSp sp = x.first;
         if (sp != gasSp::C) {
-            nucGasSrc[sp] = nuc->getNucleationGasRates(state, Mnuc[1]).gasSourceTerms[sp];
-            grwGasSrc[sp] = grw->getGrowthGasRates(state, Mgrw[1]).gasSourceTerms[sp];
-            oxiGasSrc[sp] = oxi->getOxidationGasRates(state, Moxi[1]).gasSourceTerms[sp];
-            sourceTerms->gasSourceTerms[sp] = nucGasSrc[sp] + grwGasSrc[sp] + oxiGasSrc[sp];
+            sourceTerms->gasSourceTerms[sp] = nuc->getNucleationGasRates(state, Mnuc[1]).gasSourceTerms[sp] + 
+                                              grw->getGrowthGasRates(state,     Mgrw[1]).gasSourceTerms[sp] + 
+                                              oxi->getOxidationGasRates(state,  Moxi[1]).gasSourceTerms[sp];
         }
     }
 
