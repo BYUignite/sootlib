@@ -26,9 +26,7 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    growthModel() : growthRxnRatios(std::vector<double>((size_t)gasSp::size, 0.0)) {
-        growthRxnRatios[(int)gasSp::C] = 1.0;
-    }
+    growthModel() : growthRxnRatios(std::vector<double>((size_t)gasSp::size, 0.0)) { }
     virtual ~growthModel() = default;
 };
 } // namespace soot

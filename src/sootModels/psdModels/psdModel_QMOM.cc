@@ -102,7 +102,7 @@ void psdModel_QMOM::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     for (size_t i = 0; i < nsoot; i++)
         sourceTerms->sootSourceTerms[i] = (nucSrcM[i] + cndSrcM[i] + grwSrcM[i] + oxiSrcM[i] + coaSrcM[i]);
 
-    //---------- get gas source terms
+    //---------- set gas source terms
 
     for (int sp=0; sp<(int)gasSp::size; sp++) {
         if(sp == (int)gasSp::C) continue;

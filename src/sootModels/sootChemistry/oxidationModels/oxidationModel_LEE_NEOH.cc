@@ -5,6 +5,10 @@ using namespace soot;
 
 oxidationModel_LEE_NEOH::oxidationModel_LEE_NEOH() {
 
+    // C + OH      --> CO + H   
+    //                          --> 2C_soot + OH + (1/2)O2 --> 2CO + H
+    // C + (1/2)O2 --> CO 
+
     oxidationRxnRatios[(int)gasSp::CO] =  2;
     oxidationRxnRatios[(int)gasSp::H] =   1;
     oxidationRxnRatios[(int)gasSp::OH] = -1;

@@ -41,7 +41,6 @@ void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     const double Kfm = eps_c * sqrt(M_PI * kb * state.T / 2) * pow(6 / M_PI / rhoSoot, 2 / 3.0);
     const double Kc = 2 * kb * state.T / (3 / state.muGas);
     const double Kcp = 2 * 1.657 * state.getGasMeanFreePath() * pow(M_PI / 6 * rhoSoot, 1.0 / 3);
-    const double mMin = state.cMin * gasSpMW[(int)gasSp::C] / Na;
 
     // reused Mk function results here
     const double M13 =  Mk( 1.0 / 3, M0, M1, M2);
@@ -59,7 +58,7 @@ void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     //---------- nucleation terms
 
-    double Jnuc = nuc->getNucleationSootRate(state);
+    double Jnuc = nuc->getNucleationSootRate(state);    // #/m3*s
 
     // PAH nucleation and condensation; getNucleationSootRate function call above still required to set DIMER variables
     if (nuc->mechType == nucleationMech::PAH) {
@@ -95,8 +94,10 @@ void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     } // end PAH nucleation/condensation block
 
-    N0 = Jnuc;
-    N1 = Jnuc * mMin;
+    const double mMin = state.cMin * gasSpMW[(int)gasSp::C] / Na;
+
+    N0 = Jnuc;                 // #/m3*s
+    N1 = Jnuc * mMin;          // kg_soot/m3*s
     N2 = Jnuc * mMin * mMin;
 
     //---------- growth terms
@@ -136,7 +137,7 @@ void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 	sourceTerms->sootSourceTerms[1] = (N1 + G1 + Cnd1 - X1 + C1);
 	sourceTerms->sootSourceTerms[2] = (N2 + G2 + Cnd2 - X2 + C2);
 
-	//---------- get gas source terms
+	//---------- set gas source terms
 
     for (int sp=0; sp<(int)gasSp::size; sp++) {
         if(sp == (int)gasSp::C) continue;

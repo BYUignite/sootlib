@@ -40,7 +40,7 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     //---------- get chemical rates
 
-    double jNuc = nuc->getNucleationSootRate(state);
+    double jNuc = nuc->getNucleationSootRate(state);        // #/m3*s
     double kGrw = grw->getGrowthSootRate(state);
     double kOxi = oxi->getOxidationSootRate(state);
     double coag = coa->getCoagulationSootRate(state, state.absc[0], state.absc[0]);
@@ -50,8 +50,8 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     double N0 = 0;
     double N1 = 0;
 
-    N0 = jNuc;
-    N1 = jNuc * state.cMin * gasSpMW[(int)gasSp::C] / Na;
+    N0 = jNuc;                                              // #/m3*s
+    N1 = jNuc * state.cMin * gasSpMW[(int)gasSp::C] / Na;   // kg_soot/m3*s (as carbon)
 
     //---------- PAH condensation terms
 
@@ -96,7 +96,7 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     sourceTerms->sootSourceTerms[0] = (N0 + Cnd0 + G0 + X0 + C0);      // #/m3*s
     sourceTerms->sootSourceTerms[1] = (N1 + Cnd1 + G1 + X1 + C1);      // kg/m3*s
 
-    //---------- get gas source terms
+    //---------- set gas source terms
 
     for (int sp=0; sp<(int)gasSp::size; sp++) {
         if(sp == (int)gasSp::C) continue;

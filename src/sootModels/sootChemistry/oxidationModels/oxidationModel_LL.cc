@@ -6,7 +6,7 @@ using namespace soot;
 
 oxidationModel_LL::oxidationModel_LL() {
 
-    oxidationRxnRatios[(int)gasSp::CO] =  1;
+    oxidationRxnRatios[(int)gasSp::CO] =  1;      // C(soot) + (1/2)O2 --> CO
     oxidationRxnRatios[(int)gasSp::O2] = -0.5;
     oxidationRxnRatios[(int)gasSp::C]  = -1;
 

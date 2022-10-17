@@ -84,7 +84,7 @@ void psdModel_MOMIC::setSourceTerms(state& state, sourceTermStruct *sourceTerms)
     for (size_t i = 0; i < N; i++)
         sourceTerms->sootSourceTerms[i] = (Mnuc[i] + Mcnd[i] + Mgrw[i] + Moxi[i] + Mcoa[i]);
 
-    //---------- get gas source terms
+    //---------- set gas source terms
 
     for (int sp=0; sp<(int)gasSp::size; sp++) {
         if(sp == (int)gasSp::C) continue;

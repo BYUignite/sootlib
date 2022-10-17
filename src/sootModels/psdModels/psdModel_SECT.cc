@@ -186,7 +186,7 @@ void psdModel_SECT::setSourceTerms(state& state, std::ostream* out) const {
 
     // There was a commented out section in the old code here labeled "computer gas source terms", but it looked like it didn't do anything anymore
 
-    //---------- get gas source terms
+    //---------- set gas source terms
 
     map<gasSp, double> gasSourceTerms = sootChemistry.getGasSourceTerms(state, massRateRatios, N_tot, G_tot, X_tot, Cnd_tot);
     map<size_t, double> PAHSourceTerms = sootChemistry.getPAHSourceTerms(state, massRateRatios, N_tot, 0, X_tot, Cnd_tot);
