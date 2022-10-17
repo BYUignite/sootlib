@@ -34,8 +34,8 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     //---------- set weights and abscissas
 
     if (M0 > 0) {
-        state.wts.at(0) = M0;
-        state.absc.at(0) = M1 / M0;
+        state.wts[0] = M0;
+        state.absc[0] = M1 / M0;
     }
 
     //---------- get chemical rates
@@ -43,7 +43,7 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     double jNuc = nuc->getNucleationSootRate(state);
     double kGrw = grw->getGrowthSootRate(state);
     double kOxi = oxi->getOxidationSootRate(state);
-    double coag = coa->getCoagulationSootRate(state, state.absc.at(0), state.absc.at(0));
+    double coag = coa->getCoagulationSootRate(state, state.absc[0], state.absc[0]);
 
     //---------- nucleation terms
 
@@ -51,7 +51,7 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     double N1 = 0;
 
     N0 = jNuc;
-    N1 = jNuc * state.cMin * gasSpMW.at(gasSp::C) / Na;
+    N1 = jNuc * state.cMin * gasSpMW[(int)gasSp::C] / Na;
 
     //---------- PAH condensation terms
 
@@ -63,7 +63,7 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
         double nDimer = nuc->DIMER.nDimer;
         double mDimer = nuc->DIMER.mDimer;
 
-        Cnd1 = nDimer * mDimer * coa->getCoagulationSootRate(state, mDimer, state.absc.at(0)) * state.wts.at(0);
+        Cnd1 = nDimer * mDimer * coa->getCoagulationSootRate(state, mDimer, state.absc[0]) * state.wts[0];
 
     }
 
@@ -88,68 +88,26 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     double C0 = 0;
     double C1 = 0;
 
-    //C0 = -0.5 * coag * state.wts.at(0) * state.wts.at(0);
-    C0 = -coag * state.wts.at(0) * state.wts.at(0);
+    //C0 = -0.5 * coag * state.wts[0] * state.wts[0];
+    C0 = -coag * state.wts[0] * state.wts[0];
 
     //---------- combine to make soot source terms
 
-    sourceTerms->sootSourceTerms.at(0) = (N0 + Cnd0 + G0 + X0 + C0);      // #/m3*s
-    sourceTerms->sootSourceTerms.at(1) = (N1 + Cnd1 + G1 + X1 + C1);      // kg/m3*s
+    sourceTerms->sootSourceTerms[0] = (N0 + Cnd0 + G0 + X0 + C0);      // #/m3*s
+    sourceTerms->sootSourceTerms[1] = (N1 + Cnd1 + G1 + X1 + C1);      // kg/m3*s
 
     //---------- get gas source terms
 
-    // dummy variables
-    map<gasSp, double> nucGasSrc = {{gasSp::C2H2,0},
-                                    {gasSp::O,   0},
-                                    {gasSp::O2,  0},
-                                    {gasSp::H,   0},
-                                    {gasSp::H2,  0},
-                                    {gasSp::OH,  0},
-                                    {gasSp::H2O, 0},
-                                    {gasSp::CO,  0},
-                                    {gasSp::C,   0},
-                                    {gasSp::C6H6,0}};
-
-    map<gasSp, double> grwGasSrc= {{gasSp::C2H2,0},
-                                   {gasSp::O,   0},
-                                   {gasSp::O2,  0},
-                                   {gasSp::H,   0},
-                                   {gasSp::H2,  0},
-                                   {gasSp::OH,  0},
-                                   {gasSp::H2O, 0},
-                                   {gasSp::CO,  0},
-                                   {gasSp::C,   0},
-                                   {gasSp::C6H6,0}};
-
-    map<gasSp, double> oxiGasSrc= {{gasSp::C2H2,0},
-                                   {gasSp::O,   0},
-                                   {gasSp::O2,  0},
-                                   {gasSp::H,   0},
-                                   {gasSp::H2,  0},
-                                   {gasSp::OH,  0},
-                                   {gasSp::H2O, 0},
-                                   {gasSp::CO,  0},
-                                   {gasSp::C,   0},
-                                   {gasSp::C6H6,0}};
-
-    // coagulation does not contribute to gas sources/sinks
-
-    for (auto const& x : sourceTerms->gasSourceTerms) {
-        gasSp sp = x.first;
-        if (sp != gasSp::C) {
-            nucGasSrc.at(sp) = nuc->getNucleationGasRates(state, N1).gasSourceTerms.at(sp);
-            grwGasSrc.at(sp) = grw->getGrowthGasRates(state, G1).gasSourceTerms.at(sp);
-            oxiGasSrc.at(sp) = oxi->getOxidationGasRates(state, X1).gasSourceTerms.at(sp);
-            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
-        }
+    for (int sp=0; sp<(int)gasSp::size; sp++) {
+        if(sp == (int)gasSp::C) continue;
+            sourceTerms->gasSourceTerms[sp] = nuc->getNucleationGasRates(state, N1).gasSourceTerms[sp] +
+                                              grw->getGrowthGasRates(state,     G1).gasSourceTerms[sp] + 
+                                              oxi->getOxidationGasRates(state,  X1).gasSourceTerms[sp];
     }
 
     //---------- get PAH source terms
 
-    if(nuc->mechType == nucleationMech::PAH) {
-        for (auto const& x : sourceTerms->pahSourceTerms) {
-            pahSp sp = x.first;
-            sourceTerms->pahSourceTerms.at(sp) = nuc->getNucleationPahRates(state).pahSourceTerms.at(sp);
-        }
-    }
+    if(nuc->mechType == nucleationMech::PAH)
+        for (int sp=0; sp<(int)pahSp::size; sp++)
+            sourceTerms->pahSourceTerms[sp] = nuc->getNucleationPahRates(state).pahSourceTerms[sp];
 }

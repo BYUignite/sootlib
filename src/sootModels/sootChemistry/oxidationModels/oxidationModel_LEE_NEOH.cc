@@ -5,11 +5,11 @@ using namespace soot;
 
 oxidationModel_LEE_NEOH::oxidationModel_LEE_NEOH() {
 
-    oxidationRxnRatios.at(gasSp::CO) =  2;
-    oxidationRxnRatios.at(gasSp::H) =   1;
-    oxidationRxnRatios.at(gasSp::OH) = -1;
-    oxidationRxnRatios.at(gasSp::O2) = -0.5;
-    oxidationRxnRatios.at(gasSp::C)  = -2;
+    oxidationRxnRatios[(int)gasSp::CO] =  2;
+    oxidationRxnRatios[(int)gasSp::H] =   1;
+    oxidationRxnRatios[(int)gasSp::OH] = -1;
+    oxidationRxnRatios[(int)gasSp::O2] = -0.5;
+    oxidationRxnRatios[(int)gasSp::C]  = -2;
 
     mechType = oxidationMech::LEE_NEOH;
 }

@@ -36,8 +36,8 @@ void psdModel_QMOM::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     getWtsAbs(state.sootVar, state.wts, state.absc);
 
     for (size_t i = 0; i < state.wts.size(); i++) {
-        if (state.wts.at(i) < 0  ) { state.wts.at(i) = 0;  }
-        if (state.absc.at(i) < 0)  { state.absc.at(i) = 0; }
+        if (state.wts[i] < 0  ) { state.wts[i] = 0;  }
+        if (state.absc[i] < 0)  { state.absc[i] = 0; }
     }
 
     //---------- get chemical rates
@@ -49,9 +49,9 @@ void psdModel_QMOM::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     //---------- nucleation terms
 
     vector<double> nucSrcM(nsoot, 0.);
-    const double mNuc = state.cMin * gasSpMW.at(gasSp::C) / Na;      // mass of a nucleated particle
+    const double mNuc = state.cMin * gasSpMW[(int)gasSp::C] / Na;      // mass of a nucleated particle
     for (size_t i = 0; i < nsoot; i++)
-        nucSrcM.at(i) = pow(mNuc, i) * jNuc;                            // Nuc_rate = m_nuc^r * jNuc
+        nucSrcM[i] = pow(mNuc, i) * jNuc;                            // Nuc_rate = m_nuc^r * jNuc
 
     //---------- PAH condensation terms
 
@@ -59,8 +59,8 @@ void psdModel_QMOM::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     if (nuc->mechType == nucleationMech::PAH) {
         for (size_t i = 1; i < nsoot; i++) {                             // M0 = 0.0 for condensation by definition
             for (size_t j = 0; j < state.absc.size(); j++)
-                cndSrcM.at(i) += coa->getCoagulationSootRate(state, nuc->DIMER.mDimer, state.absc.at(j)) * pow(state.absc.at(j), i - 1) * state.wts.at(j);
-            cndSrcM.at(i) *= nuc->DIMER.nDimer * nuc->DIMER.mDimer * i;
+                cndSrcM[i] += coa->getCoagulationSootRate(state, nuc->DIMER.mDimer, state.absc[j]) * pow(state.absc[j], i - 1) * state.wts[j];
+            cndSrcM[i] *= nuc->DIMER.nDimer * nuc->DIMER.mDimer * i;
         }
     }
 
@@ -69,13 +69,13 @@ void psdModel_QMOM::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     vector<double> grwSrcM(nsoot, 0);
     const double Acoef = M_PI * pow(abs(6 / M_PI / rhoSoot), 2.0 / 3);      // Acoef (=) kmol^2/3 / kg^2/3
     for (size_t i = 1; i < nsoot; i++)                                                // M0 = 0.0 for growth by definition
-        grwSrcM.at(i) = kGrw * Acoef * i * Mk(i - 1.0 / 3, state.wts, state.absc);          // kg^k/m3*s
+        grwSrcM[i] = kGrw * Acoef * i * Mk(i - 1.0 / 3, state.wts, state.absc);          // kg^k/m3*s
 
     //---------- oxidation terms
 
     vector<double> oxiSrcM(nsoot, 0);
     for (size_t i = 1; i < nsoot; i++)                                                // M0 = 0.0 for oxidation by definition
-        oxiSrcM.at(i) = -kOxi * Acoef * i * Mk(i - 1.0 / 3, state.wts, state.absc);         // kg^k/m3*s
+        oxiSrcM[i] = -kOxi * Acoef * i * Mk(i - 1.0 / 3, state.wts, state.absc);         // kg^k/m3*s
 
     //---------- coagulation terms
 
@@ -95,68 +95,27 @@ void psdModel_QMOM::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
                           (k == 0 ? -0.5 : pow(state.absc[ii], k) * (pow(2, k - 1) - 1) );                                  // M0 special case
     }
 
-    coaSrcM.at(1) = 0.0;    // M1 = 0.0 for coagulation by definition
+    coaSrcM[1] = 0.0;    // M1 = 0.0 for coagulation by definition
 
     //---------- combine to make soot source terms
 
     for (size_t i = 0; i < nsoot; i++)
-        sourceTerms->sootSourceTerms.at(i) = (nucSrcM.at(i) + cndSrcM.at(i) + grwSrcM.at(i) + oxiSrcM.at(i) + coaSrcM.at(i));
+        sourceTerms->sootSourceTerms[i] = (nucSrcM[i] + cndSrcM[i] + grwSrcM[i] + oxiSrcM[i] + coaSrcM[i]);
 
     //---------- get gas source terms
 
-    // dummy variables
-    map<gasSp, double> nucGasSrc = {{gasSp::C2H2,0},
-                                    {gasSp::O,   0},
-                                    {gasSp::O2,  0},
-                                    {gasSp::H,   0},
-                                    {gasSp::H2,  0},
-                                    {gasSp::OH,  0},
-                                    {gasSp::H2O, 0},
-                                    {gasSp::CO,  0},
-                                    {gasSp::C,   0},
-                                    {gasSp::C6H6,0}};
-
-    map<gasSp, double> grwGasSrc= {{gasSp::C2H2,0},
-                                   {gasSp::O,   0},
-                                   {gasSp::O2,  0},
-                                   {gasSp::H,   0},
-                                   {gasSp::H2,  0},
-                                   {gasSp::OH,  0},
-                                   {gasSp::H2O, 0},
-                                   {gasSp::CO,  0},
-                                   {gasSp::C,   0},
-                                   {gasSp::C6H6,0}};
-
-    map<gasSp, double> oxiGasSrc= {{gasSp::C2H2,0},
-                                   {gasSp::O,   0},
-                                   {gasSp::O2,  0},
-                                   {gasSp::H,   0},
-                                   {gasSp::H2,  0},
-                                   {gasSp::OH,  0},
-                                   {gasSp::H2O, 0},
-                                   {gasSp::CO,  0},
-                                   {gasSp::C,   0},
-                                   {gasSp::C6H6,0}};
-    // coagulation does not contribute to gas sources/sinks
-
-    for (auto const& x : sourceTerms->gasSourceTerms) {
-        gasSp sp = x.first;
-        if (sp != gasSp::C) {
-            nucGasSrc.at(sp) = nuc->getNucleationGasRates(state, nucSrcM[1]).gasSourceTerms.at(sp);
-            grwGasSrc.at(sp) = grw->getGrowthGasRates(state, grwSrcM[1]).gasSourceTerms.at(sp);
-            oxiGasSrc.at(sp) = oxi->getOxidationGasRates(state, oxiSrcM[1]).gasSourceTerms.at(sp);
-            sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
-        }
+    for (int sp=0; sp<(int)gasSp::size; sp++) {
+        if(sp == (int)gasSp::C) continue;
+            sourceTerms->gasSourceTerms[sp] = nuc->getNucleationGasRates(state, nucSrcM[1]).gasSourceTerms[sp] +
+                                              grw->getGrowthGasRates(state,     grwSrcM[1]).gasSourceTerms[sp] + 
+                                              oxi->getOxidationGasRates(state,  oxiSrcM[1]).gasSourceTerms[sp];
     }
 
     //---------- get PAH source terms
 
-    if(nuc->mechType == nucleationMech::PAH) {
-        for (auto const& x : sourceTerms->pahSourceTerms) {
-            pahSp sp = x.first;
-            sourceTerms->pahSourceTerms.at(sp) = nuc->getNucleationPahRates(state).pahSourceTerms.at(sp);
-        }
-    }
+    if(nuc->mechType == nucleationMech::PAH)
+        for (int sp=0; sp<(int)pahSp::size; sp++)
+            sourceTerms->pahSourceTerms[sp] = nuc->getNucleationPahRates(state).pahSourceTerms[sp];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -183,14 +142,14 @@ void psdModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, 
 
 		// reinitialize weights and absc with zeros
 		for (size_t i = 0; i < N / 2; i++) {
-			w_temp.at(i) = 0;
-			a_temp.at(i) = 0;
+			w_temp[i] = 0;
+			a_temp[i] = 0;
 		}
 
 		// in 2 moment case, return MONO output
 		if (N == 2) {
-			w_temp.at(0) = M.at(0);
-			a_temp.at(0) = M.at(1) / M.at(0);
+			w_temp[0] = M[0];
+			a_temp[0] = M[1] / M[0];
 			break;
 		}
 
@@ -199,9 +158,9 @@ void psdModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, 
 
 		// check for bad values
 		for (size_t i = 0; i < N / 2; i++) {
-			if (w_temp.at(i) < 0 || a_temp.at(i) < 0)     // check for negative values
+			if (w_temp[i] < 0 || a_temp[i] < 0)     // check for negative values
 				bad_values = true;
-			if (w_temp.at(i) > 1)                         // check for weights > 1
+			if (w_temp[i] > 1)                         // check for weights > 1
 			    bad_values = true;
 		}
 
@@ -217,8 +176,8 @@ void psdModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, 
 
 	// assign temporary variables to output
 	for (size_t i = 0; i < w_temp.size(); i++) {
-		weights.at(i) = w_temp.at(i);
-		abscissas.at(i) = a_temp.at(i);
+		weights[i] = w_temp[i];
+		abscissas[i] = a_temp[i];
 	}
 }
 
@@ -235,35 +194,35 @@ void psdModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w
     vector<double> j_ldiag(N);
 
     for (size_t i = 0; i <= N * 2 - 1; i++)
-        sigma.at(1).at(i) = m.at(i);
+        sigma[1][i] = m[i];
 
-    a.at(0) = m.at(1) / m.at(0);
+    a[0] = m[1] / m[0];
 
     for (size_t i = 1; i < N; i++) {
         for (size_t j = i; j < N * 2 - i; j++)
-            sigma.at(i + 1).at(j) = sigma.at(i).at(j + 1) - a.at(i - 1) * sigma.at(i).at(j) - b.at(i - 1) * sigma.at(i - 1).at(j);
-        a.at(i) = -sigma.at(i).at(i) / sigma.at(i).at(i - 1) + sigma.at(i + 1).at(i + 1) / sigma.at(i + 1).at(i);
-        b.at(i) = sigma.at(i + 1).at(i) / sigma.at(i).at(i - 1);
+            sigma[i + 1][j] = sigma[i][j + 1] - a[i - 1] * sigma[i][j] - b[i - 1] * sigma[i - 1][j];
+        a[i] = -sigma[i][i] / sigma[i][i - 1] + sigma[i + 1][i + 1] / sigma[i + 1][i];
+        b[i] = sigma[i + 1][i] / sigma[i][i - 1];
     }
 
     j_diag = a;
     for (size_t i = 1; i < N; i++)
-        j_ldiag.at(i) = -sqrt(abs(b.at(i)));
+        j_ldiag[i] = -sqrt(abs(b[i]));
 
     for (size_t i = 0; i < N; i++)
-        evec.at(i + N * i) = 1;
+        evec[i + N * i] = 1;
 
-//    int flag = tql2(N, &j_diag.at(0), &j_ldiag.at(0), &evec.at(0));       // for eispack
+//    int flag = tql2(N, &j_diag[0], &j_ldiag[0], &evec[0]);       // for eispack
 
     //char VorN = 'V';
     //vector<double> work(2*N-2);
     //int info;
-    //dstev_( &VorN, &N, &j_diag.at(0), &j_ldiag.at(1), &evec.at(0), &N, &work.at(0), &info);
+    //dstev_( &VorN, &N, &j_diag[0], &j_ldiag[1], &evec[0], &N, &work[0], &info);
 
     x = j_diag;      // j_diag are now the vector of eigenvalues.
 
     for (size_t i = 0; i < N; i++)
-        w.at(i) = pow(evec.at(0 + i * N), 2) * m.at(0);
+        w[i] = pow(evec[0 + i * N], 2) * m[0];
 }
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -272,10 +231,10 @@ double psdModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<dou
 	double Mk = 0;
 
 	for (size_t i = 0; i < wts.size() / 2; i++) {
-		if (wts.at(i) == 0 || absc.at(i) == 0)
+		if (wts[i] == 0 || absc[i] == 0)
 			return 0;
 		else
-			Mk += wts.at(i) * pow(absc.at(i), exp);
+			Mk += wts[i] * pow(absc[i], exp);
 	}
 
 	return Mk;

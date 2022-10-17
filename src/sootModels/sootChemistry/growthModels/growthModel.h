@@ -2,6 +2,7 @@
 
 #include "state.h"
 #include "sootDefs.h"
+#include <vector>
 
 namespace soot {
 
@@ -11,7 +12,7 @@ class growthModel {
 
 public:
 
-    std::map<gasSp, double>   growthRxnRatios;
+    std::vector<double> growthRxnRatios;
 
     growthMech mechType;
 
@@ -25,7 +26,9 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    growthModel();
+    growthModel() : growthRxnRatios(std::vector<double>((size_t)gasSp::size, 0.0)) {
+        growthRxnRatios[(int)gasSp::C] = 1.0;
+    }
     virtual ~growthModel() = default;
 };
 } // namespace soot

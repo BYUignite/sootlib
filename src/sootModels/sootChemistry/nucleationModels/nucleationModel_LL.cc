@@ -8,9 +8,9 @@ using namespace soot;
 
 nucleationModel_LL::nucleationModel_LL() : nucleationModel () {
 
-    nucleationRxnRatios.at(gasSp::C2H2) = -1;
-    nucleationRxnRatios.at(gasSp::H2)   =  1;
-    nucleationRxnRatios.at(gasSp::C)    =  2;
+    nucleationRxnRatios[(int)gasSp::C2H2] = -1;
+    nucleationRxnRatios[(int)gasSp::H2]   =  1;
+    nucleationRxnRatios[(int)gasSp::C]    =  2;
 
     mechType = nucleationMech::LL;
 }

@@ -41,7 +41,7 @@ void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
     const double Kfm = eps_c * sqrt(M_PI * kb * state.T / 2) * pow(6 / M_PI / rhoSoot, 2 / 3.0);
     const double Kc = 2 * kb * state.T / (3 / state.muGas);
     const double Kcp = 2 * 1.657 * state.getGasMeanFreePath() * pow(M_PI / 6 * rhoSoot, 1.0 / 3);
-    const double mMin = state.cMin * gasSpMW.at(gasSp::C) / Na;
+    const double mMin = state.cMin * gasSpMW[(int)gasSp::C] / Na;
 
     // reused Mk function results here
     const double M13 =  Mk( 1.0 / 3, M0, M1, M2);
@@ -132,65 +132,24 @@ void psdModel_LOGN::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     //---------- combine to make soot source terms
 
-    sourceTerms->sootSourceTerms.at(0) = (N0 + G0 + Cnd0 - X0 + C0);
-	sourceTerms->sootSourceTerms.at(1) = (N1 + G1 + Cnd1 - X1 + C1);
-	sourceTerms->sootSourceTerms.at(2) = (N2 + G2 + Cnd2 - X2 + C2);
+    sourceTerms->sootSourceTerms[0] = (N0 + G0 + Cnd0 - X0 + C0);
+	sourceTerms->sootSourceTerms[1] = (N1 + G1 + Cnd1 - X1 + C1);
+	sourceTerms->sootSourceTerms[2] = (N2 + G2 + Cnd2 - X2 + C2);
 
 	//---------- get gas source terms
 
-    // dummy variables
-    map<gasSp, double> nucGasSrc = {{gasSp::C2H2,0},
-                                    {gasSp::O,   0},
-                                    {gasSp::O2,  0},
-                                    {gasSp::H,   0},
-                                    {gasSp::H2,  0},
-                                    {gasSp::OH,  0},
-                                    {gasSp::H2O, 0},
-                                    {gasSp::CO,  0},
-                                    {gasSp::C,   0},
-                                    {gasSp::C6H6,0}};
-
-    map<gasSp, double> grwGasSrc= {{gasSp::C2H2,0},
-                                   {gasSp::O,   0},
-                                   {gasSp::O2,  0},
-                                   {gasSp::H,   0},
-                                   {gasSp::H2,  0},
-                                   {gasSp::OH,  0},
-                                   {gasSp::H2O, 0},
-                                   {gasSp::CO,  0},
-                                   {gasSp::C,   0},
-                                   {gasSp::C6H6,0}};
-
-    map<gasSp, double> oxiGasSrc= {{gasSp::C2H2,0},
-                                   {gasSp::O,   0},
-                                   {gasSp::O2,  0},
-                                   {gasSp::H,   0},
-                                   {gasSp::H2,  0},
-                                   {gasSp::OH,  0},
-                                   {gasSp::H2O, 0},
-                                   {gasSp::CO,  0},
-                                   {gasSp::C,   0},
-                                   {gasSp::C6H6,0}};
-	// coagulation does not contribute to gas sources/sinks
-
-	for (auto const& x : sourceTerms->gasSourceTerms) {
-	    gasSp sp = x.first;
-	    if (sp != gasSp::C) {
-	        nucGasSrc.at(sp) = nuc->getNucleationGasRates(state, N1).gasSourceTerms.at(sp);
-	        grwGasSrc.at(sp) = grw->getGrowthGasRates(state, G1).gasSourceTerms.at(sp);
-	        oxiGasSrc.at(sp) = oxi->getOxidationGasRates(state, X1).gasSourceTerms.at(sp);
-	        sourceTerms->gasSourceTerms.at(sp) = nucGasSrc.at(sp) + grwGasSrc.at(sp) + oxiGasSrc.at(sp);
-	    }
+    for (int sp=0; sp<(int)gasSp::size; sp++) {
+        if(sp == (int)gasSp::C) continue;
+	        sourceTerms->gasSourceTerms[sp] = nuc->getNucleationGasRates(state, N1).gasSourceTerms[sp] +
+	                                          grw->getGrowthGasRates(    state, G1).gasSourceTerms[sp] +
+	                                          oxi->getOxidationGasRates( state, X1).gasSourceTerms[sp];
 	}
 
     //---------- get PAH source terms
 
-    if(nuc->mechType == nucleationMech::PAH) {
-        for (auto const& x : sourceTerms->pahSourceTerms) {
-            pahSp sp = x.first;
-            sourceTerms->pahSourceTerms.at(sp) = nuc->getNucleationPahRates(state).pahSourceTerms.at(sp);
-        }
-    }
+    if(nuc->mechType == nucleationMech::PAH)
+        for (int sp=0; sp<(int)pahSp::size; sp++)
+            sourceTerms->pahSourceTerms[sp] = nuc->getNucleationPahRates(state).pahSourceTerms[sp];
 
 }
 
