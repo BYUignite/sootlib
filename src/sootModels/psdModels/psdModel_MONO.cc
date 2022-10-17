@@ -98,13 +98,11 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     //---------- get gas source terms
 
-    for (auto const& x : ggg) {
-        gasSp sp = x.first;
-        if (sp != gasSp::C) {
+    for (int sp=0; sp<(int)gasSp::size; sp++) {
+        if(sp == (int)gasSp::C) continue;
             sourceTerms->gasSourceTerms[sp] = nuc->getNucleationGasRates(state, N1).gasSourceTerms[sp] +
                                               grw->getGrowthGasRates(state,     G1).gasSourceTerms[sp] + 
                                               oxi->getOxidationGasRates(state,  X1).gasSourceTerms[sp];
-        }
     }
 
     //---------- get PAH source terms

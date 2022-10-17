@@ -58,15 +58,15 @@ int main(int argc, char** argv) {
     double S_M3 = SM.sourceTerms->sootSourceTerms[3];      // kg^3/m^3*s
 
     // gas source terms (kg sp)/(kg gas * s)
-    double S_C2H2 = SM.sourceTerms->gasSourceTerms[gasSp::C2H2];
-    double S_H    = SM.sourceTerms->gasSourceTerms[gasSp::H];
-    double S_H2   = SM.sourceTerms->gasSourceTerms[gasSp::H2];
-    double S_O    = SM.sourceTerms->gasSourceTerms[gasSp::O];
-    double S_O2   = SM.sourceTerms->gasSourceTerms[gasSp::O2];
-    double S_CO   = SM.sourceTerms->gasSourceTerms[gasSp::CO];
-    double S_H2O  = SM.sourceTerms->gasSourceTerms[gasSp::H2O];
-    double S_OH   = SM.sourceTerms->gasSourceTerms[gasSp::OH];
-    double S_C6H6 = SM.sourceTerms->gasSourceTerms[gasSp::C6H6];
+    double S_C2H2 = SM.sourceTerms->gasSourceTerms[(int)gasSp::C2H2];
+    double S_H    = SM.sourceTerms->gasSourceTerms[(int)gasSp::H];
+    double S_H2   = SM.sourceTerms->gasSourceTerms[(int)gasSp::H2];
+    double S_O    = SM.sourceTerms->gasSourceTerms[(int)gasSp::O];
+    double S_O2   = SM.sourceTerms->gasSourceTerms[(int)gasSp::O2];
+    double S_CO   = SM.sourceTerms->gasSourceTerms[(int)gasSp::CO];
+    double S_H2O  = SM.sourceTerms->gasSourceTerms[(int)gasSp::H2O];
+    double S_OH   = SM.sourceTerms->gasSourceTerms[(int)gasSp::OH];
+    double S_C6H6 = SM.sourceTerms->gasSourceTerms[(int)gasSp::C6H6];
 
     // PAH source terms (kg sp)/(kg gas * s)
     double S_C10H8  = SM.sourceTerms->pahSourceTerms[(int)pahSp::C10H8];

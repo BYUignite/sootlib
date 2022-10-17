@@ -10,16 +10,11 @@ sourceTermStruct oxidationModel::getOxidationGasRates(const state& state, const 
 
     sourceTermStruct oxiGasSourceTerms;
 
-    for (auto const& x : ggg) {
-
-        gasSp sp = x.first;
-
-        if (sp != gasSp::C)
-            oxiGasSourceTerms.gasSourceTerms.at(sp) += X1 * oxidationRxnRatios[(int)sp] * gasSpMW[(int)sp]
-                                                       / (oxidationRxnRatios[(int)gasSp::C] * gasSpMW[(int)gasSp::C])
-                                                       / state.rhoGas;
-
+    for (int sp=0; sp<(int)gasSp::size; sp++) {
+        if(sp == (int)gasSp::C) continue;
+        oxiGasSourceTerms.gasSourceTerms[sp] += X1 * oxidationRxnRatios[sp] * gasSpMW[sp] /
+                                                (oxidationRxnRatios[(int)gasSp::C] * gasSpMW[(int)gasSp::C]) /
+                                                state.rhoGas;
     }
-
     return oxiGasSourceTerms;
 }

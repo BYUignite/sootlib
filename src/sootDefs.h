@@ -84,36 +84,17 @@ const std::vector<double> pahSpGamma = {   ///< unitless sticking coefficient
 };
 
 //////////////////// custom structures
-const    std::map<gasSp, double> ggg = {
-    {gasSp::O2,  0},
-    {gasSp::O,   0},
-    {gasSp::H2,  0},
-    {gasSp::H,   0},
-    {gasSp::OH,  0},
-    {gasSp::H2O, 0},
-    {gasSp::CO,  0},
-    {gasSp::C2H2,0},
-    {gasSp::C6H6,0},
-    {gasSp::C,   0}
-};
 
 struct sourceTermStruct {
 
-    std::vector<double> sootSourceTerms{0, 0};      // default to 2 moments
-    std::vector<double> pahSourceTerms{(int)pahSp::size, 0.0};
-    //std::vector<double> gasSourceTerms{(int)gasSp::size, 0.0};
-    std::map<gasSp, double> gasSourceTerms = {
-        {gasSp::O2,  0},
-        {gasSp::O,   0},
-        {gasSp::H2,  0},
-        {gasSp::H,   0},
-        {gasSp::OH,  0},
-        {gasSp::H2O, 0},
-        {gasSp::CO,  0},
-        {gasSp::C2H2,0},
-        {gasSp::C6H6,0},
-        {gasSp::C,   0}
-    };
+    std::vector<double> sootSourceTerms;
+    std::vector<double> pahSourceTerms;
+    std::vector<double> gasSourceTerms;
+
+    sourceTermStruct() :
+        sootSourceTerms( std::vector<double>(2,0.0) ),     // default to 2 soot variables
+        pahSourceTerms(  std::vector<double>((int)pahSp::size, 0.0) ),
+        gasSourceTerms(  std::vector<double>((int)gasSp::size, 0.0) ) {}
 };
 
 //----------------------

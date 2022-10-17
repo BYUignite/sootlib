@@ -10,17 +10,12 @@ sourceTermStruct nucleationModel::getNucleationGasRates(const state& state, cons
 
     sourceTermStruct nucGasSourceTerms;
 
-    for (auto const& x : ggg) {
-
-        gasSp sp = x.first;
-
-        if (sp != gasSp::C) {
-            nucGasSourceTerms.gasSourceTerms.at(sp) += N1 * nucleationRxnRatios[(int)sp] * gasSpMW[(int)sp]
+    for (int sp=0; sp<(int)gasSp::size; sp++) {
+        if(sp == (int)gasSp::C) continue;
+            nucGasSourceTerms.gasSourceTerms[sp] += N1 * nucleationRxnRatios[sp] * gasSpMW[sp]
                                                        / (nucleationRxnRatios[(int)gasSp::C] * gasSpMW[(int)gasSp::C])
                                                        / state.rhoGas;
-        }
     }
-
     return nucGasSourceTerms;
 }
 

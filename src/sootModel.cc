@@ -46,10 +46,8 @@ void sootModel::setSourceTerms(state& state) {
     for(int i=0; i < psd->nsoot; i++)
         sourceTerms->sootSourceTerms[i] = 0;
 
-    for (auto const& x : ggg) {
-        gasSp sp = x.first;
+    for (int sp=0; sp<(int)gasSp::size; sp++)
         sourceTerms->gasSourceTerms[sp] = 0;
-    }
 
     sourceTerms->pahSourceTerms = vector<double>{(int)pahSp::size, 0.0};
 
