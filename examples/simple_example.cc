@@ -52,6 +52,7 @@ int main(int argc, char** argv) {
     //---------- accessing source term results
 
     // soot source terms
+
     double S_M0 = SM.sourceTerms->sootSourceTerms[0];      // #/m^3*s
     double S_M1 = SM.sourceTerms->sootSourceTerms[1];      // kg/m^3*s
     double S_M2 = SM.sourceTerms->sootSourceTerms[2];      // kg^2/m^3*s

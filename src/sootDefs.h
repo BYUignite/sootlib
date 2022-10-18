@@ -6,6 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include <memory>
+#include <string>
 
 namespace soot {
 
@@ -36,6 +37,28 @@ enum class psdMech        { NONE, MONO, LOGN, QMOM, MOMIC,    SECT,  size };
 //////////////////// gas species list and properties
 
 enum class gasSp{ O2, O, H2, H, OH, H2O, CO, C2H2, C6H6, C, size };
+
+const std::map<std::string, gasSp> gasSpMapSE{{"O2",  gasSp::O2},     // map String to Enumeration
+                                              {"O" ,  gasSp::O},
+                                              {"H2",  gasSp::H2},
+                                              {"H",   gasSp::H},
+                                              {"OH",  gasSp::OH},
+                                              {"H2O", gasSp::H2O},
+                                              {"CO",  gasSp::CO},
+                                              {"C2H2",gasSp::C2H2},
+                                              {"C6H6",gasSp::C6H6},
+                                              {"C",   gasSp::C}};
+
+const std::map<gasSp, std::string> gasSpMapES{{gasSp::O2,  "O2"},     // map Enumeration to String
+                                              {gasSp::O,   "O" },
+                                              {gasSp::H2,  "H2"},
+                                              {gasSp::H,   "H"},
+                                              {gasSp::OH,  "OH"},
+                                              {gasSp::H2O, "H2O"},
+                                              {gasSp::CO,  "CO"},
+                                              {gasSp::C2H2,"C2H2"},
+                                              {gasSp::C6H6,"C6H6"},
+                                              {gasSp::C,   "C"}};
 
 const std::vector<double> gasSpMW{      // (kg/kmol); make sure the order corresponds to the gasSp enum
     31.998,    // O2
