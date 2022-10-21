@@ -33,6 +33,11 @@ psdModel::psdModel(sourceTermStruct* sourceTerms, int nsoot_,
 
     nsoot = nsoot_;
 
+    if (G==growthMech::HACA && X!=oxidationMech::HACA)
+        throw domain_error("Invalid model combination: HACA surface growth cannot be combined with non-HACA oxidation");
+    if (G!=growthMech::HACA && X==oxidationMech::HACA)
+        throw domain_error("Invalid model combination: HACA oxidation cannot be combined with non-HACA surface growth");
+
     //---------- set nucleation model
 
     switch (N) {
