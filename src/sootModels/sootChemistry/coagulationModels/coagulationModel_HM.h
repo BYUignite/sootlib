@@ -40,8 +40,9 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-     coagulationModel_HM() {
-        mechType = coagulationMech::HM;
+    coagulationModel_HM() { 
+        FM_multiplier = 1.0;
+        mechType = coagulationMech::HM; 
     }
     ~coagulationModel_HM() override = default;
 };

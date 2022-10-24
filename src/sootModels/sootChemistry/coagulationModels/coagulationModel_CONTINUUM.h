@@ -38,8 +38,9 @@ public:
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    coagulationModel_CONTINUUM() {
-        mechType = coagulationMech::CONTINUUM;
+    coagulationModel_CONTINUUM() { 
+        FM_multiplier = 1.0;
+        mechType = coagulationMech::CONTINUUM; 
     }
     ~coagulationModel_CONTINUUM() override = default;
 };

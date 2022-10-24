@@ -24,6 +24,7 @@ int main(int argc, char** argv) {
 
     // create sootModel object with desired mechanisms
     sootModel SM = sootModel(PSD, N, n, g, x, c);
+    SM.psd->coa->set_FM_multiplier(9.0/2.0/2.2);
 
     //---------- set up thermodynamic state variables
 

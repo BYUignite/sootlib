@@ -34,7 +34,7 @@ double coagulationModel_FUCHS::getCoagulationSootRate(const state& state,
 
     double K12 = 2.*M_PI*(D1 + D2)*(d1 + d2) / 
                  ( (d1 + d2)/(d1 + d2 + 2.*sqrt(g1*g1 + g2*g2)) + 
-                   8./eps_c*(D1 + D2)/(sqrt(c1*c1 + c2*c2)*(d1 + d2)) 
+                   8./(eps_c*FM_multiplier)*(D1 + D2)/(sqrt(c1*c1 + c2*c2)*(d1 + d2)) 
                  );
     return K12;
 }

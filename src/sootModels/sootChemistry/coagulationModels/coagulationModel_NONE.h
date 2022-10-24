@@ -29,9 +29,10 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    coagulationModel_NONE() : coagulationModel() {
-        mechType = coagulationMech::NONE;
-    };
+    coagulationModel_NONE() { 
+        FM_multiplier = 1.0;
+        mechType = coagulationMech::NONE; 
+    }
     ~coagulationModel_NONE() override = default;
 };
 } // namespace soot

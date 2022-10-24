@@ -11,7 +11,9 @@ class coagulationModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
-private:
+protected:
+
+    double FM_multiplier;         // multiply the FM rate by this constant (1.0 default, user set)
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
@@ -27,6 +29,10 @@ public:
      * @return
      */
     virtual double getCoagulationSootRate(const state& state, double m1, double m2) const = 0;
+
+    void set_FM_multiplier(double FM_multiplier_) {
+        FM_multiplier = FM_multiplier_;
+    }
 
     coagulationMech mechType;
 

@@ -44,8 +44,9 @@ public:
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    coagulationModel_FUCHS() {
-        mechType = coagulationMech::FUCHS;
+    coagulationModel_FUCHS() { 
+        FM_multiplier = 1.0;
+        mechType = coagulationMech::FUCHS; 
     }
     ~coagulationModel_FUCHS() override = default;
 };

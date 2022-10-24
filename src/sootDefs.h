@@ -60,6 +60,17 @@ const std::map<gasSp, std::string> gasSpMapES{{gasSp::O2,  "O2"},     // map Enu
                                               {gasSp::C6H6,"C6H6"},
                                               {gasSp::C,   "C"}};
 
+const std::map<int, std::string> gasSpMapIS{{0,  "O2"},     // map Int to String
+                                            {1,   "O" },
+                                            {2,  "H2"},
+                                            {3,   "H"},
+                                            {4,  "OH"},
+                                            {5, "H2O"},
+                                            {6,  "CO"},
+                                            {7,"C2H2"},
+                                            {8,"C6H6"},
+                                            {9,   "C"}};
+
 const std::vector<double> gasSpMW{      // (kg/kmol); make sure the order corresponds to the gasSp enum
     31.998,    // O2
     15.999,    // O

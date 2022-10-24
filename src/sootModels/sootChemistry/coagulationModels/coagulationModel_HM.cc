@@ -17,7 +17,7 @@ double coagulationModel_HM::getCoagulationSootRate(const state& state,
     //------------ free molecular rate
 
     double mR = m1*m2/(m1+m2);                 // reduced mass
-    double K12_FM = eps_c * sqrt(M_PI*kb*state.T*0.5/mR) * ds*ds; 
+    double K12_FM = eps_c * sqrt(M_PI*kb*state.T*0.5/mR) * ds*ds * FM_multiplier; 
 
     //------------ continuum rate
 
