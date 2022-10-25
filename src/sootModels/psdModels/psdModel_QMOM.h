@@ -81,11 +81,11 @@ private:
 
 public:
 
-    explicit psdModel_QMOM(sourceTermStruct* sourceTerms, int nVar = 4,
-                           nucleationMech N = nucleationMech::NONE,
-                           growthMech G = growthMech::NONE,
-                           oxidationMech X = oxidationMech::NONE,
-                           coagulationMech C = coagulationMech::NONE);
+    explicit psdModel_QMOM(int nsoot_,
+                           nucleationMech N,
+                           growthMech G,
+                           oxidationMech X,
+                           coagulationMech C);
 
     ~psdModel_QMOM() override = default;
 

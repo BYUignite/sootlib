@@ -37,7 +37,7 @@ private:
 
 public:
 
-     psdModel_MONO(sourceTermStruct* sourceTerms, int nVar,
+     psdModel_MONO(int nVar,
                    nucleationMech N,
                    growthMech G,
                    oxidationMech X,

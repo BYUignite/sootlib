@@ -5,19 +5,17 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-psdModel_MONO::psdModel_MONO(sourceTermStruct* sourceTerms, int nsoot_, 
+psdModel_MONO::psdModel_MONO(int nsoot_, 
                              nucleationMech N, 
                              growthMech G, 
                              oxidationMech X, 
-                             coagulationMech C)
-             : psdModel(sourceTerms, nsoot_, N, G, X, C) {
+                             coagulationMech C) : psdModel(nsoot_, N, G, X, C) {
 
     if (nsoot_ != 2)
         cerr << "Invalid number of soot moments requested. "
                 "MONO model will use default value of 2 soot moments." << endl;
 
     nsoot = 2;
-    sourceTerms->sootSourceTerms.resize(nsoot, 0);
 
     mechType = psdMech::MONO;
 }

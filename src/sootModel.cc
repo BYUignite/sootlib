@@ -11,11 +11,7 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-sootModel::sootModel(psdMech modelType, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C) {
-
-    //---------- init sourceTermStruct
-
-    sourceTerms = new sourceTermStruct();
+sootModel::sootModel(psdMech modelType, int nsoot_, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C) {
 
     //---------- store requested mechanisms
 
@@ -28,13 +24,19 @@ sootModel::sootModel(psdMech modelType, int nVar, nucleationMech N, growthMech G
     //---------- set PSD model type
 
     switch (psdMechanism) {
-        case psdMech::MONO  : psd = new psdModel_MONO (sourceTerms, nVar, N, G, X, C); break;
-        case psdMech::LOGN  : psd = new psdModel_LOGN (sourceTerms, nVar, N, G, X, C); break;
-        case psdMech::QMOM  : psd = new psdModel_QMOM (sourceTerms, nVar, N, G, X, C); break;
-        case psdMech::MOMIC : psd = new psdModel_MOMIC(sourceTerms, nVar, N, G, X, C); break;
-        //case psdMech::SECT  : psd = new psdModel_SECT (sourceTerms, nVar, N, G, X, C); break;
+        case psdMech::MONO  : psd = new psdModel_MONO (nsoot_, N, G, X, C); break;
+        case psdMech::LOGN  : psd = new psdModel_LOGN (nsoot_, N, G, X, C); break;
+        case psdMech::QMOM  : psd = new psdModel_QMOM (nsoot_, N, G, X, C); break;
+        case psdMech::MOMIC : psd = new psdModel_MOMIC(nsoot_, N, G, X, C); break;
+        //case psdMech::SECT  : psd = new psdModel_SECT (nsoot_, N, G, X, C); break;
         default: throw domain_error("Invalid PSD model type requested");
     }
+
+    //---------- init sourceTermStruct
+
+    sourceTerms = new sourceTermStruct();
+    sourceTerms->sootSourceTerms = vector<double>(nsoot_, 0.0);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////

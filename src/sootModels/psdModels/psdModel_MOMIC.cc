@@ -6,16 +6,16 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
- psdModel_MOMIC::psdModel_MOMIC(sourceTermStruct* sourceTerms, int nsoot_, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
-         : psdModel(sourceTerms, nsoot_, N, G, X, C) {
+ psdModel_MOMIC::psdModel_MOMIC(int nsoot_, 
+                                nucleationMech N, 
+                                growthMech G, 
+                                oxidationMech X, 
+                                coagulationMech C) : psdModel(nsoot_, N, G, X, C) {
 
-     if (nsoot_ < 1)
-         throw runtime_error("Invalid number of soot moments requested");
+    if (nsoot_ < 1)
+        throw runtime_error("Invalid number of soot moments requested");
 
-     nsoot = nsoot_;
-
-     // initialize sourceTerms soot variable
-     sourceTerms->sootSourceTerms.resize(nsoot, 0);
+    nsoot = nsoot_;
 
     mechType = psdMech::MOMIC;
 }

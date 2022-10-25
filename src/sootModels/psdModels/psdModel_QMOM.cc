@@ -5,8 +5,11 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-psdModel_QMOM::psdModel_QMOM(sourceTermStruct* sourceTerms, int nsoot_, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
-        : psdModel(sourceTerms, nsoot_, N, G, X, C) {
+psdModel_QMOM::psdModel_QMOM(int nsoot_, 
+                             nucleationMech N, 
+                             growthMech G, 
+                             oxidationMech X, 
+                             coagulationMech C) : psdModel(nsoot_, N, G, X, C) {
 
     if (nsoot_%2 == 1 || nsoot_ < 1)
         throw runtime_error("Invalid number of soot moments requested");
@@ -16,9 +19,6 @@ psdModel_QMOM::psdModel_QMOM(sourceTermStruct* sourceTerms, int nsoot_, nucleati
                 "8+ soot moments. Proceed with caution." << endl;
 
     nsoot = nsoot_;
-
-    // initialize sourceTerms soot variable
-    sourceTerms->sootSourceTerms.resize(nsoot, 0);
 
     mechType = psdMech::QMOM;
 }

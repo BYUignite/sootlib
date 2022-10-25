@@ -90,11 +90,11 @@ private:
 
 public:
 
-    explicit psdModel_MOMIC(sourceTermStruct* sourceTerms, int nVar = 2,
-                            nucleationMech N = nucleationMech::NONE,
-                            growthMech G = growthMech::NONE,
-                            oxidationMech X = oxidationMech::NONE,
-                            coagulationMech C = coagulationMech::NONE);
+    explicit psdModel_MOMIC(int nVar,
+                            nucleationMech N,
+                            growthMech G,
+                            oxidationMech X,
+                            coagulationMech C);
 
     ~psdModel_MOMIC() override = default;
 

@@ -50,7 +50,7 @@ private:
 
 public:
 
-    psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar,
+    psdModel_LOGN(int nVar,
                   nucleationMech N,
                   growthMech G,
                   oxidationMech X,

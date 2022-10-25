@@ -5,19 +5,19 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-psdModel_LOGN::psdModel_LOGN(sourceTermStruct* sourceTerms, int nVar, nucleationMech N, growthMech G, oxidationMech X, coagulationMech C)
-             : psdModel(sourceTerms, nVar, N, G, X, C) {
+psdModel_LOGN::psdModel_LOGN(int nsoot_, 
+                             nucleationMech N, 
+                             growthMech G, 
+                             oxidationMech X, 
+                             coagulationMech C) : psdModel(nsoot_, N, G, X, C) {
 
     // warn user if wrong number of soot moments is requested
-    if (nVar != 3)
+    if (nsoot_ != 3)
         cerr << "Invalid number of soot moments requested. "
                 "LOGN model will use default value of 3 soot moments." << endl;
 
     // specify number of soot moments for LOGN model
     nsoot = 3;
-
-    // initialize sourceTerms soot variable
-    sourceTerms->sootSourceTerms.resize(nsoot, 0);
 
     mechType = psdMech::LOGN;
 }

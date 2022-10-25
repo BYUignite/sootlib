@@ -27,7 +27,7 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-psdModel::psdModel(sourceTermStruct* sourceTerms, int nsoot_, 
+psdModel::psdModel(int nsoot_, 
                    nucleationMech N, growthMech G, 
                    oxidationMech X, coagulationMech C) {
 

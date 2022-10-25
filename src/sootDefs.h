@@ -126,7 +126,6 @@ struct sourceTermStruct {
     std::vector<double> gasSourceTerms;
 
     sourceTermStruct() :
-        sootSourceTerms( std::vector<double>(2,0.0) ),     // default to 2 soot variables
         pahSourceTerms(  std::vector<double>((int)pahSp::size, 0.0) ),
         gasSourceTerms(  std::vector<double>((int)gasSp::size, 0.0) ) {}
 };

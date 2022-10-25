@@ -31,7 +31,7 @@ public:
 
 //////////////// CONSTRUCTOR /////////////////////////////
 
-    psdModel(sourceTermStruct* sourceTerms, int nVar, 
+    psdModel(int nVar, 
              nucleationMech N, growthMech G, 
              oxidationMech X, coagulationMech C);
 
