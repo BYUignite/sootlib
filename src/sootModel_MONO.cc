@@ -23,7 +23,8 @@ sootModel_MONO::sootModel_MONO(size_t nsoot_,
 
 void soot::sootModel_MONO::getSourceTerms(const state &stt, 
                                           std::vector<double> &sootSources,
-                                          std::vector<double> &gasSources) const {
+                                          std::vector<double> &gasSources,
+                                          std::vector<double> &pahSources) const {
 
     //---------- get moments
 
@@ -101,11 +102,15 @@ void soot::sootModel_MONO::getSourceTerms(const state &stt,
     vector<double> grow_gasSources((size_t)::gasSp::size, 0.0);
     vector<double> oxid_gasSources((size_t)::gasSp::size, 0.0);
 
-    nuc->getNucleationGasRates(state, N1, nucl_gasSources);
-    nuc->getGrowthGasRates(    state, G1, grow_gasSources);
-    nuc->getOxidationGasRates( state, X1, oxid_gasSources);
+    nucl->getNucleationGasRates(state, N1, nucl_gasSources);
+    nucl->getGrowthGasRates(    state, G1, grow_gasSources);
+    nucl->getOxidationGasRates( state, X1, oxid_gasSources);
 
     for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
         gasSourceTerms[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
+
+    //---------- set PAH source terms
+
+    pahSourceTerms = nucl->nucleationPahRxnRates;
 
 }

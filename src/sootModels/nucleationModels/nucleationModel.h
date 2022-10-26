@@ -28,8 +28,6 @@ public:
                                const double &msootDotNucl, 
                                std::vector<double> gasSourcesNucl) const;
 
-    sourceTermStruct getNucleationPahRates(const state& state) const;
-
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     nucleationModel() : nucleationPahRxnRates(std::vector<double>((int)pahSp::size, 0.0)),

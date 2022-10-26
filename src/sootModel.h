@@ -32,7 +32,8 @@ public:
 
     virtual void getSourceTerms(const state &stt, 
                                 std::vector<double> &sootSources,
-                                std::vector<double> &gasSources) const = 0;
+                                std::vector<double> &gasSources,
+                                std::vector<double> &pahSources) const = 0;
 
     //////////////// CONSTRUCTOR //////////////////////
 

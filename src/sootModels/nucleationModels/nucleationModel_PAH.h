@@ -25,7 +25,6 @@ public:
 //////////////// MEMBER FUNCTIONS /////////////////
 
     double getNucleationSootRate(state &state) override;
-//        void getNucleationPahRates(state &state) override;
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 

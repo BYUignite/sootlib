@@ -19,14 +19,3 @@ void nucleationModel::getNucleationGasRates(const state &stt,
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
-sourceTermStruct nucleationModel::getNucleationPahRates(const state& state) const {
-
-    sourceTermStruct nucPahSourceTerms;
-
-    for (int sp=0; sp<(int)pahSp::size; sp++)
-        nucPahSourceTerms.pahSourceTerms[sp] = nucleationPahRxnRates[sp];
-
-    return nucPahSourceTerms;
-}
