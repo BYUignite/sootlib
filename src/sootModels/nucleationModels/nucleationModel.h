@@ -24,7 +24,9 @@ public:
 
     virtual double getNucleationSootRate(state &state) = 0;
 
-    sourceTermStruct getNucleationGasRates(const state& state, const double &N1) const;
+    void getNucleationGasRates(const state &stt, 
+                               const double &msootDotNucl, 
+                               std::vector<double> gasSourcesNucl) const;
 
     sourceTermStruct getNucleationPahRates(const state& state) const;
 

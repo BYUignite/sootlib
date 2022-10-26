@@ -6,16 +6,15 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-sourceTermStruct growthModel::getGrowthGasRates(const state &state, const double &G1) const {
+void growthModel::getGrowthGasRates(const state &stt, 
+                                    const double &msootDotGrow, 
+                                    vector<double> gasSourcesGrow) const {
     // Compute S in: d(rho*y_k)/dt + ... = ... + S
     // kg_k/m3*s (species k)
 
-    sourceTermStruct grwGasSourceTerms;
-
-    for (int sp=0; sp<(int)gasSp::size; sp++) {
-        if(sp == (int)gasSp::C) continue;
-            grwGasSourceTerms.gasSourceTerms[sp] += G1 * growthRxnRatios[sp] * gasSpMW[sp] /
-                                                    (growthRxnRatios[(int)gasSp::C] * gasSpMW[(int)gasSp::C]);
+    for (size_t sp=0; sp<(size_t)gasSp::size; sp++) {
+        if(sp == (size_t)gasSp::C) continue;
+            gasSourcesGrow[sp] += msootDotGrow * growthRxnRatios[sp] * gasSpMW[sp] /
+                                  (growthRxnRatios[(size_t)gasSp::C] * gasSpMW[(size_t)gasSp::C]);
     }
-    return grwGasSourceTerms;
 }
