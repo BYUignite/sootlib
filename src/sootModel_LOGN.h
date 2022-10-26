@@ -19,6 +19,7 @@ public:
                                 std::vector<double> &gasSources,
                                 std::vector<double> &pahSources) const;
 
+private:
     static double Mk(double k, double M0, double M1, double M2);
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
