@@ -1,63 +1,35 @@
 #pragma once
 
-#include "sootModels/psdModels/psdModel.h"
+#include "sootModel.h"
 #include "sootDefs.h"
 #include "state.h"
 
 namespace soot {
 
-////////////////////////////////////////////////////////////////////////////////
-/** An implementation of the psdModel interface following the LOGN model
- *
- *      Associated with enum psdMech:LOGN
- */
-class psdModel_LOGN : public psdModel {
+class sootModel_LOGN : public sootModel {
 
-//////////////// DATA MEMBERS /////////////////////
+    //////////////// DATA MEMBERS /////////////////////
 
-private:
-
-//////////////// MEMBER FUNCTIONS /////////////////
-
-    ////////////////////////////////////////////////////////////////////////////////
-    /** setSourceTerms function
-     *
-     *      Calculates soot source terms using lognormal PSD model (LOGN).
-     *      Updates soot, gas, and PAH source terms (where applicable).
-     *
-     *      NOTE: PAH source terms are updated from within the getNucleationSootRate
-     *      function associated with PAH nucleation.
-     *
-     *      @param  state    \input     thermodynamic state object
-     *
-     */
-    void setSourceTerms(state& state, sourceTermStruct *sourceTerms) const override;
-
-    ////////////////////////////////////////////////////////////////////////////////
-    /** Mk function (LOGN)
-     *
-     *      Calculates fractional moment values assuming lognormal PSD
-     *
-     *      @param  k    \input     fractional moment to compute
-     *      @param  M0   \input     moment value M0
-     *      @param  M1   \input     moment value M1
-     *      @param  M2   \input     moment value M2
-     *
-     */
-    static double Mk(double k, double M0, double M1, double M2);
-
-//////////////// CONSTRUCTOR FUNCTIONS ////////////
+    //////////////// MEMBER FUNCTIONS /////////////////
 
 public:
 
-    psdModel_LOGN(int nVar,
-                  nucleationMech N,
-                  growthMech G,
-                  oxidationMech X,
-                  coagulationMech C);
+    virtual void getSourceTerms(state &state, 
+                                std::vector<double> &sootSources,
+                                std::vector<double> &gasSources,
+                                std::vector<double> &pahSources) const;
 
-    ~psdModel_LOGN() override = default;
+    static double Mk(double k, double M0, double M1, double M2);
 
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+
+    sootModel_LOGN(size_t            nsoot_,
+                   nucleationModel  *nucl_,
+                   growthModel      *grow_,
+                   oxidationModel   *oxid_,
+                   coagulationModel *coag_);
+
+    virtual ~sootModel_LOGN() {};
 
 };
 } // namspace soot

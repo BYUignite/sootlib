@@ -30,7 +30,7 @@
 #include "coagulationModels/coagulationModel_NONE.h"
 
 #include "sootModel_MONO.h"
-// #include "sootModel_LOGN.h"
+#include "sootModel_LOGN.h"
 // #include "sootModel_QMOM.h"
 // #include "sootModel_MOMIC.h"
 // #include "sootModel_SECT.h"
