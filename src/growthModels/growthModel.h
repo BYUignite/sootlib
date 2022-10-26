@@ -20,9 +20,9 @@ public:
 
     virtual double getGrowthSootRate(const state& state) const = 0;
 
-    void getGrowthGasRates(const state &stt, 
-                               const double &msootDotGrow, 
-                               std::vector<double> gasSourcesGrow) const;
+    void getGrowthGasRates(const state &state, 
+                           const double &msootDotGrow, 
+                           std::vector<double> gasSourcesGrow) const;
 
 //        virtual void getGrowthPahRates(state& state) const = 0;
 

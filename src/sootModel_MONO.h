@@ -14,17 +14,17 @@ class sootModel_MONO : public sootModel {
 
 public:
 
-    virtual void getSourceTerms(const state &stt, 
+    virtual void getSourceTerms(state &state, 
                                 std::vector<double> &sootSources,
                                 std::vector<double> &gasSources,
                                 std::vector<double> &pahSources) const;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    sootModel_MONO(size_t nsoot_,
+    sootModel_MONO(size_t            nsoot_,
                    nucleationModel  *nucl_,
-                   oxidationModel   *oxid_,
                    growthModel      *grow_,
+                   oxidationModel   *oxid_,
                    coagulationModel *coag_);
 
     virtual ~sootModel_MONO() {};

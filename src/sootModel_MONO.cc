@@ -1,4 +1,4 @@
-#include "soot_MONO.h"
+#include "sootModel_MONO.h"
 
 using namespace std;
 using namespace soot;
@@ -7,10 +7,10 @@ using namespace soot;
 
 sootModel_MONO::sootModel_MONO(size_t nsoot_,
                                nucleationModel  *nucl_,
-                               oxidationModel   *oxid_,
                                growthModel      *grow_,
+                               oxidationModel   *oxid_,
                                coagulationModel *coag_) :
-        sootModel(nsoot_, nucl_, oxid_, grow_, coag_) {
+        sootModel(nsoot_, nucl_, grow_, oxid_, coag_) {
 
     if (nsoot_ != 2)
         cerr << "Invalid number of soot moments requested. "
@@ -21,10 +21,10 @@ sootModel_MONO::sootModel_MONO(size_t nsoot_,
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void soot::sootModel_MONO::getSourceTerms(const state &stt, 
-                                          std::vector<double> &sootSources,
-                                          std::vector<double> &gasSources,
-                                          std::vector<double> &pahSources) const {
+void sootModel_MONO::getSourceTerms(state &state, 
+                                    std::vector<double> &sootSources,
+                                    std::vector<double> &gasSources,
+                                    std::vector<double> &pahSources) const {
 
     //---------- get moments
 
@@ -40,10 +40,10 @@ void soot::sootModel_MONO::getSourceTerms(const state &stt,
 
     //---------- get chemical rates
 
-    double jNuc = nuc->getNucleationSootRate(state);        // #/m3*s
-    double kGrw = grw->getGrowthSootRate(state);
-    double kOxi = oxi->getOxidationSootRate(state);
-    double coag = coa->getCoagulationSootRate(state, state.absc[0], state.absc[0]);
+    double jNuc = nucl->getNucleationSootRate(state);        // #/m3*s
+    double kGrw = grow->getGrowthSootRate(state);
+    double kOxi = oxid->getOxidationSootRate(state);
+    double coa  = coag->getCoagulationSootRate(state, state.absc[0], state.absc[0]);
 
     //---------- nucleation terms
 
@@ -58,12 +58,12 @@ void soot::sootModel_MONO::getSourceTerms(const state &stt,
     double Cnd0 = 0;
     double Cnd1 = 0;
 
-    if (nuc->mechType == nucleationMech::PAH) {
+    if (nucl->mechType == nucleationMech::PAH) {
 
-        double nDimer = nuc->DIMER.nDimer;
-        double mDimer = nuc->DIMER.mDimer;
+        double nDimer = nucl->DIMER.nDimer;
+        double mDimer = nucl->DIMER.mDimer;
 
-        Cnd1 = nDimer * mDimer * coa->getCoagulationSootRate(state, mDimer, state.absc[0]) * state.wts[0];
+        Cnd1 = nDimer * mDimer * coag->getCoagulationSootRate(state, mDimer, state.absc[0]) * state.wts[0];
 
     }
 
@@ -88,8 +88,8 @@ void soot::sootModel_MONO::getSourceTerms(const state &stt,
     double C0 = 0;
     double C1 = 0;
 
-    //C0 = -0.5 * coag * state.wts[0] * state.wts[0];
-    C0 = -coag * state.wts[0] * state.wts[0];
+    //C0 = -0.5 * coa  * state.wts[0] * state.wts[0];
+    C0 = -coa  * state.wts[0] * state.wts[0];
 
     //---------- combine to make soot source terms
 
@@ -103,15 +103,15 @@ void soot::sootModel_MONO::getSourceTerms(const state &stt,
     vector<double> oxid_gasSources((size_t)::gasSp::size, 0.0);
 
     nucl->getNucleationGasRates(state, N1, nucl_gasSources);
-    nucl->getGrowthGasRates(    state, G1, grow_gasSources);
-    nucl->getOxidationGasRates( state, X1, oxid_gasSources);
+    grow->getGrowthGasRates(    state, G1, grow_gasSources);
+    oxid->getOxidationGasRates( state, X1, oxid_gasSources);
 
     for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
-        gasSourceTerms[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
+        gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
 
     //---------- set PAH source terms
 
-    pahSourceTerms = nucl->nucleationPahRxnRates;
+    pahSources = nucl->nucleationPahRxnRates;
 
     //todo: what about pah condensation?
 

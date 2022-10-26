@@ -207,5 +207,4 @@ inline pahSp str2pahSp(const std::string& str) {
     else if(str == "C18H10") return pahSp::C18H10;
     else throw std::domain_error ("Invalid value provided to str2gasSp function");
 }
-
 }  // namespace soot

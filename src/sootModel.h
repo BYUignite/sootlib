@@ -18,7 +18,11 @@ class sootModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
+public:
+
     size_t            nsoot;  // # of soot variables: moments or sections
+
+protected:
 
     nucleationModel  *nucl;   // chemical mechanisms ...
     growthModel      *grow;
@@ -30,7 +34,7 @@ class sootModel {
 
 public:
 
-    virtual void getSourceTerms(const state &stt, 
+    virtual void getSourceTerms(state &state, 
                                 std::vector<double> &sootSources,
                                 std::vector<double> &gasSources,
                                 std::vector<double> &pahSources) const = 0;
@@ -39,12 +43,12 @@ public:
 
     sootModel(){};
 
-    sootModel(size_t nsoot_,
+    sootModel(size_t            nsoot_,
               nucleationModel  *nucl_,
-              oxidationModel   *oxid_,
               growthModel      *grow_,
+              oxidationModel   *oxid_,
               coagulationModel *coag_) :
-        nsoot(nsoot_), nucl(nucl_), oxid(oxid_), grow(grow_), coag(coag_) {}
+        nsoot(nsoot_), nucl(nucl_), grow(grow_), oxid(oxid_), coag(coag_) {}
 
     virtual ~sootModel() {};
 
