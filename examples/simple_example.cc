@@ -19,8 +19,8 @@ int main(int argc, char** argv) {
     coagulationMech c = coagulationMech::FM;            // Coagulation: NONE, LL, FUCHS, FRENK
 
     // define particle size distribution (PSD) treatment
-    psdMech         PSD = psdMech::QMOM;                // PSD mechanisms: MONO, LOGN, QMOM, MOMIC
-    int             N = 4;                              // number of soot moments
+    psdMech         PSD = psdMech::MONO;                // PSD mechanisms: MONO, LOGN, QMOM, MOMIC
+    int             N = 2;                              // number of soot moments
 
     // create sootModel object with desired mechanisms
     sootModel SM = sootModel(PSD, N, n, g, x, c);
@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 
     vector<double> yGas = {3E-4, 0.002, 0.001, 0.05, 0.003, 0.07, 0.1, 0.002};  // gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
     vector<double> yPAH = {0, 0, 0, 0, 0, 0};                             // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-    vector<double> sootVar = {0.003, 1.5E-5, 1E-7, 1E-10};                // soot moment values [M0, M1, M2, M3]
+    vector<double> sootVar = {0.003, 1.5E-5};//, 1E-7, 1E-10};                // soot moment values [M0, M1, M2, M3]
 
     // set the thermodynamic state
     S.setState(T, P, rhoGas, muGas, MWGas, yGas, yPAH, sootVar, N);
@@ -56,8 +56,8 @@ int main(int argc, char** argv) {
 
     double S_M0 = SM.sourceTerms->sootSourceTerms[0];      // #/m^3*s
     double S_M1 = SM.sourceTerms->sootSourceTerms[1];      // kg/m^3*s
-    double S_M2 = SM.sourceTerms->sootSourceTerms[2];      // kg^2/m^3*s
-    double S_M3 = SM.sourceTerms->sootSourceTerms[3];      // kg^3/m^3*s
+    // double S_M2 = SM.sourceTerms->sootSourceTerms[2];      // kg^2/m^3*s
+    // double S_M3 = SM.sourceTerms->sootSourceTerms[3];      // kg^3/m^3*s
 
     // gas source terms (kg sp)/(kg gas * s)
     double S_C2H2 = SM.sourceTerms->gasSourceTerms[(int)gasSp::C2H2];
@@ -90,8 +90,8 @@ int main(int argc, char** argv) {
     cout << endl << "Soot source terms" << endl;
     cout << endl << "M0 = " << setw(14) << S_M0;
     cout << endl << "M1 = " << setw(14) << S_M1;
-    cout << endl << "M2 = " << setw(14) << S_M2;
-    cout << endl << "M3 = " << setw(14) << S_M3;
+    // cout << endl << "M2 = " << setw(14) << S_M2;
+    // cout << endl << "M3 = " << setw(14) << S_M3;
     cout << endl;
 
     cout << endl << "Gas source terms" << endl;

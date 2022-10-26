@@ -2,8 +2,21 @@
 
 # -------- library targets --------
 
-add_library(sootModel sootDefs.h state.cc state.h sootModel.cc sootModel.h)
+add_library(sootModel)
 add_library(sootlib::sootModel ALIAS sootModel)    # alias for use as imported target
+
+target_sources(sootModel PRIVATE
+               sootDefs.h
+               sootModel.h
+               state.h           state.cc
+               sootModel_MONO.h  sootModel_MONO.cc
+               )
+               # sootModel_LOGN.h  sootModel_LOGN.cc
+               # sootModel_MOMIC.h sootModel_MOMIC.cc binomial.h
+               # sootModel_QMOM.h  sootModel_QMOM.cc
+               # sootModel_SECT.h  sootModel_SECT.cc
+               #)
+               
 
 # -------- target properties --------
 
@@ -15,11 +28,10 @@ set_target_properties(sootModel PROPERTIES PUBLIC_HEADER "state.h;sootModel.h;so
 
 target_include_directories(sootModel PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_subdirectory(sootModels/psdModels)
-add_subdirectory(sootModels/sootChemistry/nucleationModels)
-add_subdirectory(sootModels/sootChemistry/growthModels)
-add_subdirectory(sootModels/sootChemistry/oxidationModels)
-add_subdirectory(sootModels/sootChemistry/coagulationModels)
+add_subdirectory(nucleationModels)
+add_subdirectory(growthModels)
+add_subdirectory(oxidationModels)
+add_subdirectory(coagulationModels)
 
 #------ external content ------------------
 
@@ -39,19 +51,19 @@ target_include_directories(sootModel
         )
 
 install(TARGETS sootModel
-        EXPORT sootlib
+        EXPORT  sootlib
         RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
         LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
         ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
         PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib" )
 
-install(FILES "sootModels/psdModels/psdModel.h"                               DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/sootModels/psdModels")
-install(FILES "sootModels/sootChemistry/coagulationModels/coagulationModel.h" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/sootModels/sootChemistry/coagulationModels")
-install(FILES "sootModels/sootChemistry/growthModels/growthModel.h"           DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/sootModels/sootChemistry/growthModels")
-install(FILES "sootModels/sootChemistry/nucleationModels/nucleationModel.h"   DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/sootModels/sootChemistry/nucleationModels")
-install(FILES "sootModels/sootChemistry/oxidationModels/oxidationModel.h"     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/sootModels/sootChemistry/oxidationModels")
+install(FILES "coagulationModels/coagulationModel.h" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
+install(FILES "growthModels/growthModel.h"           DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/growthModels")
+install(FILES "nucleationModels/nucleationModel.h"   DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
+install(FILES "oxidationModels/oxidationModel.h"     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
 
 install(EXPORT sootlib
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sootlib
         NAMESPACE sootlib::
         )
+

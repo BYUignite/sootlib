@@ -3,10 +3,10 @@
 #include "sootDefs.h"
 #include "state.h"
 
-#include "sootModels/sootChemistry/nucleationModels/nucleationModel.h"
-#include "sootModels/sootChemistry/growthModels/growthModel.h"
-#include "sootModels/sootChemistry/oxidationModels/oxidationModel.h"
-#include "sootModels/sootChemistry/coagulationModels/coagulationModel.h"
+#include "nucleationModels/nucleationModel.h"
+#include "growthModels/growthModel.h"
+#include "oxidationModels/oxidationModel.h"
+#include "coagulationModels/coagulationModel.h"
 
 #include <vector>
 
