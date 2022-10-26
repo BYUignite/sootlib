@@ -19,109 +19,74 @@ int main(int argc, char** argv) {
 
     sootModel_MONO SM(nsoot, nucl, grow, oxid, coag);
 
-    //// define soot chemistry mechanisms to be used
-    //nucleationMech  n = nucleationMech::LL;             // Nucleation: NONE, LL, LIN, PAH
-    //growthMech      g = growthMech::LL;                 // Surface growth: NONE, LL, LIN, HACA
-    //oxidationMech   x = oxidationMech::LL;              // Oxidation: NONE, LL, LEE_NEOH, NSC_NEOH, HACA
-    //coagulationMech c = coagulationMech::FM;            // Coagulation: NONE, LL, FUCHS, FRENK
+    SM.coag->set_FM_multiplier(9.0/2.0/2.2);
 
-    //// define particle size distribution (PSD) treatment
-    //psdMech         PSD = psdMech::MONO;                // PSD mechanisms: MONO, LOGN, QMOM, MOMIC
-    //int             N = 2;                              // number of soot moments
+    //---------- set up thermodynamic state variables
 
-    //// create sootModel object with desired mechanisms
-    //sootModel SM = sootModel(PSD, N, n, g, x, c);
-    //SM.psd->coa->set_FM_multiplier(9.0/2.0/2.2);
+    state S = state(nsoot);
 
-    ////---------- set up thermodynamic state variables
+    double T      = 2100;    // temperature in K
+    double P      = 101325;  // pressure in Pa
+    double rhoGas = 0.1;     // gas density in kg/m^3
+    double muGas  = 1E-5;    // gas viscosity in Pa*s
+    double MWGas  = 29;      // gas molar weight in kg/kmol
 
-    //// create state object
-    //state S = state(N);
+    vector<double> yGas{3E-4, 0.002, 0.001, 0.05, 0.003, 0.07, 0.1, 0.002};  // gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
+    vector<double> yPAH{0, 0, 0, 0, 0, 0};                                   // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
+    vector<double> Msoot{0.003, 1.5E-5};//, 1E-7, 1E-10};                     // soot moment values [M0, M1, M2, M3]
 
-    //// specify some state variables
+    S.setState(T, P, rhoGas, muGas, MWGas, yGas, yPAH, Msoot, nsoot);
 
-    //double T = 2100;        // temperature in K
-    //double P = 101325;      // pressure in Pa
-    //double rhoGas = 0.1;    // gas density in kg/m^3
-    //double muGas = 1E-5;    // gas viscosity in Pa*s
-    //double MWGas = 29;      // gas molar weight in kg/kmol
+    //---------- calculate source terms
 
-    //vector<double> yGas = {3E-4, 0.002, 0.001, 0.05, 0.003, 0.07, 0.1, 0.002};  // gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
-    //vector<double> yPAH = {0, 0, 0, 0, 0, 0};                             // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-    //vector<double> sootVar = {0.003, 1.5E-5};//, 1E-7, 1E-10};                // soot moment values [M0, M1, M2, M3]
+    vector<double> sootSources(nsoot, 0.0);                       // kg^k/m3*s
+    vector<double> gasSources((size_t)gasSp::size, 0.0);          // kg/m3*s
+    vector<double> pahSources((size_t)pahSp::size, 0.0);          // kg/m3*s
 
-    //// set the thermodynamic state
-    //S.setState(T, P, rhoGas, muGas, MWGas, yGas, yPAH, sootVar, N);
+    SM.getSourceTerms(S, sootSources, gasSources, pahSources);
 
-    ////---------- calculate source terms
+    //---------- output results
 
-    //SM.setSourceTerms(S);
+    cout << setprecision(2) << fixed;
 
-    ////---------- accessing source term results
+    cout << endl << "T (K)  = " << setw(14) << T;
+    cout << endl << "P (Pa) = " << setw(14) << P;
 
-    //// soot source terms
+    cout << setprecision(4) << scientific;
 
-    //double S_M0 = SM.sourceTerms->sootSourceTerms[0];      // #/m^3*s
-    //double S_M1 = SM.sourceTerms->sootSourceTerms[1];      // kg/m^3*s
-    //// double S_M2 = SM.sourceTerms->sootSourceTerms[2];      // kg^2/m^3*s
-    //// double S_M3 = SM.sourceTerms->sootSourceTerms[3];      // kg^3/m^3*s
+    cout << endl << "M0     = " << setw(14) << Msoot[0];
+    cout << endl << "M1     = " << setw(14) << Msoot[1];
+    cout << endl;
 
-    //// gas source terms (kg sp)/(kg gas * s)
-    //double S_C2H2 = SM.sourceTerms->gasSourceTerms[(int)gasSp::C2H2];
-    //double S_H    = SM.sourceTerms->gasSourceTerms[(int)gasSp::H];
-    //double S_H2   = SM.sourceTerms->gasSourceTerms[(int)gasSp::H2];
-    //double S_O    = SM.sourceTerms->gasSourceTerms[(int)gasSp::O];
-    //double S_O2   = SM.sourceTerms->gasSourceTerms[(int)gasSp::O2];
-    //double S_CO   = SM.sourceTerms->gasSourceTerms[(int)gasSp::CO];
-    //double S_H2O  = SM.sourceTerms->gasSourceTerms[(int)gasSp::H2O];
-    //double S_OH   = SM.sourceTerms->gasSourceTerms[(int)gasSp::OH];
-    //double S_C6H6 = SM.sourceTerms->gasSourceTerms[(int)gasSp::C6H6];
+    cout << endl << "Soot source terms" << endl;
+    cout << endl << "M0 = " << setw(14) << sootSources[0];
+    cout << endl << "M1 = " << setw(14) << sootSources[1];
+    // cout << endl << "M2 = " << setw(14) << sootSources[2];
+    // cout << endl << "M3 = " << setw(14) << sootSources[3];
+    cout << endl;
 
-    //// PAH source terms (kg sp)/(kg gas * s)
-    //double S_C10H8  = SM.sourceTerms->pahSourceTerms[(int)pahSp::C10H8];
-    //double S_C12H8  = SM.sourceTerms->pahSourceTerms[(int)pahSp::C12H8];
-    //double S_C12H10 = SM.sourceTerms->pahSourceTerms[(int)pahSp::C12H10];
-    //double S_C14H10 = SM.sourceTerms->pahSourceTerms[(int)pahSp::C14H10];
-    //double S_C16H10 = SM.sourceTerms->pahSourceTerms[(int)pahSp::C16H10];
-    //double S_C18H10 = SM.sourceTerms->pahSourceTerms[(int)pahSp::C18H10];
+    cout << endl << "Gas source terms" << endl;
+    cout << endl << "xO2   = " << setw(14) << gasSources[(size_t)gasSp::O2];
+    cout << endl << "xO    = " << setw(14) << gasSources[(size_t)gasSp::O];
+    cout << endl << "xH2   = " << setw(14) << gasSources[(size_t)gasSp::H2];
+    cout << endl << "xH    = " << setw(14) << gasSources[(size_t)gasSp::H];
+    cout << endl << "xOH   = " << setw(14) << gasSources[(size_t)gasSp::OH];
+    cout << endl << "xH2O  = " << setw(14) << gasSources[(size_t)gasSp::H2O];
+    cout << endl << "xCO   = " << setw(14) << gasSources[(size_t)gasSp::CO];
+    cout << endl << "xC2H2 = " << setw(14) << gasSources[(size_t)gasSp::C2H2];
+    cout << endl << "xC6H6 = " << setw(14) << gasSources[(size_t)gasSp::C6H6];
+    cout << endl;
 
-    ////---------- output results
-    //cout << setprecision(2) << fixed;
-
-    //cout << endl << "T (K)  = " << setw(14) << T;
-    //cout << endl << "P (Pa) = " << setw(14) << P;
-    //cout << endl;
-
-    //cout << setprecision(4) << scientific;
-
-    //cout << endl << "Soot source terms" << endl;
-    //cout << endl << "M0 = " << setw(14) << S_M0;
-    //cout << endl << "M1 = " << setw(14) << S_M1;
-    //// cout << endl << "M2 = " << setw(14) << S_M2;
-    //// cout << endl << "M3 = " << setw(14) << S_M3;
-    //cout << endl;
-
-    //cout << endl << "Gas source terms" << endl;
-    //cout << endl << "xC2H2 = " << setw(14) << S_C2H2;
-    //cout << endl << "xH    = " << setw(14) << S_H;
-    //cout << endl << "xH2   = " << setw(14) << S_H2;
-    //cout << endl << "xO    = " << setw(14) << S_O;
-    //cout << endl << "xO2   = " << setw(14) << S_O2;
-    //cout << endl << "xCO   = " << setw(14) << S_CO;
-    //cout << endl << "xH2O  = " << setw(14) << S_H2O;
-    //cout << endl << "xOH   = " << setw(14) << S_OH;
-    //cout << endl;
-
-    //if(n==nucleationMech::PAH){
-    //    cout << endl << "PAH source terms" << endl;
-    //    cout << endl << "xC10H8  = " << setw(14) << S_C10H8 ;
-    //    cout << endl << "xC12H8  = " << setw(14) << S_C12H8 ;
-    //    cout << endl << "xC12H10 = " << setw(14) << S_C12H10;
-    //    cout << endl << "xC14H10 = " << setw(14) << S_C14H10;
-    //    cout << endl << "xC16H10 = " << setw(14) << S_C16H10;
-    //    cout << endl << "xC18H10 = " << setw(14) << S_C18H10;
-    //    cout << endl;
-    //}
+    if (nucl->mechType==nucleationMech::PAH) {
+        cout << endl << "PAH source terms" << endl;
+        cout << endl << "xC10H8  = " << setw(14) << pahSources[(size_t)pahSp::C10H8];
+        cout << endl << "xC12H8  = " << setw(14) << pahSources[(size_t)pahSp::C12H8];
+        cout << endl << "xC12H10 = " << setw(14) << pahSources[(size_t)pahSp::C12H10];
+        cout << endl << "xC14H10 = " << setw(14) << pahSources[(size_t)pahSp::C14H10];
+        cout << endl << "xC16H10 = " << setw(14) << pahSources[(size_t)pahSp::C16H10];
+        cout << endl << "xC18H10 = " << setw(14) << pahSources[(size_t)pahSp::C18H10];
+        cout << endl;
+    }
 
     //-----------------
 

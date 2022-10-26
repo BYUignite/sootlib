@@ -22,8 +22,6 @@ public:
 
     size_t            nsoot;  // # of soot variables: moments or sections
 
-protected:
-
     nucleationModel  *nucl;   // chemical mechanisms ...
     growthModel      *grow;
     oxidationModel   *oxid;
@@ -31,8 +29,6 @@ protected:
 
 
     //////////////// MEMBER FUNCTIONS /////////////////
-
-public:
 
     virtual void getSourceTerms(state &state, 
                                 std::vector<double> &sootSources,
