@@ -22,7 +22,7 @@ public:
 
     void getGrowthGasRates(const state &state, 
                            const double &msootDotGrow, 
-                           std::vector<double> gasSourcesGrow) const;
+                           std::vector<double> &gasSourcesGrow) const;
 
 //        virtual void getGrowthPahRates(state& state) const = 0;
 

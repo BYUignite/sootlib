@@ -23,7 +23,7 @@ public:
 
     void getOxidationGasRates(const state &stt, 
                                const double &msootDotOxid, 
-                               std::vector<double> gasSourcesOxid) const;
+                               std::vector<double> &gasSourcesOxid) const;
 
 //        virtual void getOxidationPahRates(state& state) const = 0;
 

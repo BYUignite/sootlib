@@ -8,7 +8,7 @@ using namespace soot;
 
 void growthModel::getGrowthGasRates(const state &stt, 
                                     const double &msootDotGrow, 
-                                    vector<double> gasSourcesGrow) const {
+                                    vector<double> &gasSourcesGrow) const {
     // Compute S in: d(rho*y_k)/dt + ... = ... + S
     // kg_k/m3*s (species k)
 

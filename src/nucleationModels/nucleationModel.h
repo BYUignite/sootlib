@@ -26,7 +26,7 @@ public:
 
     void getNucleationGasRates(const state &state, 
                                const double &msootDotNucl, 
-                               std::vector<double> gasSourcesNucl) const;
+                               std::vector<double> &gasSourcesNucl) const;
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 

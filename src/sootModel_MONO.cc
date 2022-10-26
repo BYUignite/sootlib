@@ -98,9 +98,9 @@ void sootModel_MONO::getSourceTerms(state &state,
 
     //---------- set gas source terms
 
-    vector<double> nucl_gasSources((size_t)::gasSp::size, 0.0);
-    vector<double> grow_gasSources((size_t)::gasSp::size, 0.0);
-    vector<double> oxid_gasSources((size_t)::gasSp::size, 0.0);
+    vector<double> nucl_gasSources((size_t)gasSp::size, 0.0);
+    vector<double> grow_gasSources((size_t)gasSp::size, 0.0);
+    vector<double> oxid_gasSources((size_t)gasSp::size, 0.0);
 
     nucl->getNucleationGasRates(state, N1, nucl_gasSources);
     grow->getGrowthGasRates(    state, G1, grow_gasSources);

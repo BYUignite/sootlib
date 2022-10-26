@@ -8,7 +8,7 @@ using namespace soot;
 
 void nucleationModel::getNucleationGasRates(const state &stt, 
                                             const double &msootDotNucl, 
-                                            vector<double> gasSourcesNucl) const {
+                                            vector<double> &gasSourcesNucl) const {
     // Compute S in: d(rho*y_k)/dt + ... = ... + S
     // kg_k/m3*s (species k)
 
