@@ -97,16 +97,15 @@ void soot::sootModel_MONO::getSourceTerms(const state &stt,
 
     //---------- set gas source terms
 
-    for (int sp=0; sp<(int)gasSp::size; sp++) {
-        if (sp == (int)gasSp::C) continue;
-            gasSourceTerms[sp] = nuc->getNucleationGasRates(state, N1).gasSourceTerms[sp] +
-                                 grw->getGrowthGasRates(state,     G1).gasSourceTerms[sp] + 
-                                 oxi->getOxidationGasRates(state,  X1).gasSourceTerms[sp];
-    }
+    vector<double> nucl_gasSources((size_t)::gasSp::size, 0.0);
+    vector<double> grow_gasSources((size_t)::gasSp::size, 0.0);
+    vector<double> oxid_gasSources((size_t)::gasSp::size, 0.0);
 
-    //---------- get PAH source terms
+    nuc->getNucleationGasRates(state, N1, nucl_gasSources);
+    nuc->getGrowthGasRates(    state, G1, grow_gasSources);
+    nuc->getOxidationGasRates( state, X1, oxid_gasSources);
 
-    if(nuc->mechType == nucleationMech::PAH)
-        for (int sp=0; sp<(int)pahSp::size; sp++)
-            sourceTerms->pahSourceTerms[sp] = nuc->getNucleationPahRates(state).pahSourceTerms[sp];
+    for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
+        gasSourceTerms[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
+
 }
