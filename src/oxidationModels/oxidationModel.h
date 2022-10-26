@@ -21,7 +21,6 @@ public:
 
     virtual double getOxidationSootRate(const state &state) const = 0;
 
-    sourceTermStruct getOxidationGasRates(const state& state, const double &X1) const;
     void getOxidationGasRates(const state &stt, 
                                const double &msootDotOxid, 
                                std::vector<double> gasSourcesOxid) const;

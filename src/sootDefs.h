@@ -119,17 +119,6 @@ const std::vector<double> pahSpGamma = {   ///< unitless sticking coefficient
 
 //////////////////// custom structures
 
-struct sourceTermStruct {
-
-    std::vector<double> sootSourceTerms;
-    std::vector<double> pahSourceTerms;
-    std::vector<double> gasSourceTerms;
-
-    sourceTermStruct() :
-        pahSourceTerms(  std::vector<double>((int)pahSp::size, 0.0) ),
-        gasSourceTerms(  std::vector<double>((int)gasSp::size, 0.0) ) {}
-};
-
 //----------------------
 
 struct dimerStruct {
@@ -138,73 +127,4 @@ struct dimerStruct {
     double wDotD  = 0;
 };
 
-//////////////////// model options and string conversion functions
-
-inline nucleationMech str2nucMech(const std::string& str) {
-    if(str == "NONE")     return nucleationMech::NONE;
-    else if(str == "LL")  return nucleationMech::LL;
-    else if(str == "LIN") return nucleationMech::LIN;
-    else if(str == "PAH") return nucleationMech::PAH;
-    else throw std::domain_error ("Invalid value provided to str2nucMech function");
-}
-
-inline growthMech str2grwMech(const std::string& str) {
-    if(str == "NONE")     return growthMech::NONE;
-    else if(str == "LL")  return growthMech::LL;
-    else if(str == "LIN") return growthMech::LIN;
-    else if(str == "HACA") return growthMech::HACA;
-    else throw std::domain_error ("Invalid value provided to str2grwMech function");
-}
-
-inline oxidationMech str2oxiMech(const std::string& str) {
-    if(str == "NONE")           return oxidationMech::NONE;
-    else if(str == "LL")        return oxidationMech::LL;
-    else if(str == "LEE_NEOH")  return oxidationMech::LEE_NEOH;
-    else if(str == "NSC_NEOH")  return oxidationMech::NSC_NEOH;
-    else if(str == "HACA")      return oxidationMech::HACA;
-    else throw std::domain_error ("Invalid value provided to str2oxiMech function");
-}
-
-inline coagulationMech str2coaMech(const std::string& str) {
-    if(str == "NONE")           return coagulationMech::NONE;
-    else if(str == "FM")        return coagulationMech::FM;
-    else if(str == "CONTINUUM") return coagulationMech::CONTINUUM;
-    else if(str == "HM")        return coagulationMech::HM;
-    else if(str == "FUCHS")     return coagulationMech::FUCHS;
-    else throw std::domain_error ("Invalid value provided to str2coaMech function");
-}
-
-inline psdMech str2psdMech(const std::string& str) {
-    if(str == "NONE")       return psdMech::NONE;
-    if(str == "MONO")       return psdMech::MONO;
-    else if(str == "LOGN")  return psdMech::LOGN;
-    else if(str == "QMOM")  return psdMech::QMOM;
-    else if(str == "MOMIC") return psdMech::MOMIC;
-    else if(str == "SECT")  return psdMech::SECT;
-    else throw std::domain_error ("Invalid value provided to str2psdMech function");
-}
-
-inline gasSp str2gasSp(const std::string& str) {
-    if(str == "C2H2")       return gasSp::C2H2;
-    else if(str == "O")     return gasSp::O;
-    else if(str == "O2")    return gasSp::O2;
-    else if(str == "H")     return gasSp::H;
-    else if(str == "H2")    return gasSp::H2;
-    else if(str == "OH")    return gasSp::OH;
-    else if(str == "H2O")   return gasSp::H2O;
-    else if(str == "CO")    return gasSp::CO;
-    else if(str == "C")     return gasSp::C;
-    else if(str == "C6H6")  return gasSp::C6H6;
-    else throw std::domain_error ("Invalid value provided to str2gasSp function");
-}
-
-inline pahSp str2pahSp(const std::string& str) {
-    if(str == "C10H8")       return pahSp::C10H8;
-    else if(str == "C12H8")  return pahSp::C12H8;
-    else if(str == "C12H10") return pahSp::C12H10;
-    else if(str == "C14H10") return pahSp::C14H10;
-    else if(str == "C16H10") return pahSp::C16H10;
-    else if(str == "C18H10") return pahSp::C18H10;
-    else throw std::domain_error ("Invalid value provided to str2gasSp function");
-}
 }  // namespace soot
