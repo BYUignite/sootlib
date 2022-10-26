@@ -15,10 +15,9 @@ int main(int argc, char** argv) {
     oxidationModel   *oxid = new soot::oxidationModel_LL();
     coagulationModel *coag = new soot::coagulationModel_FM();
 
-    size_t nsoot = 2;                             
+    size_t nsoot = 4;                             
 
-    sootModel_MONO SM(nsoot, nucl, grow, oxid, coag);
-    //sootModel_LOGN SM(nsoot, nucl, grow, oxid, coag);
+    sootModel_QMOM SM(nsoot, nucl, grow, oxid, coag);
 
     SM.coag->set_FM_multiplier(9.0/2.0/2.2);
 
@@ -34,7 +33,7 @@ int main(int argc, char** argv) {
 
     vector<double> yGas{3E-4, 0.002, 0.001, 0.05, 0.003, 0.07, 0.1, 0.002};  // gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
     vector<double> yPAH{0, 0, 0, 0, 0, 0};                                   // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-    vector<double> Msoot{0.003, 1.5E-5};//, 1E-7};//, 1E-10};                     // soot moment values [M0, M1, M2, M3]
+    vector<double> Msoot{0.003, 1.5E-5, 1E-7, 1E-10};                     // soot moment values [M0, M1, M2, M3]
 
     S.setState(T, P, rhoGas, muGas, MWGas, yGas, yPAH, Msoot, nsoot);
 
@@ -57,14 +56,15 @@ int main(int argc, char** argv) {
 
     cout << endl << "M0     = " << setw(14) << Msoot[0];
     cout << endl << "M1     = " << setw(14) << Msoot[1];
-    // cout << endl << "M2     = " << setw(14) << Msoot[2];
+    cout << endl << "M2     = " << setw(14) << Msoot[2];
+    cout << endl << "M3     = " << setw(14) << Msoot[3];
     cout << endl;
 
     cout << endl << "Soot source terms" << endl;
     cout << endl << "M0 = " << setw(14) << sootSources[0];
     cout << endl << "M1 = " << setw(14) << sootSources[1];
-    // cout << endl << "M2 = " << setw(14) << sootSources[2];
-    // cout << endl << "M3 = " << setw(14) << sootSources[3];
+    cout << endl << "M2 = " << setw(14) << sootSources[2];
+    cout << endl << "M3 = " << setw(14) << sootSources[3];
     cout << endl;
 
     cout << endl << "Gas source terms" << endl;

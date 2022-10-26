@@ -12,9 +12,9 @@ target_sources(sootModel PRIVATE
                state.h           state.cc
                sootModel_MONO.h  sootModel_MONO.cc
                sootModel_LOGN.h  sootModel_LOGN.cc
+               sootModel_QMOM.h  sootModel_QMOM.cc
                )
                # sootModel_MOMIC.h sootModel_MOMIC.cc binomial.h
-               # sootModel_QMOM.h  sootModel_QMOM.cc
                # sootModel_SECT.h  sootModel_SECT.cc
                #)
                

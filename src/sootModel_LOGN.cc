@@ -5,16 +5,15 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-sootModel_LOGN::sootModel_LOGN(size_t nsoot_,
+sootModel_LOGN::sootModel_LOGN(size_t            nsoot_,
                                nucleationModel  *nucl_,
                                growthModel      *grow_,
                                oxidationModel   *oxid_,
                                coagulationModel *coag_) :
         sootModel(nsoot_, nucl_, grow_, oxid_, coag_) {
 
-    if (nsoot_ != 3)          // wrong number of moments requested todo: make this an error
-        cerr << "Invalid number of soot moments requested. "
-                "LOGN model will use default value of 3 soot moments." << endl;
+    if (nsoot_ != 3)
+        throw runtime_error("LOGN requires nsoot=3");
 
     nsoot = 3;
 }

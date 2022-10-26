@@ -5,7 +5,7 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-sootModel_MONO::sootModel_MONO(size_t nsoot_,
+sootModel_MONO::sootModel_MONO(size_t            nsoot_,
                                nucleationModel  *nucl_,
                                growthModel      *grow_,
                                oxidationModel   *oxid_,
@@ -13,8 +13,7 @@ sootModel_MONO::sootModel_MONO(size_t nsoot_,
         sootModel(nsoot_, nucl_, grow_, oxid_, coag_) {
 
     if (nsoot_ != 2)
-        cerr << "Invalid number of soot moments requested. "
-                "MONO model will use default value of 2 soot moments." << endl;
+        throw runtime_error("MONO requires nsoot=2");
 
     nsoot = 2;
 }
