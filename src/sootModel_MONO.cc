@@ -1,28 +1,29 @@
-#include "sootModels/psdModels/psdModel_MONO.h"
+#include "soot_MONO.h"
 
 using namespace std;
 using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-psdModel_MONO::psdModel_MONO(int nsoot_, 
-                             nucleationMech N, 
-                             growthMech G, 
-                             oxidationMech X, 
-                             coagulationMech C) : psdModel(nsoot_, N, G, X, C) {
+sootModel_MONO::sootModel_MONO(size_t nsoot_,
+                               nucleationModel  *nucl_,
+                               oxidationModel   *oxid_,
+                               growthModel      *grow_,
+                               coagulationModel *coag_) :
+        sootModel(nsoot_, nucl_, oxid_, grow_, coag_) {
 
     if (nsoot_ != 2)
         cerr << "Invalid number of soot moments requested. "
                 "MONO model will use default value of 2 soot moments." << endl;
 
     nsoot = 2;
-
-    mechType = psdMech::MONO;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) const {
+void soot::sootModel_MONO::getSourceTerms(const state &stt, 
+                                          std::vector<double> &sootSources,
+                                          std::vector<double> &gasSources) const {
 
     //---------- get moments
 
@@ -91,16 +92,16 @@ void psdModel_MONO::setSourceTerms(state& state, sourceTermStruct *sourceTerms) 
 
     //---------- combine to make soot source terms
 
-    sourceTerms->sootSourceTerms[0] = (N0 + Cnd0 + G0 + X0 + C0);      // #/m3*s
-    sourceTerms->sootSourceTerms[1] = (N1 + Cnd1 + G1 + X1 + C1);      // kg/m3*s
+    sootSources[0] = (N0 + Cnd0 + G0 + X0 + C0);      // #/m3*s
+    sootSources[1] = (N1 + Cnd1 + G1 + X1 + C1);      // kg/m3*s
 
     //---------- set gas source terms
 
     for (int sp=0; sp<(int)gasSp::size; sp++) {
-        if(sp == (int)gasSp::C) continue;
-            sourceTerms->gasSourceTerms[sp] = nuc->getNucleationGasRates(state, N1).gasSourceTerms[sp] +
-                                              grw->getGrowthGasRates(state,     G1).gasSourceTerms[sp] + 
-                                              oxi->getOxidationGasRates(state,  X1).gasSourceTerms[sp];
+        if (sp == (int)gasSp::C) continue;
+            gasSourceTerms[sp] = nuc->getNucleationGasRates(state, N1).gasSourceTerms[sp] +
+                                 grw->getGrowthGasRates(state,     G1).gasSourceTerms[sp] + 
+                                 oxi->getOxidationGasRates(state,  X1).gasSourceTerms[sp];
     }
 
     //---------- get PAH source terms

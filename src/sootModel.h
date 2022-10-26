@@ -3,57 +3,49 @@
 #include "sootDefs.h"
 #include "state.h"
 
-#include "sootModels/psdModels/psdModel.h"
+#include "sootModels/sootChemistry/nucleationModels/nucleationModel.h"
+#include "sootModels/sootChemistry/growthModels/growthModel.h"
+#include "sootModels/sootChemistry/oxidationModels/oxidationModel.h"
+#include "sootModels/sootChemistry/coagulationModels/coagulationModel.h"
 
-/** sootModel class
- *
- *      Main point of contact between sootlib library and the user (external CFD code).
- *
- *      To create/initialize a soot model with desired mechanisms:
- *          1. Create a new sootModel object (initializes with default models)
- *          2. Specify the desired PSD model with setPsdModel function
- *          3. Specify desired soot chemistry with setSootChemistry function
- *
- *      To get source terms //TODO finish this documentation
- *
- */
+#include <vector>
+
+////////////////////////////////////////////////////////////////////////////////
+
 namespace soot {
 
 class sootModel {
 
-//////////////// DATA MEMBERS /////////////////////
+    //////////////// DATA MEMBERS /////////////////////
+
+    size_t            nsoot;  // # of soot variables: moments or sections
+
+    nucleationModel  *nucl;   // chemical mechanisms ...
+    growthModel      *grow;
+    oxidationModel   *oxid;
+    coagulationModel *coag;
+
+
+    //////////////// MEMBER FUNCTIONS /////////////////
 
 public:
 
-    // stored values for mechanism selections
-    psdMech             psdMechanism;
-    nucleationMech      nucleationMechanism;
-    growthMech          growthMechanism;
-    oxidationMech       oxidationMechanism;
-    coagulationMech     coagulationMechanism;
+    virtual void getSourceTerms(const state &stt, 
+                                std::vector<double> &sootSources,
+                                std::vector<double> &gasSources) const = 0;
 
-    // pointers to selected mechanisms
-    psdModel*           psd;
-
-    // source terms storage
-    sourceTermStruct* sourceTerms;
-
-//////////////// MEMBER FUNCTIONS /////////////////
-
-    // TODO documentation
-    void setSourceTerms(state& state);
-
-//////////////// CONSTRUCTOR /////////////////////////////
+    //////////////// CONSTRUCTOR //////////////////////
 
     sootModel(){};
 
-    sootModel(psdMech modelType, int nVar,
-              nucleationMech N,
-              growthMech G,
-              oxidationMech X,
-              coagulationMech C);
+    sootModel(size_t nsoot_,
+              nucleationModel  *nucl_,
+              oxidationModel   *oxid_,
+              growthModel      *grow_,
+              coagulationModel *coag_) :
+        nsoot(nsoot_), nucl(nucl_), oxid(oxid_), grow(grow_), coag(coag_) {}
 
-    virtual ~sootModel() = default;
+    virtual ~sootModel() {};
 
 };
 } // namespace soot
