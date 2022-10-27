@@ -18,8 +18,23 @@ sootModel_QMOM::sootModel_QMOM(size_t            nsoot_,
     if (nsoot_ > 6)
         cerr << "Warning: QMOM inversion algorithm may behave unpredictably with "
                 "8+ soot moments. Proceed with caution." << endl;
+}
 
-    nsoot = nsoot_;
+////////////////////////////////////////////////////////////////////////////////
+
+sootModel_QMOM::sootModel_QMOM(size_t          nsoot_,
+                               nucleationMech  Nmech,
+                               growthMech      Gmech,
+                               oxidationMech   Omech,
+                               coagulationMech Cmech) :
+        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech) {
+
+    if (nsoot_%2 == 1 || nsoot_ < 1)
+        throw runtime_error("Invalid number of soot moments requested");
+
+    if (nsoot_ > 6)
+        cerr << "Warning: QMOM inversion algorithm may behave unpredictably with "
+                "8+ soot moments. Proceed with caution." << endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

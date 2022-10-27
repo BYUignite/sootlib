@@ -14,8 +14,18 @@ sootModel_MONO::sootModel_MONO(size_t            nsoot_,
 
     if (nsoot_ != 2)
         throw runtime_error("MONO requires nsoot=2");
+}
+////////////////////////////////////////////////////////////////////////////////
 
-    nsoot = 2;
+sootModel_MONO::sootModel_MONO(size_t          nsoot_,
+                               nucleationMech  Nmech,
+                               growthMech      Gmech,
+                               oxidationMech   Omech,
+                               coagulationMech Cmech) :
+        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech) {
+
+    if (nsoot_ != 2)
+        throw runtime_error("MONO requires nsoot=2");
 }
 
 ////////////////////////////////////////////////////////////////////////////////

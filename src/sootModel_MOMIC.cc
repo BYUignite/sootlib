@@ -15,8 +15,19 @@ sootModel_MOMIC::sootModel_MOMIC(size_t            nsoot_,
 
     if (nsoot_ < 2)
         throw runtime_error("MOMIC requires nsoot>1");
+}
 
-    nsoot = nsoot_;
+////////////////////////////////////////////////////////////////////////////////
+
+sootModel_MOMIC::sootModel_MOMIC(size_t          nsoot_,
+                                 nucleationMech  Nmech,
+                                 growthMech      Gmech,
+                                 oxidationMech   Omech,
+                                 coagulationMech Cmech) :
+        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech) {
+
+    if (nsoot_ < 2)
+        throw runtime_error("MOMIC requires nsoot>1");
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -7,8 +7,8 @@ add_library(sootlib::sootModel ALIAS sootModel)    # alias for use as imported t
 
 target_sources(sootModel PRIVATE
                sootDefs.h
-               sootModel.h
                sootHeaders.h
+               sootModel.h       sootModel.cc
                state.h           state.cc
                sootModel_MONO.h  sootModel_MONO.cc
                sootModel_LOGN.h  sootModel_LOGN.cc

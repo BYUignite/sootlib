@@ -27,6 +27,12 @@ public:
                    oxidationModel   *oxid_,
                    coagulationModel *coag_);
 
+    sootModel_MONO(size_t           nsoot_,
+                   nucleationMech   Nmech,
+                   growthMech       Gmech,
+                   oxidationMech    Omech,
+                   coagulationMech  Cmech);
+
     virtual ~sootModel_MONO() {};
 
 };

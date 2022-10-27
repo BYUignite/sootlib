@@ -27,6 +27,7 @@ public:
     oxidationModel   *oxid;
     coagulationModel *coag;
 
+    bool mechsNewedHere;      // flag to delete "new" objects
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
@@ -42,15 +43,23 @@ public:
               growthModel      *grow_,
               oxidationModel   *oxid_,
               coagulationModel *coag_) :
-        nsoot(nsoot_), nucl(nucl_), grow(grow_), oxid(oxid_), coag(coag_) {}
+        nsoot(nsoot_), nucl(nucl_), grow(grow_), oxid(oxid_), coag(coag_), 
+        mechsNewedHere(false) {}
 
-    sootModel(size_t            nsoot_,
-              nucleationMech   nucl_,
-              growthMech       grow_,
-              oxidationMech    oxid_,
-              coagulationMech  coag_);
+    sootModel(size_t          nsoot_,
+              nucleationMech  Nmech,
+              growthMech      Gmech,
+              oxidationMech   Omech,
+              coagulationMech Cmech);
 
-    virtual ~sootModel() {};
+    virtual ~sootModel() {
+        if(mechsNewedHere){
+            delete(nucl);
+            delete(grow);
+            delete(oxid);
+            delete(coag);
+        }
+    }
 
 };
 } // namespace soot

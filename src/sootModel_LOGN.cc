@@ -14,8 +14,19 @@ sootModel_LOGN::sootModel_LOGN(size_t            nsoot_,
 
     if (nsoot_ != 3)
         throw runtime_error("LOGN requires nsoot=3");
+}
 
-    nsoot = 3;
+////////////////////////////////////////////////////////////////////////////////
+
+sootModel_LOGN::sootModel_LOGN(size_t          nsoot_,
+                               nucleationMech  Nmech,
+                               growthMech      Gmech,
+                               oxidationMech   Omech,
+                               coagulationMech Cmech) :
+        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech) {
+
+    if (nsoot_ != 3)
+        throw runtime_error("LOGN requires nsoot=3");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
