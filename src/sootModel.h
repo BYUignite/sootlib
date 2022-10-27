@@ -37,8 +37,6 @@ public:
 
     //////////////// CONSTRUCTOR //////////////////////
 
-    sootModel(){};
-
     sootModel(size_t            nsoot_,
               nucleationModel  *nucl_,
               growthModel      *grow_,

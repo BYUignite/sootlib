@@ -69,12 +69,11 @@ install(FILES "sootModel_LOGN.h"                               DESTINATION "${CM
 install(FILES "sootModel_QMOM.h"                               DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib")
 install(FILES "sootModel_SECT.h"                               DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib")
 
-install(FILES "coagulationModels/coagulationModel.h"           DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
-install(FILES "coagulationModels/coagulationModel_FM.h"        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
-install(FILES "coagulationModels/coagulationModel_CONTINUUM.h" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
-install(FILES "coagulationModels/coagulationModel_HM.h"        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
-install(FILES "coagulationModels/coagulationModel_FUCHS.h"     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
-install(FILES "coagulationModels/coagulationModel_NONE.h"      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
+install(FILES "nucleationModels/nucleationModel.h"             DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
+install(FILES "nucleationModels/nucleationModel_LL.h"          DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
+install(FILES "nucleationModels/nucleationModel_LIN.h"         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
+install(FILES "nucleationModels/nucleationModel_PAH.h"         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
+install(FILES "nucleationModels/nucleationModel_NONE.h"        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
 
 install(FILES "growthModels/growthModel.h"                     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/growthModels")
 install(FILES "growthModels/growthModel_LL.h"                  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/growthModels")
@@ -82,13 +81,20 @@ install(FILES "growthModels/growthModel_LIN.h"                 DESTINATION "${CM
 install(FILES "growthModels/growthModel_HACA.h"                DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/growthModels")
 install(FILES "growthModels/growthModel_NONE.h"                DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/growthModels")
 
-install(FILES "nucleationModels/nucleationModel.h"             DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
-install(FILES "nucleationModels/nucleationModel_LL.h"          DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
-install(FILES "nucleationModels/nucleationModel_LIN.h"         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
-install(FILES "nucleationModels/nucleationModel_PAH.h"         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
-install(FILES "nucleationModels/nucleationModel_NONE.h"        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
-
 install(FILES "oxidationModels/oxidationModel.h"               DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
+install(FILES "oxidationModels/oxidationModel_LL.h"            DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
+install(FILES "oxidationModels/oxidationModel_LEE_NEOH.h"      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
+install(FILES "oxidationModels/oxidationModel_NSC_NEOH.h"      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
+install(FILES "oxidationModels/oxidationModel_HACA.h"          DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
+install(FILES "oxidationModels/oxidationModel_NONE.h"          DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
+
+install(FILES "coagulationModels/coagulationModel.h"           DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
+install(FILES "coagulationModels/coagulationModel_FM.h"        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
+install(FILES "coagulationModels/coagulationModel_CONTINUUM.h" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
+install(FILES "coagulationModels/coagulationModel_HM.h"        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
+install(FILES "coagulationModels/coagulationModel_FUCHS.h"     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
+install(FILES "coagulationModels/coagulationModel_NONE.h"      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")
+
 
 install(EXPORT sootlib
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sootlib
