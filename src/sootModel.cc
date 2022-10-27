@@ -74,4 +74,17 @@ sootModel::sootModel(size_t          nsoot_,
         case coagulationMech::FUCHS     : coag = new coagulationModel_FUCHS();     break;
         default: throw domain_error("Invalid coagulation model requested");
     }
+
+    //----------- 
+
+    checkSpec();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void sootModel::checkSpec() {
+
+    if((grow->mechType==growthMech::HACA    && oxid->mechType!=oxidationMech::HACA) ||
+       (oxid->mechType==oxidationMech::HACA && grow->mechType!=growthMech::HACA))
+        throw domain_error("Invalid model combination: HACA surface growth must pair with HACA oxid and vice-versa");
 }

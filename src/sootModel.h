@@ -36,6 +36,8 @@ public:
                                 std::vector<double> &gasSources,
                                 std::vector<double> &pahSources) const = 0;
 
+    void checkSpec();
+
     //////////////// CONSTRUCTOR //////////////////////
 
     sootModel(size_t            nsoot_,
@@ -44,7 +46,9 @@ public:
               oxidationModel   *oxid_,
               coagulationModel *coag_) :
         nsoot(nsoot_), nucl(nucl_), grow(grow_), oxid(oxid_), coag(coag_), 
-        mechsNewedHere(false) {}
+        mechsNewedHere(false) {
+        checkSpec();
+    }
 
     sootModel(size_t          nsoot_,
               nucleationMech  Nmech,
