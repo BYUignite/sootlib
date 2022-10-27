@@ -44,6 +44,12 @@ public:
               coagulationModel *coag_) :
         nsoot(nsoot_), nucl(nucl_), grow(grow_), oxid(oxid_), coag(coag_) {}
 
+    sootModel(size_t            nsoot_,
+              nucleationMech   nucl_,
+              growthMech       grow_,
+              oxidationMech    oxid_,
+              coagulationMech  coag_);
+
     virtual ~sootModel() {};
 
 };
