@@ -1,52 +1,48 @@
 #pragma once
 
-#include "src/sootModel.h"
-//#include "sootModels/psdModels/psdModel.h"
+#include "sootModel.h"
+#include "sootDefs.h"
 #include "state.h"
 
 namespace soot {
 
-/**
- * An implementation of the psdModel interface following the SECT sectional/bin-based model
- *
- * Associated with the enum psdMech::SECT
- */
-class psdModel_SECT : public sootModel {
-//    class psdModel_SECT : public psdModel {
+class sootModel_SECT : public sootModel {
 
-//////////////// DATA MEMBERS /////////////////////
+    //////////////// DATA MEMBERS /////////////////////
 
-private:
+    double         binGrowthFactor;       // F^0, F^1, F^2, ... (set F here, F=2, say)
+    std::vector<double> mBins; 
 
-    size_t nsoot;
+    //////////////// MEMBER FUNCTIONS /////////////////
 
-//////////////// MEMBER FUNCTIONS /////////////////
-
-    /**
-     * source terms calculation function required by psdModel
-     *
-     * @param state contains soot and gas state data
-     * @param out pointer to an outstream for debugging purposes, can be null
-     * @return source terms object with computer values
-     */
-    void setSourceTerms(state& state, std::ostream* out) const override;
-    /**
-     * throws exceptions if the state object is in an illegal state to calculate source terms required by psdModel
-     *
-     * @param state
-     */
-    void checkState(const state& state) const override;
-
-    // helper functions specific to this PSD
-    static std::vector<double> getDivision(double mass, double num, const std::vector<double>& absc);
-
-
-//////////////// CONSTRUCTOR FUNCTIONS ////////////
+    void set_mBins(const int cMin_);
 
 public:
 
-    psdModel_SECT(size_t n);
-    ~psdModel_SECT() override = default;
+    virtual void getSourceTerms(state &state, 
+                                std::vector<double> &sootSources,
+                                std::vector<double> &gasSources,
+                                std::vector<double> &pahSources) const;
+
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
+
+    sootModel_SECT(size_t            nsoot_,
+                   nucleationModel  *nucl_,
+                   growthModel      *grow_,
+                   oxidationModel   *oxid_,
+                   coagulationModel *coag_, 
+                   double            binGrowthFactor_=2.0,
+                   int               cMin_=100);
+
+    sootModel_SECT(size_t           nsoot_,
+                   nucleationMech   Nmech,
+                   growthMech       Gmech,
+                   oxidationMech    Omech,
+                   coagulationMech  Cmech,
+                   double           binGrowthFactor_=2.0,
+                   int              cMin_=100);
+
+    virtual ~sootModel_SECT() {};
 
 };
 } // namespace soot

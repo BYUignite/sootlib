@@ -1,225 +1,196 @@
-#include "sootModels/sootChemistry/psdModels/psdModel_SECT.h"
+#include "sootModel_SECT.h"
 
 using namespace std;
 using namespace soot;
 
-psdModel_SECT::psdModel_SECT(size_t n) {
+////////////////////////////////////////////////////////////////////////////////
 
-    if (n < 1)
-        throw runtime_error("Invalid number of soot sections requested");
+sootModel_SECT::sootModel_SECT(size_t            nsoot_,
+                               nucleationModel  *nucl_,
+                               growthModel      *grow_,
+                               oxidationModel   *oxid_,
+                               coagulationModel *coag_,
+                               double            binGrowthFactor_, 
+                               int               cMin_) :
+        sootModel(nsoot_, nucl_, grow_, oxid_, coag_), 
+        binGrowthFactor(binGrowthFactor_) {
 
-    mechType = psdMech::SECT;
+    if (nsoot_ < 2)
+        throw runtime_error("SECT requires nsoot>1");
+
+    set_mBins(cMin_);
 }
 
-void psdModel_SECT::setSourceTerms(state& state, std::ostream* out) const {
+////////////////////////////////////////////////////////////////////////////////
 
-    if (out) {
-        *out << " === [SootModel SECT] ===" << endl;
-        *out << endl;
-    }
+sootModel_SECT::sootModel_SECT(size_t          nsoot_,
+                               nucleationMech  Nmech,
+                               growthMech      Gmech,
+                               oxidationMech   Omech,
+                               coagulationMech Cmech,
+                               double          binGrowthFactor_,
+                               int             cMin_) :
+        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech), 
+        binGrowthFactor(binGrowthFactor_) {
 
-    //---------- get weights and abscissas
+    if (nsoot_ < 2)
+        throw runtime_error("SECT requires nsoot>1");
 
-    vector<double> wts(nsoot, 0);
-    vector<double> absc(nsoot, 0);
+    set_mBins(cMin_);
+}
 
+////////////////////////////////////////////////////////////////////////////////
+/** Set the sectional mass coordinate locations: mass per particle at each size location
+ */
+
+void sootModel_SECT::set_mBins(const int cMin_) {
+
+    mBins.resize(nsoot);
     for (size_t k = 0; k < nsoot; k++)
-        absc[k] = state.cMin * pow(2, k) * gasSpMW[(int)gasSp::C] / Na;
-
-    for (double& num : wts) {
-        if (num < 0)
-            num = 0;
-    }
-
-    double Jnuc = nuc->getNucleationSootRate(state, absc, wts);
-
-
-    vector<double> Kgrw(nsoot, 0);
-    for (double& num : Kgrw)
-        num = grw->getGrowthSootRate(state);
-        // this is not how the growth model is treated anywhere else and it doesn't really work that way in this setup
-
-    if (out) {
-        *out << "Kgrw (" << Kgrw.size() << ")" << endl;
-        for (size_t i = 0; i < Kgrw.size(); i++)
-            *out << i << ": " << Kgrw[i] << endl;
-        *out << endl;
-    }
-
-    vector<double> Koxi(nsoot, 0);
-    for (double& num : Koxi)
-        num = oxi->getOxidationSootRate(state);
-        // this is not how the oxidation model is treated anywhere else and it doesn't really work that way in this setup
-
-    if (out) {
-        *out << "Koxi (" << Koxi.size() << ")" << endl;
-        for (size_t i = 0; i < Koxi.size(); i++)
-            *out << i << ": " << Koxi[i] << endl;
-        *out << endl;
-    }
-
-    vector<double> Coag(nsoot, 0);
-    double leaving;
-    vector<double> divided;
-    for (size_t i = 0; i < Coag.size(); i++) {
-        for (size_t j = 0; j < Coag.size(); j++) {
-            leaving = 0.5 * coa->getCoagulationSootRate(state, absc[i], absc[j]) * wts[i] * wts[i];
-            Coag[i] -= leaving;
-            Coag[j] -= leaving;
-            divided = getDivision((state.sootVar[i] + state.sootVar[j]), leaving, absc);
-            for (size_t k = 0; k < Coag.size(); k++)
-                Coag[k] += divided[k];
-        }
-    }
-
-    if (out) {
-        *out << "Coag (" << Coag.size() << ")" << endl;
-        for (size_t i = 0; i < Coag.size(); i++)
-            *out << i << ": " << Coag[i] << endl;
-        *out << endl;
-    }
-
-    vector<double> N0(state.nsoot, 0);
-    N0[0] = Jnuc;
-    const double N_tot = Jnuc * state.cMin * gasSpMW[(int)gasSp::C] / Na;
-
-    if (out) {
-        *out << "N0 (" << N0.size() << ")" << endl;
-        for (size_t i = 0; i < N0.size(); i++)
-            *out << i << ": " << N0[i] << endl;
-        *out << "N tot: " << N_tot << endl;
-        *out << endl;
-    }
-
-    vector<double> Cnd0(state.nsoot, 0);
-    double Cnd_tot = 0;
-    if (sootModel.nuc->getMechanism() == nucleationMech::PAH) {
-        for (size_t i = 0; i < Cnd0.size(); i++) {
-            Cnd0[i] = state.getDimer() * state.getMDimer() * sootModel.coa->getCoagulationRate(state, state.getMDimer(), absc[i]) * wts[i];
-            Cnd_tot += Cnd0[i] * absc[i];
-        }
-    }
-
-    if (out) {
-        *out << "Cnd0 (" << Cnd0.size() << ")" << endl;
-        for (size_t i = 0; i < Cnd0.size(); i++)
-            *out << i << ": " << Cnd0[i] << endl;
-        *out << "Cnd tot: " << Cnd_tot << endl;
-        *out << endl;
-    }
-
-    vector<double> Am2m3(nsoot, 0);
-    for (size_t i = 0; i < nsoot; i++) {
-        if (wts[i] > 0)
-            Am2m3[i] = M_PI * pow(abs(6 / (M_PI * rhoSoot) * state.sootVar[i]), 2.0 / 3) * abs(wts[i]);
-    }
-
-    if (out) {
-        *out << "Am2m3 (" << Am2m3.size() << ")" << endl;
-        for (size_t i = 0; i < Am2m3.size(); i++)
-            *out << i << ": " << Am2m3[i] << endl;
-        *out << endl;
-    }
-
-    vector<double> G0(nsoot, 0);
-    double G_tot = 0;
-    double Ngrw;
-    for (size_t i = 0; i < nsoot; i++) {
-        if (i == 0)
-            Ngrw = -Kgrw[i] * Am2m3[i] * wts[i] / (absc[i + 1] - absc[i]);
-        else if (i == (nsoot - 1))
-            Ngrw = Kgrw[i - 1] * Am2m3[i - 1] * wts[i - 1] / (absc[i] - absc[i - 1]);
-        else
-            Ngrw = Kgrw[i - 1] * Am2m3[i - 1] * wts[i - 1] / (absc[i] - absc[i - 1]) - Kgrw[i] * Am2m3[i] * wts[i] / (absc[i + 1] - absc[i]);
-
-        G0[i] = Ngrw;
-        G_tot += Ngrw * absc[i];
-    }
-
-    if (out) {
-        *out << "G0 (" << G0.size() << ")" << endl;
-        for (size_t i = 0; i < G0.size(); i++)
-            *out << i << ": " << G0[i] << endl;
-        *out << "G tot: " << G_tot << endl;
-        *out << endl;
-    }
-
-    vector<double> X0(nsoot, 0);
-    double X_tot = 0;
-    double Noxi;
-    for (size_t i = 0; i < nsoot; i++) {
-        if (i == 0)
-            Noxi = Koxi[i] * Am2m3[i] * wts[i] / (absc[i + 1] - absc[i]);
-        else if (i == (nsoot - 1))
-            Noxi = -Koxi[i - 1] * Am2m3[i - 1] * wts[i - 1] / (absc[i] - absc[i - 1]);
-        else
-            Noxi = -Koxi[i - 1] * Am2m3[i - 1] * wts[i - 1] / (absc[i] - absc[i - 1]) + Koxi[i] * Am2m3[i] * wts[i] / (absc[i + 1] - absc[i]);
-
-        X0[i] = Noxi;
-        X_tot += Noxi * absc[i];
-    }
-
-    if (out) {
-        *out << "X0 (" << X0.size() << ")" << endl;
-        for (size_t i = 0; i < X0.size(); i++)
-            *out << i << ": " << X0[i] << endl;
-        *out << "X tot: " << X_tot << endl;
-        *out << endl;
-    }
-
-    vector<double>& C0 = Coag;
-
-    vector<double> sootSourceTerms(nsoot, 0);
-    for (size_t i = 0; i < sootSourceTerms.size(); i++)
-        sootSourceTerms[i] = (N0[i] + Cnd0[i] + G0[i] + X0[i] + C0[i]) / rhoSoot;
-
-    if (out) {
-        *out << "Soot Source Terms (" << sootSourceTerms.size() << ")" << endl;
-        for (size_t i = 0; i < sootSourceTerms.size(); i++)
-            *out << i << ": " << sootSourceTerms[i] << endl;
-        *out << endl;
-    }
-
-    // There was a commented out section in the old code here labeled "computer gas source terms", but it looked like it didn't do anything anymore
-
-    //---------- set gas source terms
-
-    map<gasSp, double> gasSourceTerms = sootChemistry.getGasSourceTerms(state, massRateRatios, N_tot, G_tot, X_tot, Cnd_tot);
-    map<size_t, double> PAHSourceTerms = sootChemistry.getPAHSourceTerms(state, massRateRatios, N_tot, 0, X_tot, Cnd_tot);
-
-    if (out) {
-        *out << "Gas Source Terms (" << gasSourceTerms.size() << ")" << endl;
-        for (const auto& [g, t] : gasSourceTerms)
-            *out << (int) g << ": " << t << endl;
-        *out << "PAH Source Terms (" << PAHSourceTerms.size() << ")" << endl;
-        for (const auto& [s, t] : PAHSourceTerms)
-            *out << s << ": " << t << endl;
-        *out << endl;
-    }
-
-
-    return sourceTermStruct(sootSourceTerms, gasSourceTerms, PAHSourceTerms);
+        mBins[k] = cMin_ * pow(binGrowthFactor, k) * gasSpMW[(size_t)gasSp::C] / Na;
 }
 
-vector<double> psdModel_SECT::getDivision(double mass, double num, const vector<double>& absc) {
-    size_t loc = 0;
-    bool found = false;
-    vector<double> toReturn(absc.size(), 0);
-    while (!found) {
-        loc++;
-        if (loc >= absc.size()) {
-            loc = absc.size() - 1;  // FIXME this is the problematic statement, it doesn't account for the scenario where the size of absc is 1 or less
-            found = true;  // TODO I think it would probably be more appropriate to have a break here
+////////////////////////////////////////////////////////////////////////////////
+
+void sootModel_SECT::getSourceTerms(state &state, 
+                                    std::vector<double> &sootSources,
+                                    std::vector<double> &gasSources,
+                                    std::vector<double> &pahSources) const {
+
+    size_t k;
+    double term;
+
+    //---------- get chemical rates
+
+    double jNuc = nucl->getNucleationSootRate(state);      // #/m3*s
+    double kGrw = grow->getGrowthSootRate(state);          // kg/m2*s
+    double kOxi = oxid->getOxidationSootRate(state);       // kg/m2*s
+
+    //----------- nucleation terms
+
+    vector<double> Snuc(nsoot, 0.0);                             // #/m3*s in each bin (only bin 0)
+    Snuc[0] = jNuc;
+
+    //----------- get area for growth, condensation and oxidation
+
+    vector<double> Am2m3(nsoot, 0);                                     // m2 soot / m3 bulk volume
+    for (k = 0; k < nsoot; k++)
+        Am2m3[k] = M_PI*pow(6.*mBins[k]/(M_PI*rhoSoot), twothird)*abs(state.sootVar[k]);
+
+    //----------- growth terms: positive velocity through size domain
+
+    vector<double> Sgrw(nsoot, 0.0);                                    // #/m3*s in each bin
+    k=0;                                                                // first bin
+    term = kGrw*Am2m3[k]*abs(state.sootVar[k])/(mBins[k+1]-mBins[k]);
+    Sgrw[k] = -term;
+    for(k=1; k<nsoot-1; k++) {                                          // loop up interior bins
+        Sgrw[k]  = term;
+        term     = kGrw*Am2m3[k]*abs(state.sootVar[k])/(mBins[k+1]-mBins[k]);
+        Sgrw[k] -= term;
+    }
+    k=nsoot-1;                                                          // last bin
+    Sgrw[nsoot-1] = term;
+
+    //----------- PAH condensation terms: positive velocity through size domain
+
+    vector<double> Scnd(nsoot, 0.0);
+    // if (nucl->mechType == nucleationMech::PAH) {
+    //     k=0;                                                                // first bin
+    //     term = state.getDimer()*state.getDimer()*
+    //         coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, mBins[k])*
+    //         abs(state.sootVar[k]);
+    //     Scnd[k] = -term;
+    //     for(k=1; k<nsoot-1; k++) {                                          // loop up interior bins
+    //         Scnd[k]  = term;
+    //         term = state.getDimer()*state.getDimer()*
+    //                coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, mBins[k])*
+    //                abs(state.sootVar[k]);
+    //         Scnd[k] -= term;
+    //     }
+    //     k=nsoot-1;                                                          // last bin
+    //     Scnd(nsoot-1) = term;
+    // }
+
+    //todo: check pah condensation here and elsewhere
+
+    //----------- oxidation terms: negative velocity through size domain
+
+    vector<double> Soxi(nsoot, 0.0);                                    // #/m3*s in each bin
+    k=nsoot-1;                                                          // last bin
+    term = kOxi*Am2m3[k]*abs(state.sootVar[k])/(mBins[k]-mBins[k-1]);
+    Soxi[k] = -term;
+    for(k=nsoot-2; k>0; k--) {                                          // loop down interior bins
+        Soxi[k]  = term;
+        term     = kOxi*Am2m3[k]*abs(state.sootVar[k])/(mBins[k]-mBins[k-1]);
+        Soxi[k] -= term;
+    }
+    k=0;                                                                // first bin
+    Soxi[k] = term;
+
+    //----------- coagulation terms
+
+    static const double ilnF = 1.0/log(binGrowthFactor);                // factor for finding location
+
+    vector<double> Scoa(nsoot, 0.0);                                    // #/m3*s in each bin
+
+    double K12;
+
+    for(size_t i=0; i<nsoot; i++) {                     // loop size i
+        for(size_t j=i; j<nsoot; j++) {                 // which collides with each size j
+
+            //----------- loss: i,j collide to remove from bins i and j
+
+            K12  = coag->getCoagulationSootRate(state, mBins[i], mBins[j]);
+            term  = K12*state.sootVar[i]*state.sootVar[j];
+            Scoa[i] -= term;
+            Scoa[j] -= term;
+
+            //----------- gain: mi + mj = mk --> bins floor(k) and ceil(k) gain so that mass, # conserved
+
+            size_t k  = static_cast<size_t>(ilnF * log((mBins[i]+mBins[j])/state.cMin));
+
+            if (k >= nsoot) k=nsoot-1;
+            if (k == nsoot-1)            // i+j into last bin, no splitting, conserve mass
+                Scoa[k] += term*(mBins[i]+mBins[j])/mBins[k];
+            else {                       // i+j between k and k+1, split to conserve # and mass
+                double Xk = (mBins[k+1] - (mBins[i] + mBins[j])) / (mBins[k+1] - mBins[k]);   // fraction into bin k
+                Scoa[k]   += Xk       * term;
+                Scoa[k+1] += (1.0-Xk) * term;
+            }
         }
-        if (absc[loc] > mass)
-            found = true;
+    }
+    
+    //---------- combine to make soot source terms
+
+    for (size_t k=0; k<nsoot; k++)
+        sootSources[k] = Snuc[k] + Sgrw[k] + Scnd[k] + Soxi[k] + Scoa[k];  // #/m3*s in bin k
+
+    //---------- set gas sources
+
+    double mdotN=0, mdotG=0, mdotO=0;             // kg/m3*s from nuc, grow, cond, oxid
+    for(size_t k=0; k<nsoot; k++) {
+        mdotN += Snuc[k]*mBins[k];
+        mdotG += Sgrw[k]*mBins[k];
+        mdotO += Soxi[k]*mBins[k];
     }
 
-    // FIXME it's possible for loc to be 0 here, which is a problem
-    const double right = (mass - absc[loc - 1]) / (absc[loc] - absc[loc - 1]) * num;
-    const double left = (absc[loc] - mass) / (absc[loc] - absc[loc - 1]) * num;
-    toReturn[loc - 1] += left;
-    toReturn[loc] += right;
+    vector<double> nucl_gasSources((size_t)gasSp::size, 0.0);
+    vector<double> grow_gasSources((size_t)gasSp::size, 0.0);
+    vector<double> oxid_gasSources((size_t)gasSp::size, 0.0);
 
-    return toReturn;
+    nucl->getNucleationGasRates(state, mdotN, nucl_gasSources);
+    grow->getGrowthGasRates(    state, mdotG, grow_gasSources);
+    oxid->getOxidationGasRates( state, mdotO, oxid_gasSources);
+
+    for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
+        gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
+
+    //---------- set PAH source terms
+
+    if(nucl->mechType == nucleationMech::PAH)
+        pahSources = nucl->nucleationPahRxnRates;
+
+    //todo: what about pah condensation? (here and in other models)
+    //todo: also, redundancy between nucleation and PAH? Check here and elsewhere
 }
+

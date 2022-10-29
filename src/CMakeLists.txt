@@ -14,9 +14,8 @@ target_sources(sootModel PRIVATE
                sootModel_LOGN.h  sootModel_LOGN.cc
                sootModel_QMOM.h  sootModel_QMOM.cc
                sootModel_MOMIC.h sootModel_MOMIC.cc binomial.h
+               sootModel_SECT.h  sootModel_SECT.cc
                )
-               # sootModel_SECT.h  sootModel_SECT.cc
-               #)
                
 
 # -------- target properties --------
