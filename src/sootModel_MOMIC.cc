@@ -83,7 +83,7 @@ void sootModel_MOMIC::getSourceTerms(state &state,
     vector<double> Moxi(Nsoot, 0);
 
     for (size_t i = 1; i < Nsoot; i++)
-        Moxi[i] = Koxi*Acoef*i * MOMIC(i - onethird, Mtemp);
+        Moxi[i] = -Koxi*Acoef*i * MOMIC(i - onethird, Mtemp);
 
     //---------- coagulation terms
 

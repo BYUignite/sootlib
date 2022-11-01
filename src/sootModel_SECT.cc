@@ -171,7 +171,7 @@ void sootModel_SECT::getSourceTerms(state &state,
     for(size_t k=0; k<nsoot; k++) {
         mdotN += Snuc[k]*mBins[k];
         mdotG += Sgrw[k]*mBins[k];
-        mdotO += Soxi[k]*mBins[k];
+        mdotO += Soxi[k]*mBins[k];        // todo verify sign
     }
 
     vector<double> nucl_gasSources((size_t)gasSp::size, 0.0);

@@ -31,8 +31,8 @@ double oxidationModel_NSC_NEOH::getOxidationSootRate(const state &state) const {
 
     double x = 1 / (1 + kT / (kB * pO2_atm));                    // x = unitless fraction
     double NSC_rate = kA * pO2_atm * x / (1 + kz * pO2_atm) + kB * pO2_atm * (1.0 - x);   // kmol/m^2*s
-    double rSootO2 = NSC_rate * rhoSoot;                   // kg/m2*s
-    double rSootOH = 1290 * 0.13 * pOH_atm / sqrt(state.T);    // kg/m2*s
+    double rSootO2 = NSC_rate * rhoSoot;                        // kg/m2*s
+    double rSootOH = 1290. * 0.13 * pOH_atm / sqrt(state.T);    // kg/m2*s
 
     return rSootO2 + rSootOH;                                               // kg/m2*s
 }

@@ -129,8 +129,8 @@ void sootModel_LOGN::getSourceTerms(state &state,
     double Koxi = oxid->getOxidationSootRate(state);
 
     X0 = 0;
-    X1 = Koxi*M_PI*pow(6.0/rhoSoot/M_PI, twothird) * M23;
-    X2 = Koxi*M_PI*pow(6.0/rhoSoot/M_PI, twothird) * M53 * 2.;
+    X1 = -Koxi*M_PI*pow(6.0/rhoSoot/M_PI, twothird) * M23;
+    X2 = -Koxi*M_PI*pow(6.0/rhoSoot/M_PI, twothird) * M53 * 2.;
 
     //---------- coagulation terms todo: LOGN coagulation doesnt fit in the pattern (not using coag!, except for pah, but then can be arb. which doesnt make sense for diamers)
 
