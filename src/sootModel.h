@@ -27,7 +27,9 @@ public:
     oxidationModel   *oxid;
     coagulationModel *coag;
 
-    bool mechsNewedHere;      // flag to delete "new" objects
+    bool    mechsNewedHere;  // flag to delete "new" objects
+
+    psdMech psdMechType;     // one of MONO, LOGN, QMOM, MOMIC, SECT, etc.
 
     //////////////// MEMBER FUNCTIONS /////////////////
 

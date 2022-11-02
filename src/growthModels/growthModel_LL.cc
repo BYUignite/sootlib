@@ -20,6 +20,7 @@ double growthModel_LL::getGrowthSootRate(const state &state) const {
 
     double M0 = state.sootVar[0];
     double M1 = state.sootVar[1];
+    // todo: generalize this to sectional (?)
 
     if (M0 > 0)
         Am2m3 = M_PI * pow(abs(6 / (M_PI * rhoSoot) * M1 / M0), 2.0/3.0) * M0;

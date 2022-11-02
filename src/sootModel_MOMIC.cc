@@ -15,6 +15,8 @@ sootModel_MOMIC::sootModel_MOMIC(size_t            nsoot_,
 
     if (nsoot_ < 2)
         throw runtime_error("MOMIC requires nsoot>1");
+
+    psdMechType = psdMech::MOMIC;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -28,6 +30,8 @@ sootModel_MOMIC::sootModel_MOMIC(size_t          nsoot_,
 
     if (nsoot_ < 2)
         throw runtime_error("MOMIC requires nsoot>1");
+
+    psdMechType = psdMech::MOMIC;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

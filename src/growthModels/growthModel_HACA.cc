@@ -55,7 +55,8 @@ double growthModel_HACA::getGrowthSootRate(const state& state) const {
 
     double M0 = state.sootVar[0];                           // #/m3
     double M1 = state.sootVar[1];                           // kg/m3
-    //todo: generalize this to sectional.
+
+    // todo: generalize this to sectional
 
     //---------- calculate alpha, other constants
 

@@ -19,6 +19,8 @@ sootModel_SECT::sootModel_SECT(size_t            nsoot_,
         throw runtime_error("SECT requires nsoot>1");
 
     set_mBins(cMin_);
+
+    psdMechType = psdMech::SECT;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -37,6 +39,8 @@ sootModel_SECT::sootModel_SECT(size_t          nsoot_,
         throw runtime_error("SECT requires nsoot>1");
 
     set_mBins(cMin_);
+
+    psdMechType = psdMech::SECT;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

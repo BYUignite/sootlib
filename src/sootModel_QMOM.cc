@@ -18,6 +18,8 @@ sootModel_QMOM::sootModel_QMOM(size_t            nsoot_,
     if (nsoot_ > 6)
         cerr << "Warning: QMOM inversion algorithm may behave unpredictably with "
                 "8+ soot moments. Proceed with caution." << endl;
+
+    psdMechType = psdMech::QMOM;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -35,6 +37,8 @@ sootModel_QMOM::sootModel_QMOM(size_t          nsoot_,
     if (nsoot_ > 6)
         cerr << "Warning: QMOM inversion algorithm may behave unpredictably with "
                 "8+ soot moments. Proceed with caution." << endl;
+
+    psdMechType = psdMech::QMOM;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
