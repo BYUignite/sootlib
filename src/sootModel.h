@@ -31,6 +31,10 @@ public:
 
     psdMech psdMechType;     // one of MONO, LOGN, QMOM, MOMIC, SECT, etc.
 
+    //----------- for the SECT model interface
+
+    std::vector<double> mBins; 
+
     //////////////// MEMBER FUNCTIONS /////////////////
 
     virtual void getSourceTerms(state &state, 
@@ -46,11 +50,7 @@ public:
               nucleationModel  *nucl_,
               growthModel      *grow_,
               oxidationModel   *oxid_,
-              coagulationModel *coag_) :
-        nsoot(nsoot_), nucl(nucl_), grow(grow_), oxid(oxid_), coag(coag_), 
-        mechsNewedHere(false) {
-        checkSpec();
-    }
+              coagulationModel *coag_);
 
     sootModel(size_t          nsoot_,
               nucleationMech  Nmech,

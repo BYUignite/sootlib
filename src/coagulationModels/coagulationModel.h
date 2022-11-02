@@ -4,12 +4,18 @@
 
 namespace soot {
 
+class sootModel;
+
 /**
  * Interface used to calculate coagulation rate given a state and two masses
  */
 class coagulationModel {
 
     //////////////// DATA MEMBERS /////////////////////
+
+public:
+
+    sootModel *SM;
 
 protected:
 

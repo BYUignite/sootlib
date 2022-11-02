@@ -20,6 +20,7 @@ sootModel_QMOM::sootModel_QMOM(size_t            nsoot_,
                 "8+ soot moments. Proceed with caution." << endl;
 
     psdMechType = psdMech::QMOM;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -27,6 +27,23 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+sootModel::sootModel(size_t            nsoot_,
+                     nucleationModel  *nucl_,
+                     growthModel      *grow_,
+                     oxidationModel   *oxid_,
+                     coagulationModel *coag_) :
+        nsoot(nsoot_), nucl(nucl_), grow(grow_), oxid(oxid_), coag(coag_), 
+        mechsNewedHere(false) {
+        checkSpec();
+        nucl->SM = this;
+        grow->SM = this;
+        oxid->SM = this;
+        coag->SM = this;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+
 sootModel::sootModel(size_t          nsoot_,
                      nucleationMech  Nmech,
                      growthMech      Gmech,
@@ -74,6 +91,13 @@ sootModel::sootModel(size_t          nsoot_,
         case coagulationMech::FUCHS     : coag = new coagulationModel_FUCHS();     break;
         default: throw domain_error("Invalid coagulation model requested");
     }
+
+    //----------- 
+
+    nucl->SM = this;
+    grow->SM = this;
+    oxid->SM = this;
+    coag->SM = this;
 
     //----------- 
 

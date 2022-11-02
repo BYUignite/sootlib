@@ -11,7 +11,6 @@ class sootModel_SECT : public sootModel {
     //////////////// DATA MEMBERS /////////////////////
 
     double         binGrowthFactor;       // F^0, F^1, F^2, ... (set F here, F=2, say)
-    std::vector<double> mBins; 
 
     //////////////// MEMBER FUNCTIONS /////////////////
 

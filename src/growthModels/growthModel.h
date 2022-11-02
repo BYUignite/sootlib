@@ -2,9 +2,11 @@
 
 #include "state.h"
 #include "sootDefs.h"
+
 #include <vector>
 
 namespace soot {
+class sootModel;
 
 class growthModel {
 
@@ -15,6 +17,8 @@ public:
     std::vector<double> growthRxnRatios;
 
     growthMech mechType;
+
+    sootModel *SM;
 
 //////////////// MEMBER FUNCTIONS /////////////////
 

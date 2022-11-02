@@ -1,5 +1,6 @@
 #include "growthModels/growthModel_HACA.h"
 #include "sootDefs.h"
+#include "sootModel.h"          // for the SM back pointer
 
 using namespace std;
 using namespace soot;
@@ -56,7 +57,14 @@ double growthModel_HACA::getGrowthSootRate(const state& state) const {
     double M0 = state.sootVar[0];                           // #/m3
     double M1 = state.sootVar[1];                           // kg/m3
 
-    // todo: generalize this to sectional
+    if (SM->psdMechType == psdMech::SECT) {
+        M0 = 0.0;
+        M1 = 0.0;
+        for (size_t k=0; k<state.nsoot; k++) {
+            M0 += state.sootVar[k];
+            M1 += state.sootVar[k]*SM->mBins[k];
+        }
+    }
 
     //---------- calculate alpha, other constants
 

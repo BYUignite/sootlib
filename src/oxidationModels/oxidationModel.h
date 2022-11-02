@@ -7,6 +7,8 @@
 
 namespace soot {
 
+class sootModel;
+
 class oxidationModel {
 
 //////////////// DATA MEMBERS /////////////////////
@@ -16,6 +18,8 @@ public:
     std::vector<double> oxidationRxnRatios;
 
     oxidationMech mechType;
+
+    sootModel *SM;
 
 //////////////// MEMBER FUNCTIONS /////////////////
 
