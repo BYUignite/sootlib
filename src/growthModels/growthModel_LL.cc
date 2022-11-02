@@ -1,5 +1,6 @@
 #include "growthModels/growthModel_LL.h"
 #include "sootDefs.h"
+#include "sootModel.h"          // for the SM back pointer
 
 using namespace std;
 using namespace soot;

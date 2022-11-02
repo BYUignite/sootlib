@@ -17,6 +17,8 @@ public:
 
     sootModel *SM;
 
+    coagulationMech mechType;
+
 protected:
 
     double FM_multiplier;         // multiply the FM rate by this constant (1.0 default, user set)
@@ -39,8 +41,6 @@ public:
     void set_FM_multiplier(double FM_multiplier_) {
         FM_multiplier = FM_multiplier_;
     }
-
-    coagulationMech mechType;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
