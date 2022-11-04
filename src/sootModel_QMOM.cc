@@ -75,26 +75,26 @@ void sootModel_QMOM::getSourceTerms(state &state,
 
     vector<double> cndSrcM(nsoot, 0);
     if (nucl->mechType == nucleationMech::PAH) {
-        for (size_t i=1; i<nsoot; i++) {                             // M0 = 0.0 for condensation by definition
-            for (size_t j=0; j<state.absc.size(); j++)
-                cndSrcM[i] += coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, state.absc[j]) * 
-                              pow(state.absc[j], i - 1) * state.wts[j];
-            cndSrcM[i] *= nucl->DIMER.nDimer * nucl->DIMER.mDimer * i;
+        for (size_t k=1; k<nsoot; k++) {                             // loop moments k, skip moment 0
+            for (size_t i=0; i<state.absc.size(); i++)               // loop abscissas
+                cndSrcM[k] += coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, state.absc[i]) * 
+                              pow(state.absc[i], k-1) * state.wts[i];
+            cndSrcM[k] *= k * nucl->DIMER.nDimer * nucl->DIMER.mDimer;
         }
     }
 
     //---------- growth terms
 
     vector<double> grwSrcM(nsoot, 0);
-    const double Acoef = M_PI*pow(6. /(M_PI*rhoSoot), twothird);            // Acoef (=) kmol^2/3 / kg^2/3
-    for (size_t i=1; i<nsoot; i++)                                          // M0 = 0.0 for growth by definition
-        grwSrcM[i] =  kGrw*Acoef*i*Mk(i - onethird, state.wts, state.absc); // kg^k/m3*s
+    const double Acoef = M_PI*pow(6. /(M_PI*rhoSoot), twothird);          // Acoef (=) kmol^2/3 / kg^2/3
+    for (size_t k=1; k<nsoot; k++)                                        // Rate_M0 = 0.0 for growth by definition
+        grwSrcM[k] =  kGrw*Acoef*k*Mk(k-onethird, state.wts, state.absc); // kg^k/m3*s
 
     //---------- oxidation terms
 
     vector<double> oxiSrcM(nsoot, 0);
-    for (size_t i=1; i<nsoot; i++)                                          // M0 = 0.0 for oxidation by definition
-        oxiSrcM[i] = -kOxi*Acoef*i*Mk(i - onethird, state.wts, state.absc); // kg^k/m3*s
+    for (size_t k=1; k<nsoot; k++)                                        // Rate_M0 = 0.0 for oxidation by definition
+        oxiSrcM[k] = -kOxi*Acoef*k*Mk(k-onethird, state.wts, state.absc); // kg^k/m3*s
 
     //---------- coagulation terms
 
@@ -134,10 +134,7 @@ void sootModel_QMOM::getSourceTerms(state &state,
     //---------- set PAH source terms
 
     if(nucl->mechType == nucleationMech::PAH)
-        pahSources = nucl->nucleationPahRxnRates;
-
-    //todo: what about pah condensation? (here and in other models)
-
+        pahSources = nucl->nucleationPahRxnRates;        // includes both nucleation and condensation
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -275,12 +272,12 @@ void sootModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& 
 ////////////////////////////////////////////////////////////////////////////////
 /** Mk function (QMOM)
  *
- *       calculates fractional moments from weights and abscissas.
+ *  calculates fractional moments from weights and abscissas.
  *
- *       @param exp      \input      fractional moment to compute; corresponds to exponent
- *       @param wts      \input      weights
- *       @param absc     \input      abscissas
- *       @param Mk       \output     fractional moment value
+ *  @param exp      \input      fractional moment to compute; corresponds to exponent
+ *  @param wts      \input      weights
+ *  @param absc     \input      abscissas
+ *  @param Mk       \output     fractional moment value
  */
 
 double sootModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<double>& absc) {
@@ -292,6 +289,5 @@ double sootModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<do
 		else
 			Mk += wts[i] * pow(absc[i], exp);
 	}
-
 	return Mk;
 }

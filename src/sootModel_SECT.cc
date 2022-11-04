@@ -98,24 +98,22 @@ void sootModel_SECT::getSourceTerms(state &state,
     //----------- PAH condensation terms: positive velocity through size domain
 
     vector<double> Scnd(nsoot, 0.0);
-    // if (nucl->mechType == nucleationMech::PAH) {
-    //     k=0;                                                                // first bin
-    //     term = state.getDimer()*state.getDimer()*
-    //         coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, mBins[k])*
-    //         abs(state.sootVar[k]);
-    //     Scnd[k] = -term;
-    //     for(k=1; k<nsoot-1; k++) {                                          // loop up interior bins
-    //         Scnd[k]  = term;
-    //         term = state.getDimer()*state.getDimer()*
-    //                coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, mBins[k])*
-    //                abs(state.sootVar[k]);
-    //         Scnd[k] -= term;
-    //     }
-    //     k=nsoot-1;                                                          // last bin
-    //     Scnd(nsoot-1) = term;
-    // }
-
-    //todo: check pah condensation here and elsewhere
+    if (nucl->mechType == nucleationMech::PAH) {
+        k=0;                                                                // first bin
+        term = coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, mBins[k])*
+               abs(state.sootVar[k]) * nucl->DIMER.nDimer * nucl->DIMER.mDimer / 
+               (mBins[k+1]-mBins[k]);
+        Scnd[k] = -term;
+        for(k=1; k<nsoot-1; k++) {                                          // loop up interior bins
+            Scnd[k]  = term;
+            term = coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, mBins[k])*
+                   abs(state.sootVar[k]) * nucl->DIMER.nDimer * nucl->DIMER.mDimer / 
+                   (mBins[k+1]-mBins[k]);
+            Scnd[k] -= term;
+        }
+        k=nsoot-1;                                                          // last bin
+        Scnd(nsoot-1) = term;
+    }
 
     //----------- oxidation terms: negative velocity through size domain
 
@@ -192,9 +190,6 @@ void sootModel_SECT::getSourceTerms(state &state,
     //---------- set PAH source terms
 
     if(nucl->mechType == nucleationMech::PAH)
-        pahSources = nucl->nucleationPahRxnRates;
-
-    //todo: what about pah condensation? (here and in other models)
-    //todo: also, redundancy between nucleation and PAH? Check here and elsewhere
+        pahSources = nucl->nucleationPahRxnRates;        // includes both nucleation and condensation
 }
 

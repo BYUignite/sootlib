@@ -72,7 +72,7 @@ const std::map<int, std::string> gasSpMapIS{{0,  "O2"},     // map Int to String
                                             {9,   "C"}};
 
 const std::vector<double> gasSpMW{      // (kg/kmol); make sure the order corresponds to the gasSp enum
-    31.998,    // O2
+    31.998,    // O2                    // same as in cantera Elements.cpp
     15.999,    // O
     2.016,     // H2
     1.008,     // H
@@ -91,12 +91,12 @@ const std::vector<double> gasSpMW{      // (kg/kmol); make sure the order corres
 enum class pahSp{ C10H8, C12H8, C12H10, C14H10, C16H10, C18H10, size };
 
 const std::vector<double> pahSpMW = {     // (kg/kmol)
-    128.173,   // C10H8
-    152.195,   // C12H8
-    154.211,   // C12H10
-    178.233,   // C14H10
-    202.255,   // C16H10
-    226.277    // C18H10
+    128.174,   // C10H8
+    152.196,   // C12H8
+    154.212,   // C12H10
+    178.234,   // C14H10
+    202.256,   // C16H10
+    226.278    // C18H10
 };
 
 const std::vector<int> pahSpNC = {         // # carbon atoms per PAH species
@@ -107,10 +107,18 @@ const std::vector<int> pahSpNC = {         // # carbon atoms per PAH species
     16,        // C16H10
     18         // C18H10
 };
+const std::vector<int> pahSpNH = {         // # hydrogen atoms per PAH species
+    8,         // C10H8
+    8,         // C12H8
+    10,        // C12H10
+    10,        // C14H10
+    10,        // C16H10
+    10         // C18H10
+};
 
 const std::vector<double> pahSpGamma = {   ///< unitless sticking coefficient
-    0.0010,    // C10H8, 
-    0.0030,    // C12H8, 
+    0.00133,   // C10H8,           // gamma_i = CN*mi^4; CN = 1.5E-11 (fit); gamma_C10H8 = 0.004/3
+    0.00267,   // C12H8,           // gamma_C12H8 = 0.008/3 (See Blanquart and Pitsch in Bockhorn 2009
     0.0085,    // C12H10,
     0.0150,    // C14H10,
     0.0250,    // C16H10,

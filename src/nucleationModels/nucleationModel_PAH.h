@@ -20,7 +20,6 @@ class nucleationModel_PAH : public nucleationModel {
 //////////////// DATA MEMBERS /////////////////////
 
 public:
-    coagulationModel_HM coagHM;
 
 //////////////// MEMBER FUNCTIONS /////////////////
 

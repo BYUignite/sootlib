@@ -71,12 +71,9 @@ void sootModel_MONO::getSourceTerms(state &state,
     double Cnd0 = 0;
     double Cnd1 = 0;
 
-    if (nucl->mechType == nucleationMech::PAH) {
-        double nDimer = nucl->DIMER.nDimer;
-        double mDimer = nucl->DIMER.mDimer;
-
-        Cnd1 = nDimer * mDimer * coag->getCoagulationSootRate(state, mDimer, state.absc[0]) * state.wts[0];
-    }
+    if (nucl->mechType == nucleationMech::PAH)
+        Cnd1 = coag->getCoagulationSootRate(state, nucl->DIMER.mdimer, state.absc[0]) * 
+               state.wts[0] * nucl->DIMER.nDimer * nucl->DIMER.mDimer;
 
     //---------- growth terms
 
@@ -123,8 +120,5 @@ void sootModel_MONO::getSourceTerms(state &state,
     //---------- set PAH source terms
 
     if(nucl->mechType == nucleationMech::PAH)
-        pahSources = nucl->nucleationPahRxnRates;
-
-    //todo: what about pah condensation? (here and in other models)
-
+        pahSources = nucl->nucleationPahRxnRates;        // includes both nucleation and condensation
 }
