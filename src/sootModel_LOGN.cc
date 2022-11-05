@@ -180,9 +180,9 @@ void sootModel_LOGN::getSourceTerms(state &state,
 
 double sootModel_LOGN::Mk(double k, double M0, double M1, double M2) {
 
-    double M0_exp = 1. + 0.5*k*(k - 3);
-    double M1_exp = k*(2 - k);
-    double M2_exp = 0.5*k*(k - 1);
+    double M0_exp = 1. + 0.5*k*(k - 3.);
+    double M1_exp = k*(2. - k);
+    double M2_exp = 0.5*k*(k - 1.);
 
     if (M2 == 0 && M2_exp < 0)
         M2_exp = 0;

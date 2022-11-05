@@ -1,5 +1,6 @@
 #include "nucleationModels/nucleationModel_PAH.h"
 #include "sootDefs.h"
+#include "sootModel.h"
 
 using namespace std;
 using namespace soot;
@@ -10,7 +11,7 @@ nucleationModel_PAH::nucleationModel_PAH() : nucleationModel () {
 
     DIMER.mDimer = 0;
     DIMER.nDimer = 0;
-    DIMER.wDotD  = 0;
+    DIMER.nDotD  = 0;
 
     mechType = nucleationMech::PAH;
 }
@@ -74,14 +75,17 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
     double beta_DD = preFac*pow(mDimer, 1.0/6.0);   // dimer self-collision rate coefficient
 
     double I_beta_DS = 0.0;                         // sum of dimer-soot collision rates
-    for (int i = 0; i < state.absc.size(); i++) {   // loop over soot "particles" (abscissas)
-        I_beta_DS += abs(state.wts[i]) * SM->coag->getCoagulationSootRate(state, mDimer, state.absc[i]);
+    if (SM->psdMechType == psdMech::LOGN) {
+        ;
+    } else {
+        for (int i = 0; i < state.absc.size(); i++)     // loop over soot "particles" (abscissas)
+            I_beta_DS += abs(state.wts[i]) * SM->coag->getCoagulationSootRate(state, mDimer, state.absc[i]);
     }
 
     //----------- solve quadratic for D: beta_DD*(D^2) + I_beta_DS*(D) - nDotD = 0
     // See Numerical Recipes 3rd ed. Sec 5.6 page 227. (Choosing the positive root.)
 
-    if (wDot > 0 && mDimer > 0)     // nDimer initialized to 0 above
+    if (nDotD > 0 && mDimer > 0)     // nDimer initialized to 0 above
         nDimer = 2.0*nDotD/(I_beta_DS + sqrt(I_beta_DS*I_beta_DS + 4.*2.*beta_DD*nDotD));   // #/m3
 
     //----------- populate DIMER structure with updated values

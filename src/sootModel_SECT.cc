@@ -112,7 +112,7 @@ void sootModel_SECT::getSourceTerms(state &state,
             Scnd[k] -= term;
         }
         k=nsoot-1;                                                          // last bin
-        Scnd(nsoot-1) = term;
+        Scnd[nsoot-1] = term;
     }
 
     //----------- oxidation terms: negative velocity through size domain

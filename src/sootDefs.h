@@ -132,7 +132,7 @@ const std::vector<double> pahSpGamma = {   ///< unitless sticking coefficient
 struct dimerStruct {
     double mDimer = 0;
     double nDimer = 0;
-    double wDotD  = 0;
+    double nDotD  = 0;
 };
 
 }  // namespace soot

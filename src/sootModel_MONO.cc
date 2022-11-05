@@ -72,7 +72,7 @@ void sootModel_MONO::getSourceTerms(state &state,
     double Cnd1 = 0;
 
     if (nucl->mechType == nucleationMech::PAH)
-        Cnd1 = coag->getCoagulationSootRate(state, nucl->DIMER.mdimer, state.absc[0]) * 
+        Cnd1 = coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, state.absc[0]) * 
                state.wts[0] * nucl->DIMER.nDimer * nucl->DIMER.mDimer;
 
     //---------- growth terms
