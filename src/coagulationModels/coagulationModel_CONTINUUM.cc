@@ -18,8 +18,9 @@ double coagulationModel_CONTINUUM::getCoagulationSootRate(const state& state,
     double Kn1 = 2*mfp/d1;
     double Kn2 = 2*mfp/d2;
 
-    double Cc1 = 1 + Kn1 * (1.257 + 0.4*exp(-1.1/Kn1));   // Seinfeld p. 372 eq. 9.34. This is for air at 298 K, 1 atm
-    double Cc2 = 1 + Kn2 * (1.257 + 0.4*exp(-1.1/Kn2));   // for D<<mfp_g, Cc = 1 + 1.657*Kn; Seinfeld p. 380: 10% error at Kn=1, 0% at Kn=0.01, 100
+    //----------- Cc1 = 1 + Kn1 * (1.257 + 0.4*exp(-1.1/Kn1)), was validated against 1+1.657*Kn1 and is very close for all Kn
+    double Cc1 = 1 + 1.657*Kn1;   // Seinfeld p. 372 eq. 9.34. This is for air at 298 K, 1 atm
+    double Cc2 = 1 + 1.657*Kn2;   // for D<<mfp_g, Cc = 1 + 1.657*Kn; Seinfeld p. 380: 10% error at Kn=1, 0% at Kn=0.01, 100
 
     double K12 = twothird*kb*state.T/state.muGas *(Cc1/d1 + Cc2/d2)*ds;
 

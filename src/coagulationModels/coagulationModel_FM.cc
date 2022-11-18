@@ -10,13 +10,10 @@ double coagulationModel_FM::getCoagulationSootRate(const state& state,
 
     if (m1 <= mmin || m2 <= mmin) return 0.0;
 
-    double mR  = m1*m2/(m1+m2);       // reduced mass
-    double d1 = pow(6.*m1/(M_PI*rhoSoot), onethird);
-    double d2 = pow(6.*m1/(M_PI*rhoSoot), onethird);
-    double ds = d1 + d2;
+    double m13_m13 = pow(m1, onethird) + pow(m2, onethird);
 
-    double K12 = sqrt(M_PI*kb*state.T*0.5/mR) * ds*ds; 
-            // = 4.*sqrt(6.*d1*kb*state.T/rhoSoot);  // if d1=d2, m1=m2
-
-    return eps_c * K12 * FM_multiplier;      // make FM_multiplier = 9/2/eps_c for LL
+    double K12 = eps_c * sqrt(0.5*M_PI*kb*state.T)*pow(6./(M_PI/rhoSoot), twothird) *
+                         sqrt(1/m1 + 1/m2)*m13_m13*m13_m13;
+                  
+    return K12 * FM_multiplier;      // make FM_multiplier = 9/2/eps_c for LL
 }

@@ -44,6 +44,10 @@ public:
 
     void checkSpec();
 
+    //----------- for the LOGN model interface
+
+    virtual double pahSootCollisionRatePerDimer(const double mDimer) const {return 0;}
+
     //////////////// CONSTRUCTOR //////////////////////
 
     sootModel(size_t            nsoot_,

@@ -19,8 +19,9 @@ public:
                                 std::vector<double> &gasSources,
                                 std::vector<double> &pahSources) const;
 
-private:
-    static double Mk(double k, double M0, double M1, double M2);
+    double Mk(double k, double M0, double M1, double M2) const;
+
+    virtual double pahSootCollisionRatePerDimer(const state &state, const double mDimer) const;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 

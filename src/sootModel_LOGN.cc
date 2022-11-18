@@ -34,6 +34,65 @@ sootModel_LOGN::sootModel_LOGN(size_t          nsoot_,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/** Compute pah condensation terms for LOGN model.
+ *  Function split out from getSourceTerms so that it can be called in nucleationModel_PAH
+ *  for computing the pah dimer concentration.
+ *  Return value is the pah/soot collision rate per dimer. Call it I.
+ *  I*mDimer*nDimer = Cnd1 (=) kg/m3*s 
+ */
+
+double sootModel_LOGN::pahSootCollisionRatePerDimer(const state &state, const double mDimer) const {
+
+    if (nucl->mechType != nucleationMech::PAH)
+        return 0.0;
+
+    //-----------  get moment values
+
+    const double M0 = state.sootVar[0];
+    const double M1 = state.sootVar[1];
+    const double M2 = state.sootVar[2];
+
+    //-----------  calculate coagulation constants
+
+    const double Kfm = eps_c * sqrt(0.5*M_PI*kb*state.T) * pow(6./(M_PI*rhoSoot), twothird);
+    const double Kc  = 2.*kb*state.T/(3./state.muGas);
+    const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
+
+    //----------- reused Mk values
+
+    const double M13 =  Mk( 1.0/3.0, M0, M1, M2);
+    const double M23 =  Mk( 2.0/3.0, M0, M1, M2);
+    const double Mn12 = Mk(-1.0/2.0, M0, M1, M2);
+    const double Mn16 = Mk(-1.0/6.0, M0, M1, M2);
+    const double Mn13 = Mk(-1.0/3.0, M0, M1, M2);
+    const double Mn23 = Mk(-2.0/3.0, M0, M1, M2);
+    const double M16 =  Mk( 1.0/6.0, M0, M1, M2);
+
+    const double mD16  = pow(mDimer,  1./6.);
+    const double mDn16 = pow(mDimer, -1./6.);
+    const double mDn12 = pow(mDimer, -0.5);
+    const double mD13  = pow(mDimer,  onethird);
+    const double mDn13 = pow(mDimer, -onethird);
+    const double mD23  = pow(mDimer,  twothird);
+    const double mDn23 = pow(mDimer, -twothird);
+
+    //----------- FM (variable name: I for integrated, as in moment)
+
+    const double Ifm1 =    Kfm*bCoag * (M0  *mD16  + 2.*M13*mDn16 +
+        M23 *mDn12 + 2.*Mn16*mD13 +
+        Mn12*mD23  + M16);
+
+    //----------- continuum
+
+    const double Ic1 = Kc    * ( 2.*M0 + Mn13*mD13 + M13*mDn13    +
+        Kcp*(M0*mDn13 + Mn13 + M13*mDn23 + Mn23*mD13) );
+
+    //-----------
+
+    return (Ifm1*Ic1)/(Ifm1 + Ic1);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_LOGN::getSourceTerms(state &state, 
                                     std::vector<double> &sootSources,
@@ -54,11 +113,12 @@ void sootModel_LOGN::getSourceTerms(state &state,
 
     //-----------  calculate coagulation constants
 
-    const double Kfm = eps_c * sqrt(M_PI*kb*state.T/2.) * pow(6./(M_PI*rhoSoot), twothird);
+    const double Kfm = eps_c * sqrt(0.5*M_PI*kb*state.T) * pow(6./(M_PI*rhoSoot), twothird);
     const double Kc  = 2.*kb*state.T/(3./state.muGas);
-    const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI/6.*rhoSoot, onethird);
+    const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
 
-    // reused Mk function results here
+    //----------- reused Mk values
+
     const double M13 =  Mk( 1.0/3.0, M0, M1, M2);
     const double M23 =  Mk( 2.0/3.0, M0, M1, M2);
     const double Mn12 = Mk(-1.0/2.0, M0, M1, M2);
@@ -76,70 +136,73 @@ void sootModel_LOGN::getSourceTerms(state &state,
 
     double Jnuc = nucl->getNucleationSootRate(state);    // #/m3*s
 
-    //-----------  PAH nucl and cond; getNucleationSootRate call above still required to set DIMER vars
-
-    if (nucl->mechType == nucleationMech::PAH) {
-
-        double mDimer = nucl->DIMER.mDimer;
-        double nDimer = nucl->DIMER.nDimer;
-
-        //----------- PAH nucleation
-
-        const double Ifm = Kfm * bCoag * (M0 *   pow(mDimer,  1./6.)    + 2.*M13 *pow(mDimer, -1.0/6.) +
-                                          M23 *  pow(mDimer, -0.5  )    + 2.*Mn16*pow(mDimer,  onethird) +
-                                          Mn12 * pow(mDimer,  twothird) + 2.*Mn16*pow(mDimer,  onethird) + M16);
-
-        const double Ic = Kc * (2.*M0 + Mn13*pow(mDimer, onethird) + M13*pow(mDimer, -onethird) +
-                                Kcp*(M0*pow(mDimer, -onethird) + Mn13 + M13*pow(mDimer, -twothird) +
-                                       Mn23*pow(mDimer, onethird)));
-
-        const double beta_DD = coag->getCoagulationSootRate(state, mDimer, mDimer);
-
-        Jnuc = 0.5*beta_DD*nDimer*nDimer;
-
-        //----------- PAH condensation
-
-        const double Ifm1 = Ifm;
-        const double Ifm2 = Kfm * bCoag * (M1*pow(mDimer,  1.0/6.) + 2.*M43*pow(mDimer, -1.0/6.) +
-                                           M53*pow(mDimer, -0.5)     +     M12*pow(mDimer,  twothird) +
-                                           2.*M56*pow(mDimer,  onethird) +     M76);
-
-        const double Ic1 = Ic;
-        const double Ic2 = Kc * (2.*M1 + M23*pow(mDimer, onethird) + M43 * pow(mDimer, -onethird) +
-                                 Kcp*(M1*pow(mDimer, -onethird) + M23 + M43*pow(mDimer, -twothird) + M13*pow(mDimer, onethird)));
-
-        Cnd1 = mDimer*nDimer*(Ic1*Ifm1)/(Ic1 + Ifm1);
-        Cnd2 = 2.*mDimer*nDimer*(Ic2*Ifm2)/(Ic2 + Ifm2);
-    }
-
-    //----------- 
-
     const double mMin = state.cMin*gasSpMW[(int)gasSp::C]/Na;
 
     N0 = Jnuc;                 // #/m3*s
     N1 = Jnuc * mMin;          // kg_soot/m3*s
     N2 = Jnuc * mMin * mMin;
 
+    //-----------  PAH condensation
+
+    if (nucl->mechType == nucleationMech::PAH) {
+
+        double mDimer = nucl->DIMER.mDimer;
+        double nDimer = nucl->DIMER.nDimer;
+
+        const double mD16  = pow(mDimer,  1./6.);
+        const double mDn16 = pow(mDimer, -1./6.);
+        const double mDn12 = pow(mDimer, -0.5);
+        const double mD13  = pow(mDimer,  onethird);
+        const double mDn13 = pow(mDimer, -onethird);
+        const double mD23  = pow(mDimer,  twothird);
+        const double mDn23 = pow(mDimer, -twothird);
+
+        //----------- FM (variable name: I for integrated, as in moment)
+
+        const double Ifm1 =    Kfm*bCoag * (M0  *mD16  + 2.*M13*mDn16 +
+                                            M23 *mDn12 + 2.*Mn16*mD13 +
+                                            Mn12*mD23  + M16);
+
+        const double Ifm2 = 2.*Kfm*bCoag * (M1  *mD16  + 2.*M43*mDn16 +
+                                            M53 *mDn12 + 2.*M56*mD13  +
+                                            M12 *mD23  + M76);
+
+        //----------- continuum
+
+        const double Ic1 = Kc    * ( 2.*M0 + Mn13*mD13 + M13*mDn13    +
+                                     Kcp*(M0*mDn13 + Mn13 + M13*mDn23 + Mn23*mD13) );
+
+
+        const double Ic2 = 2.*Kc * ( 2.*M1 + M23 *mD13 + M43*mDn13    +
+                                     Kcp*(M1*mDn13 + M23  + M43*mDn23 + M13*mD13) );
+
+        //----------- source terms (harmonic mean)
+
+        Cnd0 = 0.0;
+        Cnd1 = mDimer*nDimer*(Ifm1*Ic1)/(Ifm1 + Ic1);
+        Cnd2 = mDimer*nDimer*(Ifm2*Ic2)/(Ifm2 + Ic2);
+    }
+
     //---------- growth terms
 
     double Kgrw = grow->getGrowthSootRate(state);
 
     G0 = 0;
-    G1 = Kgrw*M_PI*pow(6./rhoSoot/M_PI, twothird)*M23;
-    G2 = Kgrw*M_PI*pow(6./rhoSoot/M_PI, twothird)*M53;
+    G1 = Kgrw*M_PI*pow(6./(M_PI*rhoSoot), twothird)*M23;
+    G2 = Kgrw*M_PI*pow(6./(M_PI*rhoSoot), twothird)*M53 * 2.0;
 
     //---------- oxidation terms
 
     double Koxi = oxid->getOxidationSootRate(state);
 
-    X0 = 0;
-    X1 = -Koxi*M_PI*pow(6.0/rhoSoot/M_PI, twothird) * M23;
-    X2 = -Koxi*M_PI*pow(6.0/rhoSoot/M_PI, twothird) * M53 * 2.;
+    X0 =  0;
+    X1 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M23;
+    X2 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M53 * 2.0;
 
     //---------- coagulation terms todo: LOGN coagulation doesnt fit in the pattern (not using coag!, except for pah, but then can be arb. which doesnt make sense for diamers)
 
-    double C0_fm = -Kfm*bCoag*(M0*M16 + 2.*M13*Mn16 + M23*Mn12);         // free molecular
-    double C2_fm = 2.*Kfm*bCoag*(M1*M76 + 2.*M43*M56 + M53*M12);
+    double C0_fm =   -Kfm*bCoag*(M0*M16 + 2.*M13*Mn16 + M23*Mn12);       // free molecular
+    double C2_fm = 2.*Kfm*bCoag*(M1*M76 + 2.*M43*M56  + M53*M12);
 
     double C0_c = -Kc*( M0*M0 + M13*Mn13 + Kcp*(M0*Mn13 + M13*Mn23));    // continuum
     double C2_c = 2.*Kc*(M1*M1 + M23*M43 + Kcp*(M1*M23 + M13*M43));
@@ -178,7 +241,7 @@ void sootModel_LOGN::getSourceTerms(state &state,
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double sootModel_LOGN::Mk(double k, double M0, double M1, double M2) {
+double sootModel_LOGN::Mk(double k, double M0, double M1, double M2) const {
 
     double M0_exp = 1. + 0.5*k*(k - 3.);
     double M1_exp = k*(2. - k);

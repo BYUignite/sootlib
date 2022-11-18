@@ -75,12 +75,11 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
     double beta_DD = preFac*pow(mDimer, 1.0/6.0);   // dimer self-collision rate coefficient
 
     double I_beta_DS = 0.0;                         // sum of dimer-soot collision rates
-    if (SM->psdMechType == psdMech::LOGN) {
-        ;
-    } else {
+    if (SM->psdMechType == psdMech::LOGN)
+        I_beta_DS = SM->pahSootCollisionRatePerDimer(mDimer);
+    else
         for (int i = 0; i < state.absc.size(); i++)     // loop over soot "particles" (abscissas)
             I_beta_DS += abs(state.wts[i]) * SM->coag->getCoagulationSootRate(state, mDimer, state.absc[i]);
-    }
 
     //----------- solve quadratic for D: beta_DD*(D^2) + I_beta_DS*(D) - nDotD = 0
     // See Numerical Recipes 3rd ed. Sec 5.6 page 227. (Choosing the positive root.)
