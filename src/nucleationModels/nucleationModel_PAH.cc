@@ -71,11 +71,12 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
     // Steady state approximation.
     // Dimer creation rate = dimer destruction from self collision + from soot collision (condensation)
     // nDotD = 2*beta_DD*[D]^2 + sum(beta_DS*w_i)*[D]
+    // NOTE: the expressions here should be consistent with those in the sootModel_XXXX::getSourceTerms func for condensation
 
     double beta_DD = preFac*pow(mDimer, 1.0/6.0);   // dimer self-collision rate coefficient
 
     double I_beta_DS = 0.0;                         // sum of dimer-soot collision rates
-    if (SM->psdMechType == psdMech::LOGN)
+    if (SM->psdMechType == psdMech::LOGN || SM->psdMechType == psdMech::MOMIC )
         I_beta_DS = SM->pahSootCollisionRatePerDimer(mDimer);
     else
         for (int i = 0; i < state.absc.size(); i++)     // loop over soot "particles" (abscissas)

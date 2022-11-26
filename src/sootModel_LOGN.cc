@@ -60,36 +60,36 @@ double sootModel_LOGN::pahSootCollisionRatePerDimer(const state &state, const do
 
     //----------- reused Mk values
 
-    const double M13 =  Mk( 1.0/3.0, M0, M1, M2);
-    const double M23 =  Mk( 2.0/3.0, M0, M1, M2);
-    const double Mn12 = Mk(-1.0/2.0, M0, M1, M2);
+    const double M26  = Mk( 2.0/6.0, M0, M1, M2);
+    const double M46  = Mk( 4.0/6.0, M0, M1, M2);
+    const double Mn36 = Mk(-3.0/6.0, M0, M1, M2);
     const double Mn16 = Mk(-1.0/6.0, M0, M1, M2);
-    const double Mn13 = Mk(-1.0/3.0, M0, M1, M2);
-    const double Mn23 = Mk(-2.0/3.0, M0, M1, M2);
-    const double M16 =  Mk( 1.0/6.0, M0, M1, M2);
+    const double Mn26 = Mk(-2.0/6.0, M0, M1, M2);
+    const double Mn46 = Mk(-4.0/6.0, M0, M1, M2);
+    const double M16  = Mk( 1.0/6.0, M0, M1, M2);
 
     const double mD16  = pow(mDimer,  1./6.);
     const double mDn16 = pow(mDimer, -1./6.);
-    const double mDn12 = pow(mDimer, -0.5);
-    const double mD13  = pow(mDimer,  onethird);
-    const double mDn13 = pow(mDimer, -onethird);
-    const double mD23  = pow(mDimer,  twothird);
-    const double mDn23 = pow(mDimer, -twothird);
+    const double mDn36 = pow(mDimer, -0.5);
+    const double mD26  = pow(mDimer,  onethird);
+    const double mDn26 = pow(mDimer, -onethird);
+    const double mD46  = pow(mDimer,  twothird);
+    const double mDn46 = pow(mDimer, -twothird);
 
     //----------- FM (variable name: I for integrated, as in moment)
 
-    const double Ifm1 =    Kfm*bCoag * (M0  *mD16  + 2.*M13*mDn16 +
-        M23 *mDn12 + 2.*Mn16*mD13 +
-        Mn12*mD23  + M16);
+    const double Ifm1 =    Kfm*bCoag * (M0  *mD16  + 2.*M26*mDn16 +
+        M46 *mDn36 + 2.*Mn16*mD26 +
+        Mn36*mD46  + M16);
 
     //----------- continuum
 
-    const double Ic1 = Kc    * ( 2.*M0 + Mn13*mD13 + M13*mDn13    +
-        Kcp*(M0*mDn13 + Mn13 + M13*mDn23 + Mn23*mD13) );
+    const double Ic1 = Kc    * ( 2.*M0 + Mn26*mD26 + M26*mDn26    +
+        Kcp*(M0*mDn26 + Mn26 + M26*mDn46 + Mn46*mD26) );
 
-    //-----------
+    //---------- return harmonic mean
 
-    return (Ifm1*Ic1)/(Ifm1 + Ic1);
+    return Ifm1*Ic1/(Ifm1 + Ic1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -119,15 +119,15 @@ void sootModel_LOGN::getSourceTerms(state &state,
 
     //----------- reused Mk values
 
-    const double M13 =  Mk( 1.0/3.0, M0, M1, M2);
-    const double M23 =  Mk( 2.0/3.0, M0, M1, M2);
-    const double Mn12 = Mk(-1.0/2.0, M0, M1, M2);
+    const double M26 =  Mk( 2.0/6.0, M0, M1, M2);
+    const double M46 =  Mk( 4.0/6.0, M0, M1, M2);
+    const double Mn36 = Mk(-3.0/6.0, M0, M1, M2);
     const double Mn16 = Mk(-1.0/6.0, M0, M1, M2);
-    const double Mn13 = Mk(-1.0/3.0, M0, M1, M2);
-    const double Mn23 = Mk(-2.0/3.0, M0, M1, M2);
-    const double M43 =  Mk( 4.0/3.0, M0, M1, M2);
-    const double M53 =  Mk( 5.0/3.0, M0, M1, M2);
-    const double M12 =  Mk( 1.0/2.0, M0, M1, M2);
+    const double Mn26 = Mk(-2.0/6.0, M0, M1, M2);
+    const double Mn46 = Mk(-4.0/6.0, M0, M1, M2);
+    const double M86 =  Mk( 8.0/6.0, M0, M1, M2);
+    const double M106=  Mk(10.0/6.0, M0, M1, M2);
+    const double M36 =  Mk( 3.0/6.0, M0, M1, M2);
     const double M56 =  Mk( 5.0/6.0, M0, M1, M2);
     const double M76 =  Mk( 7.0/6.0, M0, M1, M2);
     const double M16 =  Mk( 1.0/6.0, M0, M1, M2);
@@ -142,7 +142,7 @@ void sootModel_LOGN::getSourceTerms(state &state,
     N1 = Jnuc * mMin;          // kg_soot/m3*s
     N2 = Jnuc * mMin * mMin;
 
-    //-----------  PAH condensation
+    //---------- PAH condensation
 
     if (nucl->mechType == nucleationMech::PAH) {
 
@@ -151,30 +151,30 @@ void sootModel_LOGN::getSourceTerms(state &state,
 
         const double mD16  = pow(mDimer,  1./6.);
         const double mDn16 = pow(mDimer, -1./6.);
-        const double mDn12 = pow(mDimer, -0.5);
-        const double mD13  = pow(mDimer,  onethird);
-        const double mDn13 = pow(mDimer, -onethird);
-        const double mD23  = pow(mDimer,  twothird);
-        const double mDn23 = pow(mDimer, -twothird);
+        const double mDn36 = pow(mDimer, -0.5);
+        const double mD26  = pow(mDimer,  onethird);
+        const double mDn26 = pow(mDimer, -onethird);
+        const double mD46  = pow(mDimer,  twothird);
+        const double mDn46 = pow(mDimer, -twothird);
 
         //----------- FM (variable name: I for integrated, as in moment)
 
-        const double Ifm1 =    Kfm*bCoag * (M0  *mD16  + 2.*M13*mDn16 +
-                                            M23 *mDn12 + 2.*Mn16*mD13 +
-                                            Mn12*mD23  + M16);
+        const double Ifm1 =    Kfm*bCoag * (M0  *mD16  + 2.*M26*mDn16 +
+                                            M46 *mDn36 + 2.*Mn16*mD26 +
+                                            Mn36*mD46  + M16);
 
-        const double Ifm2 = 2.*Kfm*bCoag * (M1  *mD16  + 2.*M43*mDn16 +
-                                            M53 *mDn12 + 2.*M56*mD13  +
-                                            M12 *mD23  + M76);
+        const double Ifm2 = 2.*Kfm*bCoag * (M1  *mD16  + 2.*M86*mDn16 +
+                                            M106*mDn36 + 2.*M56*mD26  +
+                                            M36 *mD46  + M76);
 
         //----------- continuum
 
-        const double Ic1 = Kc    * ( 2.*M0 + Mn13*mD13 + M13*mDn13    +
-                                     Kcp*(M0*mDn13 + Mn13 + M13*mDn23 + Mn23*mD13) );
+        const double Ic1 = Kc    * ( 2.*M0 + Mn26*mD26 + M26*mDn26    +
+                                     Kcp*(M0*mDn26 + Mn26 + M26*mDn46 + Mn46*mD26) );
 
 
-        const double Ic2 = 2.*Kc * ( 2.*M1 + M23 *mD13 + M43*mDn13    +
-                                     Kcp*(M1*mDn13 + M23  + M43*mDn23 + M13*mD13) );
+        const double Ic2 = 2.*Kc * ( 2.*M1 + M46 *mD26 + M86*mDn26    +
+                                     Kcp*(M1*mDn26 + M46  + M86*mDn46 + M26*mD26) );
 
         //----------- source terms (harmonic mean)
 
@@ -188,24 +188,24 @@ void sootModel_LOGN::getSourceTerms(state &state,
     double Kgrw = grow->getGrowthSootRate(state);
 
     G0 = 0;
-    G1 = Kgrw*M_PI*pow(6./(M_PI*rhoSoot), twothird)*M23;
-    G2 = Kgrw*M_PI*pow(6./(M_PI*rhoSoot), twothird)*M53 * 2.0;
+    G1 = Kgrw*M_PI*pow(6./(M_PI*rhoSoot), twothird)*M46;
+    G2 = Kgrw*M_PI*pow(6./(M_PI*rhoSoot), twothird)*M106* 2.0;
 
     //---------- oxidation terms
 
     double Koxi = oxid->getOxidationSootRate(state);
 
     X0 =  0;
-    X1 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M23;
-    X2 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M53 * 2.0;
+    X1 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M46;
+    X2 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M106* 2.0;
 
-    //---------- coagulation terms todo: LOGN coagulation doesnt fit in the pattern (not using coag!, except for pah, but then can be arb. which doesnt make sense for diamers)
+    //---------- coagulation terms todo: LOGN coagulation doesnt fit in the pattern (not using coag)
 
-    double C0_fm =   -Kfm*bCoag*(M0*M16 + 2.*M13*Mn16 + M23*Mn12);       // free molecular
-    double C2_fm = 2.*Kfm*bCoag*(M1*M76 + 2.*M43*M56  + M53*M12);
+    double C0_fm =   -Kfm*bCoag*(M0*M16 + 2.*M26*Mn16 + M46*Mn36);       // free molecular
+    double C2_fm = 2.*Kfm*bCoag*(M1*M76 + 2.*M86*M56  + M106*M36);
 
-    double C0_c = -Kc*( M0*M0 + M13*Mn13 + Kcp*(M0*Mn13 + M13*Mn23));    // continuum
-    double C2_c = 2.*Kc*(M1*M1 + M23*M43 + Kcp*(M1*M23 + M13*M43));
+    double C0_c = -Kc*( M0*M0 + M26*Mn26 + Kcp*(M0*Mn26 + M26*Mn46));    // continuum
+    double C2_c = 2.*Kc*(M1*M1 + M46*M86 + Kcp*(M1*M46 + M26*M86));
 
     C0 = C0_fm*C0_c/(C0_fm + C0_c);                                      // harmonic mean
     C1 = 0;

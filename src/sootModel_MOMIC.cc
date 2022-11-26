@@ -17,6 +17,17 @@ sootModel_MOMIC::sootModel_MOMIC(size_t            nsoot_,
         throw runtime_error("MOMIC requires nsoot>1");
 
     psdMechType = psdMech::MOMIC;
+
+    diffTable.resize(nsoot);
+    for (size_t k=0; k<nsoot; k++)
+        diffTable[k] = vector<double>(nsoot-k, 0.0);
+
+    Nmom = nsoot;
+
+    Mp6 = vector<double>(22, 0.0);
+    Mq6 = vector<double>(30, 0.0);
+    np  = {4,4,7,10,13,16,19,22};
+    nq  = {12,12,15,18,21,24,27,30};
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -32,23 +43,47 @@ sootModel_MOMIC::sootModel_MOMIC(size_t          nsoot_,
         throw runtime_error("MOMIC requires nsoot>1");
 
     psdMechType = psdMech::MOMIC;
+
+    diffTable.resize(nsoot);
+    for (size_t k=0; k<nsoot; k++)
+        diffTable[k] = vector<double>(nsoot-k, 0.0);
+
+    Nmom = nsoot;
+
+    Mp6 = vector<double>(22, 0.0);
+    Mq6 = vector<double>(30, 0.0);
+    np  = {4,4,7,10,13,16,19,22};
+    nq  = {12,12,15,18,21,24,27,30};
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ * Assumes mDn36, etc. (mDimer^powers) have been set in set_mDimerPowers()
+ */
 
 void sootModel_MOMIC::getSourceTerms(state &state, 
                                      std::vector<double> &sootSources,
                                      std::vector<double> &gasSources,
-                                     std::vector<double> &pahSources) const {
+                                     std::vector<double> &pahSources) {
 
-    //---------- get moment values
+
+    for (size_t k=0; k<nsoot; k++)
+        sootSources[k] = 0.0;         // reset to zero, in case downselectIfNeeded reduces Nmom
+
+    //----------
 
     vector<double> Mtemp(nsoot,0);
     for (size_t i=0; i<nsoot; i++)
         Mtemp[i] = state.sootVar[i];
 
     downselectIfNeeded(Mtemp);
-    int Nsoot = Mtemp.size();
+
+    vector<double> l10M(Nmom);
+    for(size_t k=0; k<Nmom; k++)
+        l10M[k] = log10(Mtemp[k]);
+    set_diffTable(l10M);
+
+    set_fractional_moments_Mp6_Mq6();                    // set fractional_moment_arrays
 
     //---------- get chemical rates
 
@@ -58,49 +93,79 @@ void sootModel_MOMIC::getSourceTerms(state &state,
 
     //---------- nucleation terms
 
-    vector<double> Mnuc(Nsoot, 0);
+    vector<double> Mnuc(Nmom, 0);
 
     double m_nuc = state.cMin*gasSpMW[(int)gasSp::C]/Na;
-    for (size_t i=0; i<Nsoot; i++)
+    for (size_t i=0; i<Nmom; i++)
         Mnuc[i] = pow(m_nuc, i)*Jnuc;
 
     //---------- PAH condensation terms
 
-    vector<double> Mcnd(Nsoot, 0);
+    vector<double> Mcnd(Nmom, 0);
 
     if (nucl->mechType == nucleationMech::PAH) {
-        for (size_t i=1; i<Nsoot; i++)
-            Mcnd[i] = MOMICCoagulationRate(state, (int) i, Mtemp) * 
-                      nucl->DIMER.nDimer * nucl->DIMER.mDimer * i;
+
+        //set_mDimerPowers();      // not needed here (called in pahSootCollisionRatePerDimer in nucl PAH)
+
+        vector<double> Mcnd_C(Nmom, 0);
+        vector<double> Mcnd_FM(Nmom, 0);
+
+        //------ continuum
+
+        const double Kc  = 2.*kb*state.T/(3./state.muGas);
+        const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
+
+        double mDimer = nucl->DIMER.mDimer;
+        double nDimer = nucl->DIMER.nDimer;
+
+        for (size_t k=1, kk=(k-1)*3; k<Nmom; k++)                   // skip moment 0 (no growth term)
+            Mcnd_C[k] = double(k)*Kc*nDimer*mDimer* (  
+                                       mD26*Mp6[kk+1] +            //  mD26*M_{k-1-2/6}
+                                          2.*Mp6[kk+2] +            //    2.*M_{k-1+0/6}
+                                       mDn26*Mp6[kk+3] +            // mDn26*M_{k-1+2/6}
+                                       Kcp*( mD26*Mp6[kk+0] +       //  mD26*M_{k-1-4/6}
+                                                  Mp6[kk+1] +       //       M_{k-1-2/6}
+                                            mDn26*Mp6[kk+2] +       // mDn26*M_{k-1+0/6}
+                                            mDn46*Mp6[kk+3] ) );    // mDn46*M_{k-1+2/6}
+
+        //------ free molecular
+
+        const double Kfm = eps_c * sqrt(0.5*M_PI*kb*state.T) * pow(6./(M_PI*rhoSoot), twothird);
+
+        for (size_t k=1; k<Nmom; k++)                   // skip moment 0 (no growth term)
+            Mcnd_FM[k] = double(k)*Kfm*nDimer*mDimer*g_grid(k);
+
+        //------ harmonic mean
+
+        for (size_t k=1; k<Nmom; k++)                   // skip moment 0 (no growth term)
+            Mcnd[k] = Mcnd_FM[k]*Mcnd_C[k] / (Mcnd_FM[k]+Mcnd_C[k]);
     }
 
     //---------- growth terms
 
-    vector<double> Mgrw(Nsoot, 0);
+    vector<double> Mgrw(Nmom, 0);
 
     const double Acoef = M_PI * pow(6./(M_PI*rhoSoot), twothird);
-    for (size_t i=1; i<Nsoot; i++)
-        Mgrw[i] = Kgrw*Acoef*i*MOMIC(i - onethird, Mtemp);
+    for (size_t k=1; k<Nmom; k++)
+        Mgrw[k] = Kgrw*Acoef*k*Mr(k-onethird);
 
     //---------- oxidation terms
 
-    vector<double> Moxi(Nsoot, 0);
+    vector<double> Moxi(Nmom, 0);
 
-    for (size_t i = 1; i < Nsoot; i++)
-        Moxi[i] = -Koxi*Acoef*i * MOMIC(i - onethird, Mtemp);
+    for (size_t k=1; k<Nmom; k++)
+        Moxi[k] = -Koxi*Acoef*k*Mr(k-onethird);
 
     //---------- coagulation terms
 
-    vector<double> Mcoa(Nsoot, 0);
+    vector<double> Mcoa(Nmom, 0);
 
-    if (coag->mechType != coagulationMech::NONE) {
-        for (size_t i=0; i<Nsoot; i++)
-            Mcoa[i] = MOMICCoagulationRate(state, i, Mtemp);
-    }
+    if (coag->mechType != coagulationMech::NONE)
+        Mcoa = MOMICCoagulationRates(state, Mtemp);
 
     //---------- combine to make soot source terms
 
-    for (size_t i=0; i<Nsoot; i++)
+    for (size_t i=0; i<Nmom; i++)
         sootSources[i] = Mnuc[i] + Mcnd[i] + Mgrw[i] + Moxi[i] + Mcoa[i];
 
     //---------- set gas source terms
@@ -121,21 +186,16 @@ void sootModel_MOMIC::getSourceTerms(state &state,
     if(nucl->mechType == nucleationMech::PAH)
         pahSources = nucl->nucleationPahRxnRates;
 
-    //todo: what about pah condensation? (here and in other models)
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /** downselectIfNeeded function
- *
- *      Reduces the number of moments to avoid invalid inversion
- *
- *      @param state      \input      thermodynamic state
- *      @param M          \input      vector of moment values
+ * Reduces the number of moments to avoid invalid inversion
+ * @param M          \input      vector of moment values
  *
  */
 
-void sootModel_MOMIC::downselectIfNeeded(vector<double> &M) const {
+void sootModel_MOMIC::downselectIfNeeded(vector<double> &M) {
 
     //----------- lognormal distribution constants
 
@@ -153,20 +213,20 @@ void sootModel_MOMIC::downselectIfNeeded(vector<double> &M) const {
 
     // CHECK: all remaining moments <= 0.0
 
-	size_t Nsoot = M.size();
+	Nmom = M.size();
 	bool zeros = false;
 
 	do {
 	    zeros = false;                   // reset flag
-        for (size_t i=0; i<Nsoot; i++)
+        for (size_t i=0; i<Nmom; i++)
             if (M[i] <= 0.0) {           // if value <= 0.0 found, throw flag and downselect by one
                 zeros = true; 
-                Nsoot = Nsoot - 1; 
+                Nmom = Nmom - 1; 
             }
 
-	} while (Nsoot>3 && zeros);        // will not downselect below 3 moments
+	} while (Nmom>3 && zeros);        // will not downselect below 3 moments
 
-    M.resize(Nsoot);
+    M.resize(Nmom);
 
 	return;
 }
@@ -175,210 +235,396 @@ void sootModel_MOMIC::downselectIfNeeded(vector<double> &M) const {
 /** f_grid function
  *
  *      Calculates the grid function described in Frenklach 2002 MOMIC paper
- *      using lagrange interpolation between whole order moments
+ *      using Lagrange interpolation between whole order moments
  *
  *      @param x     \input x grid point
  *      @param y     \input y grid point
- *      @param M     \input vector of whole order moments
+ *      @param Mq6   \input vector of fractional moments
  *
+ *      Mq6: (-3 -1 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47 49 51 53 55
+ *      indx:  0  1 2 3 4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
+ *      f_l^(x,y) is composed of M_(x+7/6)*M_(y+3/6), etc. where fractions vary
+ *           All M_(frac) are in Mq6. All frac are odd sixth fractions. 
+ *           If x = 1, then, e.g., x+7/6 --> (6+7)/6=13/6; index 7/6 is 5, shift by 3 --> 13/6 is ind 8
+ *           If x = 2, then shift by 6; x = 3, then shift by 9, etc.
+ *
+ *      returns f_{1/2}
  */
 
-double  sootModel_MOMIC::f_grid(int x, int y, const vector<double>& M) {
+double sootModel_MOMIC::f_grid(int x, int y) {
 
-	// repeated values of MOMIC calculation
-	const double M_Xn12  = MOMIC(x - 1.0  / 2.0, M);
-	const double M_Yp16  = MOMIC(y + 1.0  / 6.0, M);
-	const double M_Xn16  = MOMIC(x - 1.0  / 6.0, M);
-	const double M_Yn16  = MOMIC(y - 1.0  / 6.0, M);
-	const double M_Xp16  = MOMIC(x + 1.0  / 6.0, M);
-	const double M_Yn12  = MOMIC(y - 1.0  / 2.0, M);
-	const double M_Yp76  = MOMIC(y + 7.0  / 6.0, M);
-	const double M_Yp56  = MOMIC(y + 5.0  / 6.0, M);
-	const double M_Yp12  = MOMIC(y + 1.0  / 2.0, M);
-	const double M_Xp12  = MOMIC(x + 1.0  / 2.0, M);
-	const double M_Xp56  = MOMIC(x + 5.0  / 6.0, M);
-	const double M_Xp76  = MOMIC(x + 7.0  / 6.0, M);
-	const double M_Yp136 = MOMIC(y + 13.0 / 6.0, M);
-	const double M_Yp116 = MOMIC(y + 11.0 / 6.0, M);
-	const double M_Yp32  = MOMIC(y + 3.0  / 2.0, M);
-	const double M_Xp32  = MOMIC(x + 3.0  / 2.0, M);
-	const double M_Xp116 = MOMIC(x + 11.0 / 6.0, M);
-	const double M_Xp136 = MOMIC(x + 13.0 / 6.0, M);
-    const double M_Yp196 = MOMIC(y + 19.0 / 6.0, M);
-    const double M_Yp176 = MOMIC(y + 17.0 / 6.0, M);
-    const double M_Yp52  = MOMIC(y + 5.0  / 2.0, M);
-    const double M_Xp52  = MOMIC(x + 5.0  / 2.0, M);
-    const double M_Xp176 = MOMIC(x + 17.0 / 6.0, M);
-    const double M_Xp196 = MOMIC(x + 19.0 / 6.0, M);
+    int xi = x*3;       // add this index
+    int yi = y*3;       // add this index
 
-	const double f1_0 = M_Xn12 * M_Yp16 + 2 * M_Xn16 * M_Yn16 + M_Xp16 * M_Yn12;
-	const double f1_1 = M_Xn12 * M_Yp76 + 2 * M_Xn16 * M_Yp56 + M_Xp16 * M_Yp12 +
-                        M_Xp12 * M_Yp16 + 2 * M_Xp56 * M_Yn16 + M_Xp76 * M_Yn12;
+    double f0, f1, f2, f3;
 
-	vector<double> temp_x;
-	vector<double> temp_y;
-	double value;
+    //----------- 
 
-	if (y >= 4) {
-		temp_x = {0., 1.};
-		temp_y = {log10(f1_0), log10(f1_1)};
+    if (x==y) {                                      // exploit the symmetry
+        f0 = 2.*(       Mq6[xi+0]  * Mq6[yi+2] +
+                        Mq6[xi+1]  * Mq6[yi+1] );
 
-		value = lagrangeInterp(1.0 / 2, temp_x, temp_y);
-		return pow(10, value);
-	}
+        f1 = 2.*(       Mq6[xi+0]  * Mq6[yi+5] +  
+                     2.*Mq6[xi+1]  * Mq6[yi+4] +
+                        Mq6[xi+2]  * Mq6[yi+3] );
 
-	double f1_2 = M_Xn12*M_Yp136 + 2.*M_Xn16*M_Yp116 + M_Xp16*M_Yp32 + 2.*M_Xp12 *M_Yp76 +
-                4.*M_Xp56*M_Yp56 + 2.*M_Xp76*M_Yp12  + M_Xp32*M_Yp16 + 2.*M_Xp116*M_Yn16 + M_Xp136*M_Yn12;
+        if (y<=3)
+            f2 = 2.*(   Mq6[xi+0]  * Mq6[yi+8] +  
+                     2.*Mq6[xi+1]  * Mq6[yi+7] +
+                        Mq6[xi+2]  * Mq6[yi+6] +
+                     2.*Mq6[xi+3]  * Mq6[yi+5] +
+                     2.*Mq6[xi+4]  * Mq6[yi+4] );
 
-	if (y >= 3) {
-		temp_x = {0., 1., 2.};
-		temp_y = {log10(f1_0), log10(f1_1), log10(f1_2)};
+        if (y<=2)
+            f3 = 2.*(   Mq6[xi+0]  * Mq6[yi+11] +  
+                     2.*Mq6[xi+1]  * Mq6[yi+10] +
+                        Mq6[xi+2]  * Mq6[yi+9]  +
+                     3.*Mq6[xi+3]  * Mq6[yi+8]  +
+                     6.*Mq6[xi+4]  * Mq6[yi+7]  +
+                     3.*Mq6[xi+5]  * Mq6[yi+6] );
+    }
+    else {
 
-		value = lagrangeInterp(0.5, temp_x, temp_y);
+        f0 =            Mq6[xi+0]  * Mq6[yi+2] +     // note the pattern (0, 1, 2; 2, 1, 0)
+                     2.*Mq6[xi+1]  * Mq6[yi+1] + 
+                        Mq6[xi+2]  * Mq6[yi+0];
 
-		return pow(10, value);
-	}
+        f1 =            Mq6[xi+0]  * Mq6[yi+5] +  
+                     2.*Mq6[xi+1]  * Mq6[yi+4] +
+                        Mq6[xi+2]  * Mq6[yi+3] +
+                        Mq6[xi+3]  * Mq6[yi+2] +
+                     2.*Mq6[xi+4]  * Mq6[yi+1] +
+                        Mq6[xi+5]  * Mq6[yi+0] ;
 
-    double f1_3 = M_Xn12*M_Yp196 + 2.*M_Xn16*M_Yp176 +    M_Xp16*M_Yp52  + 3.*M_Xp12*M_Yp136 +
-              6.*M_Xp56*M_Yp116  + 3.*M_Xp76*M_Yp32  + 3.*M_Xp32*M_Yp76  + 6.*M_Xp116*M_Yp56 +
-              3.*M_Xp136*M_Yp12  +    M_Xp52*M_Yp16  + 2.*M_Xp176*M_Yn16 +    M_Xp196*M_Yn12;
+        if (y<=3)    
+            f2 =        Mq6[xi+0]  * Mq6[yi+8] +  
+                     2.*Mq6[xi+1]  * Mq6[yi+7] +
+                        Mq6[xi+2]  * Mq6[yi+6] +
+                     2.*Mq6[xi+3]  * Mq6[yi+5] +
+                     4.*Mq6[xi+4]  * Mq6[yi+4] +
+                     2.*Mq6[xi+5]  * Mq6[yi+3] +
+                        Mq6[xi+6]  * Mq6[yi+2] +
+                     2.*Mq6[xi+7]  * Mq6[yi+1] +
+                        Mq6[xi+8]  * Mq6[yi+0] ;
 
-	temp_x = {0., 1., 2., 3.};
-	temp_y = {log10(f1_0), log10(f1_1), log10(f1_2), log10(f1_3)};
+        if (y<=2)    
+            f3 =        Mq6[xi+0]  * Mq6[yi+11] +  
+                     2.*Mq6[xi+1]  * Mq6[yi+10] +
+                        Mq6[xi+2]  * Mq6[yi+9]  +
+                     3.*Mq6[xi+3]  * Mq6[yi+8]  +
+                     6.*Mq6[xi+4]  * Mq6[yi+7]  +
+                     3.*Mq6[xi+5]  * Mq6[yi+6]  +
+                     3.*Mq6[xi+6]  * Mq6[yi+5]  +
+                     6.*Mq6[xi+7]  * Mq6[yi+4]  +
+                     3.*Mq6[xi+8]  * Mq6[yi+3]  +
+                        Mq6[xi+9]  * Mq6[yi+2]  +
+                     2.*Mq6[xi+10] * Mq6[yi+1]  +
+                        Mq6[xi+11] * Mq6[yi+0]  ;
+    }
 
-	value = lagrangeInterp(0.5, temp_x, temp_y);
+    //----------- Lagrange interpolation to point 1/2 using some or all of points 0, 1, 2, 3
 
-	return pow(10., value);
+    double fhalf;
+    if (y<=2)       // 4 point interpolant
+        fhalf = pow(f0,5./16.) * pow(f1,15./16.) * pow(f2, -5./16.) * pow(f3, 1./16.);
+    else if (y<=3)  // 3 point interpolant
+        fhalf = pow(f0, 3./8.) * pow(f1,  3./4.) * pow(f2,  -1./8.);
+    else            // h point interpolant
+        fhalf = pow(f0, 1./2.) * pow(f1,  1./2.);
+
+    return fhalf;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/** g_grid function
+ *
+ * Calculates the grid function described in Frenklach 2002 MOMIC paper
+ * using Lagrange interpolation between whole order moments
+ *
+ * @param x     \input x grid point
+ * @param y     \input y grid point
+ * @param Mq6   \input vector of fractional moments
+ *
+ * Mq6: (-3 -1 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47 49 51 53 55
+ * indx:  0  1 2 3 4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
+ * f_l^(x,y) is composed of M_(x+7/6)*M_(y+3/6), etc. where fractions vary
+ *      All M_(frac) are in Mq6. All frac are odd sixth fractions. 
+ *      If x = 1, then, e.g., x+7/6 --> (6+7)/6=13/6; index 7/6 is 5, shift by 3 --> 13/6 is ind 8
+ *      If x = 2, then shift by 6; x = 3, then shift by 9, etc.
+ *
+ * returns f_{1/2}
+ *
+ * Assumes mDn36, etc. (mDimer^powers) have been set in set_mDimerPowers()
+ */
+
+double sootModel_MOMIC::g_grid(int y) {
+
+    int yi = (y-1)*3;       // add this index
+
+    double g0, g1, g2, g3;
+
+    //----------- 
+
+    g0 =            mD16   * Mq6[yi+0] +
+                 2.*mDn16  * Mq6[yi+1] + 
+                    mDn36  * Mq6[yi+2];
+
+    g1 =            mD76   * Mq6[yi+0] +  
+                 2.*mD56   * Mq6[yi+1] +
+                    mD36   * Mq6[yi+2] +
+                    mD16   * Mq6[yi+3] +
+                 2.*mDn16  * Mq6[yi+4] +
+                    mDn36  * Mq6[yi+5] ;
+
+    if (y<=3)    
+        g2 =        mD136  * Mq6[yi+0] +  
+                 2.*mD116  * Mq6[yi+1] +
+                    mD96   * Mq6[yi+2] +
+                 2.*mD76   * Mq6[yi+3] +
+                 4.*mD56   * Mq6[yi+4] +
+                 2.*mD36   * Mq6[yi+5] +
+                    mD16   * Mq6[yi+6] +
+                 2.*mDn16  * Mq6[yi+7] +
+                    mDn36  * Mq6[yi+8] ;
+
+    if (y<=2)    
+        g3 =        mD196 * Mq6[yi+0] +  
+                 2.*mD176 * Mq6[yi+1] +
+                    mD156 * Mq6[yi+2]  +
+                 3.*mD136 * Mq6[yi+3]  +
+                 6.*mD116 * Mq6[yi+4]  +
+                 3.*mD96  * Mq6[yi+5]  +
+                 3.*mD76  * Mq6[yi+6]  +
+                 6.*mD56  * Mq6[yi+7]  +
+                 3.*mD36  * Mq6[yi+8]  +
+                    mD16  * Mq6[yi+9]  +
+                 2.*mDn16 * Mq6[yi+10]  +
+                    mDn36 * Mq6[yi+11]  ;
+
+    //----------- Lagrange interpolation to point 1/2 using some or all of points 0, 1, 2, 3
+
+    double ghalf;
+    if (y<=2)       // 4 point interpolant
+        ghalf = pow(g0,5./16.) * pow(g1,15./16.) * pow(g2, -5./16.) * pow(g3, 1./16.);
+    else if (y<=3)  // 3 point interpolant
+        ghalf = pow(g0, 3./8.) * pow(g1,  3./4.) * pow(g2,  -1./8.);
+    else            // h point interpolant
+        ghalf = pow(g0, 1./2.) * pow(g1,  1./2.);
+
+    return ghalf;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/** Get coagulation rate for moment k
+ */
+
+vector<double> sootModel_MOMIC::MOMICCoagulationRates(const state& state, vector<double>& M){
+
+    if (M[0] <= 0.0) return vector<double>(Nmom, 0.0);
+
+    vector<double> Rates_C(Nmom, 0.0);
+    vector<double> Rates_FM(Nmom, 0.0);
+    vector<double> Rates(Nmom, 0.0);
+
+    //----------- continuum regime
+
+    const double Kc  = 2.*kb*state.T/(3./state.muGas);
+    const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
+
+    for (size_t r=0; r<Nmom; r++) {
+        if (r==1) continue; 
+        if (r==0)
+            Rates_C[r] = -Kc*( Mp6[2]*Mp6[2] + Mp6[1]*Mp6[3] +            // M_0*M_0 + M_{-2/6}*M_{2/6}
+                               Kcp*( Mp6[1]*Mp6[2] + Mp6[0]*Mp6[3] ) );   // M_{-2/6}*M_0 + M_{-4/6}*M_{2/6}
+        else {
+            size_t kk, rk;        // index shifters
+            for (size_t k=1; k<=r-1; k++) {
+                kk = k*3;
+                rk = (r-k)*3;
+                Rates_C[r] = binomial_coefficient(r,k) * (
+                                   Mp6[kk+1]*Mp6[rk+3] +                  // M_{k-2/6}*M_{r-k+2/6}
+                             2.0*  Mp6[kk+2]*Mp6[rk+2] +                  // M_{k+0/6}*M_{r-k+0/6}
+                                   Mp6[kk+3]*Mp6[rk+1] +                  // M_{k+2/6}*M_{r-k-2/6}
+                             Kcp*( Mp6[kk+0]*Mp6[rk+3] +                  // M_{k-4/6}*M_{r-k+2/6}
+                                   Mp6[kk+1]*Mp6[rk+2] +                  // M_{k-2/6}*M_{r-k+0/6}
+                                   Mp6[kk+2]*Mp6[rk+1] +                  // M_{k+0/6}*M_{r-k-2/6}
+                                   Mp6[kk+3]*Mp6[rk+0] ) );               // M_{k+2/6}*M_{r-k-4/6}
+            }
+            Rates_C[r] *= 0.5*Kc;
+        }
+    }
+
+    //----------- free-molecular regime
+
+    const double Kfm = eps_c * sqrt(0.5*M_PI*kb*state.T) * pow(6./(M_PI*rhoSoot), twothird);
+
+    for (size_t r=0; r<Nmom; r++) {
+        if (r==1) continue; 
+        if (r==0)
+            Rates_FM[r] = -0.5*Kfm*f_grid(0,0);
+        else {
+		    for (size_t k=1; k<=r-1; k++)
+                Rates_FM[r] += binomial_coefficient(r,k) * f_grid(k, r-k);
+            Rates_FM[r] *= 0.5*Kfm;
+        }
+    }
+
+    //----------- harmonic mean
+
+    for (size_t r=0; r<Nmom; r++) {
+        if (r==1) continue;
+        Rates[r] = Rates_FM[r]*Rates_C[r] / (Rates_FM[r]+Rates_C[r]);
+    }
+
+    return Rates;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/** Compute pah condensation terms.
+ *  Function split out from getSourceTerms so that it can be called in nucleationModel_PAH
+ *  for computing the pah dimer concentration.
+ *  Return value is the pah/soot collision rate per dimer. Call it I.
+ *  I*mDimer*nDimer = Cnd1 (=) kg/m3*s 
+ */
+
+double sootModel_MOMIC::pahSootCollisionRatePerDimer(const state &state, const double mDimer) {
+
+    if (nucl->mechType != nucleationMech::PAH)
+        return 0.0;
+
+    set_mDimerPowers();
+
+    //------ continuum
+
+    const double Kc  = 2.*kb*state.T/(3./state.muGas);
+    const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
+
+    double Ic1 = Kc*mDimer* (  
+                  mD26*Mp6[1] +            //  mD26*M_{-2/6}
+                    2.*Mp6[2] +            //    2.*M_{ 0/6}
+                 mDn26*Mp6[3] +            // mDn26*M_{ 2/6}
+                 Kcp*( mD26*Mp6[0] +       //  mD26*M_{-4/6}
+                            Mp6[1] +       //       M_{-2/6}
+                      mDn26*Mp6[2] +       // mDn26*M_{ 0/6}
+                      mDn46*Mp6[3] ) );    // mDn46*M_{ 2/6}
+
+    //------ free molecular
+
+    const double Kfm = eps_c * sqrt(0.5*M_PI*kb*state.T) * pow(6./(M_PI*rhoSoot), twothird);
+
+    double Ifm1 = Kfm*mDimer*g_grid(1);
+
+    //------ harmonic mean
+
+    return Ifm1*Ic1/(Ifm1 + Ic1);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/** Compute the difference table for a Newton polynomial
+ * x points are 0,   1,  2,  3, ... (hard-coded this way)
+ * y points are M0, M1, M2, M3, ... (or log10 of those, or whatever is passed to l10M)
+ * M0 dM0=M1-M0 ddM0=dM1-dM0 dddM0=ddM1-ddM0
+ * M1 dM1=M2-M1 ddM1=dM2-dM1
+ * M2 dM2=M3-M2           
+ * M3
+ * (interpolating among log10(M) here; nomenclature in code reflects that
+ *  but there is no change other than the var names)
+ *
+ * Function used by get_Mr
+ * Function only needs to be set when the set of moments change, so call once
+ *   at the top of the rates routine
+ * Code verified by comparison to np.polyfit, np.polyval
+ */
+
+void sootModel_MOMIC::set_diffTable(const vector<double> &l10M) {
+
+    int Nmom = l10M.size();
+
+    //----------- set first column
+
+    for (int k=0; k<Nmom; k++)
+        diffTable[k][0] = l10M[k];
+
+    //----------- set other columns (differences) using previous column
+
+    for (int j=1; j<Nmom; j++)           // each column
+        for (int i=0; i<Nmom-j; i++)     // elements in column (row values)
+            diffTable[i][j] = diffTable[i+1][j-1] - diffTable[i][j-1];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/** Compute fractional moment r by Newton Forward Polynomial
+ * x points are 0,   1,  2,  3, ... (hard-coded this way)
+ * y points are M0, M1, M2, M3, ... (log10 of those, or what is set in set_diffTable)
+ *     but return value is 10^l10Mr here.
+ * Assumes diffTable is set
+ * Mr = M0 + r*dM0 + r(r-1)*ddM0/2!+ r(r-1)(r-2)*dddM0/3! + ...
+ * Positive and negative moments get different treatement 
+ *    Positive interpolates among all moments
+ *    Negative extrapolates from M0, M1, M3 (log of those)
+ * Code verified by comparison to np.polyfit, np.polyval
+ */
+
+double sootModel_MOMIC::Mr(const double r) {
+
+    double l10Mr;
+
+    l10Mr = diffTable[0][0];
+    double coef = r;
+    int kend = (r >= 0) ? Nmom : 3;
+    for(int k=1; k<kend; k++) {
+        l10Mr += coef*diffTable[0][k];
+        coef *= (r-k)/double(k+1);
+    }
+
+    return pow(10., l10Mr);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/** Compute arrays of fractional moments
+ * Used to compute coagulation
+ * Mp6 = M_{p/6}          evens (Continuum)
+ *     Mp6 = (-4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38) / 6
+ *     indx:   0  1 2 3 4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21
+ *     indx = (p+4)/2
+ * Mq6 = M_{q/6}          odds (FM)
+ *     Mq6 = (-3 -1 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47 49 51 53 55) / 6
+ *     indx:   0  1 2 3 4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
+ *     indx = (q+3)/2
+ */
+
+void sootModel_MOMIC::set_fractional_moments_Mp6_Mq6() {
+
+    double p;
+    for(size_t i=0, p=-4; i<np[Nmom]; i++, p+=2)
+        Mp6[i] = Mr(p/6.0);
+
+    double q;
+    for(size_t i=0, q=-3; i<nq[Nmom]; i++, q+=2)
+        Mq6[i] = Mr(q/6.0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double sootModel_MOMIC::MOMICCoagulationRate(const state& state, size_t r, vector<double>& M){
+void sootModel_MOMIC::set_mDimerPowers() {
 
-    if (M[0] <= 0.0)
-        return 0;
+    double mDimer = nucl->DIMER.mDimer;
 
-    if (r == 1)    // m1 = 0.0 for coagulation by definition
-        return 0;
+    mD26  = pow(mDimer,  2./6.);
+    mDn26 = pow(mDimer, -2./6.);
+    mDn46 = pow(mDimer, -4./6.);
 
-    //---------- Knudsen number calculation
-
-	const double mu_1 = M[1] / M[2];
-	const double d_g = pow(6.*kb*state.T/state.P/M_PI, onethird);
-	const double d_p = pow(6.*mu_1/rhoSoot/M_PI, onethird);
-	const double lambda_g = kb*state.T/(root2*M_PI*d_g*d_g*state.P);
-	const double Kn = lambda_g/d_p;
-
-    //---------- continuum regime
-
-    double Rate_C;
-
-    const double K_C      = 2.*kb*state.T/(3.*state.muGas);
-    const double K_Cprime = 1.257*lambda_g*pow(M_PI*rhoSoot/6., onethird);
-
-	if (r == 0)
-		Rate_C = -K_C*( M[0]*M[0] + MOMIC(onethird, M)*MOMIC(-onethird, M) +
-                        K_Cprime*(3.*MOMIC(-onethird, M)*M[0] +
-                                  MOMIC(twothird, M)*MOMIC(onethird, M)) );
-	else {
-		Rate_C = 0;
-		for (size_t k=0; k<r; k++) {
-			if (k <= r - k)
-				Rate_C += binomial_coefficient(r, k)*( 
-                          2.*M[k]*M[r-k] + MOMIC(k + onethird, M) * MOMIC(r - k - onethird, M) +
-                          MOMIC(k - onethird, M)*MOMIC(r - k + onethird, M) +
-                          2*K_Cprime*(2.*MOMIC(k - onethird, M)*M[r - k] +
-                                      M[k]*MOMIC(r - k - onethird, M) +
-                                      MOMIC(k - twothird, M) * MOMIC(r - k + onethird, M)) );
-		}
-		Rate_C *= 0.5*K_C;
-	}
-
-    //---------- free-molecular regime
-
-	double Rate_F;
-
-	const double K_f = 2.2*pow(3./(4.*M_PI*rhoSoot), twothird)*sqrt(8.*M_PI*kb*state.T);
-
-	if (r == 0)
-		Rate_F = -0.5 * K_f * f_grid(0, 0, M);
-	else {
-		Rate_F = 0;
-		for (size_t k=1; k<r; k++) {
-			if (k <= r - k)
-				Rate_F += binomial_coefficient(r, k) * f_grid(k, r - k, M);
-		}
-		Rate_F *= 0.5*K_f;
-	}
-
-    //---------- return weighted average
-
-	return Rate_F/(1.0 + 1./Kn) + Rate_C/(1. + Kn);
-
+    mDn36  = pow(mDimer,  -3./6.);
+    mDn16  = pow(mDimer,  -1./6.);
+    mD16   = pow(mDimer,   1./6.);
+    mD36   = pow(mDimer,   3./6.);
+    mD56   = pow(mDimer,   5./6.);
+    mD76   = pow(mDimer,   7./6.);
+    mD96   = pow(mDimer,   9./6.);
+    mD116  = pow(mDimer,  11./6.);
+    mD136  = pow(mDimer,  13./6.);
+    mD156  = pow(mDimer,  15./6.);
+    mD176  = pow(mDimer,  17./6.);
+    mD196  = pow(mDimer,  19./6.);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-/** lagrangeInterp function
- *
- *      Calculates the Lagrange interpolated value from whole order moments.
- *
- *      @param x_i  \input      x value of desired interpolation
- *      @param x    \input      vector of x values to interpolate amongst
- *      @param y    \input      vector of y values to interpolate amongst
- *      @param y_i  \output     interpolated y value
- *
- */
-
-double sootModel_MOMIC::lagrangeInterp(double x_i, const vector<double>& x, const vector<double>& y)
-{
-	double y_i = 0;
-
-	double L;
-	for (size_t j=0; j<x.size(); j++) {
-		L = 1;
-		for (size_t m=0; m<x.size(); m++) {
-			if (m != j) {
-				L *= (x_i - x[m])/(x[j] - x[m]);
-			}
-		}
-		y_i += y[j]*L;
-	}
-
-	return y_i;
-}
-////////////////////////////////////////////////////////////////////////////////
-/** MOMIC function
- *
- *      Calculates the desired fractional moment by lagrange interpolation
- *      between whole order moments. Because it uses log moments, it will crash
- *      if any moment is less than or equal to zero.
- *
- *      @param p     \input     desired interpolation value
- *      @param M     \input     vector of whole order moments
- *
- */
-
-double sootModel_MOMIC::MOMIC(double p, const vector<double>& M) {
-
-    if (M[0] <= 0)
-        return 0;
-
-	if (p == 0)
-		return M[0];
-
-	size_t size = M.size();
-	if (p < 0 && M.size() != 2)
-		size = 3;
-
-	vector<double> log_mu(size, 0);
-	vector<double> x(size, 0);
-
-	for (size_t i = 0; i < size; i++) {
-		log_mu[i] = log10(M[i] / M[0]);
-		x[i] =  i;
-	}
-
-	const double log_mu_p = lagrangeInterp(p, x, log_mu);
-
-	return pow(10, log_mu_p) * M[0];
-}
