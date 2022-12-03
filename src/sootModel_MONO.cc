@@ -80,7 +80,7 @@ void sootModel_MONO::getSourceTerms(state &state,
     double G0 = 0;
     double G1 = 0;
 
-    double Am2m3 = M0 > 0 ? M_PI * pow(abs(6 / (M_PI * rhoSoot) * M1 / M0), 2.0 / 3) * abs(M0) : 0;
+    double Am2m3 = M0 > 0 ? M_PI*pow(abs(6./(M_PI*rhoSoot)*M1/M0), twothird)*abs(M0) : 0;
 
     G1 = kGrw * Am2m3;
 
@@ -96,13 +96,12 @@ void sootModel_MONO::getSourceTerms(state &state,
     double C0 = 0;
     double C1 = 0;
 
-    //C0 = -0.5 * coa  * state.wts[0] * state.wts[0];
-    C0 = -coa  * state.wts[0] * state.wts[0];
+    C0 = -0.5*coa*state.wts[0]*state.wts[0];
 
     //---------- combine to make soot source terms
 
-    sootSources[0] = (N0 + Cnd0 + G0 + X0 + C0);      // #/m3*s
-    sootSources[1] = (N1 + Cnd1 + G1 + X1 + C1);      // kg/m3*s
+    sootSources[0] = N0 + Cnd0 + G0 + X0 + C0;      // #/m3*s
+    sootSources[1] = N1 + Cnd1 + G1 + X1 + C1;      // kg/m3*s
 
     //---------- set gas source terms
 

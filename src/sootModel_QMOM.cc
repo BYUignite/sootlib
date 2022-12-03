@@ -1,4 +1,5 @@
 #include "sootModel_QMOM.h"
+#include "binomial.h"
 
 using namespace std;
 using namespace soot;
@@ -98,20 +99,32 @@ void sootModel_QMOM::getSourceTerms(state &state,
 
     //---------- coagulation terms
 
-    vector<double> coaSrcM(nsoot, 0);
+    vector<double> coaSrcM(nsoot, 0.0);          // init to 0 to handle M1
+    double s;
 
-    for(int k=0; k < nsoot; k++) {
-        for(int ii=1; ii<state.absc.size(); ii++)                // off-diag terms (looping half of them with *2 incorporated
-            for(int j=0; j<ii; j++)
-                coaSrcM[k] += coag->getCoagulationSootRate(state, state.absc[ii], state.absc[j]) * state.wts[ii] * state.wts[j] *
-                              (k == 0 ? -1.0 : (pow(state.absc[ii] + state.absc[j], k)) - pow(state.absc[ii], k) - pow(state.absc[j], k) );      // M0 special case
+    for(int r=0; r<nsoot; r++) {                 // loop all moments r
+        if (r==1) continue;                      // rate is zero for r==1
 
-        for(int ii=0; ii<state.absc.size(); ii++)                // diagonal trerms
-            coaSrcM[k] += coag->getCoagulationSootRate(state, state.absc[ii], state.absc[ii]) * state.wts[ii] * state.wts[ii] *
-                          (k == 0 ? -0.5 : pow(state.absc[ii], k) * (pow(2, k - 1) - 1) );                                  // M0 special case
+        //------ off-diagonal terms (looping half of them, with *2 incorporated)
+
+        for(int i=1; i<state.absc.size(); i++)
+            for(int j=0; j<i; j++) {                  
+                s = (r==0) ? -1.0 : 0.0;
+                for(int k=1; k<=r-1; k++)         // not entered if r==0, then s=-1
+                    s += binomial_coefficient(r,k) * pow(state.absc[i],k) * pow(state.absc[j],r-k);
+                coaSrcM[r] += coag->getCoagulationSootRate(state,state.absc[i],state.absc[j]) * state.wts[i]*state.wts[j] * s;
+            }
+
+        //------ diagonal terms
+
+        s = (r==0) ? -1.0 : 0.0;
+        for(int k=1; k<=r-1; k++)                 // not entered if r==0, then s=-1
+            s += binomial_coefficient(r,k);
+        for(int i=0; i<state.absc.size(); i++) {
+            coaSrcM[r] += 0.5*coag->getCoagulationSootRate(state,state.absc[i],state.absc[i]) *state.wts[i]*state.wts[i] * s *
+                          ((r==0) ? 1.0 : pow(state.absc[i], r));
+        }
     }
-
-    coaSrcM[1] = 0.0;    // M1 = 0.0 for coagulation by definition
 
     //---------- combine to make soot source terms
 
@@ -283,7 +296,7 @@ void sootModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& 
 double sootModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<double>& absc) {
 	double Mk = 0;
 
-	for (size_t i = 0; i < wts.size() / 2; i++) {
+	for (size_t i=0; i<wts.size(); i++) {
 		if (wts[i] == 0 || absc[i] == 0)
 			return 0;
 		else
