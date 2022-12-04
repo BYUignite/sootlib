@@ -134,7 +134,6 @@ void sootModel_SECT::getSourceTerms(state &state,
     static const double ilnF = 1.0/log(binGrowthFactor);                // factor for finding location
 
     vector<double> Scoa(nsoot, 0.0);                                    // #/m3*s in each bin
-
     double K12;
 
     for(size_t i=0; i<nsoot; i++) {                     // loop size i
@@ -142,12 +141,16 @@ void sootModel_SECT::getSourceTerms(state &state,
 
             //----------- loss: i,j collide to remove from bins i and j
 
-            K12  = coag->getCoagulationSootRate(state, mBins[i], mBins[j]);
+            K12   = coag->getCoagulationSootRate(state, mBins[i], mBins[j]);
             term  = K12*state.sootVar[i]*state.sootVar[j];
             Scoa[i] -= term;
-            Scoa[j] -= term;
+            if (j>i)
+                Scoa[j] -= term;
 
             //----------- gain: mi + mj = mk --> bins floor(k) and ceil(k) gain so that mass, # conserved
+            //----------- cmin*F^k = mBins[i] + mBins[j] --> k = int( log((mBins[i]+mbins[j])/cmin)/log(F) )
+
+            if (i==j) term *= 0.5;
 
             size_t k  = static_cast<size_t>(ilnF * log((mBins[i]+mBins[j])/state.cMin));
 
@@ -161,7 +164,7 @@ void sootModel_SECT::getSourceTerms(state &state,
             }
         }
     }
-    
+
     //---------- combine to make soot source terms
 
     for (size_t k=0; k<nsoot; k++)
