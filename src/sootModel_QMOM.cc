@@ -79,7 +79,7 @@ void sootModel_QMOM::getSourceTerms(state &state,
         for (size_t k=1; k<nsoot; k++) {                             // loop moments k, skip moment 0
             for (size_t i=0; i<state.absc.size(); i++)               // loop abscissas
                 cndSrcM[k] += coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, state.absc[i]) * 
-                              pow(state.absc[i], k-1) * state.wts[i];
+                              state.wts[i] * (k==1) ? 1.0 : (k==2) ? state.absc[i] : pow(state.absc[i], k-1);
             cndSrcM[k] *= k * nucl->DIMER.nDimer * nucl->DIMER.mDimer;
         }
     }

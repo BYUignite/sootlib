@@ -78,14 +78,14 @@ double sootModel_LOGN::pahSootCollisionRatePerDimer(const state &state, const do
 
     //----------- FM (variable name: I for integrated, as in moment)
 
-    const double Ifm1 =    Kfm*bCoag * (M0  *mD16  + 2.*M26*mDn16 +
-        M46 *mDn36 + 2.*Mn16*mD26 +
-        Mn36*mD46  + M16);
+    const double Ifm1 = Kfm*bCoag * (M0  *mD16  + 2.*M26*mDn16 +
+                                     M46 *mDn36 + 2.*Mn16*mD26 +
+                                     Mn36*mD46  + M16);
 
     //----------- continuum
 
-    const double Ic1 = Kc    * ( 2.*M0 + Mn26*mD26 + M26*mDn26    +
-        Kcp*(M0*mDn26 + Mn26 + M26*mDn46 + Mn46*mD26) );
+    const double Ic1 = Kc * ( 2.*M0 + Mn26*mD26 + M26*mDn26    +
+                              Kcp*(M0*mDn26 + Mn26 + M26*mDn46 + Mn46*mD26) );
 
     //---------- return harmonic mean
 

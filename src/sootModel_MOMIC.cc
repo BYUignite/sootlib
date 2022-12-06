@@ -499,7 +499,7 @@ double sootModel_MOMIC::pahSootCollisionRatePerDimer(const state &state, const d
     const double Kc  = 2.*kb*state.T/(3./state.muGas);
     const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
 
-    double Ic1 = Kc*mDimer* (  
+    double Ic1 = Kc * (  
                   mD26*Mp6[1] +            //  mD26*M_{-2/6}
                     2.*Mp6[2] +            //    2.*M_{ 0/6}
                  mDn26*Mp6[3] +            // mDn26*M_{ 2/6}
@@ -512,7 +512,7 @@ double sootModel_MOMIC::pahSootCollisionRatePerDimer(const state &state, const d
 
     const double Kfm = eps_c * sqrt(0.5*M_PI*kb*state.T) * pow(6./(M_PI*rhoSoot), twothird);
 
-    double Ifm1 = Kfm*mDimer*g_grid(1);
+    double Ifm1 = Kfm*g_grid(1);
 
     //------ harmonic mean
 

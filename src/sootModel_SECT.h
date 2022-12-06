@@ -10,7 +10,8 @@ class sootModel_SECT : public sootModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
-    double         binGrowthFactor;       // F^0, F^1, F^2, ... (set F here, F=2, say)
+    double              binGrowthFactor;       // F^0, F^1, F^2, ... (set F here, F=2, say)
+    std::vector<double> beta_DSi;              // store beta_dimer_soot_i for PAH nuc to avoid double computing
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
@@ -22,6 +23,8 @@ public:
                                 std::vector<double> &sootSources,
                                 std::vector<double> &gasSources,
                                 std::vector<double> &pahSources) const;
+
+    virtual double pahSootCollisionRatePerDimer(const state &state, const double mDimer);
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
