@@ -69,7 +69,7 @@ double sootModel_SECT::pahSootCollisionRatePerDimer(const state &state, const do
     size_t k;
 
     for(k=0; k<nsoot; k++)
-        beta_DSi = coag->getCoagulationSootRate(state, mDimer, mBins[k]);
+        beta_DSi[k] = coag->getCoagulationSootRate(state, mDimer, mBins[k]);
 
     //---------- compute I_beta_DS
 
