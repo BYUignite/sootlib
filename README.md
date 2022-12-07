@@ -46,4 +46,3 @@ The SootLib library consists of two main object classes that users can interact 
 
 In the case of a temporally or spatially evolving simulation, only steps 3–5 need be performed at each individual step. SootLib does not store previously calculated values, so source terms must be retrieved at each step or otherwise lost.  
 
-*/
