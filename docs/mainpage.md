@@ -1,6 +1,5 @@
-/**
 
-@mainpage
+\mainpage
 
 <!-- #################################################################### -->
 
@@ -66,9 +65,6 @@ Soot modeling
 
 ## Particle Size Distribution (PSD)
 
-fadfdsfadf
+[Monodispersed PSD](md_model_documentation_mono.html)
 
 
-
-
-*/
