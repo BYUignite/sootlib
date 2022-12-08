@@ -1,4 +1,4 @@
-\page test Monodispersed
+\page mono Monodispersed
 
 
 The monodispersed model assumes that the soot particle size distribution (PSD) is represented with a single particle size. This size is represented by the first two moments of the size distribution \f$M_0\f$ and \f$M_1\f$ with units of \f$\#\f$/m\f$^3\f$ and kg/m\f$^3\f$, respectively. The mass is given by
@@ -18,11 +18,11 @@ $$M_1 = \int m^1n(m)dm = \int mM_0\delta(m-\bar{m})dm = \bar{m}M_0.$$
 
 # Fractional moments
 
-Note that fractional moments \f$M_k\f$ for some fraction \f$k\f$ are given by
-$$M_k = \int m^kn(m)dm = \int m^kM_0\delta(m-\bar{m})dm = \bar{m}^kM_0 = \left(\frac{M_1}{M_0}\right)^kM_0,$$
-$$M_k = M_0^{1-k}M_1^k.$$
+Note that fractional moments \f$M_r\f$ for some fraction \f$r\f$ are given by
+$$M_r = \int m^rn(m)dm = \int m^rM_0\delta(m-\bar{m})dm = \bar{m}^rM_0 = \left(\frac{M_1}{M_0}\right)^rM_0,$$
+$$M_r = M_0^{1-r}M_1^r.$$
 This is a logarithmic interpolation equivalent to 
-$$\log{M_k} = (1-k)\log M_0 + (k)\log M_1.$$
+$$\log{M_r} = (1-r)\log M_0 + (r)\log M_1.$$
 
 # Model evaluation
 

@@ -14,15 +14,15 @@ $$n(m) =\frac{dN(m)}{dm} = \frac{M_0}{\sigma\sqrt{2\pi}}\frac{1}{m}\exp\left(-\f
 
 # Moments
 
-The \f$k^\text{th}\f$ moment (integer or fraction) is given by
-$$M_k = \int_0^\infty m^kn(m)dm.$$
+The \f$r^\text{th}\f$ moment (integer or fraction) is given by
+$$M_r = \int_0^\infty m^rn(m)dm.$$
 Subsituting the expression for n(m) and performing the integration gives
-$$M_k = M_0\bar{m}^ke^{k^2\sigma^2/2}.$$
-This gives any moment \f$M_k\f$ in terms of \f$M_0\f$, \f$\bar{m}\f$ and \f$\sigma^2\f$. Now write \f$\sigma\f$ and \f$\bar{m}\f$ in terms of \f$M_0\f$, \f$M_1\f$, and \f$M_2\f$ by writing the above equation for \f$k=1\f$ and \f$k=2\f$, and solve for \f$\bar{m}\f$ and \f$\sigma^2\f$:
+$$M_r = M_0\bar{m}^re^{r^2\sigma^2/2}.$$
+This gives any moment \f$M_r\f$ in terms of \f$M_0\f$, \f$\bar{m}\f$ and \f$\sigma^2\f$. Now write \f$\sigma\f$ and \f$\bar{m}\f$ in terms of \f$M_0\f$, \f$M_1\f$, and \f$M_2\f$ by writing the above equation for \f$r=1\f$ and \f$r=2\f$, and solve for \f$\bar{m}\f$ and \f$\sigma^2\f$:
 $$\bar{m} = \frac{M_1^2}{M_0^{3/2}M_2^{1/2}},$$
 $$\sigma^2 = \log\left(\frac{M_0M_2}{M_1^2}\right).$$
-Now, combine these with the expression for \f$M_k\f$ to get
-$$M_k = M_0^{1-3k/2 + k^2/2}M_1^{2k-k^2}M_2^{k^2/2 - k/2}.$$
+Now, combine these with the expression for \f$M_r\f$ to get
+$$M_r = M_0^{1-3r/2 + r^2/2}M_1^{2r-r^2}M_2^{r^2/2 - r/2}.$$
 
 # Model evaluation
 
