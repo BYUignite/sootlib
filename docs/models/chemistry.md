@@ -2,7 +2,7 @@
 
 # Nucleation
 
-Soot nucleation arises from gas phase species reacting into a smallest soot particle size.
+Soot nucleation arises from gas phase species reacting to form the smallest soot particles.
 The rate (\f$\#/\f$m\f$^3\f$kg s) is written as
 $$R_n(m) = J_n\delta(m-m_n),$$
 where \f$J_n\,(=)\,\#/\f$m\f$^3\f$s and \f$m_n\f$ is mass of the soot nucleate.
@@ -19,7 +19,36 @@ $$
 
 \f$J_n\f$ is written in terms of the gas state \f$T\f$, \f$P\f$, and \f$y_i\f$ and various models are available.
 
-# Growth
+### Leung & Lindstedt (LL)
+
+SootLib's most basic chemistry model is the simplified kinetic mechanism presented by Leung and Lindstedt (``LL``), which consists of four Arrhenius-style rate expressions: one each for soot nucleation, surface growth, oxidation, and coagulation \cite Leung_1991. The ``LL`` nucleation rate depends only on the concentration of gaseous acetylene, the gas temperature, and an empirically-determined rate constant: $$R_{nuc} = 0.1\times 10^5 e^{-21100/T} [\text{C}_2\text{H}_2].$$.
+
+### Lindstedt (LIN)
+Lindstedt later proposed an alteration to the ``LL`` nucleation step's pre-exponential factor to increase accuracy without changing the expression's form (``LIN``) \cite Lindstedt_2005 , giving the following expression:
+$$R_{nuc} = 0.1\times 10^{-11} e^{-12100/T} [\text{C}_2\text{H}_2].$$
+
+### PAH nucleation (PAH)
+SootLib implements the PAH nucleation model presented by Blanquart and Pitsch, in which nascent soot particles are created by the collision of two PAH dimers, themselves created by the collision of two PAH molecules \cite Blanquart_2009c. For a given PAH molecule, the self-collision rate derived from the kinetic molecular theory of gases is
+$$\omega_{\text{dimer}} = \sum_i 4\gamma_i \left( \frac{\pi k T}{m_i} \right)^{1/2} \left( \frac{6m_i}{\pi \rho_s} \right)^{2/3} [\text{PAH}]^2$$,
+where \f$k\f$ is the Boltzmann constant, \f$T\f$ is gas temperature, \f$m_i\f$ is the mass of PAH species \f$i\f$, and \f$\rho_s\f$ is the solid soot density. The sticking coefficient \f$\gamma\f$, which scales with \f$m_i^4\f$, accounts for the difference between the observed self-collision rate and the rate predicted by kinetic molecular theory. The following table lists the PAH species considered by this PAH nucleation model, their masses \f$m_i\f$, and their sticking coefficients \f$\gamma_i\f$:
+| PAH species       | Formula | \f$m_i\f$ (amu) | \f$\gamma_i\f$ |
+|-------------------|---------|-----------------|----------------|
+| Naphthalene       | C\f$_{10}\f$H\f$_8\f$ | 128 | 0.0010 |
+| Acenaphthylene    | C\f$_{12}\f$H\f$_8\f$ | 152 | 0.0030 |  
+| Biphenyl          | C\f$_{12}\f$H\f$_{10}\f$ | 154 | 0.0085 | 
+| Phenathrene       | C\f$_{14}\f$H\f$_{10}\f$ | 178 | 0.0150 | 
+| Acephenanthrylene | C\f$_{16}\f$H\f$_{10}\f$ | 202 | 0.0250 | 
+| Pyrene            | C\f$_{16}\f$H\f$_{10}\f$ | 202 | 0.0250 | 
+| Fluoranthene      | C\f$_{16}\f$H\f$_{10}\f$ | 202 | 0.0250 | 
+| Cyclo[cd]pyrene   | C\f$_{18}\f$H\f$_{10}\f$ | 226 | 0.0390 |
+Rather than computing the properties of every possible dimer combination, the model evaluates only the total rate of dimer formation \f$\omega_{\text{dimer}}\f$ and the average carbon content of each dimer. Because PAH and dimer collision rates are high, we compute dimer concentration assuming a quasi-steady state. The PAH dimer concentration can be found by solving the quadratic equation given by
+$$\omega_{\text{dimer}} = 2 \beta(m_D,m_D) [\text{DIMER}]^2 + [\text{DIMER}] \sum_i \beta(m_{\text{PAH}_i},m_{\text{PAH}_i}) N_i$$
+for \f$[\text{DIMER}]\f$, where \f$\beta(m_{\text{PAH}_i},m_{\text{PAH}_i})\f$ is the self-collision rate of PAH species \f$i\f$, \f$N_i\f$ is the number density of PAH species \f$i\f$, and \f$\beta(m_D,m_D)\f$ is the self-collision rate of the PAH dimer, whose calculation depends on the chosen coagulation model. Once the steady state dimer concentration has been computed, the nucleation rate is given by
+$$R_{nuc} = \frac{1}{2}\beta(m_D,m_D) [\text{DIMER}]^2.$$
+
+This PAH nucleation model also accounts for condensation of PAH dimers onto existing soot particles, which contributes to chemical surface growth. The PAH condensation rate is computed similarly to the nucleation rate, but \f$\beta\f$ is computed as the collision rate between PAH dimers and soot particles rather than the self-collision rate of PAH dimers and the mass concentration of both the PAH dimers and soot particles is taken into account.
+
+# Surface Growth
 
 For a continuous particle size distribution (assumed here), the growth rate (\f$\#/\f$m\f$^3\f$kg s) is given by
 $$R_g(m) = -\frac{\partial}{\partial m}(v_gn(m)),$$
@@ -43,9 +72,38 @@ R_{r,g} = k_s\pi\left(\frac{6}{\pi\rho_s}\right)^{2/3}kM_{k-1/3}.
 $$
 Here, the \f$M_{k-1/3}\f$ makes it clear that we will need expressions for fractional moments, and evaluation of such moments requires moment *closure*.
 
+## Surface growth chemistry
+Most soot surface growth models rely on acetylene (C\f$_2\f$H\f$_2\f$) as the primary source of gaseous carbon, though other species may also contribute. Additionally, surface growth models tend to include some dependence on the soot particle's surface area since the availability of sites for the addition of carbon atoms to existing particles tends to be a limiting factor in rate calculations \cite Wang_2011.
+
+### Leung & Lindstedt (LL)
+The Leung and Lindstedt mechanism for soot surface growth (LL) \cite Leung_1991 depends on both the gaseous concentration of acetylene and the particle surface area available for surface reactions. The overall rate of soot surface growth is computed as
+$$R_{grw} = 0.6\times 10^4 e^{-21100/T} f(A_s) [\text{C}_2\text{H}_2].$$
+\f$f(A_s)\f$ is a function of the available particle surface area given by
+$$f(A_s) = \sqrt{\pi \left( \frac{6MW_C}{\pi \rho_{s}} \right) ^{2/3}} \left[ \frac{\rho Y_{s}}{MW_C} \right]^{1/3} [\rho N]^{1/6},$$
+where \f$MW_C\f$ is the molar mass of carbon, \f$\rho\f$ is the gas density, \f$\rho_{s}\f$ is the solid density of soot, \f$Y_{s}\f$ is the mass fraction of soot, and \f$N\f$ is the soot particle number density. Results showed that the normal square dependence of the rate on available surface sites does not accurately predict the soot number density throughout the flame \cite Leung_1991, and later models explored alternative methods.
+
+### Lindstedt (LIN)
+Lindstedt proposed and tested several alternative models for the surface growth rate, concluding that the model in which the growth rate is dependent on soot number density but independent of soot surface area produced better results \cite Lindstedt_1994. This modified growth rate (LIN) is given by
+$$R_{grw} = 750 e^{-12100/T} [\text{C}_2\text{H}_2] 2N_s MW_C,$$
+where \f$N_s\f$ is the number density of soot particles and \f$MW_C\f$ is the molar mass of carbon.
+
+### Hydrogen-abstraction acetylene-addition (HACA)
+
+The HACA growth mechanism consists of a repeating sequence of elementary reaction steps with individual Arrhenius-style rate expressions, listed in the following table.
+
 # Oxidation
 
 Oxidation follows the same form as growth but the positive \f$k_s\f$ is replaced with the negatively signed \f$k_o\f$.
+
+## Oxidation chemistry
+
+### Leung & Lindstedt (LL)
+
+### Nagle & Strickland-Constable (NSC)
+
+### Lee et al. (LEE)
+
+### Neoh et al. (NEOH)
 
 # Coagulation
 
