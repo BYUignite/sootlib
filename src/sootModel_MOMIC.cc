@@ -5,6 +5,18 @@ using namespace std;
 using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Constructor taking pointers to chemistry models as input.
+/// User creates these pointers nominally by "new-ing" them.
+///
+/// @param \input nsoot_ number of soot moments (3-8).
+/// @param \input nucl_  pointer to nucleation model.
+/// @param \input grow_  pointer to growth model.
+/// @param \input oxid_  pointer to oxidation model.
+/// @param \input coag_  pointer to coagulation model.
+///
+/// \todo enforce 3-8 moments.
+////////////////////////////////////////////////////////////////////////////////
 
 sootModel_MOMIC::sootModel_MOMIC(size_t            nsoot_,
                                  nucleationModel  *nucl_,
@@ -30,6 +42,19 @@ sootModel_MOMIC::sootModel_MOMIC(size_t            nsoot_,
     nq  = {12,12,15,18,21,24,27,30};
 }
 
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Constructor taking enumerations names as input.
+/// Chemistry pointers are created (new-ed) here based on those enumerations.
+///
+/// @param \input nsoot_ number of soot moments (3-8).
+/// @param \input Nmech  one of enum class nucleationMech in sootDefs.h
+/// @param \input Gmech  one of enum class growthMech in sootDefs.h
+/// @param \input Omech  one of enum class oxidationMech in sootDefs.h
+/// @param \input Cmech  one of enum class coagulationMech in sootDefs.h
+///
+/// \todo enforce 3-8 moments.
+///
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_MOMIC::sootModel_MOMIC(size_t          nsoot_,
@@ -57,9 +82,17 @@ sootModel_MOMIC::sootModel_MOMIC(size_t          nsoot_,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/**
- * Assumes mDn36, etc. (mDimer^powers) have been set in set_mDimerPowers()
- */
+///
+/// Primary user interface.
+/// 
+/// @param \input  state       gas and soot state, set by user.
+/// @param \output sootSources soot moment (r) sources (kg^r/m3*s).
+/// @param \output gasSources  vector of gas species rates (kg/m3*s)
+/// @param \output pahSources  vector of gas PAH species rates (kg/m3*s)
+///
+/// Assumes mDn36, etc. (mDimer^powers) have been set in set_mDimerPowers().
+///
+////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_MOMIC::getSourceTerms(state &state, 
                                      std::vector<double> &sootSources,
@@ -189,11 +222,12 @@ void sootModel_MOMIC::getSourceTerms(state &state,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** downselectIfNeeded function
- * Reduces the number of moments to avoid invalid inversion
- * @param M          \input      vector of moment values
- *
- */
+///
+/// Reduces the number of moments if needed to avoid invalid inversion.
+///
+/// @param M \input vector of moment values
+///
+////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_MOMIC::downselectIfNeeded(vector<double> &M) {
 
@@ -232,24 +266,25 @@ void sootModel_MOMIC::downselectIfNeeded(vector<double> &M) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** f_grid function
- *
- *      Calculates the grid function described in Frenklach 2002 MOMIC paper
- *      using Lagrange interpolation between whole order moments
- *
- *      @param x     \input x grid point
- *      @param y     \input y grid point
- *      @param Mq6   \input vector of fractional moments
- *
- *      Mq6: (-3 -1 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47 49 51 53 55
- *      indx:  0  1 2 3 4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
- *      f_l^(x,y) is composed of M_(x+7/6)*M_(y+3/6), etc. where fractions vary
- *           All M_(frac) are in Mq6. All frac are odd sixth fractions. 
- *           If x = 1, then, e.g., x+7/6 --> (6+7)/6=13/6; index 7/6 is 5, shift by 3 --> 13/6 is ind 8
- *           If x = 2, then shift by 6; x = 3, then shift by 9, etc.
- *
- *      returns f_{1/2}
- */
+/// 
+/// Calculates the grid function described in Frenklach 2002 MOMIC paper
+/// using polynomial interpolation between whole order moments.
+/// 
+/// @param  x     \input x grid point
+/// @param  y     \input y grid point
+/// @param  Mq6   \input vector of fractional moments
+/// @return f_{1/2}
+/// 
+/// \verbatim
+/// Mq6: (-3 -1 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47 49 51 53 55
+/// indx:  0  1 2 3 4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
+/// f_l^(x,y) is composed of M_(x+7/6)*M_(y+3/6), etc. where fractions vary
+///      All M_(frac) are in Mq6. All frac are odd sixth fractions. 
+///      If x = 1, then, e.g., x+7/6 --> (6+7)/6=13/6; index 7/6 is 5, shift by 3 --> 13/6 is ind 8
+///      If x = 2, then shift by 6; x = 3, then shift by 9, etc.
+/// \endverbatim
+/// 
+////////////////////////////////////////////////////////////////////////////////
 
 double sootModel_MOMIC::f_grid(int x, int y) {
 
@@ -336,26 +371,27 @@ double sootModel_MOMIC::f_grid(int x, int y) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** g_grid function
- *
- * Calculates the grid function described in Frenklach 2002 MOMIC paper
- * using Lagrange interpolation between whole order moments
- *
- * @param x     \input x grid point
- * @param y     \input y grid point
- * @param Mq6   \input vector of fractional moments
- *
- * Mq6: (-3 -1 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47 49 51 53 55
- * indx:  0  1 2 3 4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
- * f_l^(x,y) is composed of M_(x+7/6)*M_(y+3/6), etc. where fractions vary
- *      All M_(frac) are in Mq6. All frac are odd sixth fractions. 
- *      If x = 1, then, e.g., x+7/6 --> (6+7)/6=13/6; index 7/6 is 5, shift by 3 --> 13/6 is ind 8
- *      If x = 2, then shift by 6; x = 3, then shift by 9, etc.
- *
- * returns f_{1/2}
- *
- * Assumes mDn36, etc. (mDimer^powers) have been set in set_mDimerPowers()
- */
+///
+/// Calculates the grid function described in Frenklach 2002 MOMIC paper
+/// using polynomial interpolation between whole order moments
+/// 
+/// @param x   \input x grid point
+/// @param y   \input y grid point
+/// @param Mq6 \input vector of fractional moments
+/// @return g_grid value.
+///
+/// Assumes mDn36, etc. (mDimer^powers) have been set in set_mDimerPowers()
+/// 
+/// \verbatim
+/// Mq6: (-3 -1 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47 49 51 53 55
+/// indx:  0  1 2 3 4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
+/// f_l^(x,y) is composed of M_(x+7/6)*M_(y+3/6), etc. where fractions vary
+///      All M_(frac) are in Mq6. All frac are odd sixth fractions. 
+///      If x = 1, then, e.g., x+7/6 --> (6+7)/6=13/6; index 7/6 is 5, shift by 3 --> 13/6 is ind 8
+///      If x = 2, then shift by 6; x = 3, then shift by 9, etc.
+/// \end verbatim
+///
+////////////////////////////////////////////////////////////////////////////////
 
 double sootModel_MOMIC::g_grid(int y) {
 
@@ -415,8 +451,14 @@ double sootModel_MOMIC::g_grid(int y) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** Get coagulation rate for moment k
- */
+///
+/// Get coagulation rates for moment k
+/// 
+/// @param \input  state       gas and soot state, set by user.
+/// @param \input  M           vector of soot moments
+/// @return vector of coagulation rates
+///
+////////////////////////////////////////////////////////////////////////////////
 
 vector<double> sootModel_MOMIC::MOMICCoagulationRates(const state& state, vector<double>& M){
 
@@ -480,12 +522,19 @@ vector<double> sootModel_MOMIC::MOMICCoagulationRates(const state& state, vector
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** Compute pah condensation terms.
- *  Function split out from getSourceTerms so that it can be called in nucleationModel_PAH
- *  for computing the pah dimer concentration.
- *  Return value is the pah/soot collision rate per dimer. Call it I.
- *  I*mDimer*nDimer = Cnd1 (=) kg/m3*s 
- */
+///
+/// Compute PAH condensation terms for MOMIC model.
+/// Function split out from getSourceTerms so that it can be called in nucleationModel_PAH
+/// for computing the pah dimer concentration.
+///
+/// Function only called if nucleationMech::PAH.
+/// Function called by nucleationModel_PAH::getNucleationSootRate
+///
+/// @param \input state gas and soot state, set by user.
+/// @param \input mDimer dimer mass (kg)
+/// @return pah/soot sollision rate per dimer. Call it I. I*mDimer*nDimer = Cnd1 (=) kg/m3*s
+///
+////////////////////////////////////////////////////////////////////////////////
 
 double sootModel_MOMIC::pahSootCollisionRatePerDimer(const state &state, const double mDimer) {
 
@@ -520,21 +569,27 @@ double sootModel_MOMIC::pahSootCollisionRatePerDimer(const state &state, const d
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** Compute the difference table for a Newton polynomial
- * x points are 0,   1,  2,  3, ... (hard-coded this way)
- * y points are M0, M1, M2, M3, ... (or log10 of those, or whatever is passed to l10M)
- * M0 dM0=M1-M0 ddM0=dM1-dM0 dddM0=ddM1-ddM0
- * M1 dM1=M2-M1 ddM1=dM2-dM1
- * M2 dM2=M3-M2           
- * M3
- * (interpolating among log10(M) here; nomenclature in code reflects that
- *  but there is no change other than the var names)
- *
- * Function used by get_Mr
- * Function only needs to be set when the set of moments change, so call once
- *   at the top of the rates routine
- * Code verified by comparison to np.polyfit, np.polyval
- */
+/// 
+/// Compute the difference table for a Newton polynomial.
+/// \verbatim
+/// x points are 0,   1,  2,  3, ... (hard-coded this way).
+/// y points are M0, M1, M2, M3, ... (or log10 of those, or whatever is passed to l10M)
+/// M0 dM0=M1-M0 ddM0=dM1-dM0 dddM0=ddM1-ddM0
+/// M1 dM1=M2-M1 ddM1=dM2-dM1
+/// M2 dM2=M3-M2           
+/// M3
+/// \endverbatim
+/// (Interpolating among log10(M) here; nomenclature in code reflects that
+///  but there is no change other than the var names.)
+/// 
+/// Function used by get_Mr.
+/// Function only needs to be set when the set of moments change, so call once
+///   at the top of the rates routine.
+/// Code verified by comparison to np.polyfit, np.polyval.
+///
+/// @param l10M \input vector of log_10(Moments).
+///
+////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_MOMIC::set_diffTable(const vector<double> &l10M) {
 
@@ -553,17 +608,24 @@ void sootModel_MOMIC::set_diffTable(const vector<double> &l10M) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** Compute fractional moment r by Newton Forward Polynomial
- * x points are 0,   1,  2,  3, ... (hard-coded this way)
- * y points are M0, M1, M2, M3, ... (log10 of those, or what is set in set_diffTable)
- *     but return value is 10^l10Mr here.
- * Assumes diffTable is set
- * Mr = M0 + r*dM0 + r(r-1)*ddM0/2!+ r(r-1)(r-2)*dddM0/3! + ...
- * Positive and negative moments get different treatement 
- *    Positive interpolates among all moments
- *    Negative extrapolates from M0, M1, M3 (log of those)
- * Code verified by comparison to np.polyfit, np.polyval
- */
+///
+/// Compute fractional moment r by Newton forward polynomial.
+/// \verbatim
+/// x points are 0,   1,  2,  3, ... (hard-coded this way)
+/// y points are M0, M1, M2, M3, ... (log10 of those, or what is set in set_diffTable)
+///     but return value is 10^l10Mr here.
+/// \endverbatim
+/// Assumes diffTable is set.
+/// Mr = M0 + r*dM0 + r(r-1)*ddM0/2!+ r(r-1)(r-2)*dddM0/3! + ...
+/// Positive and negative moments get different treatement.
+///    Positive interpolates among all moments.
+///    Negative extrapolates from M0, M1, M3 (log of those).
+/// Code verified by comparison to np.polyfit, np.polyval.
+///
+/// @param \input r fractional moment r
+/// @return fractional moment Mr
+/// 
+////////////////////////////////////////////////////////////////////////////////
 
 double sootModel_MOMIC::Mr(const double r) {
 
@@ -581,17 +643,21 @@ double sootModel_MOMIC::Mr(const double r) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** Compute arrays of fractional moments
- * Used to compute coagulation
- * Mp6 = M_{p/6}          evens (Continuum)
- *     Mp6 = (-4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38) / 6
- *     indx:   0  1 2 3 4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21
- *     indx = (p+4)/2
- * Mq6 = M_{q/6}          odds (FM)
- *     Mq6 = (-3 -1 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47 49 51 53 55) / 6
- *     indx:   0  1 2 3 4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
- *     indx = (q+3)/2
- */
+///
+/// Compute arrays of fractional moments.
+/// Used to compute coagulation.
+/// \verbatim
+/// Mp6 = M_{p/6}          evens (Continuum)
+///     Mp6 = (-4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38) / 6
+///     indx:   0  1 2 3 4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21
+///     indx = (p+4)/2
+/// Mq6 = M_{q/6}          odds (FM)
+///     Mq6 = (-3 -1 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47 49 51 53 55) / 6
+///     indx:   0  1 2 3 4 5 6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
+///     indx = (q+3)/2
+/// \endverbatim
+///
+////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_MOMIC::set_fractional_moments_Mp6_Mq6() {
 
@@ -604,6 +670,10 @@ void sootModel_MOMIC::set_fractional_moments_Mp6_Mq6() {
         Mq6[i] = Mr(q/6.0);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Set powers of mDimer used in other routines.
+///
 ////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_MOMIC::set_mDimerPowers() {

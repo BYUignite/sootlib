@@ -5,6 +5,19 @@ using namespace std;
 using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Constructor taking pointers to chemistry models as input.
+/// User creates these pointers nominally by "new-ing" them.
+///
+/// @param \input nsoot_ number of soot moments (even number)
+/// @param \input nucl_  pointer to nucleation model.
+/// @param \input grow_  pointer to growth model.
+/// @param \input oxid_  pointer to oxidation model.
+/// @param \input coag_  pointer to coagulation model.
+///
+/// \todo enforce even number of moments
+///
+////////////////////////////////////////////////////////////////////////////////
 
 sootModel_QMOM::sootModel_QMOM(size_t            nsoot_,
                                nucleationModel  *nucl_,
@@ -25,6 +38,19 @@ sootModel_QMOM::sootModel_QMOM(size_t            nsoot_,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Constructor taking enumerations names as input.
+/// Chemistry pointers are created (new-ed) here based on those enumerations.
+///
+/// @param \input nsoot_ number of soot moments (even number)
+/// @param \input Nmech  one of enum class nucleationMech in sootDefs.h
+/// @param \input Gmech  one of enum class growthMech in sootDefs.h
+/// @param \input Omech  one of enum class oxidationMech in sootDefs.h
+/// @param \input Cmech  one of enum class coagulationMech in sootDefs.h
+///
+/// \todo enforce even number of moments
+///
+////////////////////////////////////////////////////////////////////////////////
 
 sootModel_QMOM::sootModel_QMOM(size_t          nsoot_,
                                nucleationMech  Nmech,
@@ -43,6 +69,15 @@ sootModel_QMOM::sootModel_QMOM(size_t          nsoot_,
     psdMechType = psdMech::QMOM;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Primary user interface.
+/// 
+/// @param \input  state       gas and soot state, set by user.
+/// @param \output sootSources soot moment (r) sources (kg^r/m3*s).
+/// @param \output gasSources  vector of gas species rates (kg/m3*s)
+/// @param \output pahSources  vector of gas PAH species rates (kg/m3*s)
+///
 ////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_QMOM::getSourceTerms(state &state, 
@@ -89,13 +124,13 @@ void sootModel_QMOM::getSourceTerms(state &state,
     vector<double> grwSrcM(nsoot, 0);
     const double Acoef = M_PI*pow(6. /(M_PI*rhoSoot), twothird);          // Acoef (=) kmol^2/3 / kg^2/3
     for (size_t k=1; k<nsoot; k++)                                        // Rate_M0 = 0.0 for growth by definition
-        grwSrcM[k] =  kGrw*Acoef*k*Mk(k-onethird, state.wts, state.absc); // kg^k/m3*s
+        grwSrcM[k] =  kGrw*Acoef*k*Mr(k-onethird, state.wts, state.absc); // kg^k/m3*s
 
     //---------- oxidation terms
 
     vector<double> oxiSrcM(nsoot, 0);
     for (size_t k=1; k<nsoot; k++)                                        // Rate_M0 = 0.0 for oxidation by definition
-        oxiSrcM[k] = -kOxi*Acoef*k*Mk(k-onethird, state.wts, state.absc); // kg^k/m3*s
+        oxiSrcM[k] = -kOxi*Acoef*k*Mr(k-onethird, state.wts, state.absc); // kg^k/m3*s
 
     //---------- coagulation terms
 
@@ -151,18 +186,18 @@ void sootModel_QMOM::getSourceTerms(state &state,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** getWtsAbs function
- *
- *      Calculates weights and abscissas from moments using wheeler algorithm.
- *
- *      @param M        \input      vector of moments
- *      @param wts      \input      weights
- *      @param absc     \input      abscissas
- *
- *      NOTE: wts and absc variables DO NOT change size during downselection;
- *      instead, the extra values are set to zero. This is more convenient than
- *      resizing when wts and absc are used to reconstitute moment source terms.
- */
+///
+/// Calculates weights and abscissas from moments using wheeler algorithm.
+///
+/// @param M        \input      vector of moments
+/// @param wts      \output     weights
+/// @param absc     \output     abscissas
+///
+/// NOTE: wts and absc variables DO NOT change size during downselection;
+/// instead, the extra values are set to zero. This is more convenient than
+/// resizing when wts and absc are used to reconstitute moment source terms.
+///
+////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, vector<double>& abscissas) {
 	size_t N = M.size();        // local nsoonsoot; may change with moment downselection
@@ -225,20 +260,22 @@ void sootModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** Wheeler algorithm for computing weights and abscissas from moments
- *
- *      From Marchisio and Fox (2013) Computational Models for Polydisperse and
- *      Multiphase Systems. Uses eispack function tql2 for eigenvalues and
- *      eigenvectors of a symmetric tridiagonal matrix. If eispack version tql2
- *      is desired, download eispack.hpp and eispack.cc. LApack's dstev
- *      function to compute eigenvalues and eigenvectors of symmetrical
- *      tridiagonal matrix.
- *
- *      @param m    \input     vector of moments (size = 2N)
- *      @param N    \input     number of quadrature nodes (abscissas)
- *      @param w    \output    weights
- *      @param x    \output    abscissas
- */
+///
+/// Wheeler algorithm for computing weights and abscissas from moments.
+///
+/// From Marchisio and Fox (2013) Computational Models for Polydisperse and
+/// Multiphase Systems. Uses eispack function tql2 for eigenvalues and
+/// eigenvectors of a symmetric tridiagonal matrix. If eispack version tql2
+/// is desired, download eispack.hpp and eispack.cc. LApack's dstev
+/// function to compute eigenvalues and eigenvectors of symmetrical
+/// tridiagonal matrix.
+///
+/// @param m    \input     vector of moments (size = 2N)
+/// @param N    \input     number of quadrature nodes (abscissas)
+/// @param w    \output    weights
+/// @param x    \output    abscissas
+///
+////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& w, vector<double>& x) {
 
@@ -269,7 +306,7 @@ void sootModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& 
     for (size_t i = 0; i < N; i++)
         evec[i + N * i] = 1;
 
-//    int flag = tql2(N, &j_diag[0], &j_ldiag[0], &evec[0]);       // for eispack
+    //int flag = tql2(N, &j_diag[0], &j_ldiag[0], &evec[0]);       // for eispack
 
     //char VorN = 'V';
     //vector<double> work(2*N-2);
@@ -283,24 +320,24 @@ void sootModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** Mk function (QMOM)
- *
- *  calculates fractional moments from weights and abscissas.
- *
- *  @param exp      \input      fractional moment to compute; corresponds to exponent
- *  @param wts      \input      weights
- *  @param absc     \input      abscissas
- *  @param Mk       \output     fractional moment value
- */
+///
+/// calculates fractional moments from weights and abscissas.
+///
+/// @param r        \input      fractional moment to compute; corresponds to exponent
+/// @param wts      \input      weights
+/// @param absc     \input      abscissas
+/// @return Mr
+///
+////////////////////////////////////////////////////////////////////////////////
 
-double sootModel_QMOM::Mk(double exp, const vector<double>& wts, const vector<double>& absc) {
-	double Mk = 0;
+double sootModel_QMOM::Mr(double r, const vector<double>& wts, const vector<double>& absc) {
+	double Mr = 0;
 
 	for (size_t i=0; i<wts.size(); i++) {
 		if (wts[i] == 0 || absc[i] == 0)
 			return 0;
 		else
-			Mk += wts[i] * pow(absc[i], exp);
+			Mr += wts[i] * pow(absc[i], r);
 	}
-	return Mk;
+	return Mr;
 }

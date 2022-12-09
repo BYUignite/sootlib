@@ -6,22 +6,30 @@
 
 namespace soot {
 
+///////////////////////////////////////////////////////////////////////////////
+///
+/// Method of Moments with Interpolative Closure (MOMIC) model.
+///
+///////////////////////////////////////////////////////////////////////////////
+
 class sootModel_MOMIC : public sootModel {
 
 //////////////// DATA MEMBERS /////////////////////
 
 private:
-    size_t Nmom;              // number of soot moments (may decrese from downselectIfNeeded)
+    size_t Nmom;              ///< number of soot moments (may decrese from downselectIfNeeded)
 
-    std::vector<double> Mp6;  // arrays holding fractional moments M_{p/6} where p is posiitive (Continuum)
-    std::vector<double> Mq6;  // arrays holding fractional moments M_{q/6} where q is negative  (FM)
-    std::vector<size_t> np;   // # of Mp6 entries needed based on Nmom; if Nmom=3, then np[3] is # Mp6 entries to fill
-    std::vector<size_t> nq;   // # of Mq6 entries needed based on Nmom; if Nmom=3, then nq[3] is # Mq6 entries to fill
+    std::vector<double> Mp6;  ///< arrays holding fractional moments M_{p/6} where p is posiitive (Continuum)
+    std::vector<double> Mq6;  ///< arrays holding fractional moments M_{q/6} where q is negative  (FM)
+    std::vector<size_t> np;   ///< \# of Mp6 entries needed based on Nmom; if Nmom=3, then np[3] is # Mp6 entries to fill
+    std::vector<size_t> nq;   ///< \# of Mq6 entries needed based on Nmom; if Nmom=3, then nq[3] is # Mq6 entries to fill
 
-    std::vector<std::vector<double> > diffTable;     // set in set_diffTable, used in Mr
+    std::vector<std::vector<double> > diffTable;     ///< set in set_diffTable, used in Mr
 
-    double mDn46, mDn26, mD26;                       // mDimer^{-4/6}, etc.; for continuum
-    double mDn36, mDn16, mD16,  mD36,  mD56,  mD76,  // mDimer^{-3/6}, etc.; for free molecular
+    double mDn46,                                    ///< mDimer^{-4/6}, etc.; for continuum 
+           mDn26, mD26;
+    double mDn36,                                    ///< mDimer^{-3/6}, etc.; for free molecular
+           mDn16, mD16,  mD36,  mD56,  mD76,
            mD96,  mD116, mD136, mD156, mD176, mD196;
 
 //////////////// MEMBER FUNCTIONS /////////////////

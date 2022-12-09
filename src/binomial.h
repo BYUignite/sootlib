@@ -1,21 +1,26 @@
-/**
- * Josh Bedwell - June 2021
- *
- * This file holds a binomial coefficient function
- */
+///////////////////////////////////////////////////////////////////////////////
+///
+/// Josh Bedwell - June 2021
+///
+/// This file holds a binomial coefficient function
+///
+///////////////////////////////////////////////////////////////////////////////
 
-#ifndef BINOMIAL_H_
-#define BINOMIAL_H_
+#pragma once
 
 #include <exception>
 
-/**
- * This function calculates a binomial coefficient efficiently by enumerating several factorials
- *
- * @param r
- * @param k
- * @return binomal coefficient of r and k
- */
+///////////////////////////////////////////////////////////////////////////////
+///
+/// This function calculates a binomial coefficient efficiently by enumerating several factorials
+/// Hardcoded factorials.
+/// 
+/// @param r \input    r < 35 and r-k < 35
+/// @param k \input    k < 35 and r-k < 35
+/// @return binomal coefficient of r and k
+///
+///////////////////////////////////////////////////////////////////////////////
+
 double binomial_coefficient(unsigned r, unsigned k) {
     constexpr double factorials[] = {
         1.0,
@@ -60,5 +65,3 @@ double binomial_coefficient(unsigned r, unsigned k) {
 
     return factorials[r] / (factorials[k] * factorials[r - k]);
 }
-
-#endif //BINOMIAL_H_

@@ -10,9 +10,14 @@
 
 #include <vector>
 
-////////////////////////////////////////////////////////////////////////////////
-
 namespace soot {
+
+///////////////////////////////////////////////////////////////////////////////
+///
+/// Abstract base class for soot models.
+/// sootModel_MONO, etc. inherit from this.
+///
+///////////////////////////////////////////////////////////////////////////////
 
 class sootModel {
 
@@ -20,20 +25,20 @@ class sootModel {
 
 public:
 
-    size_t            nsoot;  // # of soot variables: moments or sections
+    size_t            nsoot;    ///< \# of soot variables: moments or sections
 
-    nucleationModel  *nucl;   // chemical mechanisms ...
-    growthModel      *grow;
-    oxidationModel   *oxid;
-    coagulationModel *coag;
+    nucleationModel  *nucl;     ///< pointer to nucleation mechanism
+    growthModel      *grow;     ///< pointer to growth mechanism
+    oxidationModel   *oxid;     ///< pointer to oxidation mechanism
+    coagulationModel *coag;     ///< pointer to coagulation mechanism
 
-    bool    mechsNewedHere;  // flag to delete "new" objects
+    bool    mechsNewedHere;     ///< flag to delete "new" objects
 
-    psdMech psdMechType;     // one of MONO, LOGN, QMOM, MOMIC, SECT, etc.
+    psdMech psdMechType;        ///< one of MONO, LOGN, QMOM, MOMIC, SECT, etc.
 
     //----------- for the SECT model interface
 
-    std::vector<double> mBins; 
+    std::vector<double> mBins;  ///< mass in sections for the sectional model
 
     //////////////// MEMBER FUNCTIONS /////////////////
 

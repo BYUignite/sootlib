@@ -6,12 +6,18 @@
 
 namespace soot {
 
+///////////////////////////////////////////////////////////////////////////////
+///
+/// Sectional model (SECT)
+///
+///////////////////////////////////////////////////////////////////////////////
+
 class sootModel_SECT : public sootModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
-    double              binGrowthFactor;       // F^0, F^1, F^2, ... (set F here, F=2, say)
-    std::vector<double> beta_DSi;              // store beta_dimer_soot_i for PAH nuc to avoid double computing
+    double              binGrowthFactor;    ///< F^0, F^1, F^2, ... (set F here, F=2, say)
+    std::vector<double> beta_DSi;           ///< store beta_dimer_soot_i for PAH nuc to avoid double computing
 
     //////////////// MEMBER FUNCTIONS /////////////////
 

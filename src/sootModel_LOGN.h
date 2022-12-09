@@ -6,6 +6,12 @@
 
 namespace soot {
 
+///////////////////////////////////////////////////////////////////////////////
+///
+/// Lognormal distribution model (LOGN)
+///
+///////////////////////////////////////////////////////////////////////////////
+
 class sootModel_LOGN : public sootModel {
 
     //////////////// DATA MEMBERS /////////////////////
@@ -19,7 +25,7 @@ public:
                                 std::vector<double> &gasSources,
                                 std::vector<double> &pahSources) const;
 
-    double Mk(double k, double M0, double M1, double M2) const;
+    double Mr(double k, double M0, double M1, double M2) const;
 
     virtual double pahSootCollisionRatePerDimer(const state &state, const double mDimer) const;
 

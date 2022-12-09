@@ -4,6 +4,17 @@ using namespace std;
 using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Constructor taking pointers to chemistry models as input.
+/// User creates these pointers nominally by "new-ing" them.
+///
+/// @param \input nsoot_ number of soot moments (2).
+/// @param \input nucl_  pointer to nucleation model.
+/// @param \input grow_  pointer to growth model.
+/// @param \input oxid_  pointer to oxidation model.
+/// @param \input coag_  pointer to coagulation model.
+///
+////////////////////////////////////////////////////////////////////////////////
 
 sootModel_MONO::sootModel_MONO(size_t            nsoot_,
                                nucleationModel  *nucl_,
@@ -17,6 +28,17 @@ sootModel_MONO::sootModel_MONO(size_t            nsoot_,
 
     psdMechType = psdMech::MONO;
 }
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Constructor taking enumerations names as input.
+/// Chemistry pointers are created (new-ed) here based on those enumerations.
+///
+/// @param \input nsoot_ number of soot moments (2).
+/// @param \input Nmech  one of enum class nucleationMech in sootDefs.h
+/// @param \input Gmech  one of enum class growthMech in sootDefs.h
+/// @param \input Omech  one of enum class oxidationMech in sootDefs.h
+/// @param \input Cmech  one of enum class coagulationMech in sootDefs.h
+///
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_MONO::sootModel_MONO(size_t          nsoot_,
@@ -32,6 +54,15 @@ sootModel_MONO::sootModel_MONO(size_t          nsoot_,
     psdMechType = psdMech::MONO;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Primary user interface.
+/// 
+/// @param \input  state       gas and soot state, set by user.
+/// @param \output sootSources soot moment (r) sources (kg^r/m3*s).
+/// @param \output gasSources  vector of gas species rates (kg/m3*s)
+/// @param \output pahSources  vector of gas PAH species rates (kg/m3*s)
+///
 ////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_MONO::getSourceTerms(state &state, 
