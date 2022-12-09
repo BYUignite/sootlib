@@ -38,7 +38,7 @@ enum class psdMech        { NONE, MONO, LOGN, QMOM, MOMIC,    SECT,  size };
 
 enum class gasSp{ O2, O, H2, H, OH, H2O, CO, C2H2, C6H6, C, size };
 
-const std::map<std::string, gasSp> gasSpMapSE{{"O2",  gasSp::O2},     // map String to Enumeration
+const std::map<std::string, gasSp> gasSpMapSE{{"O2",  gasSp::O2},     ///< map String to Enumeration
                                               {"O" ,  gasSp::O},
                                               {"H2",  gasSp::H2},
                                               {"H",   gasSp::H},
@@ -49,7 +49,7 @@ const std::map<std::string, gasSp> gasSpMapSE{{"O2",  gasSp::O2},     // map Str
                                               {"C6H6",gasSp::C6H6},
                                               {"C",   gasSp::C}};
 
-const std::map<gasSp, std::string> gasSpMapES{{gasSp::O2,  "O2"},     // map Enumeration to String
+const std::map<gasSp, std::string> gasSpMapES{{gasSp::O2,  "O2"},     ///< map Enumeration to String
                                               {gasSp::O,   "O" },
                                               {gasSp::H2,  "H2"},
                                               {gasSp::H,   "H"},
@@ -60,7 +60,7 @@ const std::map<gasSp, std::string> gasSpMapES{{gasSp::O2,  "O2"},     // map Enu
                                               {gasSp::C6H6,"C6H6"},
                                               {gasSp::C,   "C"}};
 
-const std::map<int, std::string> gasSpMapIS{{0,  "O2"},     // map Int to String
+const std::map<int, std::string> gasSpMapIS{{0,  "O2"},               //< map Int to String
                                             {1,   "O" },
                                             {2,  "H2"},
                                             {3,   "H"},
@@ -71,8 +71,8 @@ const std::map<int, std::string> gasSpMapIS{{0,  "O2"},     // map Int to String
                                             {8,"C6H6"},
                                             {9,   "C"}};
 
-const std::vector<double> gasSpMW{      // (kg/kmol); make sure the order corresponds to the gasSp enum
-    31.998,    // O2                    // same as in cantera Elements.cpp
+const std::vector<double> gasSpMW{      ///< (kg/kmol); make sure the order corresponds to the gasSp enum
+    31.998,    // O2                    ///< same as in cantera Elements.cpp
     15.999,    // O
     2.016,     // H2
     1.008,     // H
@@ -90,7 +90,7 @@ const std::vector<double> gasSpMW{      // (kg/kmol); make sure the order corres
 
 enum class pahSp{ C10H8, C12H8, C12H10, C14H10, C16H10, C18H10, size };
 
-const std::vector<double> pahSpMW = {     // (kg/kmol)
+const std::vector<double> pahSpMW = {     ///< (kg/kmol)
     128.174,   // C10H8
     152.196,   // C12H8
     154.212,   // C12H10
@@ -99,7 +99,7 @@ const std::vector<double> pahSpMW = {     // (kg/kmol)
     226.278    // C18H10
 };
 
-const std::vector<int> pahSpNC = {         // # carbon atoms per PAH species
+const std::vector<int> pahSpNC = {        ///< # carbon atoms per PAH species
     10,        // C10H8
     12,        // C12H8
     12,        // C12H10
@@ -107,7 +107,7 @@ const std::vector<int> pahSpNC = {         // # carbon atoms per PAH species
     16,        // C16H10
     18         // C18H10
 };
-const std::vector<int> pahSpNH = {         // # hydrogen atoms per PAH species
+const std::vector<int> pahSpNH = {        ///< # hydrogen atoms per PAH species
     8,         // C10H8
     8,         // C12H8
     10,        // C12H10
@@ -117,8 +117,8 @@ const std::vector<int> pahSpNH = {         // # hydrogen atoms per PAH species
 };
 
 const std::vector<double> pahSpGamma = {   ///< unitless sticking coefficient
-    0.00133,   // C10H8,           // gamma_i = CN*mi^4; CN = 1.5E-11 (fit); gamma_C10H8 = 0.004/3
-    0.00267,   // C12H8,           // gamma_C12H8 = 0.008/3 (See Blanquart and Pitsch in Bockhorn 2009
+    0.00133,   // C10H8,                   ///< gamma_i = CN*mi^4; CN = 1.5E-11 (fit); gamma_C10H8 = 0.004/3
+    0.00267,   // C12H8,                   ///< gamma_C12H8 = 0.008/3 (See Blanquart and Pitsch in Bockhorn 2009
     0.0085,    // C12H10,
     0.0150,    // C14H10,
     0.0250,    // C16H10,

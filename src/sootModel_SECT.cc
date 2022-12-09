@@ -4,6 +4,17 @@ using namespace std;
 using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Constructor taking pointers to chemistry models as input.
+/// User creates these pointers nominally by "new-ing" them.
+///
+/// @param \input nsoot_ number of soot sections
+/// @param \input nucl_  pointer to nucleation model.
+/// @param \input grow_  pointer to growth model.
+/// @param \input oxid_  pointer to oxidation model.
+/// @param \input coag_  pointer to coagulation model.
+///
+////////////////////////////////////////////////////////////////////////////////
 
 sootModel_SECT::sootModel_SECT(size_t            nsoot_,
                                nucleationModel  *nucl_,
@@ -26,6 +37,17 @@ sootModel_SECT::sootModel_SECT(size_t            nsoot_,
         beta_DSi.resize(nsoot);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Constructor taking enumerations names as input.
+/// Chemistry pointers are created (new-ed) here based on those enumerations.
+///
+/// @param \input nsoot_ number of soot sections
+/// @param \input Nmech  one of enum class nucleationMech in sootDefs.h
+/// @param \input Gmech  one of enum class growthMech in sootDefs.h
+/// @param \input Omech  one of enum class oxidationMech in sootDefs.h
+/// @param \input Cmech  one of enum class coagulationMech in sootDefs.h
+///
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_SECT::sootModel_SECT(size_t          nsoot_,
@@ -50,8 +72,12 @@ sootModel_SECT::sootModel_SECT(size_t          nsoot_,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** Set the sectional mass coordinate locations: mass per particle at each size location
- */
+///
+/// Set the sectional mass coordinate locations: mass per particle at each size location.
+///
+/// @param cMin_ \input smallest bin size.
+///
+////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_SECT::set_mBins(const int cMin_) {
 
@@ -60,6 +86,19 @@ void sootModel_SECT::set_mBins(const int cMin_) {
         mBins[k] = cMin_ * pow(binGrowthFactor, k) * gasSpMW[(size_t)gasSp::C] / Na;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Compute PAH condensation terms for SECT model.
+/// Function split out from getSourceTerms so that it can be called in nucleationModel_PAH
+/// for computing the pah dimer concentration.
+///
+/// Function only called if nucleationMech::PAH.
+/// Function called by nucleationModel_PAH::getNucleationSootRate
+///
+/// @param \input state gas and soot state, set by user.
+/// @param \input mDimer dimer mass (kg)
+/// @return pah/soot sollision rate per dimer. Call it I. I*mDimer*nDimer = Cnd1 (=) kg/m3*s
+///
 ////////////////////////////////////////////////////////////////////////////////
 
 double sootModel_SECT::pahSootCollisionRatePerDimer(const state &state, const double mDimer) {
@@ -94,6 +133,15 @@ double sootModel_SECT::pahSootCollisionRatePerDimer(const state &state, const do
 
 }
 
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Primary user interface.
+/// 
+/// @param \input  state       gas and soot state, set by user.
+/// @param \output sootSources soot section (\#_ibin/m3*s).
+/// @param \output gasSources  vector of gas species rates (kg/m3*s)
+/// @param \output pahSources  vector of gas PAH species rates (kg/m3*s)
+///
 ////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_SECT::getSourceTerms(state &state, 

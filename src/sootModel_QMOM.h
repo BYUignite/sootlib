@@ -6,6 +6,12 @@
 
 namespace soot {
 
+///////////////////////////////////////////////////////////////////////////////
+///
+/// Quadrature Method of Moments (QMOM) model
+///
+///////////////////////////////////////////////////////////////////////////////
+
 class sootModel_QMOM : public sootModel {
 
 //////////////// DATA MEMBERS /////////////////////
@@ -23,7 +29,7 @@ private:
 
     static void   wheeler(const std::vector<double>& m, size_t N, std::vector<double>& w, std::vector<double>& x);
     static void   getWtsAbs(const std::vector<double>& M, std::vector<double>& weights, std::vector<double>& abscissas);
-    static double Mk(double exp, const std::vector<double>& wts, const std::vector<double>& absc);
+    static double Mr(double exp, const std::vector<double>& wts, const std::vector<double>& absc);
 
 //////////////// CONSTRUCTOR ////////////
 

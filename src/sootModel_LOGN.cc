@@ -4,6 +4,17 @@ using namespace std;
 using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Constructor taking pointers to chemistry models as input.
+/// User creates these pointers nominally by "new-ing" them.
+///
+/// @param \input nsoot_ number of soot moments (should be 3).
+/// @param \input nucl_  pointer to nucleation model.
+/// @param \input grow_  pointer to growth model.
+/// @param \input oxid_  pointer to oxidation model.
+/// @param \input coag_  pointer to coagulation model.
+///
+////////////////////////////////////////////////////////////////////////////////
 
 sootModel_LOGN::sootModel_LOGN(size_t            nsoot_,
                                nucleationModel  *nucl_,
@@ -18,6 +29,17 @@ sootModel_LOGN::sootModel_LOGN(size_t            nsoot_,
     psdMechType = psdMech::LOGN;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Constructor taking enumerations names as input.
+/// Chemistry pointers are created (new-ed) here based on those enumerations.
+///
+/// @param \input nsoot_ number of soot moments (should be 3).
+/// @param \input Nmech  one of enum class nucleationMech in sootDefs.h
+/// @param \input Gmech  one of enum class growthMech in sootDefs.h
+/// @param \input Omech  one of enum class oxidationMech in sootDefs.h
+/// @param \input Cmech  one of enum class coagulationMech in sootDefs.h
+///
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_LOGN::sootModel_LOGN(size_t          nsoot_,
@@ -34,12 +56,19 @@ sootModel_LOGN::sootModel_LOGN(size_t          nsoot_,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** Compute pah condensation terms for LOGN model.
- *  Function split out from getSourceTerms so that it can be called in nucleationModel_PAH
- *  for computing the pah dimer concentration.
- *  Return value is the pah/soot collision rate per dimer. Call it I.
- *  I*mDimer*nDimer = Cnd1 (=) kg/m3*s 
- */
+///
+/// Compute PAH condensation terms for LOGN model.
+/// Function split out from getSourceTerms so that it can be called in nucleationModel_PAH
+/// for computing the pah dimer concentration.
+///
+/// Function only called if nucleationMech::PAH.
+/// Function called by nucleationModel_PAH::getNucleationSootRate
+///
+/// @param \input state gas and soot state, set by user.
+/// @param \input mDimer dimer mass (kg)
+/// @return pah/soot sollision rate per dimer. Call it I. I*mDimer*nDimer = Cnd1 (=) kg/m3*s
+///
+////////////////////////////////////////////////////////////////////////////////
 
 double sootModel_LOGN::pahSootCollisionRatePerDimer(const state &state, const double mDimer) const {
 
@@ -58,15 +87,15 @@ double sootModel_LOGN::pahSootCollisionRatePerDimer(const state &state, const do
     const double Kc  = 2.*kb*state.T/(3./state.muGas);
     const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
 
-    //----------- reused Mk values
+    //----------- reused Mr values
 
-    const double M26  = Mk( 2.0/6.0, M0, M1, M2);
-    const double M46  = Mk( 4.0/6.0, M0, M1, M2);
-    const double Mn36 = Mk(-3.0/6.0, M0, M1, M2);
-    const double Mn16 = Mk(-1.0/6.0, M0, M1, M2);
-    const double Mn26 = Mk(-2.0/6.0, M0, M1, M2);
-    const double Mn46 = Mk(-4.0/6.0, M0, M1, M2);
-    const double M16  = Mk( 1.0/6.0, M0, M1, M2);
+    const double M26  = Mr( 2.0/6.0, M0, M1, M2);
+    const double M46  = Mr( 4.0/6.0, M0, M1, M2);
+    const double Mn36 = Mr(-3.0/6.0, M0, M1, M2);
+    const double Mn16 = Mr(-1.0/6.0, M0, M1, M2);
+    const double Mn26 = Mr(-2.0/6.0, M0, M1, M2);
+    const double Mn46 = Mr(-4.0/6.0, M0, M1, M2);
+    const double M16  = Mr( 1.0/6.0, M0, M1, M2);
 
     const double mD16  = pow(mDimer,  1./6.);
     const double mDn16 = pow(mDimer, -1./6.);
@@ -93,6 +122,15 @@ double sootModel_LOGN::pahSootCollisionRatePerDimer(const state &state, const do
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Primary user interface.
+/// 
+/// @param \input  state       gas and soot state, set by user.
+/// @param \output sootSources soot moment (r) sources (kg^r/m3*s).
+/// @param \output gasSources  vector of gas species rates (kg/m3*s)
+/// @param \output pahSources  vector of gas PAH species rates (kg/m3*s)
+///
+////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_LOGN::getSourceTerms(state &state, 
                                     std::vector<double> &sootSources,
@@ -117,20 +155,20 @@ void sootModel_LOGN::getSourceTerms(state &state,
     const double Kc  = 2.*kb*state.T/(3./state.muGas);
     const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
 
-    //----------- reused Mk values
+    //----------- reused Mr values
 
-    const double M26 =  Mk( 2.0/6.0, M0, M1, M2);
-    const double M46 =  Mk( 4.0/6.0, M0, M1, M2);
-    const double Mn36 = Mk(-3.0/6.0, M0, M1, M2);
-    const double Mn16 = Mk(-1.0/6.0, M0, M1, M2);
-    const double Mn26 = Mk(-2.0/6.0, M0, M1, M2);
-    const double Mn46 = Mk(-4.0/6.0, M0, M1, M2);
-    const double M86 =  Mk( 8.0/6.0, M0, M1, M2);
-    const double M106=  Mk(10.0/6.0, M0, M1, M2);
-    const double M36 =  Mk( 3.0/6.0, M0, M1, M2);
-    const double M56 =  Mk( 5.0/6.0, M0, M1, M2);
-    const double M76 =  Mk( 7.0/6.0, M0, M1, M2);
-    const double M16 =  Mk( 1.0/6.0, M0, M1, M2);
+    const double M26 =  Mr( 2.0/6.0, M0, M1, M2);
+    const double M46 =  Mr( 4.0/6.0, M0, M1, M2);
+    const double Mn36 = Mr(-3.0/6.0, M0, M1, M2);
+    const double Mn16 = Mr(-1.0/6.0, M0, M1, M2);
+    const double Mn26 = Mr(-2.0/6.0, M0, M1, M2);
+    const double Mn46 = Mr(-4.0/6.0, M0, M1, M2);
+    const double M86 =  Mr( 8.0/6.0, M0, M1, M2);
+    const double M106=  Mr(10.0/6.0, M0, M1, M2);
+    const double M36 =  Mr( 3.0/6.0, M0, M1, M2);
+    const double M56 =  Mr( 5.0/6.0, M0, M1, M2);
+    const double M76 =  Mr( 7.0/6.0, M0, M1, M2);
+    const double M16 =  Mr( 1.0/6.0, M0, M1, M2);
 
     //---------- nucleation terms
 
@@ -240,12 +278,21 @@ void sootModel_LOGN::getSourceTerms(state &state,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Compute fractional moment Mr for integer fraction r
+///
+/// @param r  \input fraction of the moment.
+/// @param M0 \input moment 0 (\#/m3)
+/// @param M1 \input moment 1 (kg_soot/m3)
+/// @param M2 \input moment 2 (kg^2/m3)
+///
+////////////////////////////////////////////////////////////////////////////////
 
-double sootModel_LOGN::Mk(double k, double M0, double M1, double M2) const {
+double sootModel_LOGN::Mr(double r, double M0, double M1, double M2) const {
 
-    double M0_exp = 1. + 0.5*k*(k - 3.);
-    double M1_exp = k*(2. - k);
-    double M2_exp = 0.5*k*(k - 1.);
+    double M0_exp = 1. + 0.5*r*(r - 3.);
+    double M1_exp = r*(2. - r);
+    double M2_exp = 0.5*r*(r - 1.);
 
     if (M2 == 0 && M2_exp < 0)
         M2_exp = 0;

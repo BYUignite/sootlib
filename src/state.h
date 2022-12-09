@@ -6,66 +6,58 @@
 
 namespace soot {
 
+///////////////////////////////////////////////////////////////////////////////
+///
+/// Soot and gas state variables. Gas state includes T, P, yi (species mass fractions)
+/// density, molecular weight, viscosity. Soot state includes the soot variables (e.g.,
+/// moments or number of particles in a section). Also includes scaling factors for soot.
+///
+///////////////////////////////////////////////////////////////////////////////
+
 class state {
 
     //////////////// DATA MEMBERS /////////////////////
 
     public:
 
-        std::vector<double>          yGas;
-        std::vector<double>          yPah;
-        std::vector<double>          sootVar;
-        int                          nsoot;
+        double              T = 0;         ///< gas temperature (K)
+        double              P = 0;         ///< gas pressure (Pa)
+        double              rhoGas = 0;    ///< gas density (kg/m3)
+        double              MWGas = 0;     ///< gas mean molecular weight (kg/kmol)
+        double              muGas = 0;     ///< gas viscosity (kg/m*s)
+        std::vector<double> yGas;          ///< gas species mass fractions
+        std::vector<double> yPah;          ///< gas PAH species mass fractions
 
-        std::vector<double>          absc;                 // moment abscissas
-        std::vector<double>          wts;                  // moment weights
+        int                 nsoot;         ///< \# of soot variables
+        std::vector<double> sootVar;       ///< soot variables (moments or \# in sections>
+        std::vector<double> absc;          ///< moment abscissas
+        std::vector<double> wts;           ///< moment weights
+        std::vector<double> sootScales;    ///< soot scales for external numerical solvers
+        double              cMin = 100;    ///< soot min num carbon atoms (dynamic for PAH nucleation)
 
-        std::vector<double>          sootScales;           // for external numerical solvers
-
-        double T = 0;
-        double P = 0;
-        double rhoGas = 0;
-        double MWGas = 0;
-        double muGas = 0;
-        double cMin = 100;          ///< soot min num carbon atoms
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
-        /** Sets the thermodynamic state based on user input
-         *
-         *      Only point of contact between users and the state class. User provides
-         *      relevant data to be assigned to sootlib's internal state variables.
-         *
-         *      @param T_           temperature (K)
-         *      @param P_           pressure (Pa)
-         *      @param rhoGas_      density of gas mixture (kg/m3)
-         *      @param MWGas_       gas mixture molecular weight (kg/kmol)
-         *      @param yGas_        gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
-         *      @param yPAH_        PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-         *      @param sootVar_     soot variable (moments or section values) values
-         *      @param cMin_        minimum number of carbon atoms in a soot particle
-         *
-         *      IMPORTANT: gas and PAH species mass fractions MUST be provided in the order specified
-         *      above within the yGas and yPAH vectors. Values must be non-negative. If a species is
-         *      not represented or not present, DO NOT leave it out; instead, enter a mass fraction
-         *      value of zero. If the user mechanism contains more than one species with the same
-         *      molecular formula (C16H10 is a common culprit), enter the sum of the mass fractions
-         *      for the applicable species. Any additional species information is not used by sootlib
-         *      and will be ignored.
-         */
         void setState(double T_, double P_, double rhoGas_, double muGas_, double MWGas_,
                       std::vector<double> yGas_, std::vector<double> yPAH_, 
                       std::vector<double> sootVar_, int nsoot, double cMin_ = 100);
 
+        /** gas species concentration (kmol/m3) */
         double getGasSpC(gasSp sp)  const { return rhoGas * yGas[(int)sp] / gasSpMW[(int)sp]; }
+
+        /** gas species partial pressure (Pa) */
         double getGasSpP(gasSp sp)  const { return yGas[(int)sp] * MWGas / gasSpMW[(int)sp] * P; }
 
+        /** gas mean free path */
         double getGasMeanFreePath() const { return muGas/rhoGas*sqrt(M_PI*MWGas/(2.0*Rg*T)); }
 
+        /** PAH species concentration (kmol/m3) */
         double get_pahSpC(pahSp sp) const { return rhoGas * yPah[(int)sp] / pahSpMW[(int)sp]; }
-        double get_pahSpP(pahSp sp) const { return yPah[(int)sp] * MWGas  / pahSpMW[(int)sp] * P; }
-        double get_pahSpN(pahSp sp) const { return rhoGas * yPah[(int)sp] / pahSpMW[(int)sp] * Na; }
 
+        /** PAH species partial pressure (Pa) */
+        double get_pahSpP(pahSp sp) const { return yPah[(int)sp] * MWGas  / pahSpMW[(int)sp] * P; }
+
+        /** sets variable sootScales */
         void setSootScales(std::vector<double> &sootScales_) { sootScales = sootScales_; }
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
