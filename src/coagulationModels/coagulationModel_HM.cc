@@ -4,6 +4,21 @@
 using namespace std;
 using namespace soot;
 
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Coagulation as harmonic mean between FM and continuum regimes. 
+///
+/// FM and Continuum as outlined in Seinfeld and Pandis 3rd Ed. pages 372, 547, 548
+/// See also Frenklach (2002) "Reaction mechanism of soot formation in flames"
+/// Phys. Chem. Chem. Phys. 4 p 2028–2037.
+///
+/// @param state \input       gas and soot state, set by user.
+/// @param m1               \input      first particle size (kg)
+/// @param m2               \input      second particle size (kg)
+/// @return coagulation rate (\#/m3*s)
+///
+////////////////////////////////////////////////////////////////////////////////
+
 double coagulationModel_HM::getCoagulationSootRate(const state& state,
                                                       double m1,
                                                       double m2) const {
