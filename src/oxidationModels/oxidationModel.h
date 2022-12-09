@@ -22,7 +22,7 @@ class oxidationModel {
 public:
 
     sootModel *SM;                           ///< back pointer to soot model
-    coagulationMech mechType;                ///< identity of the type of coagulation (child)
+    oxidationMech mechType;                  ///< identity of the type of oxidation (child)
 
     std::vector<double> oxidationRxnRatios;  ///< mole ratios for gas species rate coupling
 

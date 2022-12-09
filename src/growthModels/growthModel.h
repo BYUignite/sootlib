@@ -20,8 +20,8 @@ class growthModel {
 
 public:
 
-    sootModel *SM;                        ///< back pointer to soot model
-    coagulationMech mechType;             ///< identity of the type of growth (child)
+    sootModel *SM;                 ///< back pointer to soot model
+    growthMech mechType;           ///< identity of the type of growth (child)
 
     std::vector<double> growthRxnRatios;  ///< mole ratios for gas species rate coupling
 

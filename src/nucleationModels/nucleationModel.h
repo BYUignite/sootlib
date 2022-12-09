@@ -22,7 +22,7 @@ class nucleationModel {
 public:
 
     sootModel *SM;                              ///< back pointer to soot model
-    coagulationMech mechType;                   ///< identity of the type of coagulation (child)
+    nucleationMech mechType;                    ///< identity of the type of nucleation (child)
 
     dimerStruct DIMER = dimerStruct();          ///< used for PAH nucleation only
 
