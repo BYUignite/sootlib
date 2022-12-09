@@ -8,11 +8,11 @@ using namespace soot;
 /// Constructor taking pointers to chemistry models as input.
 /// User creates these pointers nominally by "new-ing" them.
 ///
-/// @param \input nsoot_ number of soot moments (2).
-/// @param \input nucl_  pointer to nucleation model.
-/// @param \input grow_  pointer to growth model.
-/// @param \input oxid_  pointer to oxidation model.
-/// @param \input coag_  pointer to coagulation model.
+/// @param nsoot_ \input number of soot moments (2).
+/// @param nucl_  \input pointer to nucleation model.
+/// @param grow_  \input pointer to growth model.
+/// @param oxid_  \input pointer to oxidation model.
+/// @param coag_  \input pointer to coagulation model.
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -33,11 +33,11 @@ sootModel_MONO::sootModel_MONO(size_t            nsoot_,
 /// Constructor taking enumerations names as input.
 /// Chemistry pointers are created (new-ed) here based on those enumerations.
 ///
-/// @param \input nsoot_ number of soot moments (2).
-/// @param \input Nmech  one of enum class nucleationMech in sootDefs.h
-/// @param \input Gmech  one of enum class growthMech in sootDefs.h
-/// @param \input Omech  one of enum class oxidationMech in sootDefs.h
-/// @param \input Cmech  one of enum class coagulationMech in sootDefs.h
+/// @param nsoot_ \input number of soot moments (2).
+/// @param Nmech  \input one of enum class nucleationMech in sootDefs.h
+/// @param Gmech  \input one of enum class growthMech in sootDefs.h
+/// @param Omech  \input one of enum class oxidationMech in sootDefs.h
+/// @param Cmech  \input one of enum class coagulationMech in sootDefs.h
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -58,10 +58,10 @@ sootModel_MONO::sootModel_MONO(size_t          nsoot_,
 ///
 /// Primary user interface.
 /// 
-/// @param \input  state       gas and soot state, set by user.
-/// @param \output sootSources soot moment (r) sources (kg^r/m3*s).
-/// @param \output gasSources  vector of gas species rates (kg/m3*s)
-/// @param \output pahSources  vector of gas PAH species rates (kg/m3*s)
+/// @param state       \input  gas and soot state, set by user.
+/// @param sootSources \output soot moment (r) sources (kg^r/m3*s).
+/// @param gasSources  \output vector of gas species rates (kg/m3*s)
+/// @param pahSources  \output vector of gas PAH species rates (kg/m3*s)
 ///
 ////////////////////////////////////////////////////////////////////////////////
 

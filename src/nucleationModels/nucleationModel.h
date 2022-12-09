@@ -9,22 +9,27 @@ namespace soot {
 
 class sootModel;
 
+///////////////////////////////////////////////////////////////////////////////
+///
+/// Abstract base class to calculate nucleation rates
+///
+///////////////////////////////////////////////////////////////////////////////
+
 class nucleationModel {
 
-//////////////// DATA MEMBERS /////////////////////
+    //////////////// DATA MEMBERS /////////////////////
 
 public:
 
-    dimerStruct DIMER = dimerStruct();      // used for PAH nucleation only
+    sootModel *SM;                              ///< back pointer to soot model
+    coagulationMech mechType;                   ///< identity of the type of coagulation (child)
 
-    std::vector<double> nucleationRxnRatios;
-    std::vector<double> nucleationPahRxnRates;
+    dimerStruct DIMER = dimerStruct();          ///< used for PAH nucleation only
 
-    nucleationMech mechType;
+    std::vector<double> nucleationRxnRatios;    ///< mole ratios for gas species rate coupling
+    std::vector<double> nucleationPahRxnRates;  ///< mole ratios for PAH gas species rate coupling
 
-    sootModel *SM;
-
-//////////////// MEMBER FUNCTIONS /////////////////
+    //////////////// MEMBER FUNCTIONS /////////////////
 
     virtual double getNucleationSootRate(state &state) = 0;
 
@@ -32,7 +37,7 @@ public:
                                const double &msootDotNucl, 
                                std::vector<double> &gasSourcesNucl) const;
 
-//////////////// CONSTRUCTOR FUNCTIONS ////////////
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     nucleationModel() : nucleationPahRxnRates(std::vector<double>((int)pahSp::size, 0.0)),
                         nucleationRxnRatios(  std::vector<double>((int)gasSp::size, 0.0)) { }

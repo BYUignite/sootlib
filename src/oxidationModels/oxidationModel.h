@@ -9,19 +9,24 @@ namespace soot {
 
 class sootModel;
 
+///////////////////////////////////////////////////////////////////////////////
+///
+/// Abstract base class to calculate oxidation rates
+///
+///////////////////////////////////////////////////////////////////////////////
+
 class oxidationModel {
 
-//////////////// DATA MEMBERS /////////////////////
+    //////////////// DATA MEMBERS /////////////////////
 
 public:
 
-    std::vector<double> oxidationRxnRatios;
+    sootModel *SM;                           ///< back pointer to soot model
+    coagulationMech mechType;                ///< identity of the type of coagulation (child)
 
-    oxidationMech mechType;
+    std::vector<double> oxidationRxnRatios;  ///< mole ratios for gas species rate coupling
 
-    sootModel *SM;
-
-//////////////// MEMBER FUNCTIONS /////////////////
+    //////////////// MEMBER FUNCTIONS /////////////////
 
     virtual double getOxidationSootRate(const state &state) const = 0;
 
@@ -29,9 +34,7 @@ public:
                                const double &msootDotOxid, 
                                std::vector<double> &gasSourcesOxid) const;
 
-//        virtual void getOxidationPahRates(state& state) const = 0;
-
-//////////////// CONSTRUCTOR FUNCTIONS ////////////
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     oxidationModel() : oxidationRxnRatios(std::vector<double>((int)gasSp::size, 0.0)) {
         oxidationRxnRatios[(int)gasSp::C] = 1.0;

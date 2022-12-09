@@ -30,11 +30,11 @@ using namespace soot;
 /// Constructor taking pointers to chemistry models as input.
 /// User creates these pointers nominally by "new-ing" them.
 ///
-/// @param \input nsoot_ number of soot variables (moments or sections)
-/// @param \input nucl_  pointer to nucleation model.
-/// @param \input grow_  pointer to growth model.
-/// @param \input oxid_  pointer to oxidation model.
-/// @param \input coag_  pointer to coagulation model.
+/// @param nsoot_ \input number of soot variables (moments or sections)
+/// @param nucl_  \input pointer to nucleation model.
+/// @param grow_  \input pointer to growth model.
+/// @param oxid_  \input pointer to oxidation model.
+/// @param coag_  \input pointer to coagulation model.
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -58,11 +58,11 @@ sootModel::sootModel(size_t            nsoot_,
 /// Constructor taking enumerations names as input.
 /// Chemistry pointers are created (new-ed) here based on those enumerations.
 ///
-/// @param \input nsoot_ number of soot variables (moments or sections)
-/// @param \input Nmech  one of enum class nucleationMech in sootDefs.h
-/// @param \input Gmech  one of enum class growthMech in sootDefs.h
-/// @param \input Omech  one of enum class oxidationMech in sootDefs.h
-/// @param \input Cmech  one of enum class coagulationMech in sootDefs.h
+/// @param nsoot_ \input number of soot variables (moments or sections)
+/// @param Nmech  \input one of enum class nucleationMech in sootDefs.h
+/// @param Gmech  \input one of enum class growthMech in sootDefs.h
+/// @param Omech  \input one of enum class oxidationMech in sootDefs.h
+/// @param Cmech  \input one of enum class coagulationMech in sootDefs.h
 ///
 ////////////////////////////////////////////////////////////////////////////////
 

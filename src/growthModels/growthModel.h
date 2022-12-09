@@ -8,19 +8,24 @@
 namespace soot {
 class sootModel;
 
+///////////////////////////////////////////////////////////////////////////////
+///
+/// Abstract base class to calculate growth rate
+///
+///////////////////////////////////////////////////////////////////////////////
+
 class growthModel {
 
-//////////////// DATA MEMBERS /////////////////////
+    //////////////// DATA MEMBERS /////////////////////
 
 public:
 
-    std::vector<double> growthRxnRatios;
+    sootModel *SM;                        ///< back pointer to soot model
+    coagulationMech mechType;             ///< identity of the type of growth (child)
 
-    growthMech mechType;
+    std::vector<double> growthRxnRatios;  ///< mole ratios for gas species rate coupling
 
-    sootModel *SM;
-
-//////////////// MEMBER FUNCTIONS /////////////////
+    //////////////// MEMBER FUNCTIONS /////////////////
 
     virtual double getGrowthSootRate(const state& state) const = 0;
 
@@ -28,9 +33,7 @@ public:
                            const double &msootDotGrow, 
                            std::vector<double> &gasSourcesGrow) const;
 
-//        virtual void getGrowthPahRates(state& state) const = 0;
-
-//////////////// CONSTRUCTOR FUNCTIONS ////////////
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     growthModel() : growthRxnRatios(std::vector<double>((size_t)gasSp::size, 0.0)) { }
     virtual ~growthModel() = default;

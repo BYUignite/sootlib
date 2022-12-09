@@ -4,6 +4,17 @@
 using namespace std;
 using namespace soot;
 
+///////////////////////////////////////////////////////////////////////////////
+///
+/// Calculates coagulation rate - required by coagulationModel.
+///
+/// @param state \input       gas and soot state, set by user.
+/// @param m1    \input
+/// @param m2    \input
+/// @return coagulation rate (\#/m3*s)
+///
+///////////////////////////////////////////////////////////////////////////////
+
 double coagulationModel_CONTINUUM::getCoagulationSootRate(const state& state,
                                                           double m1,
                                                           double m2) const {

@@ -12,14 +12,14 @@ using namespace std;
 /// Only point of contact between users and the state class. User provides
 /// relevant data to be assigned to sootlib's internal state variables.
 /// 
-/// @param T_           temperature (K)
-/// @param P_           pressure (Pa)
-/// @param rhoGas_      density of gas mixture (kg/m3)
-/// @param MWGas_       gas mixture molecular weight (kg/kmol)
-/// @param yGas_        gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
-/// @param yPAH_        PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-/// @param sootVar_     soot variable (moments or section values) values
-/// @param cMin_        minimum number of carbon atoms in a soot particle
+/// @param T_       \input temperature (K)
+/// @param P_       \input pressure (Pa)
+/// @param rhoGas_  \input density of gas mixture (kg/m3)
+/// @param MWGas_   \input gas mixture molecular weight (kg/kmol)
+/// @param yGas_    \input gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
+/// @param yPAH_    \input PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
+/// @param sootVar_ \input soot variable (moments or section values) values
+/// @param cMin_    \input minimum number of carbon atoms in a soot particle
 /// 
 /// IMPORTANT: gas and PAH species mass fractions MUST be provided in the order specified
 /// above within the yGas and yPAH vectors. Values must be non-negative. If a species is
