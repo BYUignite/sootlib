@@ -5,6 +5,13 @@ using namespace std;
 using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Gas source terms due to nucleation for coupling the gas to the soot. 
+///
+/// @param msootDotNucl   \input  soot growth rate (kg/m3*s)
+/// @param gasSourcesNucl \output vector of gas species source terms (kg/m3*s)
+///
+////////////////////////////////////////////////////////////////////////////////
 
 void nucleationModel::getNucleationGasRates(const double &msootDotNucl, 
                                             vector<double> &gasSourcesNucl) const {

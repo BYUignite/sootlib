@@ -6,15 +6,12 @@
 
 namespace soot {
 
-////////////////////////////////////////////////////////////////////////////////
-/*! PAH nucleation by Blanquart et al. (2009)
- *
- *      Rate from Blanquart & Pitsch (2009) article "A joint
- *      volume-surface-hydrogen multi-variate model for soot formation," ch. 27
- *      in Combustion Generated Fine Carbonaceous Particles ed. Bockhorn et al.
- *      Returns chemical nucleation rate in #/m3*s.
- *
- */
+//////////////////////////////////////////////////////////////////////////////////
+///
+/// PAH nucleation model (Blanquart)
+///
+//////////////////////////////////////////////////////////////////////////////////
+
 class nucleationModel_PAH : public nucleationModel {
 
 //////////////// DATA MEMBERS /////////////////////

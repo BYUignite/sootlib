@@ -16,6 +16,18 @@ nucleationModel_LIN::nucleationModel_LIN() : nucleationModel () {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Nucleation by Lindstedt (2005)
+///
+/// Rate from Lindstedt (2005), Proc. Comb. Inst. 30:775
+/// Returns chemical nucleation rate in #/m3*s.
+///
+/// C2H2 --> 2C(s) + H2
+///
+/// @param state \input  gas and soot state, set by user.
+/// @return soot nucleation rate (\#/m3*s)
+///
+////////////////////////////////////////////////////////////////////////////////
 
 double nucleationModel_LIN::getNucleationSootRate(state &state) {
 

@@ -17,26 +17,32 @@ nucleationModel_PAH::nucleationModel_PAH() : nucleationModel () {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** Nucleation and condensation via PAH based on Blanquart and Pitsch in Bockhorn 
- *  Combustion Generated Fine Carbonaceous Particles, Chapter 27, 2009.
- *  PAH   + PAH   --> Dimer 
- *  Dimer + Dimer --> (soot nucleation) + (condensation)
- *  
- *  nDoti = dn_PAHi/dt = gamma_i*beta_i,i * n_PAH_i^2       (ignoring the neg sign here)
- *  
- *  nDotD = dn_D/dt    = sum_i( 0.5*nDoti )                 half as many dimers formed as pah lost
- *
- *  mDimer = sum_i( nDoti*m_PAHi ) / sum_i( nDoti )
- *         = sum_i( nDoti*m_PAHi ) / (2*nDotD)
- *
- *
- *  Assume dimers are in steady state. Use to solve for nD (quadratic equation)
- * 
- *  beta_DD*(nD)^2             + (sum_i beta_D,s_i * n_si)*(nD)        - nDotD           = 0
- *  (kill by soot nuc from D)  + (kill by dimer condensation on soot)  - (form by PAH)   = 0
- *
- *  PAH --> D --> soot as C, with H coming off as H2
- */
+///
+/// Rate from Blanquart & Pitsch (2009) article "A joint
+/// volume-surface-hydrogen multi-variate model for soot formation," ch. 27
+/// in Combustion Generated Fine Carbonaceous Particles ed. Bockhorn et al.
+/// PAH   + PAH   --> Dimer 
+/// Dimer + Dimer --> (soot nucleation) + (condensation)
+/// 
+/// nDoti = dn_PAHi/dt = gamma_i*beta_i,i * n_PAH_i^2       (ignoring the neg sign here)
+/// 
+/// nDotD = dn_D/dt    = sum_i( 0.5*nDoti )                 half as many dimers formed as pah lost
+///
+/// mDimer = sum_i( nDoti*m_PAHi ) / sum_i( nDoti )
+///        = sum_i( nDoti*m_PAHi ) / (2*nDotD)
+///
+///
+/// Assume dimers are in steady state. Use to solve for nD (quadratic equation)
+///
+/// beta_DD*(nD)^2             + (sum_i beta_D,s_i * n_si)*(nD)        - nDotD           = 0
+/// (kill by soot nuc from D)  + (kill by dimer condensation on soot)  - (form by PAH)   = 0
+///
+/// PAH --> D --> soot as C, with H coming off as H2
+///
+/// @param state \input  gas and soot state, set by user.
+/// @return soot nucleation rate (\#/m3*s)
+///
+////////////////////////////////////////////////////////////////////////////////
 
 double nucleationModel_PAH::getNucleationSootRate(state& state) {
 

@@ -16,6 +16,18 @@ nucleationModel_LL::nucleationModel_LL() : nucleationModel () {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Nucleation by Leung, Lindstedt, Jones (1991)
+///
+/// Rate from Leung, Lindstedt, Jones (1991), Comb. & Flame 87:289-305.
+/// Returns chemical nucleation rate in #/m3*s.
+///
+/// C2H2 --> C(s) + H2
+///
+/// @param state \input  gas and soot state, set by user.
+/// @return soot nucleation rate (\#/m3*s)
+///
+////////////////////////////////////////////////////////////////////////////////
 
 double nucleationModel_LL::getNucleationSootRate(state &state) {
 
