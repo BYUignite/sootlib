@@ -5,6 +5,13 @@ using namespace std;
 using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Gas source terms due to oxidation for coupling the gas to the soot. 
+///
+/// @param msootDotOxid   \input  soot oxidation rate (kg/m3*s)
+/// @param gasSourcesOxid \output vector of gas species source terms (kg/m3*s)
+///
+////////////////////////////////////////////////////////////////////////////////
 
 void oxidationModel::getOxidationGasRates(const double &msootDotOxid, 
                                           vector<double> &gasSourcesOxid) const {

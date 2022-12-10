@@ -5,20 +5,12 @@
 
 namespace soot {
 
-////////////////////////////////////////////////////////////////////////////////
-/*! Oxidation by Lee et al. + Neoh
- *
- *      Rates from Lee et al. (1962) Comb. & Flame 6:137-145 and Neoh (1981)
- *      "Soot oxidation in flames" in Particulate Carbon Formation During
- *      Combustion book
- *      C + 0.5 O2 --> CO
- *      C + OH     --> CO + H
- *
- *      Returns chemical soot oxidation rate in kg/m2*s.
- *
- *      @param MomentState&     /input      local moment state; need M0 and M1
- *      @param rSoot            /output     soot growth rate (kg/m2*s)
- */
+//////////////////////////////////////////////////////////////////////////////////
+///
+/// Lee (O2) + Neoh (OH) Oxidation model
+///
+//////////////////////////////////////////////////////////////////////////////////
+
 class oxidationModel_LEE_NEOH : public oxidationModel {
 
 //////////////// DATA MEMBERS /////////////////////

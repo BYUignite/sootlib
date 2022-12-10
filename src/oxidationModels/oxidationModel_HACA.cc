@@ -5,11 +5,6 @@ using namespace std;
 using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
-/** See haca description in growthModel_HACA.cc
- * Reaction 5: Cs* + O2  ==> 2CO
- * Reaction 6: Cs-H + OH ==> CO + (products)
- *     implement the balance for reaction 6 as C + OH ==> CO + H
- */
 
 oxidationModel_HACA::oxidationModel_HACA() {
 
@@ -22,13 +17,24 @@ oxidationModel_HACA::oxidationModel_HACA() {
     mechType = oxidationMech::HACA;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+///
+/// Oxidation by HACA.
+/// See HACA description in growthModel_HACA.cc
+/// 5. Cs*  + O2    ==> 2CO + (products)
+/// 6. Cs-H + OH  ==> CO + (products)
+///    implement the balance for reaction 6 as C + OH ==> CO + H
+///
+/// @param state \input  gas and soot state, set by user.
+/// @return soot oxidation rate (kg/m2*s)
+///
+//////////////////////////////////////////////////////////////////////////////////
 
 double oxidationModel_HACA::getOxidationSootRate(const state &state) const {
 
-    double M0 = state.sootVar[0];                           // #/m3
-    double M1 = state.sootVar[1];                           // kg/m3
-    //todo: generalize this to sectional.
+    double M0 = state.sootVar[0];                       // #/m3
+    double M1 = state.sootVar[1];                       // kg/m3
+    // \todo: generalize this to sectional.
 
     //---------- calculate alpha, other constants
 
@@ -54,7 +60,7 @@ double oxidationModel_HACA::getOxidationSootRate(const state &state) const {
 
     double alpha = 1.0;
     if (M0 > 0)
-        alpha = tanh(a_param/log10(M1/M0) + b_param);                     // alpha = fraction of available surface sites
+        alpha = tanh(a_param/log10(M1/M0) + b_param);      // alpha = fraction of available surface sites
     if (alpha < 0) alpha=1.0;
 
     double rxns_s = fR5*alpha*chi_S * 1E4;                 // reactions at sites per m2 per s.

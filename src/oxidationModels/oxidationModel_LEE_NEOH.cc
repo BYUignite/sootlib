@@ -3,6 +3,8 @@
 
 using namespace soot;
 
+////////////////////////////////////////////////////////////////////////////////
+
 oxidationModel_LEE_NEOH::oxidationModel_LEE_NEOH() {
 
     // C + OH      --> CO + H   
@@ -18,13 +20,29 @@ oxidationModel_LEE_NEOH::oxidationModel_LEE_NEOH() {
     mechType = oxidationMech::LEE_NEOH;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Oxidation by Lee et al. + Neoh
+///
+/// Rates from Lee et al. (1962) Comb. & Flame 6:137-145 and Neoh (1981)
+/// "Soot oxidation in flames" in Particulate Carbon Formation During
+/// Combustion book
+/// C + 0.5 O2 --> CO
+/// C + OH     --> CO + H
+///
+/// @param state \input  gas and soot state, set by user.
+/// @return soot oxidation rate (kg/m2*s)
+///
+////////////////////////////////////////////////////////////////////////////////
+
 double oxidationModel_LEE_NEOH::getOxidationSootRate(const state &state) const {
 
     const double pO2_atm = state.getGasSpP(gasSp::O2) / 101325.0;     // partial pressure of O2 (atm)
-    const double pOH_atm = state.getGasSpP(gasSp::OH) / 101325.0;     // partial pressure of OH (atm)
 
     const double rSootO2 = 1.085E4 * pO2_atm / sqrt(state.T) * exp(-1.977824E4 / state.T) / 1000.0;     // kg/m^2*s
-    const double rSootOH = 1290. * 0.13 * pOH_atm / sqrt(state.T);                                      // kg/m^2*s
+    const double rSootOH = 0.13*state.getGasSpC(gasSp::OH)*       // kg/m2/s     = 1290*0.13*POH/sqrt(T) with POH in atm
+                           sqrt(Rg*state.T/(2.0*M_PI*gasSpMW[(int)gasSp::OH]))*
+                           gasSpMW[(int)gasSp::C];
 
     return rSootO2 + rSootOH;
 }
