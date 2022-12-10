@@ -13,15 +13,15 @@ namespace soot {
 
 class coagulationModel_FM : public coagulationModel {
 
-//////////////// DATA MEMBERS /////////////////////
+    //////////////// DATA MEMBERS /////////////////////
 
-//////////////// MEMBER FUNCTIONS /////////////////
+    //////////////// MEMBER FUNCTIONS /////////////////
 
 public:
 
      double getCoagulationSootRate(const state& state, double m1, double m2) const override;
 
-//////////////// CONSTRUCTOR FUNCTIONS ////////////
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     coagulationModel_FM() { 
         FM_multiplier = 1.0;

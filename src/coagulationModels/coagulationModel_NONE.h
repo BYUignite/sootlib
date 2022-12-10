@@ -5,29 +5,33 @@
 
 namespace soot {
 
-/**
-* The default implementation of coagulationModel interface
-*/
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Coagulation: No model
+///
+////////////////////////////////////////////////////////////////////////////////
+
 class coagulationModel_NONE : public coagulationModel {
 
-//////////////// DATA MEMBERS /////////////////////
+    //////////////// DATA MEMBERS /////////////////////
 
 private:
 
-//////////////// MEMBER FUNCTIONS /////////////////
+    //////////////// MEMBER FUNCTIONS /////////////////
 
 public:
 
-    /**
-     * Always returns 0 for coagulation rate - required by coagulationModel
-     *
-     * @param state
-     * @param m1
-     * @param m2
-     */
+    /////////////////////
+    /// Always returns 0 for coagulation rate - required by coagulationModel
+    ///
+    /// @param state
+    /// @param m1
+    /// @param m2
+    /////////////////////
+
      double getCoagulationSootRate(const state& state, double m1, double m2) const override { return 0; }
 
-//////////////// CONSTRUCTOR FUNCTIONS ////////////
+    //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     coagulationModel_NONE() { 
         FM_multiplier = 1.0;

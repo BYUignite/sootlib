@@ -172,9 +172,9 @@ void sootModel_QMOM::getSourceTerms(state &state,
     vector<double> grow_gasSources((size_t)gasSp::size, 0.0);
     vector<double> oxid_gasSources((size_t)gasSp::size, 0.0);
 
-    nucl->getNucleationGasRates(state, nucSrcM[1], nucl_gasSources);
-    grow->getGrowthGasRates(    state, grwSrcM[1], grow_gasSources);
-    oxid->getOxidationGasRates( state, oxiSrcM[1], oxid_gasSources);
+    nucl->getNucleationGasRates(nucSrcM[1], nucl_gasSources);
+    grow->getGrowthGasRates(    grwSrcM[1], grow_gasSources);
+    oxid->getOxidationGasRates( oxiSrcM[1], oxid_gasSources);
 
     for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
         gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];

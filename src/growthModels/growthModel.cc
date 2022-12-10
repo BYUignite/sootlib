@@ -5,9 +5,15 @@ using namespace std;
 using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
+///
+/// Gas source terms due to growth for coupling the gas to the soot. 
+///
+/// @param msootDotGrow   \input  soot growth rate (kg/m3*s)
+/// @param gasSourcesGrow \output vector of gas species source terms (kg/m3*s)
+///
+////////////////////////////////////////////////////////////////////////////////
 
-void growthModel::getGrowthGasRates(const state &stt, 
-                                    const double &msootDotGrow, 
+void growthModel::getGrowthGasRates( const double &msootDotGrow, 
                                     vector<double> &gasSourcesGrow) const {
     // Compute S in: d(rho*y_k)/dt + ... = ... + S
     // kg_k/m3*s (species k)

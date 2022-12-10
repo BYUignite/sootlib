@@ -30,9 +30,8 @@ public:
 
     virtual double getOxidationSootRate(const state &state) const = 0;
 
-    void getOxidationGasRates(const state &stt, 
-                               const double &msootDotOxid, 
-                               std::vector<double> &gasSourcesOxid) const;
+    void getOxidationGasRates(const double &msootDotOxid, 
+                              std::vector<double> &gasSourcesOxid) const;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 

@@ -6,9 +6,8 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void oxidationModel::getOxidationGasRates(const state &stt, 
-                                            const double &msootDotOxid, 
-                                            vector<double> &gasSourcesOxid) const {
+void oxidationModel::getOxidationGasRates(const double &msootDotOxid, 
+                                          vector<double> &gasSourcesOxid) const {
     // Compute S in: d(rho*y_k)/dt + ... = ... + S
     // kg_k/m3*s (species k)
 

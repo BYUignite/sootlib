@@ -5,6 +5,8 @@
 using namespace std;
 using namespace soot;
 
+//////////////////////////////////////////////////////////////////////////////////
+
 growthModel_LL::growthModel_LL() {
 
     growthRxnRatios[(int)gasSp::C2H2] = -1;    // C2H2 --> 2C(soot) + H2
@@ -13,6 +15,20 @@ growthModel_LL::growthModel_LL() {
 
     mechType = growthMech::LL;
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+///
+/// Growth by Leung_Lindstedt (1991)
+///
+/// Rate from Leung & Lindstedt (1991), Comb. & Flame 87:289-305.
+/// Returns chemical surface growth rate in kg/m2*s.
+///
+/// C2H2 + nC(s) --> (n+2)C(s) + H2
+///
+/// @param state       \input  gas and soot state, set by user.
+/// @return soot growth rate (kg/m2*s)
+///
+//////////////////////////////////////////////////////////////////////////////////
 
 double growthModel_LL::getGrowthSootRate(const state &state) const {
 

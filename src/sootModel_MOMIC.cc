@@ -207,9 +207,9 @@ void sootModel_MOMIC::getSourceTerms(state &state,
     vector<double> grow_gasSources((size_t)gasSp::size, 0.0);
     vector<double> oxid_gasSources((size_t)gasSp::size, 0.0);
 
-    nucl->getNucleationGasRates(state, Mnuc[1], nucl_gasSources);
-    grow->getGrowthGasRates(    state, Mgrw[1], grow_gasSources);
-    oxid->getOxidationGasRates( state, Moxi[1], oxid_gasSources);
+    nucl->getNucleationGasRates(Mnuc[1], nucl_gasSources);
+    grow->getGrowthGasRates(    Mgrw[1], grow_gasSources);
+    oxid->getOxidationGasRates( Moxi[1], oxid_gasSources);
 
     for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
         gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];

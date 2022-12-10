@@ -4,6 +4,8 @@
 using namespace std;
 using namespace soot;
 
+////////////////////////////////////////////////////////////////////////////////
+
 growthModel_LIN::growthModel_LIN() {
 
     growthRxnRatios[(int)gasSp::C2H2] = -1;    // C2H2 --> 2C(soot) + H2
@@ -12,6 +14,20 @@ growthModel_LIN::growthModel_LIN() {
 
     mechType = growthMech::LIN;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+///
+/// Growth by Lindstedt (1994)
+///
+/// Rate from Bockhorn (1994) pg. 417, "Simplified Soot Nucleation and Surface Growth Steps..."
+/// Equation (27.36). Returns chemical surface growth rate in kg/m2*s. Assumes that rate is
+/// proportional to number of particles (M0) but independent of available surface area.
+/// \todo check that this is actually the equation implemented here (27.36).
+///
+/// @param state       \input  gas and soot state, set by user.
+/// @return soot growth rate (kg/m2*s)
+///
+////////////////////////////////////////////////////////////////////////////////
 
 double growthModel_LIN::getGrowthSootRate(const state &state) const {
 

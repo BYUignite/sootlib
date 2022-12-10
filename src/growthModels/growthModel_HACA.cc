@@ -7,35 +7,6 @@ using namespace soot;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-/** HACA via ABF mechanism: Appel, Bockhorn, Frenklach, Combustion and Flame 121:122-136 (2000).
- * Reactions:
- * 1. Cs-H + H    <==> Cs* + H2
- * 2. Cs-H + OH   <==> Cs* + H2O
- * 3. Cs*  + H     ==> Cs-H
- * 4. Cs*  + C2H2  ==> (CsCs)Cs-H + H
- * 5. Cs*  + O2    ==> 2CO + (products)
- * ( 6. Cs-H + OH  ==> CO + (products) )
- *
- * The key reaction is Rxn 4. The rest are used to get Cs* from a QSSA.
- * Rxn 6 is oxidation via OH, treated in the oxidation mechanism elsewhere.
- * Rxn 5 is used here to compute Cs*, but oxidation balance is done elsewhere.
- * 
- * Note, in terms of species balance, soot is treated as carbon, and we could 
- * use a simple balance n*soot + C2H2 ==> (n+2)*soot + H2.
- * However, the reations and growthRxnRatios here are self-consistent, so we'll use those.
- *
- * Rates: See Frenklach and Wang, Proceedings of the Combustion Institute 23:1559-1566 (1990).
- * kf4 = 8E7*T**1.56*exp(-3.8/RT) has units of cm3/(mol*site*s).
- * Hence, kf4*[C2H2]*alpha*(Chi_Cs*) = cm3/(mol*site*s)*(mol/cm3)*alpha*(sites/cm2) = rxns/(cm2*s)
- * If reactions happen at soot sites, then * mc to get kg_c/(cm2*s), where mc is the mass of a carbon atom.
- * This is not so obvious from Frenklach and Wang, but see Balthasar and Frenklach, Combustion and Flame 140:130-145(2005).
- *
- * The reverse reaction rates are from Ken Revzan and Frenklach 02/15/02 code soot.f: http://combustion.berkeley.edu/soot/codes/routines.html
- * Those rates are also in cantera: test/data/haca2.yaml
- *
- * The a_param and b_param values are from Blathasar and Frenklach (2005).
- */
-
 growthModel_HACA::growthModel_HACA() {
 
     growthRxnRatios[(int)gasSp::O2]   =  0;
@@ -50,6 +21,43 @@ growthModel_HACA::growthModel_HACA() {
     mechType = growthMech::HACA;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+///
+/// HACA via ABF mechanism: Appel, Bockhorn, Frenklach, Combustion and Flame 121:122-136 (2000).
+/// See also see Franklach and Wang (1990), 23rd Symposium, pp. 1559-1566.
+/// Parameters for steric factor alpha updated to those given in Balthasar
+/// and Franklach (2005) Comb. & Flame 140:130-145.
+/// 
+/// Reactions:
+/// 1. Cs-H + H    <==> Cs* + H2
+/// 2. Cs-H + OH   <==> Cs* + H2O
+/// 3. Cs*  + H     ==> Cs-H
+/// 4. Cs*  + C2H2  ==> (CsCs)Cs-H + H
+/// 5. Cs*  + O2    ==> 2CO + (products)
+/// ( 6. Cs-H + OH  ==> CO + (products) )
+///
+/// The key reaction is Rxn 4. The rest are used to get Cs* from a QSSA.
+/// Rxn 6 is oxidation via OH, treated in the oxidation mechanism elsewhere.
+/// Rxn 5 is used here to compute Cs*, but oxidation balance is done elsewhere.
+/// 
+/// Note, in terms of species balance, soot is treated as carbon, and we could 
+/// use a simple balance n*soot + C2H2 ==> (n+2)*soot + H2.
+/// However, the reations and growthRxnRatios here are self-consistent, so we'll use those.
+///
+/// Rates: See Frenklach and Wang, Proceedings of the Combustion Institute 23:1559-1566 (1990).
+/// kf4 = 8E7*T**1.56*exp(-3.8/RT) has units of cm3/(mol*site*s).
+/// Hence, kf4*[C2H2]*alpha*(Chi_Cs*) = cm3/(mol*site*s)*(mol/cm3)*alpha*(sites/cm2) = rxns/(cm2*s)
+/// If reactions happen at soot sites, then * mc to get kg_c/(cm2*s), where mc is the mass of a carbon atom.
+/// This is not so obvious from Frenklach and Wang, but see Balthasar and Frenklach, Combustion and Flame 140:130-145(2005).
+///
+/// The reverse reaction rates are from Ken Revzan and Frenklach 02/15/02 code soot.f: http://combustion.berkeley.edu/soot/codes/routines.html
+/// Those rates are also in cantera: test/data/haca2.yaml
+///
+/// The a_param and b_param values are from Blathasar and Frenklach (2005).
+///
+/// @param state       \input  gas and soot state, set by user.
+/// @return soot growth rate (kg/m2*s)
+///
 ////////////////////////////////////////////////////////////////////////////////
 
 double growthModel_HACA::getGrowthSootRate(const state& state) const {

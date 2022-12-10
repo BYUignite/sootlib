@@ -261,9 +261,9 @@ void sootModel_LOGN::getSourceTerms(state &state,
     vector<double> grow_gasSources((size_t)gasSp::size, 0.0);
     vector<double> oxid_gasSources((size_t)gasSp::size, 0.0);
 
-    nucl->getNucleationGasRates(state, N1, nucl_gasSources);
-    grow->getGrowthGasRates(    state, G1, grow_gasSources);
-    oxid->getOxidationGasRates( state, X1, oxid_gasSources);
+    nucl->getNucleationGasRates(N1, nucl_gasSources);
+    grow->getGrowthGasRates(    G1, grow_gasSources);
+    oxid->getOxidationGasRates( X1, oxid_gasSources);
 
     for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
         gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];

@@ -279,9 +279,9 @@ void sootModel_SECT::getSourceTerms(state &state,
     vector<double> grow_gasSources((size_t)gasSp::size, 0.0);
     vector<double> oxid_gasSources((size_t)gasSp::size, 0.0);
 
-    nucl->getNucleationGasRates(state, mdotN, nucl_gasSources);
-    grow->getGrowthGasRates(    state, mdotG, grow_gasSources);
-    oxid->getOxidationGasRates( state, mdotO, oxid_gasSources);
+    nucl->getNucleationGasRates(mdotN, nucl_gasSources);
+    grow->getGrowthGasRates(    mdotG, grow_gasSources);
+    oxid->getOxidationGasRates( mdotO, oxid_gasSources);
 
     for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
         gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];

@@ -29,8 +29,7 @@ public:
 
     virtual double getGrowthSootRate(const state& state) const = 0;
 
-    void getGrowthGasRates(const state &state, 
-                           const double &msootDotGrow, 
+    void getGrowthGasRates( const double &msootDotGrow, 
                            std::vector<double> &gasSourcesGrow) const;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
