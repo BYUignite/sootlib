@@ -237,7 +237,7 @@ void sootModel_LOGN::getSourceTerms(state &state,
     X1 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M46;
     X2 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M106* 2.0;
 
-    //---------- coagulation terms todo: LOGN coagulation doesnt fit in the pattern (not using coag)
+    //---------- coagulation terms \todo: LOGN coagulation doesnt fit in the pattern (not using coag)
 
     double C0_fm =   -Kfm*bCoag*(M0*M16 + 2.*M26*Mn16 + M46*Mn36);       // free molecular
     double C2_fm = 2.*Kfm*bCoag*(M1*M76 + 2.*M86*M56  + M106*M36);
@@ -249,7 +249,7 @@ void sootModel_LOGN::getSourceTerms(state &state,
     C1 = 0;
     C2 = C2_fm*C2_c/(C2_fm + C2_c);
 
-    //todo choose fm, c, hm based on user inputs; also account for FM_multiplier
+    // \todo choose fm, c, hm based on user inputs; also account for FM_multiplier
 
     //---------- combine to make soot source terms
 
@@ -274,8 +274,6 @@ void sootModel_LOGN::getSourceTerms(state &state,
 
     if(nucl->mechType == nucleationMech::PAH)
         pahSources = nucl->nucleationPahRxnRates;
-
-    //todo: what about pah condensation? (here and in other models)
 
 }
 

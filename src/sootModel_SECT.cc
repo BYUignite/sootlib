@@ -161,7 +161,7 @@ void sootModel_SECT::getSourceTerms(state &state,
     //----------- nucleation terms
 
     vector<double> Snuc(nsoot, 0.0);                       // #/m3*s in each bin (only bin 0)
-    Snuc[0] = jNuc * 2.*nucl->DIMER.mDimer/mBins[0];       // todo: check that soot nucleate mass < mBins[1]
+    Snuc[0] = jNuc * 2.*nucl->DIMER.mDimer/mBins[0];       // \todo: check that soot nucleate mass < mBins[1]
 
     //----------- get area for growth, condensation and oxidation
 
@@ -272,7 +272,7 @@ void sootModel_SECT::getSourceTerms(state &state,
     for(size_t k=0; k<nsoot; k++) {
         mdotN += Snuc[k]*mBins[k];
         mdotG += Sgrw[k]*mBins[k];
-        mdotO += Soxi[k]*mBins[k];                         // todo verify sign
+        mdotO += Soxi[k]*mBins[k];                         // /todo verify sign
     }
 
     vector<double> nucl_gasSources((size_t)gasSp::size, 0.0);
