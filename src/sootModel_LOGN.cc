@@ -249,6 +249,8 @@ void sootModel_LOGN::getSourceTerms(state &state,
     C1 = 0;
     C2 = C2_fm*C2_c/(C2_fm + C2_c);
 
+    //todo choose fm, c, hm based on user inputs; also account for FM_multiplier
+
     //---------- combine to make soot source terms
 
     sootSources[0] = (N0 + G0 + Cnd0 - X0 + C0);    // #/m3*s
