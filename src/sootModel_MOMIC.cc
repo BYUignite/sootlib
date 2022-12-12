@@ -619,7 +619,7 @@ void sootModel_MOMIC::set_diffTable(const vector<double> &l10M) {
 /// Mr = M0 + r*dM0 + r(r-1)*ddM0/2!+ r(r-1)(r-2)*dddM0/3! + ...
 /// Positive and negative moments get different treatement.
 ///    Positive interpolates among all moments.
-///    Negative extrapolates from M0, M1, M3 (log of those).
+///    Negative extrapolates from M0, M1, M2 (log of those).
 /// Code verified by comparison to np.polyfit, np.polyval.
 ///
 /// @param \input r fractional moment r
