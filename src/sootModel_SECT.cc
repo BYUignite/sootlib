@@ -184,7 +184,8 @@ void sootModel_SECT::getSourceTerms(state &state,
     }
 
     k=nsoot-1;                                             // last bin
-    Sgrw[nsoot-1] = term;
+    Sgrw[k] = term +                                       // growth into last bin from its smaller neighbor + 
+              kGrw*Am2m3[k]*abs(state.sootVar[k])/mBins[k];// growth inside last bin manifest as new particles in that bin
 
     //----------- PAH condensation terms: 
     //----------- positive vel. through size domain: each bin has in/out except 1st (out) and last (in,gen)
@@ -207,7 +208,7 @@ void sootModel_SECT::getSourceTerms(state &state,
 
         k=nsoot-1;                                         // last bin 
         Scnd[k] = term +                                   // growth into bin by neighbor + ... vvv
-                  beta_DSi[k] * abs(state.sootVar[k]) *    // growth inside last bin is manifest as new particles in that bin
+                  beta_DSi[k] * abs(state.sootVar[k]) *    // growth inside last bin, manifest as new particles in that bin (rather that transport out)
                   nucl->DIMER.nDimer * nucl->DIMER.mDimer / mBins[k];
     }
 
@@ -223,7 +224,8 @@ void sootModel_SECT::getSourceTerms(state &state,
         Soxi[k] -= term;
     }
     k=0;                                                   // first bin
-    Soxi[k] = term;
+    Soxi[k] = term -                                       // source from oxid of larger neighbor - 
+              kOxi*Am2m3[k]*abs(state.sootVar[k])/mBins[k];// oxidation inside first bin, manifest as fewer particles in that bin (rather than transport out)
 
     //----------- coagulation terms
 
