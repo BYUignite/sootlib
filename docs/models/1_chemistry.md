@@ -29,10 +29,10 @@ $$R_{nuc} = 0.1\times 10^{-11} e^{-12100/T} [\text{C}_2\text{H}_2].$$
 
 ### PAH nucleation (PAH)
 SootLib implements the PAH nucleation model presented by Blanquart and Pitsch, in which nascent soot particles are created by the collision of two PAH dimers, themselves created by the collision of two PAH molecules \cite Blanquart_2009c. For a given PAH molecule, the self-collision rate derived from the kinetic molecular theory of gases is
-$$\omega_{\text{dimer}} = \sum_i 4\gamma_i \left( \frac{\pi k T}{m_i} \right)^{1/2} \left( \frac{6m_i}{\pi \rho_s} \right)^{2/3} [\text{PAH}]^2$$,
+$$\omega_{\text{dimer}} = \sum_i 4\gamma_i \left( \frac{\pi k T}{m_i} \right)^{1/2} \left( \frac{6m_i}{\pi \rho_s} \right)^{2/3} [\text{PAH}]^2,$$
 where \f$k\f$ is the Boltzmann constant, \f$T\f$ is gas temperature, \f$m_i\f$ is the mass of PAH species \f$i\f$, and \f$\rho_s\f$ is the solid soot density. The sticking coefficient \f$\gamma\f$, which scales with \f$m_i^4\f$, accounts for the difference between the observed self-collision rate and the rate predicted by kinetic molecular theory. The following table lists the PAH species considered by this PAH nucleation model, their masses \f$m_i\f$, and their sticking coefficients \f$\gamma_i\f$:
 | PAH species       | Formula | \f$m_i\f$ (amu) | \f$\gamma_i\f$ |
-|-------------------|---------|-----------------|----------------|
+|-------------------|:-------:|:---------------:|:--------------:|
 | Naphthalene       | C\f$_{10}\f$H\f$_8\f$ | 128 | 0.0010 |
 | Acenaphthylene    | C\f$_{12}\f$H\f$_8\f$ | 152 | 0.0030 |  
 | Biphenyl          | C\f$_{12}\f$H\f$_{10}\f$ | 154 | 0.0085 | 
