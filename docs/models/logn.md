@@ -26,7 +26,7 @@ $$M_r = M_0^{1-3r/2 + r^2/2}M_1^{2r-r^2}M_2^{r^2/2 - r/2}.$$
 
 # Model evaluation
 
-The nucleation, growth, and oxidation models can be evaluated as presented on the [chemistry](chemistry.md) page. Those relations are written in terms of fractional moments, which are available using the equation above. The expression for coagulation in the continuum regime \(C\) can be integrated to give
+The nucleation, growth, and oxidation models can be evaluated as presented on the [chemistry](chemistry.md) page. Those relations are written in terms of fractional moments, which are available using the equation above. The expression for coagulation in the **continuum regime \(C\)** can be integrated to give
 $$\begin{align}
 R^C_{0,c} &= -K_C\left[M_0^2 + M_{2/6}M_{-2/6} + K_C^\prime\left(M_0M_{-2/6} + M_{2/6}M_{-4/6}\right)\right], \\\\
 R^C_{1,c} &=0, \\\\
@@ -35,7 +35,7 @@ R^C_{2,c} &= 2K_C\left[M_1^2 + M_{4/6}M_{8/6} + K_C^\prime\left(M_1M_{4/6} + M_{
 &K_C^\prime = (2)(1.675)\lambda_g\left(\frac{\pi\rho_s}{6}\right)^{1/3}.
 \end{align}$$
 
-In the free molecular (FM) the coagulation coefficient has a factor \f$(1/m+1/\mu)^{1/2}\f$. This factor precludes direct integration of the coagulation rate. As a result, this factor is approximated as
+In the **free molecular (FM)** the coagulation coefficient has a factor \f$(1/m+1/\mu)^{1/2}\f$. This factor precludes direct integration of the coagulation rate. As a result, this factor is approximated as
 $$\left(\frac{1}{m} + \frac{1}{\mu}\right)^{1/2} \approx b\left(\frac{1}{m^{1/2}} + \frac{1}{\mu^{1/2}}\right),$$
 where \f$b\f$ is a correction constant that is bounded between \f$1/\sqrt{2}\approx 0.707\f$ and 1 when \f$m\f$ and \f$\mu\f$ approach the same size and when they are widely separated, respectively. Taking the average gives at worst a 15\% error, which is done here. The rate expression is then integrated to give
 $$\begin{align}
