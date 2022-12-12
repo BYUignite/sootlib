@@ -57,14 +57,3 @@ In the case of a temporally or spatially evolving simulation, only steps 3–5 n
 
 Sootlib is written in C++ and includes example codes that illustrate its use.
 
-# Models
-
-Soot modeling
-
-## Chemistry
-
-## Particle Size Distribution (PSD)
-
-[Monodispersed PSD](md_models_mono.html)
-
-

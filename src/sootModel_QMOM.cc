@@ -189,9 +189,9 @@ void sootModel_QMOM::getSourceTerms(state &state,
 ///
 /// Calculates weights and abscissas from moments using wheeler algorithm.
 ///
-/// @param M        \input      vector of moments
-/// @param wts      \output     weights
-/// @param absc     \output     abscissas
+/// @param M         \input      vector of moments
+/// @param weights   \output     weights
+/// @param abscissas \output     abscissas
 ///
 /// NOTE: wts and absc variables DO NOT change size during downselection;
 /// instead, the extra values are set to zero. This is more convenient than

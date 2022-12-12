@@ -272,7 +272,6 @@ void sootModel_MOMIC::downselectIfNeeded(vector<double> &M) {
 /// 
 /// @param  x     \input x grid point
 /// @param  y     \input y grid point
-/// @param  Mq6   \input vector of fractional moments
 /// @return f_{1/2}
 /// 
 /// \verbatim
@@ -375,9 +374,7 @@ double sootModel_MOMIC::f_grid(int x, int y) {
 /// Calculates the grid function described in Frenklach 2002 MOMIC paper
 /// using polynomial interpolation between whole order moments
 /// 
-/// @param x   \input x grid point
 /// @param y   \input y grid point
-/// @param Mq6 \input vector of fractional moments
 /// @return g_grid value.
 ///
 /// Assumes mDn36, etc. (mDimer^powers) have been set in set_mDimerPowers()
@@ -568,7 +565,7 @@ double sootModel_MOMIC::pahSootCollisionRatePerDimer(const state &state, const d
     return Ifm1*Ic1/(Ifm1 + Ic1);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 /// 
 /// Compute the difference table for a Newton polynomial.
 /// \verbatim
@@ -613,7 +610,7 @@ void sootModel_MOMIC::set_diffTable(const vector<double> &l10M) {
 /// \verbatim
 /// x points are 0,   1,  2,  3, ... (hard-coded this way)
 /// y points are M0, M1, M2, M3, ... (log10 of those, or what is set in set_diffTable)
-///     but return value is 10^l10Mr here.
+///     but returned value is 10^l10Mr here.
 /// \endverbatim
 /// Assumes diffTable is set.
 /// Mr = M0 + r*dM0 + r(r-1)*ddM0/2!+ r(r-1)(r-2)*dddM0/3! + ...
@@ -622,7 +619,7 @@ void sootModel_MOMIC::set_diffTable(const vector<double> &l10M) {
 ///    Negative extrapolates from M0, M1, M2 (log of those).
 /// Code verified by comparison to np.polyfit, np.polyval.
 ///
-/// @param \input r fractional moment r
+/// @param r \input fractional moment r
 /// @return fractional moment Mr
 /// 
 ////////////////////////////////////////////////////////////////////////////////

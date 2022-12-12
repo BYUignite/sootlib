@@ -8,11 +8,13 @@ using namespace soot;
 /// Constructor taking pointers to chemistry models as input.
 /// User creates these pointers nominally by "new-ing" them.
 ///
-/// @param nsoot_ \input number of soot sections
-/// @param nucl_  \input pointer to nucleation model.
-/// @param grow_  \input pointer to growth model.
-/// @param oxid_  \input pointer to oxidation model.
-/// @param coag_  \input pointer to coagulation model.
+/// @param nsoot_            \input number of soot sections
+/// @param nucl_             \input pointer to nucleation model.
+/// @param grow_             \input pointer to growth model.
+/// @param oxid_             \input pointer to oxidation model.
+/// @param coag_             \input pointer to coagulation model.
+/// @param binGrowthFactor_  \input geometric growth factor = F --> m[0]*(F^0, F^1, F^2...)
+/// @param cMin_             \input number of carbon atoms in the smallest bin
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -47,6 +49,8 @@ sootModel_SECT::sootModel_SECT(size_t            nsoot_,
 /// @param Gmech  \input one of enum class growthMech in sootDefs.h
 /// @param Omech  \input one of enum class oxidationMech in sootDefs.h
 /// @param Cmech  \input one of enum class coagulationMech in sootDefs.h
+/// @param binGrowthFactor_  \input geometric growth factor = F --> m[0]*(F^0, F^1, F^2...)
+/// @param cMin_             \input number of carbon atoms in the smallest bin
 ///
 ////////////////////////////////////////////////////////////////////////////////
 

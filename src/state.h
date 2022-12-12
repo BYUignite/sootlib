@@ -40,7 +40,7 @@ class state {
 
         void setState(double T_, double P_, double rhoGas_, double muGas_, double MWGas_,
                       std::vector<double> yGas_, std::vector<double> yPAH_, 
-                      std::vector<double> sootVar_, int nsoot, double cMin_ = 100);
+                      std::vector<double> sootVar_, int nsoot_, double cMin_ = 100);
 
         /** gas species concentration (kmol/m3) */
         double getGasSpC(gasSp sp)  const { return rhoGas * yGas[(int)sp] / gasSpMW[(int)sp]; }
