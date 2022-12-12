@@ -26,7 +26,7 @@ $$M_r = M_0^{1-3r/2 + r^2/2}M_1^{2r-r^2}M_2^{r^2/2 - r/2}.$$
 
 # Model evaluation
 
-The nucleation, growth, and oxidation models can be evaluated as presented on the [chemistry](chemistry.md) page. Those relations are written in terms of fractional moments, which are available using the equation above. The expression for coagulation in the **continuum regime \(C\)** can be integrated to give
+The nucleation, growth, and oxidation models can be evaluated as presented on the [chemistry](1_chemistry.md) page. Those relations are written in terms of fractional moments, which are available using the equation above. The expression for coagulation in the **continuum regime \(C\)** can be integrated to give
 $$\begin{align}
 R^C_{0,c} &= -K_C\left[M_0^2 + M_{2/6}M_{-2/6} + K_C^\prime\left(M_0M_{-2/6} + M_{2/6}M_{-4/6}\right)\right], \\\\
 R^C_{1,c} &=0, \\\\

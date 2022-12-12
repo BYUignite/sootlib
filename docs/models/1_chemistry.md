@@ -1,4 +1,4 @@
-\page chemistry Chemistry
+\page chemistry Chemistry and Physical Models
 
 # Nucleation
 

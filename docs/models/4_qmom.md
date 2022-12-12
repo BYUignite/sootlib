@@ -1,6 +1,6 @@
 \page qmom Quadrature Method of Moments (QMOM)
 
-In the [chemistry](chemistry.md) section, the coagulation rates were written in terms of integral equations. These are then specialized to the several models for the particle size distributions (PSD). In QMOM, these integrals are computed by numerical quadrature. In general, we have
+In the [chemistry](1_chemistry.md) section, the coagulation rates were written in terms of integral equations. These are then specialized to the several models for the particle size distributions (PSD). In QMOM, these integrals are computed by numerical quadrature. In general, we have
 $$\int_a^bW(x)f(x)dx \approx\sum_{j_1}^Nw_jf(x_j),$$
 
 where \f$f(x)\f$ is some generic function and \f$W(x)\f$ is a weighting function. On the right-hand-side (RHS), \f$w_j\f$ is a *weight* and \f$x_j\f$ is an *abscissa*. In specializing to soot formation, we take the weight function to be the (unknown) particle density function \f$n(m)\f$:
