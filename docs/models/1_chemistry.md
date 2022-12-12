@@ -107,6 +107,8 @@ Oxidation follows the same form as growth but the positive \f$k_s\f$ is replaced
 
 # Coagulation
 
+Coagulation here is based on the presentation in \cite Seinfeld_2016. See also \cite Fuchs_1964.
+
 Particle coagulation between two particles of masses \f$m\f$ and \f$\mu\f$ results in the rate (\f$\#/\f$m\f$^3\f$kg s)
 $$R_c(m) = \frac{1}{2}\int_0^m\beta(\mu, m-\mu)n(\mu)n(m)d\mu - \int_0^\infty\beta(m,\mu)n(\mu)n(m)d\mu.$$
 The first term represents creation of particles of size \f$m\f$ by particles smaller than size \f$m\f$, and the second term represents destruction of particles of size \f$m\f$ by collision of size \f$m\f$ particles with all particles \f$\mu\f$. \f$\beta\f$ is the coagulation coefficient.
@@ -205,6 +207,6 @@ $$
 D_m = \frac{k_BTC_c}{3\pi\mu_vd_m},
 }
 $$
-where \f$D_m\f$ is particle diffusivity, \f$l_m\f$ is a particle mean free path, \f$\bar{c}_m\f$ is the mean particle velocity, and \f$g_m\f$ is defined in The Mechanics of Aerosols by Fuchs page 291. (Note that Seinfeld erroneously lea leaves off the \f$\sqrt{2}\f$ in the second term of \f$g_m\f$.)
+where \f$D_m\f$ is particle diffusivity, \f$l_m\f$ is a particle mean free path, \f$\bar{c}_m\f$ is the mean particle velocity, and \f$g_m\f$ is defined in \cite Fuchs_1964 page 291. (Note that Seinfeld erroneously leaves off the \f$\sqrt{2}\f$ in the second term of \f$g_m\f$.)
 
 

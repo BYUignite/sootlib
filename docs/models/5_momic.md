@@ -1,14 +1,14 @@
-\page momic Method of Moments with Interpolative Closure (MOMIC)
+\page momic MOMIC
 
-In the [chemistry](1_chemistry.md) section, rate expressions were written in terms of fractional moments. For coagulation, the rate expressions were written in terms of integral expressions, which were then specialized to specific models. For coagulation in the continuum regime, this resulted in fractional moments. The MOMIC model uses polynomial interpolation among logarithms of integer moments to evaluate fractional moments. In the free molecular regime, the term \f$(1/m+1/\mu)^{1/2}\f$ required special treatment for the lognormal model, and also here for the MOMIC model. In MOMIC, the coagulation rate with the power \f$1/2\f$ is interpolated from the coagulation rate assuming integer powers, which removes the difficulty in evaluation. 
+In the [chemistry](1_chemistry.md) section, rate expressions were written in terms of fractional moments. For coagulation, the rate expressions were written in terms of integral expressions, which were then specialized to specific models. For coagulation in the continuum regime, this resulted in fractional moments. The method of moments with interpolative closure (MOMIC) model uses polynomial interpolation among logarithms of integer moments to evaluate fractional moments. In the free molecular regime, the term \f$(1/m+1/\mu)^{1/2}\f$ required special treatment for the lognormal model, and also here for the MOMIC model. In MOMIC, the coagulation rate with the power \f$1/2\f$ is interpolated from the coagulation rate assuming integer powers, which removes the difficulty in evaluation. 
 
 # Interpolation
 
 ## Fractional moments
 
-Interpolation among integer moments to find fractional moments \f$M_r\f$ is done using polynomial interpolation among logarithms of moments. In particular, Newton Foward Interpolation is used. (Frenklach uses Lagrange interpolation, but polynomials through given moments are unique, so the terminology used for the interpolation really just indicates the algorithm used for evaluation, and Newton Forward Interpolation is efficient for the repeated evaluations needed.)
+Interpolation among integer moments to find fractional moments \f$M_r\f$ is done using polynomial interpolation among logarithms of moments. In particular, Newton Foward Interpolation is used. Frenklach \cite Frenklach_2002b uses Lagrange interpolation, but polynomials through given moments are unique, so the terminology used for the interpolation really just indicates the algorithm used for evaluation, and Newton Forward Interpolation is efficient for the repeated evaluations needed.
 
-Following Frenklach, positive fractional moments are interpolated using a polynomial including all available integer moments, while negative fractional moments, which require extrapolation, are evaluated using \f$M_0\f$, \f$M_1\f$, and \f$M_2\f$.
+Following Frenklach \cite Frenklach_2002b, positive fractional moments are interpolated using a polynomial including all available integer moments, while negative fractional moments, which require extrapolation, are evaluated using \f$M_0\f$, \f$M_1\f$, and \f$M_2\f$.
 
 ## Grid functions for FM coagulation
 
