@@ -36,10 +36,7 @@ private:
 
 public:
 
-    virtual void getSourceTerms(state &state, 
-                                std::vector<double> &sootSources,
-                                std::vector<double> &gasSources,
-                                std::vector<double> &pahSources);
+    virtual void getSourceTerms(state &state);
 
     virtual double pahSootCollisionRatePerDimer(const state &state, const double mDimer);
 

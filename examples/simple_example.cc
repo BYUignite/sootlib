@@ -39,11 +39,7 @@ int main(int argc, char** argv) {
 
     //---------- calculate source terms
 
-    vector<double> sootSources(nsoot, 0.0);                       // kg^k/m3*s
-    vector<double> gasSources((size_t)gasSp::size, 0.0);          // kg/m3*s
-    vector<double> pahSources((size_t)pahSp::size, 0.0);          // kg/m3*s
-
-    SM.getSourceTerms(S, sootSources, gasSources, pahSources);
+    SM.getSourceTerms(S);
 
     //---------- output results
 
@@ -61,32 +57,32 @@ int main(int argc, char** argv) {
     cout << endl;
 
     cout << endl << "Soot source terms" << endl;
-    cout << endl << "M0 = " << setw(14) << sootSources[0];
-    cout << endl << "M1 = " << setw(14) << sootSources[1];
-    cout << endl << "M2 = " << setw(14) << sootSources[2];
-    cout << endl << "M3 = " << setw(14) << sootSources[3];
+    cout << endl << "M0 = " << setw(14) << SM.sources.sootSources[0];
+    cout << endl << "M1 = " << setw(14) << SM.sources.sootSources[1];
+    cout << endl << "M2 = " << setw(14) << SM.sources.sootSources[2];
+    cout << endl << "M3 = " << setw(14) << SM.sources.sootSources[3];
     cout << endl;
 
     cout << endl << "Gas source terms" << endl;
-    cout << endl << "xO2   = " << setw(14) << gasSources[(size_t)gasSp::O2];
-    cout << endl << "xO    = " << setw(14) << gasSources[(size_t)gasSp::O];
-    cout << endl << "xH2   = " << setw(14) << gasSources[(size_t)gasSp::H2];
-    cout << endl << "xH    = " << setw(14) << gasSources[(size_t)gasSp::H];
-    cout << endl << "xOH   = " << setw(14) << gasSources[(size_t)gasSp::OH];
-    cout << endl << "xH2O  = " << setw(14) << gasSources[(size_t)gasSp::H2O];
-    cout << endl << "xCO   = " << setw(14) << gasSources[(size_t)gasSp::CO];
-    cout << endl << "xC2H2 = " << setw(14) << gasSources[(size_t)gasSp::C2H2];
-    cout << endl << "xC6H6 = " << setw(14) << gasSources[(size_t)gasSp::C6H6];
+    cout << endl << "xO2   = " << setw(14) << SM.sources.gasSources[(size_t)gasSp::O2];
+    cout << endl << "xO    = " << setw(14) << SM.sources.gasSources[(size_t)gasSp::O];
+    cout << endl << "xH2   = " << setw(14) << SM.sources.gasSources[(size_t)gasSp::H2];
+    cout << endl << "xH    = " << setw(14) << SM.sources.gasSources[(size_t)gasSp::H];
+    cout << endl << "xOH   = " << setw(14) << SM.sources.gasSources[(size_t)gasSp::OH];
+    cout << endl << "xH2O  = " << setw(14) << SM.sources.gasSources[(size_t)gasSp::H2O];
+    cout << endl << "xCO   = " << setw(14) << SM.sources.gasSources[(size_t)gasSp::CO];
+    cout << endl << "xC2H2 = " << setw(14) << SM.sources.gasSources[(size_t)gasSp::C2H2];
+    cout << endl << "xC6H6 = " << setw(14) << SM.sources.gasSources[(size_t)gasSp::C6H6];
     cout << endl;
 
     if (nucl->mechType==nucleationMech::PAH) {
         cout << endl << "PAH source terms" << endl;
-        cout << endl << "xC10H8  = " << setw(14) << pahSources[(size_t)pahSp::C10H8];
-        cout << endl << "xC12H8  = " << setw(14) << pahSources[(size_t)pahSp::C12H8];
-        cout << endl << "xC12H10 = " << setw(14) << pahSources[(size_t)pahSp::C12H10];
-        cout << endl << "xC14H10 = " << setw(14) << pahSources[(size_t)pahSp::C14H10];
-        cout << endl << "xC16H10 = " << setw(14) << pahSources[(size_t)pahSp::C16H10];
-        cout << endl << "xC18H10 = " << setw(14) << pahSources[(size_t)pahSp::C18H10];
+        cout << endl << "xC10H8  = " << setw(14) << SM.sources.pahSources[(size_t)pahSp::C10H8];
+        cout << endl << "xC12H8  = " << setw(14) << SM.sources.pahSources[(size_t)pahSp::C12H8];
+        cout << endl << "xC12H10 = " << setw(14) << SM.sources.pahSources[(size_t)pahSp::C12H10];
+        cout << endl << "xC14H10 = " << setw(14) << SM.sources.pahSources[(size_t)pahSp::C14H10];
+        cout << endl << "xC16H10 = " << setw(14) << SM.sources.pahSources[(size_t)pahSp::C16H10];
+        cout << endl << "xC18H10 = " << setw(14) << SM.sources.pahSources[(size_t)pahSp::C18H10];
         cout << endl;
     }
 

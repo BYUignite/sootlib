@@ -54,7 +54,8 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
 
     //------------ compute the dimer self collision rate nDotD and mass mDimer (kg/particle)
 
-    static double preFac = 4.0*sqrt(M_PI*kb*state.T)*pow(6./(M_PI*rhoSoot), twothird);
+    static double preFac = 4.0*sqrt(M_PI*kb*state.T)*   // compare to coag->getKfm; here no eps_c and FM_multiplier, and simp with m1=m2
+                           pow(6./(M_PI*rhoSoot), twothird);
 
     //-----  loop over PAH species
 

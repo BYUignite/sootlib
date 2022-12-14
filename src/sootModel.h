@@ -40,12 +40,11 @@ public:
 
     std::vector<double> mBins;  ///< mass in sections for the sectional model
 
+    sourceTerms sources;        ///< struct containing soot, gas, and pah source terms vectors
+
     //////////////// MEMBER FUNCTIONS /////////////////
 
-    virtual void getSourceTerms(state &state, 
-                                std::vector<double> &sootSources,
-                                std::vector<double> &gasSources,
-                                std::vector<double> &pahSources) const = 0;
+    virtual void getSourceTerms(state &state) = 0;
 
     void checkSpec();
 

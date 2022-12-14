@@ -142,16 +142,14 @@ double sootModel_SECT::pahSootCollisionRatePerDimer(const state &state, const do
 /// Primary user interface.
 /// 
 /// @param state       \input  gas and soot state, set by user.
-/// @param sootSources \output soot section (\#_ibin/m3*s).
-/// @param gasSources  \output vector of gas species rates (kg/m3*s)
-/// @param pahSources  \output vector of gas PAH species rates (kg/m3*s)
+///
+/// sets sources.sootSources vector
+/// sets sources.gasSources vector
+/// sets sources.pahSources vector
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-void sootModel_SECT::getSourceTerms(state &state, 
-                                    std::vector<double> &sootSources,
-                                    std::vector<double> &gasSources,
-                                    std::vector<double> &pahSources) const {
+void sootModel_SECT::getSourceTerms(state &state) {
 
     size_t k;
     double term;
@@ -270,7 +268,7 @@ void sootModel_SECT::getSourceTerms(state &state,
     //---------- combine to make soot source terms
 
     for (size_t k=0; k<nsoot; k++)
-        sootSources[k] = Snuc[k] + Sgrw[k] + Scnd[k] + Soxi[k] + Scoa[k];  // #/m3*s in bin k
+        sources.sootSources[k] = Snuc[k] + Sgrw[k] + Scnd[k] + Soxi[k] + Scoa[k];  // #/m3*s in bin k
 
     //---------- set gas sources
 
@@ -290,11 +288,11 @@ void sootModel_SECT::getSourceTerms(state &state,
     oxid->getOxidationGasRates( mdotO, oxid_gasSources);
 
     for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
-        gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
+        sources.gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
 
     //---------- set PAH source terms
 
     if(nucl->mechType == nucleationMech::PAH)
-        pahSources = nucl->nucleationPahRxnRates;          // includes both nucleation and condensation
+        sources.pahSources = nucl->nucleationPahRxnRates;          // includes both nucleation and condensation
 }
 

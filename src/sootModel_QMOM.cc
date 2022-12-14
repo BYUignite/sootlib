@@ -70,16 +70,14 @@ sootModel_QMOM::sootModel_QMOM(size_t          nsoot_,
 /// Primary user interface.
 /// 
 /// @param state       \input  gas and soot state, set by user.
-/// @param sootSources \output soot moment (r) sources (kg^r/m3*s).
-/// @param gasSources  \output vector of gas species rates (kg/m3*s)
-/// @param pahSources  \output vector of gas PAH species rates (kg/m3*s)
+///
+/// sets sources.sootSources vector
+/// sets sources.gasSources vector
+/// sets sources.pahSources vector
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-void sootModel_QMOM::getSourceTerms(state &state, 
-                                    std::vector<double> &sootSources,
-                                    std::vector<double> &gasSources,
-                                    std::vector<double> &pahSources) const {
+void sootModel_QMOM::getSourceTerms(state &state) {
 
     //---------- get weights and abscissas
 
@@ -160,7 +158,7 @@ void sootModel_QMOM::getSourceTerms(state &state,
     //---------- combine to make soot source terms
 
     for (size_t i = 0; i < nsoot; i++)
-        sootSources[i] = nucSrcM[i] + cndSrcM[i] + grwSrcM[i] + oxiSrcM[i] + coaSrcM[i];  // kg^k/m3*s
+        sources.sootSources[i] = nucSrcM[i] + cndSrcM[i] + grwSrcM[i] + oxiSrcM[i] + coaSrcM[i];  // kg^k/m3*s
 
     //---------- set gas source terms
 
@@ -173,12 +171,12 @@ void sootModel_QMOM::getSourceTerms(state &state,
     oxid->getOxidationGasRates( oxiSrcM[1], oxid_gasSources);
 
     for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
-        gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
+        sources.gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
 
     //---------- set PAH source terms
 
     if(nucl->mechType == nucleationMech::PAH)
-        pahSources = nucl->nucleationPahRxnRates;        // includes both nucleation and condensation
+        sources.pahSources = nucl->nucleationPahRxnRates;        // includes both nucleation and condensation
 }
 
 ////////////////////////////////////////////////////////////////////////////////

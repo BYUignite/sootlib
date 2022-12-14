@@ -20,10 +20,7 @@ class sootModel_LOGN : public sootModel {
 
 public:
 
-    virtual void getSourceTerms(state &state, 
-                                std::vector<double> &sootSources,
-                                std::vector<double> &gasSources,
-                                std::vector<double> &pahSources) const;
+    virtual void getSourceTerms(state &state);
 
     double Mr(double k, double M0, double M1, double M2) const;
 

@@ -59,16 +59,14 @@ sootModel_MONO::sootModel_MONO(size_t          nsoot_,
 /// Primary user interface.
 /// 
 /// @param state       \input  gas and soot state, set by user.
-/// @param sootSources \output soot moment (r) sources (kg^r/m3*s).
-/// @param gasSources  \output vector of gas species rates (kg/m3*s)
-/// @param pahSources  \output vector of gas PAH species rates (kg/m3*s)
+///
+/// sets sources.sootSources vector
+/// sets sources.gasSources vector
+/// sets sources.pahSources vector
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-void sootModel_MONO::getSourceTerms(state &state, 
-                                    std::vector<double> &sootSources,
-                                    std::vector<double> &gasSources,
-                                    std::vector<double> &pahSources) const {
+void sootModel_MONO::getSourceTerms(state &state) {
 
     //---------- get moments
 
@@ -131,8 +129,8 @@ void sootModel_MONO::getSourceTerms(state &state,
 
     //---------- combine to make soot source terms
 
-    sootSources[0] = N0 + Cnd0 + G0 + X0 + C0;      // #/m3*s
-    sootSources[1] = N1 + Cnd1 + G1 + X1 + C1;      // kg/m3*s
+    sources.sootSources[0] = N0 + Cnd0 + G0 + X0 + C0;      // #/m3*s
+    sources.sootSources[1] = N1 + Cnd1 + G1 + X1 + C1;      // kg/m3*s
 
     //---------- set gas source terms
 
@@ -145,10 +143,10 @@ void sootModel_MONO::getSourceTerms(state &state,
     oxid->getOxidationGasRates( X1, oxid_gasSources);
 
     for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
-        gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
+        sources.gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
 
     //---------- set PAH source terms
 
     if(nucl->mechType == nucleationMech::PAH)
-        pahSources = nucl->nucleationPahRxnRates;        // includes both nucleation and condensation
+        sources.pahSources = nucl->nucleationPahRxnRates;        // includes both nucleation and condensation
 }

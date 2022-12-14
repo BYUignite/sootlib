@@ -44,7 +44,7 @@ sootModel::sootModel(size_t            nsoot_,
                      oxidationModel   *oxid_,
                      coagulationModel *coag_) :
         nsoot(nsoot_), nucl(nucl_), grow(grow_), oxid(oxid_), coag(coag_), 
-        mechsNewedHere(false) {
+        mechsNewedHere(false), sources(nsoot_) {
         checkSpec();
         nucl->SM = this;
         grow->SM = this;
@@ -70,7 +70,9 @@ sootModel::sootModel(size_t          nsoot_,
                      nucleationMech  Nmech,
                      growthMech      Gmech,
                      oxidationMech   Omech,
-                     coagulationMech Cmech) : nsoot(nsoot_), mechsNewedHere(true) {
+                     coagulationMech Cmech) : nsoot(nsoot_), 
+                                              mechsNewedHere(true),
+                                              sources(nsoot_) {
 
     //---------- set nucleation model
 

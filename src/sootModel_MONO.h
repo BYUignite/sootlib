@@ -20,10 +20,7 @@ class sootModel_MONO : public sootModel {
 
 public:
 
-    virtual void getSourceTerms(state &state, 
-                                std::vector<double> &sootSources,
-                                std::vector<double> &gasSources,
-                                std::vector<double> &pahSources) const;
+    virtual void getSourceTerms(state &state);
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 

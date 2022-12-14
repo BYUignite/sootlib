@@ -20,10 +20,7 @@ class sootModel_QMOM : public sootModel {
 
 public:
 
-    virtual void getSourceTerms(state &state, 
-                                std::vector<double> &sootSources,
-                                std::vector<double> &gasSources,
-                                std::vector<double> &pahSources) const;
+    virtual void getSourceTerms(state &state);
 
 private:
 

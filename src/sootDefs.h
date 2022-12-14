@@ -135,4 +135,16 @@ struct dimerStruct {
     double nDotD  = 0;
 };
 
+//----------------------
+
+struct sourceTerms {
+    std::vector<double> sootSources;     ///< kg^r/m3*s (moments), or \#/m3*s (sections)
+    std::vector<double> gasSources;      ///< kg/m3*s
+    std::vector<double> pahSources;      ///< kg/m3*s
+
+    sourceTerms(size_t nsoot) : sootSources(std::vector<double>(nsoot, 0.0)), 
+                                gasSources( std::vector<double>((size_t)gasSp::size, 0.0)),
+                                pahSources( std::vector<double>((size_t)pahSp::size, 0.0)) {}
+};
+
 }  // namespace soot

@@ -84,22 +84,20 @@ sootModel_MOMIC::sootModel_MOMIC(size_t          nsoot_,
 /// Primary user interface.
 /// 
 /// @param state       \input  gas and soot state, set by user.
-/// @param sootSources \output soot moment (r) sources (kg^r/m3*s).
-/// @param gasSources  \output vector of gas species rates (kg/m3*s)
-/// @param pahSources  \output vector of gas PAH species rates (kg/m3*s)
+///
+/// sets sources.sootSources vector
+/// sets sources.gasSources vector
+/// sets sources.pahSources vector
 ///
 /// Assumes mDn36, etc. (mDimer^powers) have been set in set_mDimerPowers().
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-void sootModel_MOMIC::getSourceTerms(state &state, 
-                                     std::vector<double> &sootSources,
-                                     std::vector<double> &gasSources,
-                                     std::vector<double> &pahSources) {
+void sootModel_MOMIC::getSourceTerms(state &state) {
 
 
     for (size_t k=0; k<nsoot; k++)
-        sootSources[k] = 0.0;         // reset to zero, in case downselectIfNeeded reduces Nmom
+        sources.sootSources[k] = 0.0;         // reset to zero, in case downselectIfNeeded reduces Nmom
 
     //----------
 
@@ -197,7 +195,7 @@ void sootModel_MOMIC::getSourceTerms(state &state,
     //---------- combine to make soot source terms
 
     for (size_t i=0; i<Nmom; i++)
-        sootSources[i] = Mnuc[i] + Mcnd[i] + Mgrw[i] + Moxi[i] + Mcoa[i];
+        sources.sootSources[i] = Mnuc[i] + Mcnd[i] + Mgrw[i] + Moxi[i] + Mcoa[i];
 
     //---------- set gas source terms
 
@@ -210,12 +208,12 @@ void sootModel_MOMIC::getSourceTerms(state &state,
     oxid->getOxidationGasRates( Moxi[1], oxid_gasSources);
 
     for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
-        gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
+        sources.gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
 
     //---------- set PAH source terms
 
     if(nucl->mechType == nucleationMech::PAH)
-        pahSources = nucl->nucleationPahRxnRates;
+        sources.pahSources = nucl->nucleationPahRxnRates;
 
 }
 
