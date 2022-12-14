@@ -1,5 +1,6 @@
 #include "oxidationModels/oxidationModel_HACA.h"
 #include "sootDefs.h"
+#include "sootModel.h"
 
 using namespace std;
 using namespace soot;
@@ -32,9 +33,16 @@ oxidationModel_HACA::oxidationModel_HACA() {
 
 double oxidationModel_HACA::getOxidationSootRate(const state &state) const {
 
-    double M0 = state.sootVar[0];                       // #/m3
-    double M1 = state.sootVar[1];                       // kg/m3
-    ///< \todo: generalize this to sectional.
+    double M0, M1;                       // #/m3, kg/m3
+
+    if (SM->psdMechType == psdMech::SECT) {
+        M0 = SM->get_M0_sectional(state);
+        M1 = SM->get_M1_sectional(state);
+    }
+    else {
+        M0 = state.sootVar[0];
+        M1 = state.sootVar[1];
+    }
 
     //---------- calculate alpha, other constants
 

@@ -29,6 +29,9 @@ public:
 
     virtual double pahSootCollisionRatePerDimer(const state &state, const double mDimer);
 
+    virtual double get_M0_sectional(const state &state);
+    virtual double get_M1_sectional(const state &state);
+
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     sootModel_SECT(size_t            nsoot_,

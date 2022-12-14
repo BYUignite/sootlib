@@ -296,3 +296,30 @@ void sootModel_SECT::getSourceTerms(state &state) {
         sources.pahSources = nucl->nucleationPahRxnRates;          // includes both nucleation and condensation
 }
 
+////////////////////////////////////////////////////////////////////////////////
+///
+/// \return M0
+///
+////////////////////////////////////////////////////////////////////////////////
+
+double sootModel_SECT::get_M0_sectional(const state &state) {
+
+    double M0;
+    for (size_t k=0; k<nsoot; k++)
+        M0 += state.sootVar[k];
+    return M0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+///
+/// \return M1
+///
+////////////////////////////////////////////////////////////////////////////////
+
+double sootModel_SECT::get_M1_sectional(const state &state) {
+
+    double M1;
+    for (size_t k=0; k<nsoot; k++)
+        M1 += state.sootVar[k] * mBins[k];
+    return M1;
+}

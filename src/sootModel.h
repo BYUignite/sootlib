@@ -39,7 +39,6 @@ public:
     //----------- for the SECT model interface
 
     std::vector<double> mBins;  ///< mass in sections for the sectional model
-
     sourceTerms sources;        ///< struct containing soot, gas, and pah source terms vectors
 
     //////////////// MEMBER FUNCTIONS /////////////////
@@ -51,6 +50,17 @@ public:
     //----------- for the LOGN model interface
 
     virtual double pahSootCollisionRatePerDimer(const double mDimer) const {return 0;}
+
+    //----------- for the SECT model interface
+
+    virtual double get_M0_sectional(const state &state) {
+        throw std::runtime_error("ERROR: sootModel::get_M0_sectional should not be called, but child sootModel_SECT::get_M0_sectional is fine");
+        return 0;
+    }
+    virtual double get_M1_sectional(const state &state) {
+        throw std::runtime_error("ERROR: sootModel::get_M1_sectional should not be called, but child sootModel_SECT::get_M1_sectional is fine");
+        return 0;
+    }
 
     //////////////// CONSTRUCTOR //////////////////////
 

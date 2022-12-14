@@ -35,16 +35,15 @@ double growthModel_LL::getGrowthSootRate(const state &state) const {
     double Am2m3 = 0;           // soot surface area available for reaction (m2_soot/m3_total)
     double rSoot = 0;           // rate soot growth (kg/m2*s)
 
-    double M0 = state.sootVar[0];
-    double M1 = state.sootVar[1];
+    double M0, M1;                       // #/m3, kg/m3
 
     if (SM->psdMechType == psdMech::SECT) {
-        M0 = 0.0;
-        M1 = 0.0;
-        for (size_t k=0; k<state.nsoot; k++) {
-            M0 += state.sootVar[k];
-            M1 += state.sootVar[k]*SM->mBins[k];
-        }
+        M0 = SM->get_M0_sectional(state);
+        M1 = SM->get_M1_sectional(state);
+    }
+    else {
+        M0 = state.sootVar[0];
+        M1 = state.sootVar[1];
     }
 
     if (M0 > 0)
