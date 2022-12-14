@@ -20,7 +20,7 @@ class sootModel_QMOM : public sootModel {
 
 public:
 
-    virtual void getSourceTerms(state &state);
+    virtual void setSourceTerms(state &state);
 
 private:
 

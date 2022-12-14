@@ -83,7 +83,7 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
     nucleationRxnRatios[(int)gasSp::H2] = hMin/2.0/cMin;
 
     //----------- compute the dimer concentration nDimer as solution to quadratic
-    //----------- NOTE: this must be consistent with sootModel_XXXX::getSourceTerms func for condensation
+    //----------- NOTE: this must be consistent with sootModel_XXXX::setSourceTerms func for condensation
 
     double beta_DD = preFac*pow(mDimer, 1.0/6.0);       // dimer self-collision rate coefficient
 

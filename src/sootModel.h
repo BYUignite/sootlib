@@ -43,7 +43,7 @@ public:
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
-    virtual void getSourceTerms(state &state) = 0;
+    virtual void setSourceTerms(state &state) = 0;
 
     void checkSpec();
 

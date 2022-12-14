@@ -93,7 +93,7 @@ void sootModel_SECT::set_mBins(const int cMin_) {
 ////////////////////////////////////////////////////////////////////////////////
 ///
 /// Compute PAH condensation terms for SECT model.
-/// Function split out from getSourceTerms so that it can be called in nucleationModel_PAH
+/// Function split out from setSourceTerms so that it can be called in nucleationModel_PAH
 /// for computing the pah dimer concentration.
 ///
 /// Function only called if nucleationMech::PAH.
@@ -107,7 +107,7 @@ void sootModel_SECT::set_mBins(const int cMin_) {
 
 double sootModel_SECT::pahSootCollisionRatePerDimer(const state &state, const double mDimer) {
 
-    //---------- compute beta_DSi; used here and in subsequent PAH condensation in getSourceTerms
+    //---------- compute beta_DSi; used here and in subsequent PAH condensation in setSourceTerms
 
     size_t k;
 
@@ -149,7 +149,7 @@ double sootModel_SECT::pahSootCollisionRatePerDimer(const state &state, const do
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-void sootModel_SECT::getSourceTerms(state &state) {
+void sootModel_SECT::setSourceTerms(state &state) {
 
     size_t k;
     double term;

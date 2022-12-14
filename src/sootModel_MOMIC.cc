@@ -93,7 +93,7 @@ sootModel_MOMIC::sootModel_MOMIC(size_t          nsoot_,
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-void sootModel_MOMIC::getSourceTerms(state &state) {
+void sootModel_MOMIC::setSourceTerms(state &state) {
 
 
     for (size_t k=0; k<nsoot; k++)
@@ -532,7 +532,7 @@ vector<double> sootModel_MOMIC::MOMICCoagulationRates(const state& state, vector
 ////////////////////////////////////////////////////////////////////////////////
 ///
 /// Compute PAH condensation terms for MOMIC model.
-/// Function split out from getSourceTerms so that it can be called in nucleationModel_PAH
+/// Function split out from setSourceTerms so that it can be called in nucleationModel_PAH
 /// for computing the pah dimer concentration.
 ///
 /// Function only called if nucleationMech::PAH.

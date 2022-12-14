@@ -77,7 +77,7 @@ sootModel_QMOM::sootModel_QMOM(size_t          nsoot_,
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-void sootModel_QMOM::getSourceTerms(state &state) {
+void sootModel_QMOM::setSourceTerms(state &state) {
 
     //---------- get weights and abscissas
 

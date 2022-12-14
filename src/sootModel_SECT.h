@@ -25,7 +25,7 @@ class sootModel_SECT : public sootModel {
 
 public:
 
-    virtual void getSourceTerms(state &state);
+    virtual void setSourceTerms(state &state);
 
     virtual double pahSootCollisionRatePerDimer(const state &state, const double mDimer);
 

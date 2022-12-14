@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
 
     //---------- calculate source terms
 
-    SM.getSourceTerms(S);
+    SM.setSourceTerms(S);
 
     //---------- output results
 

@@ -20,7 +20,7 @@ class sootModel_LOGN : public sootModel {
 
 public:
 
-    virtual void getSourceTerms(state &state);
+    virtual void setSourceTerms(state &state);
 
     double Mr(double k, double M0, double M1, double M2) const;
 

@@ -63,7 +63,7 @@ sootModel_LOGN::sootModel_LOGN(size_t          nsoot_,
 ////////////////////////////////////////////////////////////////////////////////
 ///
 /// Compute PAH condensation terms for LOGN model.
-/// Function split out from getSourceTerms so that it can be called in nucleationModel_PAH
+/// Function split out from setSourceTerms so that it can be called in nucleationModel_PAH
 /// for computing the pah dimer concentration.
 ///
 /// Function only called if nucleationMech::PAH.
@@ -135,7 +135,7 @@ double sootModel_LOGN::pahSootCollisionRatePerDimer(const state &state, const do
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-void sootModel_LOGN::getSourceTerms(state &state) {
+void sootModel_LOGN::setSourceTerms(state &state) {
 
     double N0   = 0, N1   = 0, N2   = 0;
     double G0   = 0, G1   = 0, G2   = 0;

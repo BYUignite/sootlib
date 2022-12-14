@@ -20,7 +20,7 @@ class sootModel_MONO : public sootModel {
 
 public:
 
-    virtual void getSourceTerms(state &state);
+    virtual void setSourceTerms(state &state);
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 

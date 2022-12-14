@@ -66,7 +66,7 @@ sootModel_MONO::sootModel_MONO(size_t          nsoot_,
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-void sootModel_MONO::getSourceTerms(state &state) {
+void sootModel_MONO::setSourceTerms(state &state) {
 
     //---------- get moments
 
