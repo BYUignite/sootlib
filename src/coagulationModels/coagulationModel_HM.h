@@ -1,6 +1,7 @@
 #pragma once
 
-#include "coagulationModels/coagulationModel.h"
+#include "coagulationModels/coagulationModel_FM.h"
+#include "coagulationModels/coagulationModel_CONTINUUM.h"
 #include "state.h"
 
 namespace soot {
@@ -11,7 +12,7 @@ namespace soot {
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-class coagulationModel_HM : public coagulationModel {
+class coagulationModel_HM : public coagulationModel_FM, public coagulationModel_CONTINUUM {
 
     //////////////// DATA MEMBERS /////////////////////
 

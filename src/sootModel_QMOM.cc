@@ -15,8 +15,6 @@ using namespace soot;
 /// @param oxid_  \input pointer to oxidation model.
 /// @param coag_  \input pointer to coagulation model.
 ///
-/// \todo enforce even number of moments
-///
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_QMOM::sootModel_QMOM(size_t            nsoot_,
@@ -27,7 +25,7 @@ sootModel_QMOM::sootModel_QMOM(size_t            nsoot_,
         sootModel(nsoot_, nucl_, grow_, oxid_, coag_) {
 
     if (nsoot_%2 == 1 || nsoot_ < 1)
-        throw runtime_error("Invalid number of soot moments requested");
+        throw runtime_error("Invalid number of soot moments requested: must be even number");
 
     if (nsoot_ > 6)
         cerr << "Warning: QMOM inversion algorithm may behave unpredictably with "
@@ -48,8 +46,6 @@ sootModel_QMOM::sootModel_QMOM(size_t            nsoot_,
 /// @param Omech  \input one of enum class oxidationMech in sootDefs.h
 /// @param Cmech  \input one of enum class coagulationMech in sootDefs.h
 ///
-/// \todo enforce even number of moments
-///
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_QMOM::sootModel_QMOM(size_t          nsoot_,
@@ -60,7 +56,7 @@ sootModel_QMOM::sootModel_QMOM(size_t          nsoot_,
         sootModel(nsoot_, Nmech, Gmech, Omech, Cmech) {
 
     if (nsoot_%2 == 1 || nsoot_ < 1)
-        throw runtime_error("Invalid number of soot moments requested");
+        throw runtime_error("Invalid number of soot moments requested: must be even number");
 
     if (nsoot_ > 6)
         cerr << "Warning: QMOM inversion algorithm may behave unpredictably with "

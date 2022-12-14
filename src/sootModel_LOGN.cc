@@ -26,6 +26,11 @@ sootModel_LOGN::sootModel_LOGN(size_t            nsoot_,
     if (nsoot_ != 3)
         throw runtime_error("LOGN requires nsoot=3");
 
+    if ( !(coag->mechType == coagulationMech::FM        ||
+           coag->mechType == coagulationMech::CONTINUUM ||
+           coag->mechType == coagulationMech::HM) )
+        throw runtime_error("LOGN requires coagulation to be FM or CONTINUUM or HM");
+
     psdMechType = psdMech::LOGN;
 }
 
@@ -81,12 +86,6 @@ double sootModel_LOGN::pahSootCollisionRatePerDimer(const state &state, const do
     const double M1 = state.sootVar[1];
     const double M2 = state.sootVar[2];
 
-    //-----------  calculate coagulation constants
-
-    const double Kfm = eps_c * sqrt(0.5*M_PI*kb*state.T) * pow(6./(M_PI*rhoSoot), twothird);
-    const double Kc  = 2.*kb*state.T/(3./state.muGas);
-    const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
-
     //----------- reused Mr values
 
     const double M26  = Mr( 2.0/6.0, M0, M1, M2);
@@ -107,12 +106,15 @@ double sootModel_LOGN::pahSootCollisionRatePerDimer(const state &state, const do
 
     //----------- FM (variable name: I for integrated, as in moment)
 
+    const double Kfm = coag->getKfm(state);
     const double Ifm1 = Kfm*bCoag * (M0  *mD16  + 2.*M26*mDn16 +
                                      M46 *mDn36 + 2.*Mn16*mD26 +
                                      Mn36*mD46  + M16);
 
     //----------- continuum
 
+    const double Kc  = coag->getKc( state);
+    const double Kcp = coag->getKcp(state);
     const double Ic1 = Kc * ( 2.*M0 + Mn26*mD26 + M26*mDn26    +
                               Kcp*(M0*mDn26 + Mn26 + M26*mDn46 + Mn46*mD26) );
 
@@ -148,12 +150,6 @@ void sootModel_LOGN::getSourceTerms(state &state,
     const double M0 = state.sootVar[0];
     const double M1 = state.sootVar[1];
     const double M2 = state.sootVar[2];
-
-    //-----------  calculate coagulation constants
-
-    const double Kfm = eps_c * sqrt(0.5*M_PI*kb*state.T) * pow(6./(M_PI*rhoSoot), twothird);
-    const double Kc  = 2.*kb*state.T/(3./state.muGas);
-    const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
 
     //----------- reused Mr values
 
@@ -195,26 +191,33 @@ void sootModel_LOGN::getSourceTerms(state &state,
         const double mD46  = pow(mDimer,  twothird);
         const double mDn46 = pow(mDimer, -twothird);
 
+        double Ifm1, Ifm2, Ic1, Ic2;
+
         //----------- FM (variable name: I for integrated, as in moment)
 
-        const double Ifm1 =    Kfm*bCoag * (M0  *mD16  + 2.*M26*mDn16 +
-                                            M46 *mDn36 + 2.*Mn16*mD26 +
-                                            Mn36*mD46  + M16);
+        double Kfm = coag->getKfm(state);
 
-        const double Ifm2 = 2.*Kfm*bCoag * (M1  *mD16  + 2.*M86*mDn16 +
-                                            M106*mDn36 + 2.*M56*mD26  +
-                                            M36 *mD46  + M76);
+        Ifm1 =    Kfm*bCoag * (M0  *mD16  + 2.*M26*mDn16 +
+                               M46 *mDn36 + 2.*Mn16*mD26 +
+                               Mn36*mD46  + M16);
+
+        Ifm2 = 2.*Kfm*bCoag * (M1  *mD16  + 2.*M86*mDn16 +
+                               M106*mDn36 + 2.*M56*mD26  +
+                               M36 *mD46  + M76);
 
         //----------- continuum
 
-        const double Ic1 = Kc    * ( 2.*M0 + Mn26*mD26 + M26*mDn26    +
-                                     Kcp*(M0*mDn26 + Mn26 + M26*mDn46 + Mn46*mD26) );
+        double Kc  = coag->getKc( state);
+        double Kcp = coag->getKcp(state);
+
+        Ic1 = Kc    * ( 2.*M0 + Mn26*mD26 + M26*mDn26    +
+                        Kcp*(M0*mDn26 + Mn26 + M26*mDn46 + Mn46*mD26) );
 
 
-        const double Ic2 = 2.*Kc * ( 2.*M1 + M46 *mD26 + M86*mDn26    +
-                                     Kcp*(M1*mDn26 + M46  + M86*mDn46 + M26*mD26) );
+        Ic2 = 2.*Kc * ( 2.*M1 + M46 *mD26 + M86*mDn26    +
+                        Kcp*(M1*mDn26 + M46  + M86*mDn46 + M26*mD26) );
 
-        //----------- source terms (harmonic mean)
+        //----------- source terms
 
         Cnd0 = 0.0;
         Cnd1 = mDimer*nDimer*(Ifm1*Ic1)/(Ifm1 + Ic1);
@@ -237,19 +240,39 @@ void sootModel_LOGN::getSourceTerms(state &state,
     X1 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M46;
     X2 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M106* 2.0;
 
-    //---------- coagulation terms \todo: LOGN coagulation doesnt fit in the pattern (not using coag)
+    //---------- coagulation terms
 
-    double C0_fm =   -Kfm*bCoag*(M0*M16 + 2.*M26*Mn16 + M46*Mn36);       // free molecular
-    double C2_fm = 2.*Kfm*bCoag*(M1*M76 + 2.*M86*M56  + M106*M36);
+    double C0_fm, C2_fm, C0_c, C2_c;
 
-    double C0_c = -Kc*( M0*M0 + M26*Mn26 + Kcp*(M0*Mn26 + M26*Mn46));    // continuum
-    double C2_c = 2.*Kc*(M1*M1 + M46*M86 + Kcp*(M1*M46 + M26*M86));
+    if (coag->mechType == coagulationMech::FM || 
+        coag->mechType == coagulationMech::HM) {
+        double Kfm = coag->getKfm(state);
+        C0_fm =   -Kfm*bCoag*(M0*M16 + 2.*M26*Mn16 + M46*Mn36);       // free molecular
+        C2_fm = 2.*Kfm*bCoag*(M1*M76 + 2.*M86*M56  + M106*M36);
+    }
 
-    C0 = C0_fm*C0_c/(C0_fm + C0_c);                                      // harmonic mean
-    C1 = 0;
-    C2 = C2_fm*C2_c/(C2_fm + C2_c);
+    else if (coag->mechType == coagulationMech::CONTINUUM || 
+             coag->mechType == coagulationMech::HM) {
+        double Kc  = coag->getKc( state);
+        double Kcp = coag->getKcp(state);
+        C0_c =   -Kc*(M0*M0 + M26*Mn26 + Kcp*(M0*Mn26 + M26*Mn46));    // continuum
+        C2_c = 2.*Kc*(M1*M1 + M46*M86  + Kcp*(M1*M46  + M26*M86));
+    }
 
-    // \todo choose fm, c, hm based on user inputs; also account for FM_multiplier
+
+    C1 = 0.0;
+    if (coag->mechType == coagulationMech::FM) {
+        C0 = C0_fm;
+        C2 = C2_fm;
+    }
+    else if (coag->mechType == coagulationMech::CONTINUUM) {
+        C0 = C0_c;
+        C2 = C2_c;
+    }
+    else {      // harmonic mean
+        C0 = C0_fm*C0_c/(C0_fm + C0_c);
+        C2 = C2_fm*C2_c/(C2_fm + C2_c);
+    }
 
     //---------- combine to make soot source terms
 

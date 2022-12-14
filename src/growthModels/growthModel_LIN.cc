@@ -22,7 +22,6 @@ growthModel_LIN::growthModel_LIN() {
 /// Rate from Bockhorn (1994) pg. 417, "Simplified Soot Nucleation and Surface Growth Steps..."
 /// Equation (27.36). Returns chemical surface growth rate in kg/m2*s. Assumes that rate is
 /// proportional to number of particles (M0) but independent of available surface area.
-/// \todo check that this is actually the equation implemented here (27.36).
 ///
 /// @param state       \input  gas and soot state, set by user.
 /// @return soot growth rate (kg/m2*s)

@@ -11,7 +11,7 @@ namespace soot {
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-class coagulationModel_CONTINUUM : public coagulationModel {
+class coagulationModel_CONTINUUM : virtual public coagulationModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
@@ -20,6 +20,13 @@ class coagulationModel_CONTINUUM : public coagulationModel {
 public:
 
     double getCoagulationSootRate(const state& state, double m1, double m2) const override;
+
+    double getKc(const state& state) const override  { 
+        return 2.*kb*state.T/(3./state.muGas);
+    }
+    double getKcp(const state& state) const override { 
+        return 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
+    }
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 

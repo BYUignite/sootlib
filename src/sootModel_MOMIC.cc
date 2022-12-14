@@ -15,7 +15,6 @@ using namespace soot;
 /// @param oxid_  \input pointer to oxidation model.
 /// @param coag_  \input pointer to coagulation model.
 ///
-/// \todo enforce 3-8 moments.
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_MOMIC::sootModel_MOMIC(size_t            nsoot_,
@@ -25,8 +24,8 @@ sootModel_MOMIC::sootModel_MOMIC(size_t            nsoot_,
                                  coagulationModel *coag_) :
         sootModel(nsoot_, nucl_, grow_, oxid_, coag_) {
 
-    if (nsoot_ < 2)
-        throw runtime_error("MOMIC requires nsoot>1");
+    if (nsoot_ < 3 || nsoot_ > 8)
+        throw runtime_error("MOMIC requires 3-8 moments");
 
     psdMechType = psdMech::MOMIC;
 
@@ -53,7 +52,6 @@ sootModel_MOMIC::sootModel_MOMIC(size_t            nsoot_,
 /// @param Omech  \input one of enum class oxidationMech in sootDefs.h
 /// @param Cmech  \input one of enum class coagulationMech in sootDefs.h
 ///
-/// \todo enforce 3-8 moments.
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -64,8 +62,8 @@ sootModel_MOMIC::sootModel_MOMIC(size_t          nsoot_,
                                  coagulationMech Cmech) :
         sootModel(nsoot_, Nmech, Gmech, Omech, Cmech) {
 
-    if (nsoot_ < 2)
-        throw runtime_error("MOMIC requires nsoot>1");
+    if (nsoot_ < 3 || nsoot_ > 8)
+        throw runtime_error("MOMIC requires 3-8 moments");
 
     psdMechType = psdMech::MOMIC;
 
@@ -145,8 +143,8 @@ void sootModel_MOMIC::getSourceTerms(state &state,
 
         //------ continuum
 
-        const double Kc  = 2.*kb*state.T/(3./state.muGas);
-        const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
+        const double Kc  = coag->getKc(state);
+        const double Kcp = coag->getKcp(state);
 
         double mDimer = nucl->DIMER.mDimer;
         double nDimer = nucl->DIMER.nDimer;
@@ -163,7 +161,7 @@ void sootModel_MOMIC::getSourceTerms(state &state,
 
         //------ free molecular
 
-        const double Kfm = eps_c * sqrt(0.5*M_PI*kb*state.T) * pow(6./(M_PI*rhoSoot), twothird);
+        const double Kfm = coag->getKfm(state);
 
         for (size_t k=1; k<Nmom; k++)                   // skip moment 0 (no growth term)
             Mcnd_FM[k] = double(k)*Kfm*nDimer*mDimer*g_grid(k);
@@ -465,54 +463,69 @@ vector<double> sootModel_MOMIC::MOMICCoagulationRates(const state& state, vector
     vector<double> Rates_FM(Nmom, 0.0);
     vector<double> Rates(Nmom, 0.0);
 
-    //----------- continuum regime
-
-    const double Kc  = 2.*kb*state.T/(3./state.muGas);
-    const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
-
-    for (size_t r=0; r<Nmom; r++) {
-        if (r==1) continue; 
-        if (r==0)
-            Rates_C[r] = -Kc*( Mp6[2]*Mp6[2] + Mp6[1]*Mp6[3] +            // M_0*M_0 + M_{-2/6}*M_{2/6}
-                               Kcp*( Mp6[1]*Mp6[2] + Mp6[0]*Mp6[3] ) );   // M_{-2/6}*M_0 + M_{-4/6}*M_{2/6}
-        else {
-            size_t kk, rk;        // index shifters
-            for (size_t k=1; k<=r-1; k++) {
-                kk = k*3;
-                rk = (r-k)*3;
-                Rates_C[r] = binomial_coefficient(r,k) * (
-                                   Mp6[kk+1]*Mp6[rk+3] +                  // M_{k-2/6}*M_{r-k+2/6}
-                             2.0*  Mp6[kk+2]*Mp6[rk+2] +                  // M_{k+0/6}*M_{r-k+0/6}
-                                   Mp6[kk+3]*Mp6[rk+1] +                  // M_{k+2/6}*M_{r-k-2/6}
-                             Kcp*( Mp6[kk+0]*Mp6[rk+3] +                  // M_{k-4/6}*M_{r-k+2/6}
-                                   Mp6[kk+1]*Mp6[rk+2] +                  // M_{k-2/6}*M_{r-k+0/6}
-                                   Mp6[kk+2]*Mp6[rk+1] +                  // M_{k+0/6}*M_{r-k-2/6}
-                                   Mp6[kk+3]*Mp6[rk+0] ) );               // M_{k+2/6}*M_{r-k-4/6}
-            }
-            Rates_C[r] *= 0.5*Kc;
-        }
-    }
-
     //----------- free-molecular regime
 
-    const double Kfm = eps_c * sqrt(0.5*M_PI*kb*state.T) * pow(6./(M_PI*rhoSoot), twothird);
+    if (coag->mechType == coagulationMech::FM || 
+        coag->mechType == coagulationMech::HM) {
 
-    for (size_t r=0; r<Nmom; r++) {
-        if (r==1) continue; 
-        if (r==0)
-            Rates_FM[r] = -0.5*Kfm*f_grid(0,0);
-        else {
-		    for (size_t k=1; k<=r-1; k++)
-                Rates_FM[r] += binomial_coefficient(r,k) * f_grid(k, r-k);
-            Rates_FM[r] *= 0.5*Kfm;
+        const double Kfm = coag->getKfm(state);
+
+        for (size_t r=0; r<Nmom; r++) {
+            if (r==1) continue; 
+            if (r==0)
+                Rates_FM[r] = -0.5*Kfm*f_grid(0,0);
+            else {
+                for (size_t k=1; k<=r-1; k++)
+                    Rates_FM[r] += binomial_coefficient(r,k) * f_grid(k, r-k);
+                Rates_FM[r] *= 0.5*Kfm;
+            }
         }
     }
 
-    //----------- harmonic mean
+    //----------- continuum regime
+
+
+    else if (coag->mechType == coagulationMech::CONTINUUM || 
+             coag->mechType == coagulationMech::HM) {
+
+        const double Kc  = coag->getKc( state);
+        const double Kcp = coag->getKcp(state);
+
+
+        for (size_t r=0; r<Nmom; r++) {
+            if (r==1) continue; 
+            if (r==0)
+                Rates_C[r] = -Kc*( Mp6[2]*Mp6[2] + Mp6[1]*Mp6[3] +            // M_0*M_0 + M_{-2/6}*M_{2/6}
+                                   Kcp*( Mp6[1]*Mp6[2] + Mp6[0]*Mp6[3] ) );   // M_{-2/6}*M_0 + M_{-4/6}*M_{2/6}
+            else {
+                size_t kk, rk;        // index shifters
+                for (size_t k=1; k<=r-1; k++) {
+                    kk = k*3;
+                    rk = (r-k)*3;
+                    Rates_C[r] = binomial_coefficient(r,k) * (
+                                       Mp6[kk+1]*Mp6[rk+3] +                  // M_{k-2/6}*M_{r-k+2/6}
+                                 2.0*  Mp6[kk+2]*Mp6[rk+2] +                  // M_{k+0/6}*M_{r-k+0/6}
+                                       Mp6[kk+3]*Mp6[rk+1] +                  // M_{k+2/6}*M_{r-k-2/6}
+                                 Kcp*( Mp6[kk+0]*Mp6[rk+3] +                  // M_{k-4/6}*M_{r-k+2/6}
+                                       Mp6[kk+1]*Mp6[rk+2] +                  // M_{k-2/6}*M_{r-k+0/6}
+                                       Mp6[kk+2]*Mp6[rk+1] +                  // M_{k+0/6}*M_{r-k-2/6}
+                                       Mp6[kk+3]*Mp6[rk+0] ) );               // M_{k+2/6}*M_{r-k-4/6}
+                }
+                Rates_C[r] *= 0.5*Kc;
+            }
+        }
+    }
+
+    //----------- finalize and return
 
     for (size_t r=0; r<Nmom; r++) {
         if (r==1) continue;
-        Rates[r] = Rates_FM[r]*Rates_C[r] / (Rates_FM[r]+Rates_C[r]);
+        if (coag->mechType == coagulationMech::FM)
+            Rates[r] = Rates_FM[r];
+        else if (coag->mechType == coagulationMech::CONTINUUM)
+            Rates[r] = Rates_C[r];
+        else      // harmonic mean
+            Rates[r] = Rates_FM[r]*Rates_C[r] / (Rates_FM[r]+Rates_C[r]);
     }
 
     return Rates;
@@ -542,8 +555,8 @@ double sootModel_MOMIC::pahSootCollisionRatePerDimer(const state &state, const d
 
     //------ continuum
 
-    const double Kc  = 2.*kb*state.T/(3./state.muGas);
-    const double Kcp = 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
+    const double Kc  = coag->getKc( state);
+    const double Kcp = coag->getKcp(state);
 
     double Ic1 = Kc * (  
                   mD26*Mp6[1] +            //  mD26*M_{-2/6}
@@ -556,7 +569,7 @@ double sootModel_MOMIC::pahSootCollisionRatePerDimer(const state &state, const d
 
     //------ free molecular
 
-    const double Kfm = eps_c * sqrt(0.5*M_PI*kb*state.T) * pow(6./(M_PI*rhoSoot), twothird);
+    const double Kfm = coag->getKfm(state);
 
     double Ifm1 = Kfm*g_grid(1);
 
