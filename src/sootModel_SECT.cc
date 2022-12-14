@@ -120,17 +120,17 @@ double sootModel_SECT::pahSootCollisionRatePerDimer(const state &state, const do
     double term1, term2;
 
     k = 0;                                                    // 1st bin: loss via growth into 2nd
-    term1 = beta_DSi[k]*abs(state.sootVar[k])/(mBins[k+1]-mBins[k]);
+    term1 = beta_DSi[k]*state.sootVar[k]/(mBins[k+1]-mBins[k]);
     I_beta_DS -= term1*mBins[0];
 
     for(k=1; k<nsoot-1; k++) {                                // interior bins: gain from k-1, lose to k+1
-        term2 = beta_DSi[k]*abs(state.sootVar[k])/(mBins[k+1]-mBins[k]);
+        term2 = beta_DSi[k]*state.sootVar[k]/(mBins[k+1]-mBins[k]);
         I_beta_DS += mBins[k] * (term1 - term2);
         term1 = term2;
     }
 
     k = nsoot-1;                                              // last bin: gain from 2nd to last + condensation inside
-    term2 = beta_DSi[k]*abs(state.sootVar[k])/mBins[k];
+    term2 = beta_DSi[k]*state.sootVar[k]/mBins[k];
     I_beta_DS += mBins[k] * (term1 + term2);
 
     return I_beta_DS;
@@ -169,25 +169,25 @@ void sootModel_SECT::getSourceTerms(state &state) {
 
     vector<double> Am2m3(nsoot, 0);                        // m2 soot / m3 bulk volume
     for (k = 0; k < nsoot; k++)
-        Am2m3[k] = M_PI*pow(6.*mBins[k]/(M_PI*rhoSoot), twothird)*abs(state.sootVar[k]);
+        Am2m3[k] = M_PI*pow(6.*mBins[k]/(M_PI*rhoSoot), twothird)*state.sootVar[k];
 
     //----------- growth terms: positive velocity through size domain
 
     vector<double> Sgrw(nsoot, 0.0);                       // #/m3*s in each bin
 
     k=0;                                                   // first bin
-    term = kGrw*Am2m3[k]*abs(state.sootVar[k])/(mBins[k+1]-mBins[k]);
+    term = kGrw*Am2m3[k]*state.sootVar[k]/(mBins[k+1]-mBins[k]);
     Sgrw[k] = -term;
 
     for(k=1; k<nsoot-1; k++) {                             // loop up interior bins
         Sgrw[k]  = term;
-        term     = kGrw*Am2m3[k]*abs(state.sootVar[k])/(mBins[k+1]-mBins[k]);
+        term     = kGrw*Am2m3[k]*state.sootVar[k]/(mBins[k+1]-mBins[k]);
         Sgrw[k] -= term;
     }
 
     k=nsoot-1;                                             // last bin
     Sgrw[k] = term +                                       // growth into last bin from its smaller neighbor + 
-              kGrw*Am2m3[k]*abs(state.sootVar[k])/mBins[k];// growth inside last bin manifest as new particles in that bin
+              kGrw*Am2m3[k]*state.sootVar[k]/mBins[k];// growth inside last bin manifest as new particles in that bin
 
     //----------- PAH condensation terms: 
     //----------- positive vel. through size domain: each bin has in/out except 1st (out) and last (in,gen)
@@ -197,20 +197,20 @@ void sootModel_SECT::getSourceTerms(state &state) {
     if (nucl->mechType == nucleationMech::PAH) {
 
         k=0;                                               // first bin
-        term = beta_DSi[k] * abs(state.sootVar[k]) * nucl->DIMER.nDimer * 
+        term = beta_DSi[k] * state.sootVar[k] * nucl->DIMER.nDimer * 
                nucl->DIMER.mDimer / (mBins[k+1]-mBins[k]);
         Scnd[k] = -term;
 
         for(k=1; k<nsoot-1; k++) {                         // loop up interior bins
             Scnd[k]  = term;
-            term = beta_DSi[k] * abs(state.sootVar[k]) * nucl->DIMER.nDimer * 
+            term = beta_DSi[k] * state.sootVar[k] * nucl->DIMER.nDimer * 
                    nucl->DIMER.mDimer / (mBins[k+1]-mBins[k]);
             Scnd[k] -= term;
         }
 
         k=nsoot-1;                                         // last bin 
         Scnd[k] = term +                                   // growth into bin by neighbor + ... vvv
-                  beta_DSi[k] * abs(state.sootVar[k]) *    // growth inside last bin, manifest as new particles in that bin (rather that transport out)
+                  beta_DSi[k] * state.sootVar[k] *    // growth inside last bin, manifest as new particles in that bin (rather that transport out)
                   nucl->DIMER.nDimer * nucl->DIMER.mDimer / mBins[k];
     }
 
@@ -218,16 +218,16 @@ void sootModel_SECT::getSourceTerms(state &state) {
 
     vector<double> Soxi(nsoot, 0.0);                       // #/m3*s in each bin
     k=nsoot-1;                                             // last bin
-    term = kOxi*Am2m3[k]*abs(state.sootVar[k])/(mBins[k]-mBins[k-1]);
+    term = kOxi*Am2m3[k]*state.sootVar[k]/(mBins[k]-mBins[k-1]);
     Soxi[k] = -term;
     for(k=nsoot-2; k>0; k--) {                             // loop down interior bins
         Soxi[k]  = term;
-        term     = kOxi*Am2m3[k]*abs(state.sootVar[k])/(mBins[k]-mBins[k-1]);
+        term     = kOxi*Am2m3[k]*state.sootVar[k]/(mBins[k]-mBins[k-1]);
         Soxi[k] -= term;
     }
     k=0;                                                   // first bin
     Soxi[k] = term -                                       // source from oxid of larger neighbor - 
-              kOxi*Am2m3[k]*abs(state.sootVar[k])/mBins[k];// oxidation inside first bin, manifest as fewer particles in that bin (rather than transport out)
+              kOxi*Am2m3[k]*state.sootVar[k]/mBins[k];// oxidation inside first bin, manifest as fewer particles in that bin (rather than transport out)
 
     //----------- coagulation terms
 

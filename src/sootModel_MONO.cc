@@ -109,7 +109,7 @@ void sootModel_MONO::getSourceTerms(state &state) {
     double G0 = 0;
     double G1 = 0;
 
-    double Am2m3 = M0 > 0 ? M_PI*pow(abs(6./(M_PI*rhoSoot)*M1/M0), twothird)*abs(M0) : 0;
+    double Am2m3 = M0 > 0 ? M_PI*pow(6./(M_PI*rhoSoot)*M1/M0, twothird)*M0 : 0;
 
     G1 = kGrw * Am2m3;
 
