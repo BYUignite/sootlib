@@ -10,7 +10,7 @@ where \f$J_n\,(=)\,\#/\f$m\f$^3\f$s and \f$m_n\f$ is mass of the soot nucleate.
 For moment methods (e.g., MONO, QMOM, LOGN, MOMIC), the moment \f$r\f$ source term is
 $$R_{r,n} = \int m^kR_n(m)dm = \int m^kJ_n\delta(m-m_n)dm,$$
 $$
-\color{blue} {
+\color{#1779c4} {
 R_{r,n} = m_n^kJ_n.
 }
 $$
@@ -68,7 +68,7 @@ Now, use \f$v_g = k_sS(m)\f$ with \f$S = \pi d^2\f$, \f$m=\rho_s\pi d^3/6\f$, or
 $$S(m) = \pi\left(\frac{6}{\pi\rho_s}\right)^{2/3}m^{2/3}.$$
 Then we have
 $$
-\color{blue} {
+\color{#1779c4} {
 R_{r,g} = k_s\pi\left(\frac{6}{\pi\rho_s}\right)^{2/3}kM_{k-1/3}.
 }
 $$
@@ -162,7 +162,7 @@ R_{r,c} = \frac{1}{2}\iint\beta(m,\mu)n(m)n(\mu)\left[-2m^k+\sum_{j=0}^r\left(r\
 $$ 
 This simplifies to
 $$
-\color{blue} {
+\color{#1779c4} {
 \begin{align}
 &R_{0,c} = -\frac{1}{2}\iint\beta(m,\mu)n(m)n(\mu)dmd\mu, \\\\
 &R_{1,c} = 0,  \\\\
@@ -177,7 +177,7 @@ The coagulation coefficient \f$\beta\f$ is generally written for two regimes: fr
 
 The coagulation coefficient in the free molecular regime (large Knudsen number) is given by
 $$
-\color{blue} {
+\color{#1779c4} {
 \beta^{FM}(m,\mu) = \epsilon_c\left(\frac{\pi k_BT}{2}\right)\left(\frac{6}{\pi\rho_s}\right)^{2/3}\left(\frac{1}{m}+\frac{1}{\mu}\right)^{1/2}(m^{1/3}+\mu^{1/3})^2.
 }
 $$
@@ -187,23 +187,23 @@ Here, \f$k_B\f$ is the Boltzmann constant, \f$\rho_s\f$ is the soot particle den
 
 The coagulation coefficient in the continuum regime (small Knudsen number) is given by 
 $$
-\color{blue} {
+\color{#1779c4} {
 \beta^C(m,\mu) = \frac{2k_BT}{3\mu_v}\left(\frac{C_m}{m^{1/3}}\frac{C_\mu}{\mu^{1/3}}\right)(m^{1/3}+\mu^{1/3}),
 }
 $$
 where \f$\mu_v\f$ is the gas dynamic viscosity, and \f$c_m\f$ (and similarly for \f$c_\mu\f$) is
 $$
-\color{blue} {
+\color{#1779c4} {
 C_m = 1+1.657Kn_m,
 }
 $$
 $$
-\color{blue} {
+\color{#1779c4} {
 Kn_m = 2\lambda_g/d_m,
 }
 $$
 $$
-\color{blue} {
+\color{#1779c4} {
 \lambda_g = \nu\left(\frac{\pi M}{2RT}\right)^{1/2},
 }
 $$
@@ -214,7 +214,7 @@ where \f$C_m\f$ is the Cunningham slip correction factor, \f$\lambda_g\f$ is the
 ### Harmonic mean
 A harmonic mean can be used to transition between the FM and C regimes:
 $$
-\color{blue} {
+\color{#1779c4} {
 \beta^{HM} = \frac{\beta^{FM}\beta^C}{\beta^{FM}+\beta^C}.
 }
 $$
@@ -223,7 +223,7 @@ $$
 
 Fuchs uses the following form that transitions between the FM and C regime.
 $$
-\color{blue} {
+\color{#1779c4} {
 \beta^{F}(m,\mu) = 2\pi(D_m+D_\mu)(d_m+d_\mu)\left(
 \frac{d_m+d_\mu}{d_m+d_\mu+2(g_m^2+g_\mu^2)^{1/2}} +
 \frac{8(D_m+D_\mu)/\epsilon_c}{(\bar{c}_m^2+\bar{c}_\mu^2)^{1/2}(d_m+d_\mu)}
@@ -231,22 +231,22 @@ $$
 }
 $$
 $$
-\color{blue} {
+\color{#1779c4} {
 \bar{c}_m = \left(\frac{8k_BT}{\pi m}\right)^{1/2},
 }
 $$
 $$
-\color{blue}{
+\color{#1779c4}{
 g_m = \frac{\sqrt{2}}{3d_ml}\left[(d_m+l_m)^3-(d_m^2+l_m^2)^{3/2}\right] - \sqrt{2}d_m,
 }
 $$
 $$
-\color{blue} {
+\color{#1779c4} {
 l_m = \frac{8D_m}{\pi\bar{c}_m},
 }
 $$
 $$
-\color{blue} {
+\color{#1779c4} {
 D_m = \frac{k_BTC_c}{3\pi\mu_vd_m},
 }
 $$
