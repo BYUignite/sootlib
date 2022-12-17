@@ -21,7 +21,7 @@ $$
 
 ### Leung & Lindstedt (LL)
 
-SootLib's most basic chemistry model is the simplified kinetic mechanism presented by Leung and Lindstedt (LL), which consists of four Arrhenius-style rate expressions: one each for soot nucleation, surface growth, oxidation, and coagulation \cite Leung_1991. The LL nucleation rate depends only on the concentration of gaseous acetylene, the gas temperature, and an empirically-determined rate constant: $$R_{nuc} = 0.1\times 10^5 e^{-21100/T} [\text{C}_2\text{H}_2].$$.
+SootLib's most basic chemistry model is the simplified kinetic mechanism presented by Leung and Lindstedt (LL), which consists of four Arrhenius-style rate expressions: one each for soot nucleation, surface growth, oxidation, and coagulation \cite Leung_1991. The LL nucleation rate depends only on the concentration of gaseous acetylene, the gas temperature, and an empirically-determined rate constant: $$R_{nuc} = 0.1\times 10^5 e^{-21100/T} [\text{C}_2\text{H}_2].$$
 
 ### Lindstedt (LIN)
 Lindstedt later proposed an alteration to the LL nucleation step's pre-exponential factor to increase accuracy without changing the expression's form (LIN) \cite Lindstedt_2005 , giving the following expression:
@@ -31,7 +31,7 @@ $$R_{nuc} = 0.1\times 10^{-11} e^{-12100/T} [\text{C}_2\text{H}_2].$$
 SootLib implements the PAH nucleation model presented by Blanquart and Pitsch, in which nascent soot particles are created by the collision of two PAH dimers, themselves created by the collision of two PAH molecules \cite Blanquart_2009c. Assuming free-molecular coagulation for the self-collision of PAH molecules, the effective rate of dimerization is given by
 $$\doot{n}_D = \sum_i \gamma_i \frac{1}{2} \beta_i n_i^2,$$
 where
-$$\beta_i = \left( \frac{\pi k_B T}{m_i} \right)^{1/2} \left( \frac{6m_i}{\pi \rho_s} \right)^{2/3}$$
+$$\beta_i = 4\left( \frac{\pi k_B T}{m_i} \right)^{1/2} \left( \frac{6m_i}{\pi \rho_s} \right)^{2/3}$$
 and \f$k_B\f$ is the Boltzmann constant, \f$T\f$ is gas temperature, \f$m_i\f$ is the mass of PAH species \f$i\f$, \f$n_i\f$ is the number density of PAH species \f$i\f$, and \f$\rho_s\f$ is the solid soot density. The sticking coefficient \f$\gamma_i\f$, which scales with \f$m_i^4\f$, accounts for the difference between the observed self-collision rate and the rate predicted by kinetic molecular theory. The following table lists the PAH species considered by this PAH nucleation model, their masses \f$m_i\f$, and their sticking coefficients \f$\gamma_i\f$:
 | PAH species       | Formula | \f$m_i\f$ (amu) | \f$\gamma_i\f$ |
 |-------------------|:-------:|:---------------:|:--------------:|
