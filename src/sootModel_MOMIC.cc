@@ -1,5 +1,6 @@
 #include "sootModel_MOMIC.h"
 #include "binomial.h"
+#include <cmath>                 //isfinite (not nan or inf)
 
 using namespace std;
 using namespace soot;
@@ -101,16 +102,11 @@ void sootModel_MOMIC::setSourceTerms(state &state) {
 
     //----------
 
-    vector<double> Mtemp(nsoot,0);
-    for (size_t i=0; i<nsoot; i++)
-        Mtemp[i] = state.sootVar[i];
+    vector<double> Mtemp = state.sootVar;
 
-    downselectIfNeeded(Mtemp);
+    //doldb downselectIfNeeded(Mtemp);
 
-    vector<double> l10M(Nmom);
-    for(size_t k=0; k<Nmom; k++)
-        l10M[k] = log10(Mtemp[k]);
-    set_diffTable(l10M);
+    set_diffTable(Mtemp);
 
     set_fractional_moments_Mp6_Mq6();                    // set fractional_moment_arrays
 
@@ -595,18 +591,16 @@ double sootModel_MOMIC::pahSootCollisionRatePerDimer(const state &state, const d
 ///   at the top of the rates routine.
 /// Code verified by comparison to np.polyfit, np.polyval.
 ///
-/// @param l10M \input vector of log_10(Moments).
+/// @param M \input vector of Moments, converted to log10(Moments).
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-void sootModel_MOMIC::set_diffTable(const vector<double> &l10M) {
-
-    int Nmom = l10M.size();
+void sootModel_MOMIC::set_diffTable(const vector<double> &M) {
 
     //----------- set first column
 
     for (int k=0; k<Nmom; k++)
-        diffTable[k][0] = l10M[k];
+        diffTable[k][0] = log10(M[k]);
 
     //----------- set other columns (differences) using previous column
 
@@ -637,9 +631,7 @@ void sootModel_MOMIC::set_diffTable(const vector<double> &l10M) {
 
 double sootModel_MOMIC::Mr(const double r) {
 
-    double l10Mr;
-
-    l10Mr = diffTable[0][0];
+    double l10Mr = diffTable[0][0];
     double coef = r;
     int kend = (r >= 0) ? Nmom : 3;
     for(int k=1; k<kend; k++) {
@@ -647,7 +639,8 @@ double sootModel_MOMIC::Mr(const double r) {
         coef *= (r-k)/double(k+1);
     }
 
-    return pow(10., l10Mr);
+    double value = pow(10., l10Mr);
+    return isfinite(value) ? value : 0.0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -676,6 +669,7 @@ void sootModel_MOMIC::set_fractional_moments_Mp6_Mq6() {
     double q;
     for(size_t i=0, q=-3; i<nq[Nmom]; i++, q+=2)
         Mq6[i] = Mr(q/6.0);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////

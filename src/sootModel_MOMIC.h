@@ -47,7 +47,7 @@ private:
     double              g_grid(int y);
     std::vector<double> MOMICCoagulationRates(const state& state, std::vector<double>& M);
     double              Mr(const double r);                              // fractional moments using polynomial interp among log M
-    void                set_diffTable(const std::vector<double> &l10M);  // needed by Mr
+    void                set_diffTable(const std::vector<double> &M);  // needed by Mr
     void                set_fractional_moments_Mp6_Mq6();
     void                set_mDimerPowers();
 
