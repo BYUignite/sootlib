@@ -163,7 +163,8 @@ void sootModel_SECT::setSourceTerms(state &state) {
     //----------- nucleation terms
 
     vector<double> Snuc(nsoot, 0.0);                       // #/m3*s in each bin (only bin 0)
-    Snuc[0] = jNuc * 2.*nucl->DIMER.mDimer/mBins[0];       ///< \todo: check that soot nucleate mass < mBins[1]
+    double mNuc = state.cMin*gasSpMW[(int)gasSp::C]/Na;    // mass of a nucleated particle
+    Snuc[0]     = jNuc * mNuc /mBins[0];                   // kg_soot/m3*s (as carbon); \todo check that soot nucleation mass < mBins[1]
 
     //----------- get area for growth, condensation and oxidation
 
