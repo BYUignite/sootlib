@@ -1,8 +1,12 @@
 #include "sootModel_QMOM.h"
 #include "binomial.h"
+#include <algorithm>         // fill
+#include <cmath>             // isfinite (not nan or inf)
 
 using namespace std;
 using namespace soot;
+
+extern "C" void dstev_(char *JOBZ, int *N, double *D, double *E, double *Z, int *LDZ, double *WORK, int *INFO);
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
@@ -82,11 +86,6 @@ void sootModel_QMOM::setSourceTerms(state &state) {
     //---------- get weights and abscissas
 
     getWtsAbs(state.sootVar, state.wts, state.absc);    // moment downselection applied
-
-    for (size_t i=0; i<state.wts.size(); i++) {
-        if (state.wts[i] < 0)  state.wts[i]  = 0;
-        if (state.absc[i] < 0) state.absc[i] = 0;
-    }
 
     //---------- get chemical rates
 
@@ -194,62 +193,57 @@ void sootModel_QMOM::setSourceTerms(state &state) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void sootModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights, vector<double>& abscissas) {
-	size_t N = M.size();        // local nsoonsoot; may change with moment downselection
 
-	for (double num : M) {      // if any moments are zero,
-		if (num <= 0)           // return with zero wts and absc
-			return;
-	}
+    fill(weights.begin(),   weights.end(),   0.0);   // initialize weights and abscissas
+    fill(abscissas.begin(), abscissas.end(), 0.0);
+
+	for (double num : M)        // if any moments are zero, return with wts, absc=0.0
+		if (num <= 0) return;
+
+    //----------
+
+    size_t Nenv = M.size()/2;   // local nsoonsoot; may change with moment downselection
+
+	vector<double> w_temp(Nenv, 0);
+	vector<double> a_temp(Nenv, 0);
 
 	bool bad_values;            // downselection flag
+	do {                        // downselection loop
 
-	vector<double> w_temp(N / 2, 0);
-	vector<double> a_temp(N / 2, 0);
+		bad_values = false;     // reset flag
 
-    // downselection loop
-	do {
-
-	    // reset flag
-		bad_values = false;
-
-		// reinitialize weights and absc with zeros
-		for (size_t i = 0; i < N / 2; i++) {
-			w_temp[i] = 0;
-			a_temp[i] = 0;
-		}
-
-		// in 2 moment case, return MONO output
-		if (N == 2) {
+		//---- 1 env (2 moment) case, return MONO output
+		if (Nenv == 1) {
+            //cout << endl << "downselected to mono" << endl;
 			w_temp[0] = M[0];
 			a_temp[0] = M[1] / M[0];
 			break;
 		}
 
-		// wheeler algorithm for moment inversion
-		wheeler(M, N / 2, w_temp, a_temp);
+		//---- wheeler algorithm for moment inversion
+		wheeler(M, Nenv, w_temp, a_temp);
 
-		// check for bad values
-		for (size_t i = 0; i < N / 2; i++) {
-			if (w_temp[i] < 0 || a_temp[i] < 0)     // check for negative values
+		//---- check for bad values
+		for (size_t i=0; i<Nenv; i++) {
+            if ( (!isfinite(w_temp[i]) || w_temp[i]<0) ||
+                 (!isfinite(a_temp[i]) || a_temp[i]<0) )
 				bad_values = true;
-			if (w_temp[i] > 1)                         // check for weights > 1
-			    bad_values = true;
 		}
 
-		// if we find bad values, downselect to two fewer moments and try again
+		//---- if we find bad values, downselect to 2 fewer moments (1 fewer env) and try again
 		if (bad_values) {
-			N = N - 2;
-			w_temp.resize(N / 2);
-			a_temp.resize(N / 2);
+            Nenv--;
+            w_temp.assign(Nenv, 0.0);       // resizes and assigns 0.0
+            a_temp.assign(Nenv, 0.0);
 		}
 
 	}
 	while (bad_values);
 
-	// assign temporary variables to output
-	for (size_t i = 0; i < w_temp.size(); i++) {
-		weights[i] = w_temp[i];
-		abscissas[i] = a_temp[i];
+	//---------- assign temporary variables to output
+	for (size_t i=0; i<Nenv; i++) {
+		weights[i]   = w_temp[i] >= 0 ? w_temp[i] : 0.0;     // these checks should be redundant
+		abscissas[i] = a_temp[i] >= 0 ? a_temp[i] : 0.0;
 	}
 }
 
@@ -302,10 +296,11 @@ void sootModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& 
 
     //int flag = tql2(N, &j_diag[0], &j_ldiag[0], &evec[0]);       // for eispack
 
-    //char VorN = 'V';
-    //vector<double> work(2*N-2);
-    //int info;
-    //dstev_( &VorN, &N, &j_diag[0], &j_ldiag[1], &evec[0], &N, &work[0], &info);
+    char VorN = 'V';
+    vector<double> work(2*N-2);
+    int info;
+    int NN = int(N);
+    dstev_( &VorN, &NN, &j_diag[0], &j_ldiag[1], &evec[0], &NN, &work[0], &info);
 
     x = j_diag;      // j_diag are now the vector of eigenvalues.
 

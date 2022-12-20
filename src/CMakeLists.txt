@@ -24,6 +24,11 @@ target_compile_features(sootModel PUBLIC cxx_std_11)
 
 set_target_properties(sootModel PROPERTIES PUBLIC_HEADER "state.h;sootModel.h;sootDefs.h;sootHeaders.h")
 
+if(APPLE)
+    find_library(ACCELERATE Accelerate)
+endif()
+target_link_libraries(sootModel ${ACCELERATE})
+
 #------ src files ------------------
 
 target_include_directories(sootModel PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
