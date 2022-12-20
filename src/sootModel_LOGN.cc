@@ -164,6 +164,7 @@ void sootModel_LOGN::setSourceTerms(state &state) {
     const double M76 =  Mr( 7.0/6.0, M0, M1, M2);
     const double M16 =  Mr( 1.0/6.0, M0, M1, M2);
 
+
     //---------- nucleation terms
 
     double Jnuc = nucl->getNucleationSootRate(state);    // #/m3*s
@@ -311,12 +312,11 @@ void sootModel_LOGN::setSourceTerms(state &state) {
 
 double sootModel_LOGN::Mr(double r, double M0, double M1, double M2) const {
 
+    if(M0 <= 0.0) return 0.0;
+
     double M0_exp = 1. + 0.5*r*(r - 3.);
     double M1_exp = r*(2. - r);
     double M2_exp = 0.5*r*(r - 1.);
-
-    if (M2 == 0 && M2_exp < 0)
-        M2_exp = 0;
 
     return pow(M0, M0_exp) * pow(M1, M1_exp) * pow(M2, M2_exp);
 }
