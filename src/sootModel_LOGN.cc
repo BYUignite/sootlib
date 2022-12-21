@@ -57,6 +57,11 @@ sootModel_LOGN::sootModel_LOGN(size_t          nsoot_,
     if (nsoot_ != 3)
         throw runtime_error("LOGN requires nsoot=3");
 
+    if ( !(coag->mechType == coagulationMech::FM        ||
+           coag->mechType == coagulationMech::CONTINUUM ||
+           coag->mechType == coagulationMech::HM) )
+        throw runtime_error("LOGN requires coagulation to be FM or CONTINUUM or HM");
+
     psdMechType = psdMech::LOGN;
 }
 
@@ -164,7 +169,6 @@ void sootModel_LOGN::setSourceTerms(state &state) {
     const double M76 =  Mr( 7.0/6.0, M0, M1, M2);
     const double M16 =  Mr( 1.0/6.0, M0, M1, M2);
 
-
     //---------- nucleation terms
 
     double Jnuc = nucl->getNucleationSootRate(state);    // #/m3*s
@@ -250,8 +254,8 @@ void sootModel_LOGN::setSourceTerms(state &state) {
         C2_fm = 2.*Kfm*bCoag*(M1*M76 + 2.*M86*M56  + M106*M36);
     }
 
-    else if (coag->mechType == coagulationMech::CONTINUUM || 
-             coag->mechType == coagulationMech::HM) {
+    if (coag->mechType == coagulationMech::CONTINUUM || 
+        coag->mechType == coagulationMech::HM) {
         double Kc  = coag->getKc( state);
         double Kcp = coag->getKcp(state);
         C0_c =   -Kc*(M0*M0 + M26*Mn26 + Kcp*(M0*Mn26 + M26*Mn46));    // continuum
@@ -269,8 +273,8 @@ void sootModel_LOGN::setSourceTerms(state &state) {
         C2 = C2_c;
     }
     else {      // harmonic mean
-        C0 = C0_fm*C0_c/(C0_fm + C0_c);
-        C2 = C2_fm*C2_c/(C2_fm + C2_c);
+        C0 = (C0_fm > 0 || C0_c > 0) ? C0_fm*C0_c/(C0_fm + C0_c) : 0.0;
+        C2 = (C2_fm > 0 || C2_c > 0) ? C2_fm*C2_c/(C2_fm + C2_c) : 0.0;
     }
 
     //---------- combine to make soot source terms
