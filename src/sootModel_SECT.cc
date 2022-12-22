@@ -238,24 +238,25 @@ void sootModel_SECT::setSourceTerms(state &state) {
     double K12;
 
     for(size_t i=0; i<nsoot; i++) {                        // loop size i
-        for(size_t j=i; j<nsoot; j++) {                    // which collides with each size j
+        for(size_t j=i; j<nsoot; j++) {                    // which collides with each size j >= i (loop over upper triang matrix inc diag)
 
             //----------- loss: i,j collide to remove from bins i and j
 
             K12   = coag->getCoagulationSootRate(state, mBins[i], mBins[j]);
             term  = K12*state.sootVar[i]*state.sootVar[j];
             Scoa[i] -= term;
-            if (j>i)
+            if (j>i)                   // account for terms below the diagonal taking advantage of symmetry
                 Scoa[j] -= term;
 
             //----------- gain: mi + mj = mk --> bins floor(k) and ceil(k) gain so that mass, # conserved
-            //----------- cmin*F^k = mBins[i] + mBins[j] --> k = int( log((mBins[i]+mbins[j])/cmin)/log(F) )
+            //----------- mBins[0]*F^k = mBins[i] + mBins[j] --> k = int( log((mBins[i]+mBins[j])/mBins[0])/log(F) )
 
             if (i==j) term *= 0.5;
 
-            size_t k  = static_cast<size_t>(ilnF * log((mBins[i]+mBins[j])/state.cMin));
+            size_t k  = static_cast<size_t>(ilnF * log((mBins[i]+mBins[j])/mBins[0]));
 
-            if (k >= nsoot) k=nsoot-1;
+            if (k >= nsoot) 
+                k=nsoot-1;
             if (k == nsoot-1)                              // i+j into last bin, no splitting, conserve mass
                 Scoa[k] += term*(mBins[i]+mBins[j])/mBins[k];
             else {                                         // i+j between k and k+1, split to conserve # and mass
@@ -269,7 +270,8 @@ void sootModel_SECT::setSourceTerms(state &state) {
     //---------- combine to make soot source terms
 
     for (size_t k=0; k<nsoot; k++)
-        sources.sootSources[k] = Snuc[k] + Sgrw[k] + Scnd[k] + Soxi[k] + Scoa[k];  // #/m3*s in bin k
+        sources.sootSources[k] = Snuc[k] + Scoa[k];// + Scnd[k] + Sgrw[k];  // #/m3*s in bin k
+        //sources.sootSources[k] = Snuc[k] + Sgrw[k] + Scnd[k] + Soxi[k] + Scoa[k];  // #/m3*s in bin k
 
     //---------- set gas sources
 
