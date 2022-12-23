@@ -197,9 +197,6 @@ void sootModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights,
     fill(weights.begin(),   weights.end(),   0.0);   // initialize weights and abscissas
     fill(abscissas.begin(), abscissas.end(), 0.0);
 
-	for (double num : M)        // if any moments are zero, return with wts, absc=0.0
-		if (num <= 0) return;
-
     //----------
 
     size_t Nenv = M.size()/2;   // local nsoonsoot; may change with moment downselection
@@ -323,7 +320,7 @@ double sootModel_QMOM::Mr(double r, const vector<double>& wts, const vector<doub
 	double Mr = 0;
 
 	for (size_t i=0; i<wts.size(); i++) {
-		if (wts[i] == 0 || absc[i] == 0)
+		if (wts[i] <= 0 || absc[i] <= 0)
 			return 0;
 		else
 			Mr += wts[i] * pow(absc[i], r);
