@@ -92,8 +92,10 @@ void sootModel_MONO::setSourceTerms(state &state) {
     double N0 = 0;
     double N1 = 0;
 
-    N0 = jNuc;                                              // #/m3*s
-    N1 = jNuc * state.cMin * gasSpMW[(int)gasSp::C] / Na;   // kg_soot/m3*s (as carbon)
+    if (nucl->mechType != nucleationMech::NONE) {
+        N0 = jNuc;                                              // #/m3*s
+        N1 = jNuc * state.cMin * gasSpMW[(int)gasSp::C] / Na;   // kg_soot/m3*s (as carbon)
+    }
 
     //---------- PAH condensation terms
 
@@ -111,21 +113,24 @@ void sootModel_MONO::setSourceTerms(state &state) {
 
     double Am2m3 = M0 > 0 ? M_PI*pow(6./(M_PI*rhoSoot)*M1/M0, twothird)*M0 : 0;
 
-    G1 = kGrw * Am2m3;
+    if (grow->mechType != growthMech::NONE)
+        G1 = kGrw * Am2m3;
 
     //---------- oxidation terms
 
     double X0 = 0;
     double X1 = 0;
 
-    X1 = -kOxi * Am2m3;
+    if (oxid->mechType != oxidationMech::NONE)
+        X1 = -kOxi * Am2m3;
 
     //---------- coagulation terms
 
     double C0 = 0;
     double C1 = 0;
 
-    C0 = -0.5*coa*state.wts[0]*state.wts[0];
+    if (coag->mechType != coagulationMech::NONE)
+        C0 = -0.5*coa*state.wts[0]*state.wts[0];
 
     //---------- combine to make soot source terms
 

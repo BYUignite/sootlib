@@ -130,9 +130,11 @@ void sootModel_MOMIC::setSourceTerms(state &state) {
 
     vector<double> Mnuc(Nmom, 0);
 
-    double m_nuc = state.cMin*gasSpMW[(int)gasSp::C]/Na;
-    for (size_t i=0; i<Nmom; i++)
-        Mnuc[i] = pow(m_nuc, i)*Jnuc;
+    if (nucl->mechType != nucleationMech::NONE) {
+        double m_nuc = state.cMin*gasSpMW[(int)gasSp::C]/Na;
+        for (size_t i=0; i<Nmom; i++)
+            Mnuc[i] = pow(m_nuc, i)*Jnuc;
+    }
 
     //---------- PAH condensation terms
 
@@ -155,7 +157,7 @@ void sootModel_MOMIC::setSourceTerms(state &state) {
 
         for (size_t k=1, kk=(k-1)*3; k<Nmom; k++)                   // skip moment 0 (no growth term)
             Mcnd_C[k] = double(k)*Kc*nDimer*mDimer* (  
-                                       mD26*Mp6[kk+1] +            //  mD26*M_{k-1-2/6}
+                                       mD26*Mp6[kk+1]  +            //  mD26*M_{k-1-2/6}
                                           2.*Mp6[kk+2] +            //    2.*M_{k-1+0/6}
                                        mDn26*Mp6[kk+3] +            // mDn26*M_{k-1+2/6}
                                        Kcp*( mD26*Mp6[kk+0] +       //  mD26*M_{k-1-4/6}
@@ -179,17 +181,19 @@ void sootModel_MOMIC::setSourceTerms(state &state) {
     //---------- growth terms
 
     vector<double> Mgrw(Nmom, 0);
-
     const double Acoef = M_PI * pow(6./(M_PI*rhoSoot), twothird);
-    for (size_t k=1; k<Nmom; k++)
-        Mgrw[k] = Kgrw*Acoef*k*Mr(k-onethird);
+
+    if (grow->mechType != growthMech::NONE)
+        for (size_t k=1; k<Nmom; k++)
+            Mgrw[k] = Kgrw*Acoef*k*Mr(k-onethird);
 
     //---------- oxidation terms
 
     vector<double> Moxi(Nmom, 0);
 
-    for (size_t k=1; k<Nmom; k++)
-        Moxi[k] = -Koxi*Acoef*k*Mr(k-onethird);
+    if (oxid->mechType != oxidationMech::NONE)
+        for (size_t k=1; k<Nmom; k++)
+            Moxi[k] = -Koxi*Acoef*k*Mr(k-onethird);
 
     //---------- coagulation terms
 

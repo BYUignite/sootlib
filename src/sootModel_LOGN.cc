@@ -175,9 +175,11 @@ void sootModel_LOGN::setSourceTerms(state &state) {
 
     const double mMin = state.cMin*gasSpMW[(int)gasSp::C]/Na;
 
-    N0 = Jnuc;                 // #/m3*s
-    N1 = Jnuc * mMin;          // kg_soot/m3*s
-    N2 = Jnuc * mMin * mMin;
+    if (nucl->mechType != nucleationMech::NONE) {
+        N0 = Jnuc;                 // #/m3*s
+        N1 = Jnuc * mMin;          // kg_soot/m3*s
+        N2 = Jnuc * mMin * mMin;
+    }
 
     //---------- PAH condensation
 
@@ -229,52 +231,59 @@ void sootModel_LOGN::setSourceTerms(state &state) {
 
     //---------- growth terms
 
-    double Kgrw = grow->getGrowthSootRate(state);
+    if (grow->mechType != growthMech::NONE) {
+        double Kgrw = grow->getGrowthSootRate(state);
 
-    G0 = 0;
-    G1 = Kgrw*M_PI*pow(6./(M_PI*rhoSoot), twothird)*M46;
-    G2 = Kgrw*M_PI*pow(6./(M_PI*rhoSoot), twothird)*M106* 2.0;
+        G0 = 0;
+        G1 = Kgrw*M_PI*pow(6./(M_PI*rhoSoot), twothird)*M46;
+        G2 = Kgrw*M_PI*pow(6./(M_PI*rhoSoot), twothird)*M106* 2.0;
+    }
 
     //---------- oxidation terms
 
-    double Koxi = oxid->getOxidationSootRate(state);
+    if (oxid->mechType != oxidationMech::NONE) {
+        double Koxi = oxid->getOxidationSootRate(state);
 
-    X0 =  0;
-    X1 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M46;
-    X2 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M106* 2.0;
+        X0 =  0;
+        X1 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M46;
+        X2 = -Koxi*M_PI*pow(6.0/(M_PI*rhoSoot), twothird)*M106* 2.0;
+    }
 
     //---------- coagulation terms
 
-    double C0_fm, C2_fm, C0_c, C2_c;
+    if (coag->mechType != coagulationMech::NONE) {
 
-    if (coag->mechType == coagulationMech::FM || 
-        coag->mechType == coagulationMech::HM) {
-        double Kfm = coag->getKfm(state);
-        C0_fm =   -Kfm*bCoag*(M0*M16 + 2.*M26*Mn16 + M46*Mn36);       // free molecular
-        C2_fm = 2.*Kfm*bCoag*(M1*M76 + 2.*M86*M56  + M106*M36);
-    }
+        double C0_fm, C2_fm, C0_c, C2_c;
 
-    if (coag->mechType == coagulationMech::CONTINUUM || 
-        coag->mechType == coagulationMech::HM) {
-        double Kc  = coag->getKc( state);
-        double Kcp = coag->getKcp(state);
-        C0_c =   -Kc*(M0*M0 + M26*Mn26 + Kcp*(M0*Mn26 + M26*Mn46));    // continuum
-        C2_c = 2.*Kc*(M1*M1 + M46*M86  + Kcp*(M1*M46  + M26*M86));
-    }
+        if (coag->mechType == coagulationMech::FM || 
+                coag->mechType == coagulationMech::HM) {
+            double Kfm = coag->getKfm(state);
+            C0_fm =   -Kfm*bCoag*(M0*M16 + 2.*M26*Mn16 + M46*Mn36);       // free molecular
+            C2_fm = 2.*Kfm*bCoag*(M1*M76 + 2.*M86*M56  + M106*M36);
+        }
+
+        if (coag->mechType == coagulationMech::CONTINUUM || 
+                coag->mechType == coagulationMech::HM) {
+            double Kc  = coag->getKc( state);
+            double Kcp = coag->getKcp(state);
+            C0_c =   -Kc*(M0*M0 + M26*Mn26 + Kcp*(M0*Mn26 + M26*Mn46));    // continuum
+            C2_c = 2.*Kc*(M1*M1 + M46*M86  + Kcp*(M1*M46  + M26*M86));
+        }
 
 
-    C1 = 0.0;
-    if (coag->mechType == coagulationMech::FM) {
-        C0 = C0_fm;
-        C2 = C2_fm;
-    }
-    else if (coag->mechType == coagulationMech::CONTINUUM) {
-        C0 = C0_c;
-        C2 = C2_c;
-    }
-    else {      // harmonic mean
-        C0 = (C0_fm > 0 || C0_c > 0) ? C0_fm*C0_c/(C0_fm + C0_c) : 0.0;
-        C2 = (C2_fm > 0 || C2_c > 0) ? C2_fm*C2_c/(C2_fm + C2_c) : 0.0;
+        C1 = 0.0;
+        if (coag->mechType == coagulationMech::FM) {
+            C0 = C0_fm;
+            C2 = C2_fm;
+        }
+        else if (coag->mechType == coagulationMech::CONTINUUM) {
+            C0 = C0_c;
+            C2 = C2_c;
+        }
+        else {      // harmonic mean
+            C0 = (C0_fm > 0 || C0_c > 0) ? C0_fm*C0_c/(C0_fm + C0_c) : 0.0;
+            C2 = (C2_fm > 0 || C2_c > 0) ? C2_fm*C2_c/(C2_fm + C2_c) : 0.0;
+        }
     }
 
     //---------- combine to make soot source terms

@@ -96,9 +96,12 @@ void sootModel_QMOM::setSourceTerms(state &state) {
     //---------- nucleation terms
 
     vector<double> nucSrcM(nsoot, 0.);
-    const double mNuc = state.cMin*gasSpMW[(int)gasSp::C]/Na;      // mass of a nucleated particle
-    for (size_t i=0; i<nsoot; i++)
-        nucSrcM[i] = pow(mNuc, i)*jNuc;                            // Nuc_rate = m_nuc^r * jNuc
+
+    if (nucl->mechType != nucleationMech::NONE) {
+        const double mNuc = state.cMin*gasSpMW[(int)gasSp::C]/Na;      // mass of a nucleated particle
+        for (size_t i=0; i<nsoot; i++)
+            nucSrcM[i] = pow(mNuc, i)*jNuc;                            // Nuc_rate = m_nuc^r * jNuc
+    }
 
     //---------- PAH condensation terms
 
@@ -115,42 +118,51 @@ void sootModel_QMOM::setSourceTerms(state &state) {
     //---------- growth terms
 
     vector<double> grwSrcM(nsoot, 0);
+
     const double Acoef = M_PI*pow(6. /(M_PI*rhoSoot), twothird);          // Acoef (=) kmol^2/3 / kg^2/3
-    for (size_t k=1; k<nsoot; k++)                                        // Rate_M0 = 0.0 for growth by definition
-        grwSrcM[k] =  kGrw*Acoef*k*Mr(k-onethird, state.wts, state.absc); // kg^k/m3*s
+
+    if (grow->mechType != growthMech::NONE)
+        for (size_t k=1; k<nsoot; k++)                                        // Rate_M0 = 0.0 for growth by definition
+            grwSrcM[k] =  kGrw*Acoef*k*Mr(k-onethird, state.wts, state.absc); // kg^k/m3*s
 
     //---------- oxidation terms
 
     vector<double> oxiSrcM(nsoot, 0);
-    for (size_t k=1; k<nsoot; k++)                                        // Rate_M0 = 0.0 for oxidation by definition
-        oxiSrcM[k] = -kOxi*Acoef*k*Mr(k-onethird, state.wts, state.absc); // kg^k/m3*s
+
+    if (oxid->mechType != oxidationMech::NONE)
+        for (size_t k=1; k<nsoot; k++)                                        // Rate_M0 = 0.0 for oxidation by definition
+            oxiSrcM[k] = -kOxi*Acoef*k*Mr(k-onethird, state.wts, state.absc); // kg^k/m3*s
 
     //---------- coagulation terms
 
-    vector<double> coaSrcM(nsoot, 0.0);          // init to 0 to handle M1
-    double s;
+    vector<double> coaSrcM(nsoot, 0.0);              // init to 0 to handle M1
 
-    for(int r=0; r<nsoot; r++) {                 // loop all moments r
-        if (r==1) continue;                      // rate is zero for r==1
+    if (coag->mechType != coagulationMech::NONE) {
 
-        //------ off-diagonal terms (looping half of them, with *2 incorporated)
+        double s;
 
-        for(int i=1; i<state.absc.size(); i++)
-            for(int j=0; j<i; j++) {                  
-                s = (r==0) ? -1.0 : 0.0;
-                for(int k=1; k<=r-1; k++)         // not entered if r==0, then s=-1
-                    s += binomial_coefficient(r,k) * pow(state.absc[i],k) * pow(state.absc[j],r-k);
-                coaSrcM[r] += coag->getCoagulationSootRate(state,state.absc[i],state.absc[j]) * state.wts[i]*state.wts[j] * s;
+        for(int r=0; r<nsoot; r++) {                 // loop all moments r
+            if (r==1) continue;                      // rate is zero for r==1
+
+            //------ off-diagonal terms (looping half of them, with *2 incorporated)
+
+            for(int i=1; i<state.absc.size(); i++)
+                for(int j=0; j<i; j++) {                  
+                    s = (r==0) ? -1.0 : 0.0;
+                    for(int k=1; k<=r-1; k++)        // not entered if r==0, then s=-1
+                        s += binomial_coefficient(r,k) * pow(state.absc[i],k) * pow(state.absc[j],r-k);
+                    coaSrcM[r] += coag->getCoagulationSootRate(state,state.absc[i],state.absc[j]) * state.wts[i]*state.wts[j] * s;
+                }
+
+            //------ diagonal terms
+
+            s = (r==0) ? -1.0 : 0.0;
+            for(int k=1; k<=r-1; k++)                // not entered if r==0, then s=-1
+                s += binomial_coefficient(r,k);
+            for(int i=0; i<state.absc.size(); i++) {
+                coaSrcM[r] += 0.5*coag->getCoagulationSootRate(state,state.absc[i],state.absc[i]) *state.wts[i]*state.wts[i] * s *
+                    ((r==0) ? 1.0 : pow(state.absc[i], r));
             }
-
-        //------ diagonal terms
-
-        s = (r==0) ? -1.0 : 0.0;
-        for(int k=1; k<=r-1; k++)                 // not entered if r==0, then s=-1
-            s += binomial_coefficient(r,k);
-        for(int i=0; i<state.absc.size(); i++) {
-            coaSrcM[r] += 0.5*coag->getCoagulationSootRate(state,state.absc[i],state.absc[i]) *state.wts[i]*state.wts[i] * s *
-                          ((r==0) ? 1.0 : pow(state.absc[i], r));
         }
     }
 

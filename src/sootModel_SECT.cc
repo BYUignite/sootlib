@@ -163,8 +163,11 @@ void sootModel_SECT::setSourceTerms(state &state) {
     //----------- nucleation terms
 
     vector<double> Snuc(nsoot, 0.0);                       // #/m3*s in each bin (only bin 0)
-    double mNuc = state.cMin*gasSpMW[(int)gasSp::C]/Na;    // mass of a nucleated particle
-    Snuc[0]     = jNuc * mNuc /mBins[0];                   // kg_soot/m3*s (as carbon); \todo check that soot nucleation mass < mBins[1]
+
+    if (nucl->mechType != nucleationMech::NONE) {
+        double mNuc = state.cMin*gasSpMW[(int)gasSp::C]/Na;    // mass of a nucleated particle
+        Snuc[0]     = jNuc * mNuc /mBins[0];                   // kg_soot/m3*s (as carbon); \todo check that soot nucleation mass < mBins[1]
+    }
 
     //----------- get area for growth, condensation and oxidation
 
@@ -176,19 +179,21 @@ void sootModel_SECT::setSourceTerms(state &state) {
 
     vector<double> Sgrw(nsoot, 0.0);                       // #/m3*s in each bin
 
-    k=0;                                                   // first bin
-    term = kGrw*Am2m3[k]/(mBins[k+1]-mBins[k]);
-    Sgrw[k] = -term;
+    if (grow->mechType != growthMech::NONE) {
+        k=0;                                                   // first bin
+        term = kGrw*Am2m3[k]/(mBins[k+1]-mBins[k]);
+        Sgrw[k] = -term;
 
-    for(k=1; k<nsoot-1; k++) {                             // loop up interior bins
-        Sgrw[k]  = term;
-        term     = kGrw*Am2m3[k]/(mBins[k+1]-mBins[k]);
-        Sgrw[k] -= term;
+        for(k=1; k<nsoot-1; k++) {                             // loop up interior bins
+            Sgrw[k]  = term;
+            term     = kGrw*Am2m3[k]/(mBins[k+1]-mBins[k]);
+            Sgrw[k] -= term;
+        }
+
+        k=nsoot-1;                                             // last bin
+        Sgrw[k] = term + kGrw*Am2m3[k]/mBins[k];               // growth into last bin from its smaller neighbor + 
+                                                               // growth inside last bin manifest as new particles in that bin
     }
-
-    k=nsoot-1;                                             // last bin
-    Sgrw[k] = term + kGrw*Am2m3[k]/mBins[k];               // growth into last bin from its smaller neighbor + 
-                                                           // growth inside last bin manifest as new particles in that bin
     //----------- PAH condensation terms: 
     //----------- positive vel. through size domain: each bin has in/out except 1st (out) and last (in,gen)
     //----------- beta_DSi is set in pahSootCollisionRatePerDimer called in nucl->getNucleationSootRate
@@ -218,51 +223,56 @@ void sootModel_SECT::setSourceTerms(state &state) {
 
     vector<double> Soxi(nsoot, 0.0);                       // #/m3*s in each bin
 
-    k=nsoot-1;                                             // last bin
-    term = kOxi*Am2m3[k]/(mBins[k]-mBins[k-1]);
-    Soxi[k] = -term;
+    if (oxid->mechType != oxidationMech::NONE) {
+        k=nsoot-1;                                             // last bin
+        term = kOxi*Am2m3[k]/(mBins[k]-mBins[k-1]);
+        Soxi[k] = -term;
 
-    for(k=nsoot-2; k>0; k--) {                             // loop down interior bins
-        Soxi[k]  = term;
-        term     = kOxi*Am2m3[k]/(mBins[k]-mBins[k-1]);
-        Soxi[k] -= term;
+        for(k=nsoot-2; k>0; k--) {                             // loop down interior bins
+            Soxi[k]  = term;
+            term     = kOxi*Am2m3[k]/(mBins[k]-mBins[k-1]);
+            Soxi[k] -= term;
+        }
+        k=0;                                                   // first bin
+        Soxi[k] = term - kOxi*Am2m3[k]/mBins[k];               // source from oxid of larger neighbor - 
+                                                               // oxidation inside first bin, manifest as fewer particles in that bin (rather than transport out)
     }
-    k=0;                                                   // first bin
-    Soxi[k] = term - kOxi*Am2m3[k]/mBins[k];               // source from oxid of larger neighbor - 
-                                                           // oxidation inside first bin, manifest as fewer particles in that bin (rather than transport out)
     //----------- coagulation terms
 
-    static const double ilnF = 1.0/log(binGrowthFactor);   // factor for finding location
 
     vector<double> Scoa(nsoot, 0.0);                       // #/m3*s in each bin
-    double K12;
 
-    for(size_t i=0; i<nsoot; i++) {                        // loop size i
-        for(size_t j=i; j<nsoot; j++) {                    // which collides with each size j >= i (loop over upper triang matrix inc diag)
+    if (coag->mechType != coagulationMech::NONE) {
+        static const double ilnF = 1.0/log(binGrowthFactor);   // factor for finding location
+        double K12;
 
-            //----------- loss: i,j collide to remove from bins i and j
+        for(size_t i=0; i<nsoot; i++) {                        // loop size i
+            for(size_t j=i; j<nsoot; j++) {                    // which collides with each size j >= i (loop over upper triang matrix inc diag)
 
-            K12   = coag->getCoagulationSootRate(state, mBins[i], mBins[j]);
-            term  = K12*state.sootVar[i]*state.sootVar[j];
-            Scoa[i] -= term;
-            if (j>i)                   // account for terms below the diagonal taking advantage of symmetry
-                Scoa[j] -= term;
+                //----------- loss: i,j collide to remove from bins i and j
 
-            //----------- gain: mi + mj = mk --> bins floor(k) and ceil(k) gain so that mass, # conserved
-            //----------- mBins[0]*F^k = mBins[i] + mBins[j] --> k = int( log((mBins[i]+mBins[j])/mBins[0])/log(F) )
+                K12   = coag->getCoagulationSootRate(state, mBins[i], mBins[j]);
+                term  = K12*state.sootVar[i]*state.sootVar[j];
+                Scoa[i] -= term;
+                if (j>i)                   // account for terms below the diagonal taking advantage of symmetry
+                    Scoa[j] -= term;
 
-            if (i==j) term *= 0.5;
+                //----------- gain: mi + mj = mk --> bins floor(k) and ceil(k) gain so that mass, # conserved
+                //----------- mBins[0]*F^k = mBins[i] + mBins[j] --> k = int( log((mBins[i]+mBins[j])/mBins[0])/log(F) )
 
-            size_t k  = static_cast<size_t>(ilnF * log((mBins[i]+mBins[j])/mBins[0]));
+                if (i==j) term *= 0.5;
 
-            if (k >= nsoot) 
-                k=nsoot-1;
-            if (k == nsoot-1)                              // i+j into last bin, no splitting, conserve mass
-                Scoa[k] += term*(mBins[i]+mBins[j])/mBins[k];
-            else {                                         // i+j between k and k+1, split to conserve # and mass
-                double Xk = (mBins[k+1] - (mBins[i] + mBins[j])) / (mBins[k+1] - mBins[k]);   // fraction into bin k
-                Scoa[k]   += Xk       * term;
-                Scoa[k+1] += (1.0-Xk) * term;
+                size_t k  = static_cast<size_t>(ilnF * log((mBins[i]+mBins[j])/mBins[0]));
+
+                if (k >= nsoot) 
+                    k=nsoot-1;
+                if (k == nsoot-1)                              // i+j into last bin, no splitting, conserve mass
+                    Scoa[k] += term*(mBins[i]+mBins[j])/mBins[k];
+                else {                                         // i+j between k and k+1, split to conserve # and mass
+                    double Xk = (mBins[k+1] - (mBins[i] + mBins[j])) / (mBins[k+1] - mBins[k]);   // fraction into bin k
+                    Scoa[k]   += Xk       * term;
+                    Scoa[k+1] += (1.0-Xk) * term;
+                }
             }
         }
     }
