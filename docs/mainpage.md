@@ -55,5 +55,5 @@ In the case of a temporally or spatially evolving simulation, only steps 3–5 n
 
 # Examples
 
-Sootlib is written in C++ and includes example codes that illustrate its use.
+Sootlib is written in C++ and includes two example codes that illustrate its use. The first example ```simple_example.cc``` illustrates the setup and interaction with the soot variable source terms, which are the key output of the model. The second example, ```burner_flame.cc``` integrates soot variables along the length of a flat flame burner with fixed gas variable profiles. This is a simple example that can be used to compare soot model specifications, but does not include soot diffusion, or coupling from the soot phase back to the gas phase.
 

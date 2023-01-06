@@ -1,4 +1,5 @@
 #include "sootModel.h"
+#include <iostream>
 
 #include "nucleationModels/nucleationModel_NONE.h"
 #include "nucleationModels/nucleationModel_LL.h"
@@ -138,5 +139,9 @@ void sootModel::checkSpec() {
 
     if((grow->mechType==growthMech::HACA    && oxid->mechType!=oxidationMech::HACA) ||
        (oxid->mechType==oxidationMech::HACA && grow->mechType!=growthMech::HACA))
-        throw domain_error("Invalid model combination: HACA surface growth must pair with HACA oxid and vice-versa");
+        cerr << endl
+             << "**********************************************************************" << endl
+             << "Warning: HACA surface growth should pair with HACA oxid and vice-versa" << endl
+             << "**********************************************************************" << endl << endl;
+        //throw domain_error("Invalid model combination: HACA surface growth must pair with HACA oxid and vice-versa");
 }

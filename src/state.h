@@ -38,7 +38,7 @@ class state {
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
-        void setState(double T_, double P_, double rhoGas_, double muGas_, double MWGas_,
+        void setState(double T_, double P_, double rhoGas_, double muGas_,
                       std::vector<double> yGas_, std::vector<double> yPAH_, 
                       std::vector<double> sootVar_, int nsoot_, double cMin_ = 100);
 
