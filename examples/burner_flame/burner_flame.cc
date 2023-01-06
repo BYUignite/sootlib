@@ -30,9 +30,6 @@ int main(int argc, char** argv) {
     ifstream ifile("burner_profiles.inp");
     string line;
     std::getline(ifile, line);                     // header
-    std::getline(ifile, line);                     // header
-    std::getline(ifile, line);                     // header
-    std::getline(ifile, line);                     // header
 
     double d;
     for(int i=0; i<35; i++) {
@@ -49,7 +46,8 @@ int main(int argc, char** argv) {
         ifile >> d; yH2O_prof.push_back(d);
         ifile >> d; yCO_prof.push_back(d);
         ifile >> d; yC2H2_prof.push_back(d);
-        ifile >> d; ifile >> d;                     // soot
+        ifile >> d;                                 // soot
+        ifile >> d;                                 // soot
     }
 
     Linear_interp LI_v(z_prof,     v_prof);         // interpolate v to some t with LI_T(some_t);
@@ -83,8 +81,8 @@ int main(int argc, char** argv) {
 
     //---------- set up thermodynamic state variables
 
-    state S = state(nsoot);
-    double P      = 101325;  // pressure in Pa
+    state  S = state(nsoot);
+    double P = 101325;                               // pressure in Pa
 
     vector<double> yGas(size_t(gasSp::size), 0.0);   // y_H, H2, O, O2, OH, H2O, CO, C2H2
     vector<double> yPAH(size_t(pahSp::size), 0.0);
@@ -93,9 +91,9 @@ int main(int argc, char** argv) {
     vector<double> M(nsoot, 0.0);                    // M = Mhat * rho
 
     double zstart = z_prof[0];
-    double zend = z_prof.back();
+    double zend   = z_prof.back();
     int    nsteps = 20000;
-    double dz = (zend-zstart)/nsteps;
+    double dz     = (zend-zstart)/nsteps;
 
     ofstream ofile("burner.out");
 

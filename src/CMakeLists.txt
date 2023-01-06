@@ -38,11 +38,6 @@ add_subdirectory(growthModels)
 add_subdirectory(oxidationModels)
 add_subdirectory(coagulationModels)
 
-#------ external content ------------------
-
-target_sources(sootModel PRIVATE ${PROJECT_SOURCE_DIR}/ext/eispack/eispack.h
-                                 ${PROJECT_SOURCE_DIR}/ext/eispack/eispack.cc)
-
 ############# LIBRARY INSTALLATION ################
 
 include(GNUInstallDirs)

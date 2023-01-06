@@ -6,6 +6,7 @@
 using namespace std;
 using namespace soot;
 
+//------ LApack function
 extern "C" void dstev_(char *JOBZ, int *N, double *D, double *E, double *Z, int *LDZ, double *WORK, int *INFO);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -261,10 +262,8 @@ void sootModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights,
 /// Wheeler algorithm for computing weights and abscissas from moments.
 ///
 /// From Marchisio and Fox (2013) Computational Models for Polydisperse and
-/// Multiphase Systems. Uses eispack function tql2 for eigenvalues and
-/// eigenvectors of a symmetric tridiagonal matrix. If eispack version tql2
-/// is desired, download eispack.hpp and eispack.cc. LApack's dstev
-/// function to compute eigenvalues and eigenvectors of symmetrical
+/// Multiphase Systems.
+/// LApack's dstev function to compute eigenvalues and eigenvectors of symmetrical
 /// tridiagonal matrix.
 ///
 /// @param m    \input     vector of moments (size = 2N)
@@ -303,13 +302,15 @@ void sootModel_QMOM::wheeler(const vector<double>& m, size_t N, vector<double>& 
     for (size_t i = 0; i < N; i++)
         evec[i + N * i] = 1;
 
-    //int flag = tql2(N, &j_diag[0], &j_ldiag[0], &evec[0]);       // for eispack
+    //----- compute eigenvalues/eigenvectors (lapack)
 
     char VorN = 'V';
     vector<double> work(2*N-2);
     int info;
     int NN = int(N);
     dstev_( &VorN, &NN, &j_diag[0], &j_ldiag[1], &evec[0], &NN, &work[0], &info);
+
+    //-----
 
     x = j_diag;      // j_diag are now the vector of eigenvalues.
 

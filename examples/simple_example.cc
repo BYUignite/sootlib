@@ -15,10 +15,10 @@ int main(int argc, char** argv) {
     oxidationModel   *oxid = new soot::oxidationModel_LL();
     coagulationModel *coag = new soot::coagulationModel_FM();
 
-    size_t nsoot = 3;                             
+    size_t nsoot = 2;  // 3; etc.
 
-    //sootModel_QMOM SM(nsoot, nucl, grow, oxid, coag);
-    sootModel_LOGN SM(nsoot, nucl, grow, oxid, coag);
+    sootModel_QMOM SM(nsoot, nucl, grow, oxid, coag);
+    //sootModel_LOGN SM(nsoot, nucl, grow, oxid, coag);
 
     SM.coag->set_FM_multiplier(9.0/2.0/2.2);
 
@@ -30,7 +30,6 @@ int main(int argc, char** argv) {
     double P      = 101325;  // pressure in Pa
     double rhoGas = 0.1;     // gas density in kg/m^3
     double muGas  = 1E-5;    // gas viscosity in Pa*s
-    double MWGas  = 29;      // gas molar weight in kg/kmol
 
     vector<double> yGas{3E-4, 0.002, 0.001, 0.05, 0.003, 0.07, 0.1, 0.002};  // gas species mass fractions [H, H2, O, O2, OH, H2O, CO, C2H2]
     vector<double> yPAH{0, 0, 0, 0, 0, 0};                                   // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
