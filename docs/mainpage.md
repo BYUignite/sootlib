@@ -14,6 +14,7 @@ The code is intended to be built and used on Linux-like systems, including MacOS
 Required software:
 * CMake 3.15+
 * C++11
+* LApack
 
 Optional software:
 * Doxygen (for building documentation)
