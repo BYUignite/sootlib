@@ -26,8 +26,11 @@ set_target_properties(sootModel PROPERTIES PUBLIC_HEADER "state.h;sootModel.h;so
 
 if(APPLE)
     find_library(ACCELERATE Accelerate)
+    target_link_libraries(sootModel ${ACCELERATE})
+else()
+    find_package(LAPACK REQUIRED)
+    target_link_libraries(sootModel LAPACK::LAPACK)
 endif()
-target_link_libraries(sootModel ${ACCELERATE})
 
 #------ src files ------------------
 
