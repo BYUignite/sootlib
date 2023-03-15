@@ -6,4 +6,6 @@ target_sources(sootModel PRIVATE
                 oxidationModel_LL.cc        oxidationModel_LL.h
                 oxidationModel_LEE_NEOH.cc  oxidationModel_LEE_NEOH.h
                 oxidationModel_NSC_NEOH.cc  oxidationModel_NSC_NEOH.h
+                oxidationModel_OPTJ.cc      oxidationModel_OPTJ.h
+                oxidationModel_OPTG.cc      oxidationModel_OPTG.h
                                             oxidationModel_NONE.h)

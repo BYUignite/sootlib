@@ -88,6 +88,8 @@ install(FILES "oxidationModels/oxidationModel_LL.h"            DESTINATION "${CM
 install(FILES "oxidationModels/oxidationModel_LEE_NEOH.h"      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
 install(FILES "oxidationModels/oxidationModel_NSC_NEOH.h"      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
 install(FILES "oxidationModels/oxidationModel_HACA.h"          DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
+install(FILES "oxidationModels/oxidationModel_OPTJ.h"          DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
+install(FILES "oxidationModels/oxidationModel_OPTG.h"          DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
 install(FILES "oxidationModels/oxidationModel_NONE.h"          DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/oxidationModels")
 
 install(FILES "coagulationModels/coagulationModel.h"           DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/coagulationModels")

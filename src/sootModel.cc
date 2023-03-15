@@ -16,6 +16,8 @@
 #include "oxidationModels/oxidationModel_HACA.h"
 #include "oxidationModels/oxidationModel_LEE_NEOH.h"
 #include "oxidationModels/oxidationModel_NSC_NEOH.h"
+#include "oxidationModels/oxidationModel_OPTJ.h"
+#include "oxidationModels/oxidationModel_OPTG.h"
 
 #include "coagulationModels/coagulationModel_NONE.h"
 #include "coagulationModels/coagulationModel_FM.h"
@@ -100,9 +102,11 @@ sootModel::sootModel(size_t          nsoot_,
     switch (Omech) {
         case oxidationMech::NONE     : oxid = new oxidationModel_NONE();     break;
         case oxidationMech::LL       : oxid = new oxidationModel_LL();       break;
+        case oxidationMech::HACA     : oxid = new oxidationModel_HACA();     break;
         case oxidationMech::LEE_NEOH : oxid = new oxidationModel_LEE_NEOH(); break;
         case oxidationMech::NSC_NEOH : oxid = new oxidationModel_NSC_NEOH(); break;
-        case oxidationMech::HACA     : oxid = new oxidationModel_HACA();     break;
+        case oxidationMech::OPTJ     : oxid = new oxidationModel_OPTJ();     break;
+        case oxidationMech::OPTG     : oxid = new oxidationModel_OPTG();     break;
         default: throw domain_error("Invalid oxidation model requested");
     }
 

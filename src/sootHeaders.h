@@ -20,6 +20,8 @@
 #include "oxidationModels/oxidationModel_LEE_NEOH.h"
 #include "oxidationModels/oxidationModel_NSC_NEOH.h"
 #include "oxidationModels/oxidationModel_HACA.h"
+#include "oxidationModels/oxidationModel_OPTJ.h"
+#include "oxidationModels/oxidationModel_OPTG.h"
 #include "oxidationModels/oxidationModel_NONE.h"
 
 #include "coagulationModels/coagulationModel.h"
