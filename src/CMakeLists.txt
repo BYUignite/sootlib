@@ -74,6 +74,7 @@ install(FILES "sootModel_SECT.h"                               DESTINATION "${CM
 install(FILES "nucleationModels/nucleationModel.h"             DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
 install(FILES "nucleationModels/nucleationModel_LL.h"          DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
 install(FILES "nucleationModels/nucleationModel_LIN.h"         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
+install(FILES "nucleationModels/nucleationModel_LINA1.h"       DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
 install(FILES "nucleationModels/nucleationModel_PAH.h"         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
 install(FILES "nucleationModels/nucleationModel_NONE.h"        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sootlib/nucleationModels")
 

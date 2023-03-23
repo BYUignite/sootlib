@@ -4,6 +4,7 @@
 #include "nucleationModels/nucleationModel_NONE.h"
 #include "nucleationModels/nucleationModel_LL.h"
 #include "nucleationModels/nucleationModel_LIN.h"
+#include "nucleationModels/nucleationModel_LINA1.h"
 #include "nucleationModels/nucleationModel_PAH.h"
 
 #include "growthModels/growthModel_NONE.h"
@@ -80,10 +81,11 @@ sootModel::sootModel(size_t          nsoot_,
     //---------- set nucleation model
 
     switch (Nmech) {
-        case nucleationMech::NONE : nucl = new nucleationModel_NONE(); break;
-        case nucleationMech::LL   : nucl = new nucleationModel_LL();   break;
-        case nucleationMech::LIN  : nucl = new nucleationModel_LIN();  break;
-        case nucleationMech::PAH  : nucl = new nucleationModel_PAH();  break;
+        case nucleationMech::NONE  : nucl = new nucleationModel_NONE();   break;
+        case nucleationMech::LL    : nucl = new nucleationModel_LL();     break;
+        case nucleationMech::LIN   : nucl = new nucleationModel_LIN();    break;
+        case nucleationMech::LINA1 : nucl = new nucleationModel_LINA1();  break;
+        case nucleationMech::PAH   : nucl = new nucleationModel_PAH();    break;
         default: throw domain_error("Invalid nucleation model requested");
     }
 

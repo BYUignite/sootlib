@@ -6,6 +6,7 @@
 #include "nucleationModels/nucleationModel.h"
 #include "nucleationModels/nucleationModel_LL.h"
 #include "nucleationModels/nucleationModel_LIN.h"
+#include "nucleationModels/nucleationModel_LINA1.h"
 #include "nucleationModels/nucleationModel_PAH.h"
 #include "nucleationModels/nucleationModel_NONE.h"
 
