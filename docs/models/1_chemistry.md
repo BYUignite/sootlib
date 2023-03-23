@@ -21,11 +21,16 @@ $$
 
 ### Leung & Lindstedt (LL)
 
-SootLib's most basic chemistry model is the simplified kinetic mechanism presented by Leung and Lindstedt (LL), which consists of four Arrhenius-style rate expressions: one each for soot nucleation, surface growth, oxidation, and coagulation \cite Leung_1991. The LL nucleation rate depends only on the concentration of gaseous acetylene, the gas temperature, and an empirically-determined rate constant: $$R_{nuc} = 0.1\times 10^5 e^{-21100/T} [\text{C}_2\text{H}_2].$$
+SootLib's most basic chemistry model is the simplified kinetic mechanism presented by Leung and Lindstedt (LL), which consists of four Arrhenius-style rate expressions: one each for soot nucleation, surface growth, oxidation, and coagulation \cite Leung_1991. The LL nucleation rate depends only on the concentration of gaseous acetylene, the gas temperature, and an empirically-determined rate constant with units of (\#/m\f$^3\f$s): 
+$$R_{nuc} = 0.1\times 10^5 e^{-21100/T} [\text{C}_2\text{H}_2]\cdot 2N_a/C_{min}.$$
 
 ### Lindstedt (LIN)
-Lindstedt later proposed an alteration to the LL nucleation step's pre-exponential factor to increase accuracy without changing the expression's form (LIN) \cite Lindstedt_2005 , giving the following expression:
-$$R_{nuc} = 0.1\times 10^{-11} e^{-12100/T} [\text{C}_2\text{H}_2].$$
+Lindstedt later proposed an alteration to the LL nucleation step's pre-exponential factor to increase accuracy without changing the expression's form (LIN) \cite Lindstedt_2005 , giving the following expression for the rate in units of (\#/m\f$^3\f$s):
+$$R_{nuc} = 0.64\times 10^{4} e^{-21100/T} [\text{C}_2\text{H}_2]\cdot 2N_a/C_{min}.$$
+
+### Lindstedt Benzene (LINA1)
+Lindstedt proposed a nucleation rate for soot formation from benzene \cite Lindstedt_1994 with the following rate expression with units of units of (\#/m\f$^3\f$s): 
+$$R_{nuc} = 0.75\times 10^5 e^{-21000/T} [\text{C}_6\text{H}_6]\cdot 6N_a/C_{min}.$$
 
 ### PAH nucleation (PAH)
 SootLib implements the PAH nucleation model presented by Blanquart and Pitsch, in which nascent soot particles are created by the collision of two PAH dimers, themselves created by the collision of two PAH molecules \cite Blanquart_2009c. Assuming free-molecular coagulation for the self-collision of PAH molecules, the effective rate of dimerization is given by
@@ -142,6 +147,22 @@ $$R_{oxi}=0.13\cdot 1290 P_{\text{OH}} T^{-1/2}$$
 to represent soot oxidation by OH \cite Neoh_1980 \cite Neoh_1981.
 
 To account for the lack of consideration for oxidation by OH in the previous models, SootLib adds the preceding expression to those presented by Lee et al. and Nagle and Strickland-Constable, resulting in the combined LEE_NEOH and NSC_NEOH options for soot oxidation in SootLib. Leung and Lindstedt explicitly acknowledge the lack of oxidation by OH in their model and consider their one-step oxidation mechanism sufficient for their purposes; in light of their reasoning, SootLib does not alter or add to the existing Leung and Lindstedt oxidation step.
+
+### Guo et al. Optimized models for OH and O2 (OPTG)
+Guo, Anderson, and Sunderland \cite Guo_2016 examined 12 experimental studies of soot oxidation and found optmized rates for oxidation from OH, and O2. 
+The OH rate is the same as that of Neoh, but with a slightly different reaction efficiency of 0.1,
+$$R_{oxi,OH}=0.1\cdot 1290 P_{\text{OH}} T^{-1/2}.$$
+The oxidation rate by O2 is given by
+$$R_{oxi,O2} = 15.8P_{O2}T^{1/2}e^{-23450/T}/1000,$$
+with units of (kg/m\f$^2\f$s), where the oxygen pressure is in Pascals.
+
+### Josephson et al. Optimized models for OH and O2 (OPTJ)
+Josephson et al. \cite Josephson_2017 examined 13 experimental studies of soot oxidation and found optmized rates for oxidation from OH, and O2 using Bayesian methods. 
+The OH rate is the same as that of Neoh, but with a different reaction efficiency of 0.15,
+$$R_{oxi,OH}=0.15\cdot 1290 P_{\text{OH}} T^{-1/2}.$$
+The oxidation rate by O2 is given by
+$$R_{oxi,O2} = 0.798P_{O2}T^{1/2}e^{-21294/T}/1000,$$
+with units of (kg/m\f$^2\f$s), where the oxygen pressure is in Pascals.
 
 ### Hydrogen-abstraction acetylene-addition (HACA)
 SootLib also includes the HACA mechanism for soot oxidation, represented by reactions (5) and (6) in the HACA table of reactions in the surface growth chemistry section. The HACA mechanism accounts for oxidation by both \f$\text{O}_2\f$ and OH and includes the previously-discussed dependence on available particle surface sites. The HACA rates of oxidation by \f$\text{O}_2\f$ and OH are given by \cite Appel_2000
