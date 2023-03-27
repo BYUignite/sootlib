@@ -1,6 +1,6 @@
 # SootLib overview
 
-[Sootlib](https://github.com/BYUignite/sootlib.git) is an open-source C++ library that computes soot source terms using moment-based particle size distribution models for combustion CFD simulations. Detailed code documentation is available [here](https://ignite.byu.edu/sootlib_documentation/)
+[Sootlib](https://github.com/BYUignite/sootlib.git) is an open-source C++ library that computes soot source terms using moment-based particle size distribution models for combustion CFD simulations. Detailed code documentation is available [here](https://ignite.byu.edu/sootlib_documentation/). Click [here](https://www.sciencedirect.com/science/article/pii/S2352711023000717) for the paper published in SoftwareX.
 
 # Dependencies and installation
 
