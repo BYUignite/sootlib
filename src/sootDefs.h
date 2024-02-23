@@ -38,7 +38,7 @@ enum class psdMech        { NONE, MONO, LOGN, QMOM, MOMIC,    SECT,             
 
 enum class gasSp{ O2, O, H2, H, OH, H2O, CO, C2H2, C6H6, C, size };
 
-const std::map<std::string, gasSp> gasSpMapSE{{"O2",  gasSp::O2},     ///< map String to Enumeration
+static std::map<std::string, gasSp> gasSpMapSE{{"O2",  gasSp::O2},     ///< map String to Enumeration
                                               {"O" ,  gasSp::O},
                                               {"H2",  gasSp::H2},
                                               {"H",   gasSp::H},
@@ -49,7 +49,7 @@ const std::map<std::string, gasSp> gasSpMapSE{{"O2",  gasSp::O2},     ///< map S
                                               {"C6H6",gasSp::C6H6},
                                               {"C",   gasSp::C}};
 
-const std::map<gasSp, std::string> gasSpMapES{{gasSp::O2,  "O2"},     ///< map Enumeration to String
+static std::map<gasSp, std::string> gasSpMapES{{gasSp::O2,  "O2"},     ///< map Enumeration to String
                                               {gasSp::O,   "O" },
                                               {gasSp::H2,  "H2"},
                                               {gasSp::H,   "H"},
@@ -60,7 +60,7 @@ const std::map<gasSp, std::string> gasSpMapES{{gasSp::O2,  "O2"},     ///< map E
                                               {gasSp::C6H6,"C6H6"},
                                               {gasSp::C,   "C"}};
 
-const std::map<int, std::string> gasSpMapIS{{0,  "O2"},               //< map Int to String
+static std::map<int, std::string> gasSpMapIS{{0,  "O2"},               //< map Int to String
                                             {1,   "O" },
                                             {2,  "H2"},
                                             {3,   "H"},

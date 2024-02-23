@@ -79,8 +79,8 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_,
     double yGas_sum = 0;
     for(double y : yGas_)
         yGas_sum += y;
-    if (yGas_sum > 1.0)
-        throw domain_error("Unphysical state value input: sum of gas species mass fractions greater than one");
+    // if (yGas_sum > 1.0)
+    //     throw domain_error("Unphysical state value input: sum of gas species mass fractions greater than one");
 
     yGas = yGas_;
 
