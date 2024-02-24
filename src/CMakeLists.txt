@@ -2,7 +2,7 @@
 
 # -------- library targets --------
 
-add_library(sootModel)
+add_library(sootModel SHARED)
 add_library(sootlib::sootModel ALIAS sootModel)    # alias for use as imported target
 
 target_sources(sootModel PRIVATE

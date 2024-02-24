@@ -21,7 +21,7 @@
 ///
 ///////////////////////////////////////////////////////////////////////////////
 
-double binomial_coefficient(unsigned r, unsigned k) {
+static double binomial_coefficient(unsigned r, unsigned k) {
     constexpr double factorials[] = {
         1.0,
         1.0,
