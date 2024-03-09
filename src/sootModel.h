@@ -34,11 +34,11 @@ public:
 
     bool    mechsNewedHere;     ///< flag to delete "new" objects
 
-    psdMech psdMechType;        ///< one of MONO, LOGN, QMOM, MOMIC, SECT, etc.
+    psdMech psdMechType;        ///< one of MONO, LOGN, QMOM, MOMIC, SECT, DETAILED, etc.
 
-    //----------- for the SECT model interface
+    //----------- for the SECT or DETAILED model interfaces
 
-    std::vector<double> mBins;  ///< mass in sections for the sectional model
+    std::vector<double> mBins;  ///< mass in sections for the sectional or detailed models
     sourceTerms sources;        ///< struct containing soot, gas, and pah source terms vectors
 
     //////////////// MEMBER FUNCTIONS /////////////////
@@ -59,6 +59,14 @@ public:
     }
     virtual double get_M1_sectional(const state &state) {
         throw std::runtime_error("ERROR: sootModel::get_M1_sectional should not be called, but child sootModel_SECT::get_M1_sectional is fine");
+        return 0;
+    }
+    virtual double get_M0_detailed(const state &state) {
+        throw std::runtime_error("ERROR: sootModel::get_M0_detailed should not be called, but child sootModel_DETAILED::get_M0_sectional is fine");
+        return 0;
+    }
+    virtual double get_M1_detailed(const state &state) {
+        throw std::runtime_error("ERROR: sootModel::get_M1_detailed should not be called, but child sootModel_DETAILED::get_M1_sectional is fine");
         return 0;
     }
 
