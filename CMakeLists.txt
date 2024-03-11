@@ -1,6 +1,6 @@
 ################### PREAMBLE ###############################
 
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.23)
 
 project(sootlib VERSION 0.1.0 LANGUAGES CXX)
 
@@ -23,8 +23,8 @@ set(CMAKE_CXX_EXTENSIONS NO)
 #---- installation location
 # set here, OR comment these and set on command line with cmake --install-prefix /path/sootlib ..
 
-set(CMAKE_INSTALL_PREFIX "/opt/sootlib")              # --> /opt/sootlib/include and /opt/sootlib/lib
-#set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}")    # --> ./include and ./lib
+#set(CMAKE_INSTALL_PREFIX "/opt/sootlib")              # --> /opt/sootlib/include and /opt/sootlib/lib
+set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}")    # --> ./include and ./lib
 
 # ---- build options ----
 
