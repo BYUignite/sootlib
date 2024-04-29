@@ -59,6 +59,10 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_,
 
     //------------ soot moments/bins
 
+    // for(int i=0; i<nsoot; i++)
+    //     if(sootVar_[i] < 0)
+    //         sootVar_[i] = 0.0;
+
     nsoot = nsoot_;
     for (double s : sootVar_)
         if (s < 0)

@@ -38,10 +38,10 @@ int main(int argc, char** argv) {
         ifile >> d; T_prof.push_back(d);
         ifile >> d; rho_prof.push_back(d);
         ifile >> d; mu_prof.push_back(d);
-        ifile >> d; yH_prof.push_back(d);
-        ifile >> d; yH2_prof.push_back(d);
-        ifile >> d; yO_prof.push_back(d);
         ifile >> d; yO2_prof.push_back(d);
+        ifile >> d; yO_prof.push_back(d);
+        ifile >> d; yH2_prof.push_back(d);
+        ifile >> d; yH_prof.push_back(d);
         ifile >> d; yOH_prof.push_back(d);
         ifile >> d; yH2O_prof.push_back(d);
         ifile >> d; yCO_prof.push_back(d);
@@ -54,10 +54,10 @@ int main(int argc, char** argv) {
     Linear_interp LI_T(z_prof,     T_prof);
     Linear_interp LI_rho(z_prof,   rho_prof);
     Linear_interp LI_mu(z_prof,    mu_prof);
-    Linear_interp LI_yH(z_prof,    yH_prof);
-    Linear_interp LI_yH2(z_prof,   yH2_prof);
-    Linear_interp LI_yO(z_prof,    yO_prof);
     Linear_interp LI_yO2(z_prof,   yO2_prof);
+    Linear_interp LI_yO(z_prof,    yO_prof);
+    Linear_interp LI_yH2(z_prof,   yH2_prof);
+    Linear_interp LI_yH(z_prof,    yH_prof);
     Linear_interp LI_yOH(z_prof,   yOH_prof);
     Linear_interp LI_yH2O(z_prof,  yH2O_prof);
     Linear_interp LI_yCO(z_prof,   yCO_prof);
@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
     state  S = state(nsoot);
     double P = 101325;                               // pressure in Pa
 
-    vector<double> yGas(size_t(gasSp::size), 0.0);   // y_H, H2, O, O2, OH, H2O, CO, C2H2
+    vector<double> yGas(size_t(gasSp::size), 0.0);   // y_O2, O, H2, H, OH, H2O, CO, C2H2
     vector<double> yPAH(size_t(pahSp::size), 0.0);
     vector<double> Mhat(nsoot, 0.0);                 // M/rho; main variable solved
     vector<double> Mhath(nsoot, 0.0);                // M/rho at half step for midpoint method
@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
     double zh;
     for(int istep = 0; istep < nsteps; istep++, z+=dz) {
 
-        yGas = {LI_yH(z), LI_yH2(z), LI_yO(z), LI_yO2(z), LI_yOH(z), LI_yH2O(z), LI_yCO(z), LI_yC2H2(z)};
+        yGas = {LI_yO2(z), LI_yO(z), LI_yH2(z), LI_yH(z), LI_yOH(z), LI_yH2O(z), LI_yCO(z), LI_yC2H2(z)};
         for(int i=0; i<nsoot; i++)
             M[i] = Mhat[i]*LI_rho(z);
         S.setState(LI_T(z), P, LI_rho(z), LI_mu(z), yGas, yPAH, M, nsoot);
