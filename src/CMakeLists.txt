@@ -75,7 +75,7 @@ include(GNUInstallDirs)
 install(
     TARGETS sootlib                                     # install library
     EXPORT  sootlib_exp                                 # define export var for next comand
-    FILE_SET sootlib_headers   DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    FILE_SET sootlib_headers DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
 )
 
 install(

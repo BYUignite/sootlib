@@ -210,6 +210,8 @@ void sootModel_QMOM::getWtsAbs(const vector<double>& M, vector<double>& weights,
     fill(weights.begin(),   weights.end(),   0.0);   // initialize weights and abscissas
     fill(abscissas.begin(), abscissas.end(), 0.0);
 
+    if(M[0] <= 0.0) return;
+
     //----------
 
     size_t Nenv = M.size()/2;   // local nsoonsoot; may change with moment downselection

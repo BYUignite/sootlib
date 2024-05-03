@@ -28,7 +28,7 @@ set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}")    # --> ./include and ./lib
 
 # ---- build options ----
 
-option(SOOTLIB_BUILD_EXAMPLES   "Build sootlib examples"        ON)
+option(SOOTLIB_BUILD_EXAMPLES   "Build sootlib examples"        OFF)
 option(SOOTLIB_BUILD_TESTING    "Build sootlib tests"           OFF)
 option(SOOTLIB_BUILD_DOCS       "Build sootlib documentation"   OFF)
 
