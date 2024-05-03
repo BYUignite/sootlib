@@ -23,8 +23,8 @@ set(CMAKE_CXX_EXTENSIONS NO)
 #---- installation location
 # set here, OR comment these and set on command line with cmake --install-prefix /path/sootlib ..
 
-#set(CMAKE_INSTALL_PREFIX "/opt/sootlib")              # --> /opt/sootlib/include and /opt/sootlib/lib
-set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}")    # --> ./include and ./lib
+#set(CMAKE_INSTALL_PREFIX "/opt/sootlib" CACHE STRING "install location")
+set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}" CACHE STRING "install location")
 
 # ---- build options ----
 
