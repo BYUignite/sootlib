@@ -62,10 +62,10 @@ add_subdirectory(coagulationModels)
 
 if(APPLE)
     find_library(ACCELERATE Accelerate)
-    target_link_libraries(sootlib ${ACCELERATE})
+    target_link_libraries(sootlib PRIVATE ${ACCELERATE})
 else()
     find_package(LAPACK REQUIRED)
-    target_link_libraries(sootlib LAPACK::LAPACK)
+    target_link_libraries(sootlib PRIVATE LAPACK::LAPACK)
 endif()
 
 ############################ Install library
