@@ -22,7 +22,7 @@ public:
      double getCoagulationSootRate(const state& state, double m1, double m2) const override;
 
      double getKfm(const state& state) const override {
-         return FM_multiplier * eps_c * sqrt(0.5*M_PI*kb*state.T)*pow(6./(M_PI/rhoSoot), twothird);
+         return FM_multiplier * eps_c * sqrt(0.5*M_PI*kb*state.T)*pow(6./(M_PI*rhoSoot), twothird);
      }
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
