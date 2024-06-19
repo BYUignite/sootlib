@@ -7,4 +7,5 @@ target_sources(sootlib PRIVATE
     oxidationModel_NSC_NEOH.cc
     oxidationModel_OPTJ.cc
     oxidationModel_OPTG.cc
+    oxidationModel_MB.cc
 )

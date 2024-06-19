@@ -31,11 +31,13 @@ target_sources(sootlib
                   nucleationModels/nucleationModel_LIN.h        
                   nucleationModels/nucleationModel_LINA1.h
                   nucleationModels/nucleationModel_PAH.h
+                  nucleationModels/nucleationModel_MB.h
                   nucleationModels/nucleationModel_NONE.h
                   growthModels/growthModel.h
                   growthModels/growthModel_LL.h
                   growthModels/growthModel_LIN.h            
                   growthModels/growthModel_HACA.h
+                  growthModels/growthModel_MB.h
                   growthModels/growthModel_NONE.h
                   oxidationModels/oxidationModel.h
                   oxidationModels/oxidationModel_LL.h
@@ -44,6 +46,7 @@ target_sources(sootlib
                   oxidationModels/oxidationModel_HACA.h
                   oxidationModels/oxidationModel_OPTJ.h    
                   oxidationModels/oxidationModel_OPTG.h
+                  oxidationModels/oxidationModel_MB.h
                   oxidationModels/oxidationModel_NONE.h
                   coagulationModels/coagulationModel.h
                   coagulationModels/coagulationModel_FM.h

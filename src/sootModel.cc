@@ -6,11 +6,13 @@
 #include "nucleationModels/nucleationModel_LIN.h"
 #include "nucleationModels/nucleationModel_LINA1.h"
 #include "nucleationModels/nucleationModel_PAH.h"
+#include "nucleationModels/nucleationModel_MB.h"
 
 #include "growthModels/growthModel_NONE.h"
 #include "growthModels/growthModel_LL.h"
 #include "growthModels/growthModel_LIN.h"
 #include "growthModels/growthModel_HACA.h"
+#include "growthModels/growthModel_MB.h"
 
 #include "oxidationModels/oxidationModel_NONE.h"
 #include "oxidationModels/oxidationModel_LL.h"
@@ -19,6 +21,7 @@
 #include "oxidationModels/oxidationModel_NSC_NEOH.h"
 #include "oxidationModels/oxidationModel_OPTJ.h"
 #include "oxidationModels/oxidationModel_OPTG.h"
+#include "oxidationModels/oxidationModel_MB.h"
 
 #include "coagulationModels/coagulationModel_NONE.h"
 #include "coagulationModels/coagulationModel_FM.h"
@@ -86,6 +89,8 @@ sootModel::sootModel(size_t          nsoot_,
         case nucleationMech::LIN   : nucl = new nucleationModel_LIN();    break;
         case nucleationMech::LINA1 : nucl = new nucleationModel_LINA1();  break;
         case nucleationMech::PAH   : nucl = new nucleationModel_PAH();    break;
+        case nucleationMech::MB    : nucl = new nucleationModel_MB();     break;
+                                    
         default: throw domain_error("Invalid nucleation model requested");
     }
 
@@ -96,6 +101,7 @@ sootModel::sootModel(size_t          nsoot_,
         case growthMech::LL   : grow = new growthModel_LL();   break;
         case growthMech::LIN  : grow = new growthModel_LIN();  break;
         case growthMech::HACA : grow = new growthModel_HACA(); break;
+        case growthMech::MB   : grow = new growthModel_MB();   break;
         default: throw domain_error("Invalid growth model requested");
     }
 
@@ -109,6 +115,7 @@ sootModel::sootModel(size_t          nsoot_,
         case oxidationMech::NSC_NEOH : oxid = new oxidationModel_NSC_NEOH(); break;
         case oxidationMech::OPTJ     : oxid = new oxidationModel_OPTJ();     break;
         case oxidationMech::OPTG     : oxid = new oxidationModel_OPTG();     break;
+        case oxidationMech::MB       : oxid = new oxidationModel_MB();       break;
         default: throw domain_error("Invalid oxidation model requested");
     }
 

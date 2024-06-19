@@ -4,4 +4,5 @@ target_sources(sootlib PRIVATE
     growthModel_HACA.cc
     growthModel_LIN.cc
     growthModel_LL.cc
+    growthModel_MB.cc
 )
