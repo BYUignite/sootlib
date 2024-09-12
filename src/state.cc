@@ -33,8 +33,9 @@ using namespace std;
 /// 
 ////////////////////////////////////////////////////////////////////////////////
 
-void state::setState(double T_, double P_, double rhoGas_, double muGas_,
-                     vector<double> yGas_, vector<double> yPah_, vector<double> sootVar_, int nsoot_, double cMin_) {
+void state::setState(double T_, double P_, double rhoGas_, double muGas_, double Ntar_,
+                     vector<double> yGas_, vector<double> yPah_, vector<double> yTar_, vector<double> yBio_,
+                     vector<double> sootVar_, int nsoot_, double cMin_) {
 
     //------------ scalar variable values
 
@@ -49,6 +50,9 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_,
 
     if (muGas_ <= 0) throw domain_error("Unphysical state value input: muGas");
     else muGas = muGas_;
+
+    if (Ntar_ <= 0) throw domain_error("Unphysical state value input: Ntar");
+    else Ntar = Ntar_;
 
     if (cMin_ <= 0) throw domain_error("Unphysical state value input: cMin");
     else cMin = cMin_;

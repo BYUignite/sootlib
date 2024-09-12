@@ -22,8 +22,9 @@ sootModel_MOMIC::sootModel_MOMIC(size_t            nsoot_,
                                  nucleationModel  *nucl_,
                                  growthModel      *grow_,
                                  oxidationModel   *oxid_,
-                                 coagulationModel *coag_) :
-        sootModel(nsoot_, nucl_, grow_, oxid_, coag_) {
+                                 coagulationModel *coag_,
+                                 tarModel         *tar_) :
+        sootModel(nsoot_, nucl_, grow_, oxid_, coag_, tar_) {
 
     if (nsoot_ < 3 || nsoot_ > 8)
         throw runtime_error("MOMIC requires 3-8 moments");
@@ -65,8 +66,9 @@ sootModel_MOMIC::sootModel_MOMIC(size_t          nsoot_,
                                  nucleationMech  Nmech,
                                  growthMech      Gmech,
                                  oxidationMech   Omech,
-                                 coagulationMech Cmech) :
-        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech) {
+                                 coagulationMech Cmech,
+                                 tarMech         Tmech) :
+        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech, Tmech) {
 
     if (nsoot_ < 3 || nsoot_ > 8)
         throw runtime_error("MOMIC requires 3-8 moments");

@@ -28,13 +28,15 @@ public:
                    nucleationModel  *nucl_,
                    growthModel      *grow_,
                    oxidationModel   *oxid_,
-                   coagulationModel *coag_);
+                   coagulationModel *coag_,
+                   tarModel         *tar_);
 
     sootModel_MONO(size_t           nsoot_,
                    nucleationMech   Nmech,
                    growthMech       Gmech,
                    oxidationMech    Omech,
-                   coagulationMech  Cmech);
+                   coagulationMech  Cmech,
+                   tarMech          Tmech);
 
     virtual ~sootModel_MONO() {};
 

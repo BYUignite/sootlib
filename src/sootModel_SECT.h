@@ -38,7 +38,8 @@ public:
                    nucleationModel  *nucl_,
                    growthModel      *grow_,
                    oxidationModel   *oxid_,
-                   coagulationModel *coag_, 
+                   coagulationModel *coag_,
+                   tarModel         *tar_,
                    double            binGrowthFactor_=2.0,
                    int               cMin_=100);
 
@@ -47,6 +48,7 @@ public:
                    growthMech       Gmech,
                    oxidationMech    Omech,
                    coagulationMech  Cmech,
+                   tarMech          Tmech,
                    double           binGrowthFactor_=2.0,
                    int              cMin_=100);
 

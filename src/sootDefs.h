@@ -26,17 +26,20 @@ const double twothird = 2.0/3.0;
 const double root2    = sqrt(2.0);
 const double mmin     = 2E-26;      ///< mass of a carbon atom (kg)
 
+//double mtar; // average molecular mass TODO: jansenpb
+
 //////////////////// mechanism types
 
-enum class nucleationMech { NONE, LL,   LIN, LINA1, PAH,   MB,                              size };
-enum class growthMech     { NONE, LL,   LIN,        HACA,  MB,                              size };
-enum class oxidationMech  { NONE, LL,   LEE_NEOH,          MB, NSC_NEOH, HACA, OPTJ, OPTG,  size };
+enum class nucleationMech { NONE, LL,   LIN, LINA1, PAH,   MB, FAIR, AJ_RED,                      size };
+enum class growthMech     { NONE, LL,   LIN,        HACA,  MB, FAIR,                              size };
+enum class oxidationMech  { NONE, LL,   LEE_NEOH, MB, FAIR, NSC_NEOH, HACA, AJ_RED, OPTJ, OPTG,  size };
 enum class coagulationMech{ NONE, FM,   CONTINUUM,  HM,       FUCHS,                        size };
 enum class psdMech        { NONE, MONO, LOGN, QMOM, MOMIC,    SECT,                         size };
+enum class tarMech        { NONE, AJ_RED, size                                                       };
 
 //////////////////// gas species list and properties
 
-enum class gasSp{ O2, O, H2, H, OH, H2O, CO, C2H2, C6H6, C, size };
+enum class gasSp{ O2, O, H2, H, OH, H2O, CO, C2H2, C6H6, C, CO2, size };
 
 static std::map<std::string, gasSp> gasSpMapSE{{"O2",  gasSp::O2},     ///< map String to Enumeration
                                               {"O" ,  gasSp::O},
@@ -47,7 +50,8 @@ static std::map<std::string, gasSp> gasSpMapSE{{"O2",  gasSp::O2},     ///< map 
                                               {"CO",  gasSp::CO},
                                               {"C2H2",gasSp::C2H2},
                                               {"C6H6",gasSp::C6H6},
-                                              {"C",   gasSp::C}};
+                                              {"C",   gasSp::C},
+                                              {"CO2", gasSp::CO2}};
 
 static std::map<gasSp, std::string> gasSpMapES{{gasSp::O2,  "O2"},     ///< map Enumeration to String
                                               {gasSp::O,   "O" },
@@ -58,7 +62,8 @@ static std::map<gasSp, std::string> gasSpMapES{{gasSp::O2,  "O2"},     ///< map 
                                               {gasSp::CO,  "CO"},
                                               {gasSp::C2H2,"C2H2"},
                                               {gasSp::C6H6,"C6H6"},
-                                              {gasSp::C,   "C"}};
+                                              {gasSp::C,   "C"},
+                                              {gasSp::CO2, "CO2"}};
 
 static std::map<int, std::string> gasSpMapIS{{0,  "O2"},               //< map Int to String
                                             {1,   "O" },
@@ -69,7 +74,8 @@ static std::map<int, std::string> gasSpMapIS{{0,  "O2"},               //< map I
                                             {6,  "CO"},
                                             {7,"C2H2"},
                                             {8,"C6H6"},
-                                            {9,   "C"}};
+                                            {9,   "C"},
+                                            {10, "CO2"}};
 
 const std::vector<double> gasSpMW{      ///< (kg/kmol); make sure the order corresponds to the gasSp enum
     31.998,    // O2                    ///< same as in cantera Elements.cpp
@@ -81,7 +87,9 @@ const std::vector<double> gasSpMW{      ///< (kg/kmol); make sure the order corr
     28.010,    // CO
     26.038,    // C2H2
     78.114,    // C6H6
-    12.011     // C
+    12.011,    // C
+    44.009     // CO2
+
 };
 
 //////////////////// PAH species list and properties for PAH nucleation and condensation
@@ -124,7 +132,39 @@ const std::vector<double> pahSpGamma = {   ///< unitless sticking coefficient
     0.0250,    // C16H10,
     0.0390     // C18H10,
 };
+/// Four basic tar types /// 
 
+enum class tarSp{ C6H6O, C10H8, C7H8, C6H6, size};
+
+const std::vector<double> tarSpMW = {
+    94.11,   // C6H6O
+    128.174, // C10H8
+    92.14,   // C7H8
+    78.114,  // C6H6
+
+};
+
+/// Four biomass components from CPDbio /// 
+
+enum class bioSp{ cell, hw_hc, sw_hc, hw_lig, sw_lig, size};
+
+static std::map<std::string, bioSp> bioMapSE{{"cell",   bioSp::cell },         // map string to enum
+                                             {"hw_hc",  bioSp::hw_hc},
+                                             {"sw_hc",  bioSp::sw_hc},
+                                             {"hw_lig", bioSp::hw_lig},
+                                             {"sw_lig", bioSp::sw_lig}};
+
+static std::map<bioSp, std::string> bioMapES{{bioSp::cell, "cell"},
+                                             {bioSp::hw_hc, "hw_hc"},
+                                             {bioSp::sw_hc, "sw_sc"},
+                                             {bioSp::hw_lig, "hw_lig"},
+                                             {bioSp::sw_lig, "sw_lig"}};
+
+static std::map<int, bioSp> bioMapIS{{0, bioSp::cell},
+                                     {1, bioSp::hw_hc},
+                                     {2, bioSp::sw_hc},
+                                     {3, bioSp::hw_lig},
+                                     {4, bioSp::sw_lig}};
 //////////////////// custom structures
 
 //----------------------

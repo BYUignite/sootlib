@@ -15,6 +15,7 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
+set(CMAKE_BINARY_DIR "${CMAKE_SOURCE_DIR}/build")
 
 #---- installation location: SET ON COMMAND LINE with cmake --install-prefix /opt/sootlib ..
 #---- or uncomment here, but don't do both
@@ -28,9 +29,12 @@ set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}" CACHE STRING "install location")
 
 # ---- build options ----
 
-option(SOOTLIB_BUILD_EXAMPLES   "Build sootlib examples"        OFF)
+option(SOOTLIB_BUILD_EXAMPLES   "Build sootlib examples"        ON)
 option(SOOTLIB_BUILD_TESTING    "Build sootlib tests"           OFF)
 option(SOOTLIB_BUILD_DOCS       "Build sootlib documentation"   OFF)
+
+# ---- Fortran Wrappers ----
+option(BUILD_FORTRAN_INTERFACE  "Build fortran interface"        ON)
 
 ################### MAIN PROJECT TARGETS #####################
 
@@ -55,4 +59,12 @@ endif()
 
 if(SOOTLIB_BUILD_DOCS)
     add_subdirectory(docs)
+endif()
+
+#-------- FORTRAN INTERFACE ----
+
+if(BUILD_FORTRAN_INTERFACE)
+    enable_language(Fortran)
+    add_subdirectory(src/fortran_wraps)
+    add_subdirectory(examples/fortran_examples)
 endif()

@@ -13,6 +13,7 @@ using namespace soot;
 /// @param grow_  \input pointer to growth model.
 /// @param oxid_  \input pointer to oxidation model.
 /// @param coag_  \input pointer to coagulation model.
+/// @param tar_   \input pointer to tar model.
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -20,8 +21,9 @@ sootModel_MONO::sootModel_MONO(size_t            nsoot_,
                                nucleationModel  *nucl_,
                                growthModel      *grow_,
                                oxidationModel   *oxid_,
-                               coagulationModel *coag_) :
-        sootModel(nsoot_, nucl_, grow_, oxid_, coag_) {
+                               coagulationModel *coag_,
+                               tarModel         *tar_) :
+        sootModel(nsoot_, nucl_, grow_, oxid_, coag_, tar_) {
 
     if (nsoot_ != 2)
         throw runtime_error("MONO requires nsoot=2");
@@ -38,6 +40,7 @@ sootModel_MONO::sootModel_MONO(size_t            nsoot_,
 /// @param Gmech  \input one of enum class growthMech in sootDefs.h
 /// @param Omech  \input one of enum class oxidationMech in sootDefs.h
 /// @param Cmech  \input one of enum class coagulationMech in sootDefs.h
+/// @param Tmech  \input one of enum class tarMech in sootDefs.h
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -45,8 +48,9 @@ sootModel_MONO::sootModel_MONO(size_t          nsoot_,
                                nucleationMech  Nmech,
                                growthMech      Gmech,
                                oxidationMech   Omech,
-                               coagulationMech Cmech) :
-        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech) {
+                               coagulationMech Cmech,
+                               tarMech         Tmech) :
+        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech, Tmech) {
 
     if (nsoot_ != 2)
         throw runtime_error("MONO requires nsoot=2");
@@ -68,6 +72,8 @@ sootModel_MONO::sootModel_MONO(size_t          nsoot_,
 
 void sootModel_MONO::setSourceTerms(state &state) {
 
+    cout << "Made it to start of setSourceTerms" << endl;
+
     //---------- get moments
 
     double M0 = state.sootVar[0];
@@ -86,6 +92,12 @@ void sootModel_MONO::setSourceTerms(state &state) {
     double kGrw = grow->getGrowthSootRate(state);
     double kOxi = oxid->getOxidationSootRate(state);
     double coa  = coag->getCoagulationSootRate(state, state.absc[0], state.absc[0]);
+    if (state.doTar) {
+        double incp   = tar->getInceptionTarRate(state);
+        double crack  = tar->getCrackingTarRate(state);
+        double gasify = tar->getSurfaceTarRate(state);
+        double depo   = tar->getDepositionTarRate(state);
+    }
 
     //---------- nucleation terms
 

@@ -9,10 +9,20 @@ using namespace soot;
 
 oxidationModel_MB::oxidationModel_MB() {
 
-    oxidationRxnRatios[(int)gasSp::CO] =  1;       // C(soot) + OH --> CO + H
-    oxidationRxnRatios[(int)gasSp::H]  =  1;
-    oxidationRxnRatios[(int)gasSp::C]  = -1;
+    // C + OH      --> CO + H   
+    //                          --> 2C_soot + OH + (1/2)O2 --> 2CO + H
+    // C + (1/2)O2 --> CO 
+
+    //oxidationRxnRatios[(int)gasSp::CO] =  2;
+    oxidationRxnRatios[(int)gasSp::H] =   1;
     oxidationRxnRatios[(int)gasSp::OH] = -1;
+    //oxidationRxnRatios[(int)gasSp::O2] = -0.5;
+    //oxidationRxnRatios[(int)gasSp::C]  = -2;
+    oxidationRxnRatios[(int)gasSp::CO] =  1;       // C(soot) + OH --> CO + H
+    //oxidationRxnRatios[(int)gasSp::H]  =  1;        // H + OH + C --> H2O + C
+    oxidationRxnRatios[(int)gasSp::C]  = -1;
+    //oxidationRxnRatios[(int)gasSp::OH] = -1;
+    //oxidationRxnRatios[(int)gasSp::H2O] = 1;
 
     mechType = oxidationMech::MB;
 }
@@ -45,6 +55,7 @@ double oxidationModel_MB::getOxidationSootRate(const state &state) const {
 
     double omega = 4.2325 * state.getGasSpC(gasSp::OH) * sqrt(state.T); // check against NEO, collision eff=0.04 here
 
-    return -omega * pow(M_PI * M0, 1.0/3.0) * pow(6 * M1 / rhoSoot, 2.0/3.0); // kg_soot/m2*s
+    //return -omega * 0.015 * pow(M_PI * M0, 1.0/3.0) * pow(6 * M1 / rhoSoot, 2.0/3.0) * gasSpMW[(int)gasSp::C]; // kg_soot/m2*s
+    return omega;// * pow(M_PI * M0, 1.0/3.0) * pow(6 * M1 / rhoSoot, 2.0/3.0); // kg_soot/m2*s
 }
 
