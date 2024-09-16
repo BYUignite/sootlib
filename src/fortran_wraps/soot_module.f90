@@ -245,8 +245,9 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine setState_C_interface(state_ptr, T_, P_, rhoGas_, muGas_, Ntar_, yGas_, yPAH_, yTar_, yBio_, sootVar_, nsoot_, cMin_) &
-                bind(C, name="setState_C_interface")
+        subroutine setState_C_interface(state_ptr, T_, P_, rhoGas_, muGas_, Ntar_, yGas_, yPAH_, &
+                                        yTar_, yBio_, sootVar_, nsoot_, cMin_) &
+                                        bind(C, name="setState_C_interface")
             import
             type(C_ptr),    value        :: state_ptr
             real(C_double), value        :: T_
@@ -587,7 +588,8 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine setState(state_ptr, T_, P_, rhoGas_, muGas_, Ntar_, yGas_, yPAH_, yTar_, yBio_, sootVar_, nsoot_, cMin_)
+        subroutine setState(state_ptr, T_, P_, rhoGas_, muGas_, Ntar_, yGas_, yPAH_, &
+                            yTar_, yBio_, sootVar_, nsoot_, cMin_)
             type(C_ptr)     , intent(inout)               :: state_ptr
             double precision, intent(inout)               :: T_
             double precision, intent(inout)               :: P_
@@ -602,7 +604,8 @@ module soot_module
             integer         , intent(in)               :: nsoot_
             double precision, intent(in)               :: cMin_
 
-            call setState_C_interface(state_ptr, T_, P_, rhoGas_, muGas_, Ntar_, yGas_, yPAH_, yTar_, yBio_, sootVar_, nsoot_, cMin_)
+            call setState_C_interface(state_ptr, T_, P_, rhoGas_, muGas_, Ntar_, yGas_, yPAH_, &
+                                      yTar_, yBio_, sootVar_, nsoot_, cMin_)
         end subroutine setState
 
         !------------------------------------------------------------------------
