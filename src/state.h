@@ -36,7 +36,8 @@ class state {
         double              cMin = 100;    ///< soot min num carbon atoms (dynamic for PAH nucleation)
         
         bool                doTar = false; ///< set true for tar transport equation and models
-        double              Ntar = 1;      ///< single tar variable TODO: make this general for more models
+        int                 Ntar;          ///< \# of tar variables
+        std::vector<double> tarVar;        ///> tar variables 
         std::vector<double> yTar;          ///< gas tar species mass fractions
         std::vector<double> yBio;          ///< biomass components from CPDbio
         double              mtar;          ///< average tar molecular size jansenpb TODO: does this go here?
@@ -44,11 +45,11 @@ class state {
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
-        void setState(double T_, double P_, double rhoGas_, double muGas_, double Ntar_,
+        void setState(double T_, double P_, double rhoGas_, double muGas_, 
                       std::vector<double> yGas_, std::vector<double> yPAH_,
                       std::vector<double> yTar_, std::vector<double> yBio_, 
-                      std::vector<double> sootVar_, int nsoot_, double cMin_ = 100 
-                      );
+                      std::vector<double> sootVar_, std::vector<double> tarVar_,
+                      int nsoot_, int Ntar_, double cMin_ = 100 );
 
         /** gas species concentration (kmol/m3) */
         double getGasSpC(gasSp sp)  const { return rhoGas * yGas[(int)sp] / gasSpMW[(int)sp]; }
@@ -73,9 +74,11 @@ class state {
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    state(size_t nsoot_=0) :
+    state(size_t nsoot_=0, size_t Ntar_ =0) :
         nsoot(nsoot_),
+        Ntar(Ntar_),
         sootVar(std::vector<double>(   nsoot_,           0.0)),
+        tarVar(std::vector<double> (   Ntar_,            0.0)),
         sootScales(std::vector<double>(nsoot_,           1.0)),
         absc(std::vector<double>(      nsoot_/2,         0.0)),
         wts(std::vector<double>(       nsoot_/2,         0.0)),

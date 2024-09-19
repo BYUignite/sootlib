@@ -18,12 +18,13 @@ using namespace soot;
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_MONO::sootModel_MONO(size_t            nsoot_,
+                               size_t            Ntar_,
                                nucleationModel  *nucl_,
                                growthModel      *grow_,
                                oxidationModel   *oxid_,
                                coagulationModel *coag_,
                                tarModel         *tar_) :
-        sootModel(nsoot_, nucl_, grow_, oxid_, coag_, tar_) {
+        sootModel(nsoot_, Ntar_, nucl_, grow_, oxid_, coag_, tar_) {
 
     if (nsoot_ != 2)
         throw runtime_error("MONO requires nsoot=2");
@@ -45,12 +46,13 @@ sootModel_MONO::sootModel_MONO(size_t            nsoot_,
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_MONO::sootModel_MONO(size_t          nsoot_,
+                               size_t          Ntar_,
                                nucleationMech  Nmech,
                                growthMech      Gmech,
                                oxidationMech   Omech,
                                coagulationMech Cmech,
                                tarMech         Tmech) :
-        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech, Tmech) {
+        sootModel(nsoot_, Ntar_, Nmech, Gmech, Omech, Cmech, Tmech) {
 
     if (nsoot_ != 2)
         throw runtime_error("MONO requires nsoot=2");
@@ -76,8 +78,9 @@ void sootModel_MONO::setSourceTerms(state &state) {
 
     //---------- get moments
 
-    double M0 = state.sootVar[0];
-    double M1 = state.sootVar[1];
+    double M0    = state.sootVar[0];
+    double M1    = state.sootVar[1];
+    double Ntar0 = state.tarVar[0];
 
     //---------- set weights and abscissas
 
@@ -92,12 +95,6 @@ void sootModel_MONO::setSourceTerms(state &state) {
     double kGrw = grow->getGrowthSootRate(state);
     double kOxi = oxid->getOxidationSootRate(state);
     double coa  = coag->getCoagulationSootRate(state, state.absc[0], state.absc[0]);
-    if (state.doTar) {
-        double incp   = tar->getInceptionTarRate(state);
-        double crack  = tar->getCrackingTarRate(state);
-        double gasify = tar->getSurfaceTarRate(state);
-        double depo   = tar->getDepositionTarRate(state);
-    }
 
     //---------- nucleation terms
 
@@ -144,26 +141,74 @@ void sootModel_MONO::setSourceTerms(state &state) {
     if (coag->mechType != coagulationMech::NONE)
         C0 = -0.5*coa*state.wts[0]*state.wts[0];
 
-    //---------- combine to make soot source terms
+    //---------- tar terms
 
-    sources.sootSources[0] = N0 + Cnd0 + G0 + X0 + C0;      // #/m3*s
-    sources.sootSources[1] = N1 + Cnd1 + G1 + X1 + C1;      // kg/m3*s
+    double T0 = 0;                               // tar equation 1 #/m3*s 
+    double T1 = 0;                               // tar terms in soot mass equation kg_soot/m3*s
 
-    //---------- set gas source terms
+    if (tar->mechType != tarMech::NONE) {
+        
+        double incp   = tar->getInceptionTarRate(state);
+        double crack  = tar->getCrackingTarRate(state);
+        double gasify = tar->getSurfaceTarRate(state);
+        double depo   = tar->getDepositionTarRate(state);
+        
 
-    vector<double> nucl_gasSources((size_t)gasSp::size, 0.0);
-    vector<double> grow_gasSources((size_t)gasSp::size, 0.0);
-    vector<double> oxid_gasSources((size_t)gasSp::size, 0.0);
+        T0 = incp - depo - crack + 2508 * Ntar0 * (G1 - X1 - gasify);
+        T1 = state.mtar * depo + Am2m3 * (G1 - X1 - gasify);
 
-    nucl->getNucleationGasRates(N1, nucl_gasSources);
-    grow->getGrowthGasRates(    G1, grow_gasSources);
-    oxid->getOxidationGasRates( X1, oxid_gasSources);
+        // combine to make soot source terms 
 
-    for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
-        sources.gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
+        sources.sootSources[0] = N0 + C0;
+        sources.sootSources[1] = 2*state.mtar*N1 + T1;
 
-    //---------- set PAH source terms
+        // combine to make tar source term 
 
-    if(nucl->mechType == nucleationMech::PAH)
-        sources.pahSources = nucl->nucleationPahRxnRates;        // includes both nucleation and condensation
+        sources.tarSources[0]  = T0 - 2*N0;
+
+        // set gas source terms
+
+        vector<double> nucl_gasSources((size_t)gasSp::size, 0.0);
+        vector<double> grow_gasSources((size_t)gasSp::size, 0.0);
+        vector<double> oxid_gasSources((size_t)gasSp::size, 0.0);
+
+        nucl->getNucleationGasRates(N1, nucl_gasSources);
+        grow->getGrowthGasRates(    G1, grow_gasSources);
+        oxid->getOxidationGasRates( X1, oxid_gasSources);
+
+        for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
+            sources.gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
+
+        //---------- set PAH source terms
+
+        if(nucl->mechType == nucleationMech::PAH)
+            sources.pahSources = nucl->nucleationPahRxnRates;        // includes both nucleation and condensation
+
+    }
+
+
+    else {
+        //---------- combine to make soot source terms
+
+        sources.sootSources[0] = N0 + Cnd0 + G0 + X0 + C0;      // #/m3*s
+        sources.sootSources[1] = N1 + Cnd1 + G1 + X1 + C1;      // kg/m3*s
+
+        //---------- set gas source terms
+
+        vector<double> nucl_gasSources((size_t)gasSp::size, 0.0);
+        vector<double> grow_gasSources((size_t)gasSp::size, 0.0);
+        vector<double> oxid_gasSources((size_t)gasSp::size, 0.0);
+
+        nucl->getNucleationGasRates(N1, nucl_gasSources);
+        grow->getGrowthGasRates(    G1, grow_gasSources);
+        oxid->getOxidationGasRates( X1, oxid_gasSources);
+
+        for (size_t sp=0; sp<(size_t)gasSp::size; sp++)
+            sources.gasSources[sp] = nucl_gasSources[sp] + grow_gasSources[sp] + oxid_gasSources[sp];
+
+        //---------- set PAH source terms
+
+        if(nucl->mechType == nucleationMech::PAH)
+            sources.pahSources = nucl->nucleationPahRxnRates;        // includes both nucleation and condensation
+    }
 }

@@ -29,6 +29,7 @@ public:
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     sootModel_LOGN(size_t            nsoot_,
+                   size_t            Ntar_,
                    nucleationModel  *nucl_,
                    growthModel      *grow_,
                    oxidationModel   *oxid_,
@@ -36,6 +37,7 @@ public:
                    tarModel         *tar_);
 
     sootModel_LOGN(size_t           nsoot_,
+                   size_t           Ntar_,
                    nucleationMech   Nmech,
                    growthMech       Gmech,
                    oxidationMech    Omech,

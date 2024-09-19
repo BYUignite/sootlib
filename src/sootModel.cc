@@ -55,13 +55,14 @@ using namespace soot;
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel::sootModel(size_t            nsoot_,
+                     size_t            Ntar_,
                      nucleationModel  *nucl_,
                      growthModel      *grow_,
                      oxidationModel   *oxid_,
                      coagulationModel *coag_,
                      tarModel         *tar_) :
-        nsoot(nsoot_), nucl(nucl_), grow(grow_), oxid(oxid_), coag(coag_), tar(tar_), 
-        mechsNewedHere(false), sources(nsoot_) {
+        nsoot(nsoot_), Ntar(Ntar_), nucl(nucl_), grow(grow_), oxid(oxid_), coag(coag_), tar(tar_), 
+        mechsNewedHere(false), sources(nsoot_, Ntar_) {
         checkSpec();
         nucl->SM = this;
         grow->SM = this;
@@ -86,13 +87,14 @@ sootModel::sootModel(size_t            nsoot_,
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel::sootModel(size_t          nsoot_,
+                     size_t          Ntar_,
                      nucleationMech  Nmech,
                      growthMech      Gmech,
                      oxidationMech   Omech,
                      coagulationMech Cmech,
-                     tarMech         Tmech) : nsoot(nsoot_), 
+                     tarMech         Tmech) : nsoot(nsoot_), Ntar(Ntar_), 
                                               mechsNewedHere(true),
-                                              sources(nsoot_) {
+                                              sources(nsoot_, Ntar_) {
 
     //---------- set nucleation model
 
@@ -172,7 +174,7 @@ sootModel::sootModel(size_t          nsoot_,
 
 void sootModel::checkSpec() {
 
-    if((grow->mechType==growthMech::HACA    && oxid->mechType!=oxidationMech::HACA) ||
+    if((grow->mechType==growthMech::HACA    && oxid->mechType!=oxidationMech::HACA or oxid->mechType!=oxidationMech::AJ_RED) ||
        (oxid->mechType==oxidationMech::HACA && grow->mechType!=growthMech::HACA))
         cerr << endl
              << "**********************************************************************" << endl

@@ -33,6 +33,7 @@ private:
 public:
 
     sootModel_QMOM(size_t            nsoot_,
+                   size_t            Ntar_,
                    nucleationModel  *nucl_,
                    growthModel      *grow_,
                    oxidationModel   *oxid_,
@@ -40,6 +41,7 @@ public:
                    tarModel         *tar_);
 
     sootModel_QMOM(size_t           nsoot_,
+                   size_t           Ntar_,
                    nucleationMech   Nmech,
                    growthMech       Gmech,
                    oxidationMech    Omech,

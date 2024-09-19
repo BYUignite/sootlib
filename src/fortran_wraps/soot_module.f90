@@ -174,11 +174,12 @@ module soot_module
 
         !-------------------- Soot Models ---------------------------------------
 
-        function sootModel_MONO_C_interface(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr) result(SM_ptr) &
+        function sootModel_MONO_C_interface(nsoot_, Ntar_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr) result(SM_ptr) &
                 bind(C, name="sootModel_MONO_C_interface")
             import
             type(C_ptr)           :: SM_ptr
             integer(C_int), value :: nsoot_
+            integer(C_int), value :: Ntar_
             type(C_ptr)           :: nucl_ptr
             type(C_ptr)           :: grow_ptr
             type(C_ptr)           :: oxid_ptr
@@ -188,11 +189,12 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        function sootModel_QMOM_C_interface(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr) result(SM_ptr) &
+        function sootModel_QMOM_C_interface(nsoot_, Ntar_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr) result(SM_ptr) &
                 bind(C, name="sootModel_QMOM_C_interface")
             import
             type(C_ptr)           :: SM_ptr
             integer(C_int), value :: nsoot_
+            integer(C_int), value :: Ntar_
             type(C_ptr)           :: nucl_ptr
             type(C_ptr)           :: grow_ptr
             type(C_ptr)           :: oxid_ptr
@@ -230,10 +232,11 @@ module soot_module
             type(C_ptr), value :: state_ptr
         end subroutine setSourceTerms_C_interface
 
-        function state_C_interface(nsoot_) result(state_ptr) bind(C, name="state_C_interface")
+        function state_C_interface(nsoot_, Ntar_) result(state_ptr) bind(C, name="state_C_interface")
             import
             type(C_ptr)           :: state_ptr
             integer(C_int), value :: nsoot_
+            integer(C_int), value :: Ntar_
         end function state_C_interface
 
         !------------------------------------------------------------------------
@@ -245,8 +248,8 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine setState_C_interface(state_ptr, T_, P_, rhoGas_, muGas_, Ntar_, yGas_, yPAH_, &
-                                        yTar_, yBio_, sootVar_, nsoot_, cMin_) &
+        subroutine setState_C_interface(state_ptr, T_, P_, rhoGas_, muGas_, yGas_, yPAH_, &
+                                        yTar_, yBio_, sootVar_, tarVar_, nsoot_, Ntar_, cMin_) &
                                         bind(C, name="setState_C_interface")
             import
             type(C_ptr),    value        :: state_ptr
@@ -254,13 +257,14 @@ module soot_module
             real(C_double), value        :: P_
             real(C_double), value        :: rhoGas_
             real(C_double), value        :: muGas_
-            real(C_double), value        :: Ntar_
             real(C_double), dimension(*) :: yGas_
             real(C_double), dimension(*) :: yPAH_
             real(C_double), dimension(*) :: yTar_
             real(C_double), dimension(*) :: yBio_
             real(C_double), dimension(*) :: sootVar_
+            real(C_double), dimension(*) :: tarVar_
             integer(C_int), value        :: nsoot_
+            integer(C_int), value        :: Ntar_
             real(C_double), value        :: cMin_
         end subroutine setState_C_interface
 
@@ -497,16 +501,17 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine sootModel_MONO(SM_ptr, nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr)
+        subroutine sootModel_MONO(SM_ptr, nsoot_, Ntar_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr)
             type(C_ptr), intent(out) :: SM_ptr
             integer(4),  intent(in)  :: nsoot_
+            integer(4),  intent(in)  :: Ntar_
             type(C_ptr), intent(in)  :: nucl_ptr
             type(C_ptr), intent(in)  :: grow_ptr
             type(C_ptr), intent(in)  :: oxid_ptr
             type(C_ptr), intent(in)  :: coag_ptr
             type(C_ptr), intent(in)  :: tar_ptr
 
-            SM_ptr = sootModel_MONO_C_interface(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr)
+            SM_ptr = sootModel_MONO_C_interface(nsoot_, Ntar_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr)
         end subroutine sootModel_MONO
 
         !------------------------------------------------------------------------
@@ -538,16 +543,17 @@ module soot_module
         !end subroutine sootModel_delete
         !------------------------------------------------------------------------
 
-        subroutine sootModel_QMOM(SM_ptr, nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr)
+        subroutine sootModel_QMOM(SM_ptr, nsoot_, Ntar_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr)
             type(C_ptr), intent(out) :: SM_ptr
             integer    , intent(in)  :: nsoot_
+            integer    , intent(in)  :: Ntar_
             type(C_ptr), intent(in)  :: nucl_ptr
             type(C_ptr), intent(in)  :: grow_ptr
             type(C_ptr), intent(in)  :: oxid_ptr
             type(C_ptr), intent(in)  :: coag_ptr
             type(C_ptr), intent(in)  :: tar_ptr
 
-            SM_ptr = sootModel_QMOM_C_interface(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr)
+            SM_ptr = sootModel_QMOM_C_interface(nsoot_, Ntar_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr)
         end subroutine sootModel_QMOM
 
         !------------------------------------------------------------------------
@@ -571,11 +577,12 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine state(state_ptr, nsoot_)
+        subroutine state(state_ptr, nsoot_, Ntar_)
             type(C_ptr), intent(out)   :: state_ptr
             integer    , intent(in)    :: nsoot_
+            integer    , intent(in)    :: Ntar_
 
-            state_ptr = state_C_interface(nsoot_)
+            state_ptr = state_C_interface(nsoot_, Ntar_)
         end subroutine state
 
         !------------------------------------------------------------------------
@@ -588,24 +595,25 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine setState(state_ptr, T_, P_, rhoGas_, muGas_, Ntar_, yGas_, yPAH_, &
-                            yTar_, yBio_, sootVar_, nsoot_, cMin_)
+        subroutine setState(state_ptr, T_, P_, rhoGas_, muGas_, yGas_, yPAH_, &
+                            yTar_, yBio_, sootVar_, tarVar_, nsoot_, Ntar_, cMin_)
             type(C_ptr)     , intent(inout)               :: state_ptr
             double precision, intent(inout)               :: T_
             double precision, intent(inout)               :: P_
             double precision, intent(inout)               :: rhoGas_
             double precision, intent(inout)               :: muGas_
-            double precision, intent(inout)               :: Ntar_
             double precision, intent(inout), dimension(:) :: yGas_
             double precision, intent(inout), dimension(:) :: yPAH_
             double precision, intent(inout), dimension(:) :: yTar_
             double precision, intent(inout), dimension(:) :: yBio_
             double precision, intent(inout), dimension(:) :: sootVar_
+            double precision, intent(inout), dimension(:) :: tarVar_
             integer         , intent(in)               :: nsoot_
+            integer         , intent(in)               :: Ntar_
             double precision, intent(in)               :: cMin_
 
-            call setState_C_interface(state_ptr, T_, P_, rhoGas_, muGas_, Ntar_, yGas_, yPAH_, &
-                                      yTar_, yBio_, sootVar_, nsoot_, cMin_)
+            call setState_C_interface(state_ptr, T_, P_, rhoGas_, muGas_, yGas_, yPAH_, &
+                                      yTar_, yBio_, sootVar_, tarVar_, nsoot_, Ntar_, cMin_)
         end subroutine setState
 
         !------------------------------------------------------------------------

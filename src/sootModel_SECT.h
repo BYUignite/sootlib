@@ -35,6 +35,7 @@ public:
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     sootModel_SECT(size_t            nsoot_,
+                   size_t            Ntar_,
                    nucleationModel  *nucl_,
                    growthModel      *grow_,
                    oxidationModel   *oxid_,
@@ -44,6 +45,7 @@ public:
                    int               cMin_=100);
 
     sootModel_SECT(size_t           nsoot_,
+                   size_t           Ntar_,
                    nucleationMech   Nmech,
                    growthMech       Gmech,
                    oxidationMech    Omech,

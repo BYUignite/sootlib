@@ -72,13 +72,14 @@ int main(int argc, char** argv) {
     tarModel         *tar  = new soot::tarModel_NONE();
 
     size_t nsoot = 2;
-    //size_t nsoot = 40;                             
+    //size_t nsoot = 40;
+    size_t Ntar  = 1;
 
-    sootModel_MONO SM(nsoot, nucl, grow, oxid, coag, tar);
-    //sootModel_LOGN SM(nsoot, nucl, grow, oxid, coag, tar);
-    //sootModel_QMOM SM(nsoot, nucl, grow, oxid, coag, tar);
-    //sootModel_MOMIC SM(nsoot, nucl, grow, oxid, coag, tar);
-    //sootModel_SECT SM(nsoot, nucl, grow, oxid, coag, tar);
+    sootModel_MONO SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);
+    //sootModel_LOGN SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);
+    //sootModel_QMOM SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);
+    //sootModel_MOMIC SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);
+    //sootModel_SECT SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);
 
     //---------- set up thermodynamic state variables
 
@@ -93,8 +94,8 @@ int main(int argc, char** argv) {
     vector<double> Mhat(nsoot, 0.0);                 // M/rho; main variable solved
     vector<double> Mhath(nsoot, 0.0);                // M/rho at half step for midpoint method
     vector<double> M(nsoot, 0.0);                    // M = Mhat * rho
+    vector<double> TV(Ntar, 0.0);                    // Tar variables
     
-    double Ntar = 1.0;
 
     double zstart = z_prof[0];
     double zend   = z_prof.back();
@@ -122,7 +123,7 @@ int main(int argc, char** argv) {
         yGas = {LI_yO2(z), LI_yO(z), LI_yH2(z), LI_yH(z), LI_yOH(z), LI_yH2O(z), LI_yCO(z), LI_yC2H2(z)};
         for(int i=0; i<nsoot; i++)
             M[i] = Mhat[i]*LI_rho(z);
-        S.setState(LI_T(z), P, LI_rho(z), LI_mu(z), Ntar, yGas, yPAH, yTar, yBio, M, nsoot);
+        S.setState(LI_T(z), P, LI_rho(z), LI_mu(z), yGas, yPAH, yTar, yBio, M, TV, nsoot, Ntar);
         SM.setSourceTerms(S);
 
         for(int k=0; k<nsoot; k++)
@@ -132,7 +133,7 @@ int main(int argc, char** argv) {
         yGas = {LI_yH(zh), LI_yH2(zh), LI_yO(zh), LI_yO2(zh), LI_yOH(zh), LI_yH2O(zh), LI_yCO(zh), LI_yC2H2(zh)};
         for(int i=0; i<nsoot; i++)
             M[i] = Mhath[i]*LI_rho(z);
-        S.setState(LI_T(zh), P, LI_rho(zh), LI_mu(zh), Ntar, yGas, yPAH, yTar, yBio, M, nsoot);
+        S.setState(LI_T(zh), P, LI_rho(zh), LI_mu(zh), yGas, yPAH, yTar, yBio, M, TV, nsoot, Ntar);
         SM.setSourceTerms(S);
 
         for(int k=0; k<nsoot; k++)

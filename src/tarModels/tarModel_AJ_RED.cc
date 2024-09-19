@@ -25,6 +25,8 @@ double tarModel_AJ_RED::getInceptionTarRate(state &state) {
     double Pl = log10 (state.P/101325); // atm
     double mtar = state.mtar;
 
+    double N0 = state.tarVar[0]; // \#/m3
+
     ////// Declare the mass fractions of tar and average molecular size based on constituents /////////
 
     double ytar_cell;
@@ -87,10 +89,12 @@ double tarModel_AJ_RED::getInceptionTarRate(state &state) {
 }
 
 double tarModel_AJ_RED::getCrackingTarRate(state &state) {
-
+    
+    double N0 = state.tarVar[0];
     double k1, k2, k3, k4, k5; // reaction rate constants
     double xphe, xnapth, xtol, xben; // mole fractions of surrogate tars
-    double Cl   = log10 (state.Ntar);
+    double Cl = 0.0;
+    if (N0 > 0) double Cl   = log10 (N0);
 
     //////////////////// Rate constant calculations ///////////////////////////////////// 
 
@@ -114,12 +118,13 @@ double tarModel_AJ_RED::getCrackingTarRate(state &state) {
     double r4 = 14/92*k4*xtol*pow(state.getGasSpC(gasSp::H2), 0.5);
     double r5 = k5*xben;
 
-    return state.Ntar*(r1 + r2 + r3 + r4 + r5);
+    return N0*(r1 + r2 + r3 + r4 + r5);
 
 }
 
 double tarModel_AJ_RED::getDepositionTarRate(state &state) {
 
+    double N0 = state.tarVar[0];
     double eps = 2.2; // same steric factor from soot nucleation for this model
     double Bts; // frequency of collision between soot and tar molecules
     double muTS = state.mtar*state.sootVar[1]/(state.mtar + state.sootVar[1]);
@@ -129,7 +134,7 @@ double tarModel_AJ_RED::getDepositionTarRate(state &state) {
 
     Bts = pow((dsoot + dtar), 2) * sqrt(M_PI*kb*state.T/(2*muTS));
 
-    return eps*Bts*state.Ntar*state.sootVar[0];
+    return eps*Bts*N0*state.sootVar[0];
 
 }
 

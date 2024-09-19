@@ -27,6 +27,7 @@ class sootModel {
 public:
 
     size_t            nsoot;    ///< \# of soot variables: moments or sections
+    size_t            Ntar;     ///< \# of tar variables
 
     nucleationModel  *nucl;     ///< pointer to nucleation mechanism
     growthModel      *grow;     ///< pointer to growth mechanism
@@ -75,6 +76,7 @@ public:
     //////////////// CONSTRUCTOR //////////////////////
 
     sootModel(size_t            nsoot_,
+              size_t            Ntar_,
               nucleationModel  *nucl_,
               growthModel      *grow_,
               oxidationModel   *oxid_,
@@ -82,6 +84,7 @@ public:
               tarModel         *tar_);
 
     sootModel(size_t          nsoot_,
+              size_t          Ntar_,
               nucleationMech  Nmech,
               growthMech      Gmech,
               oxidationMech   Omech,

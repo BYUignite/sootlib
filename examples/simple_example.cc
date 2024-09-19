@@ -10,15 +10,16 @@ int main(int argc, char** argv) {
 
     //---------- set up and create a soot model
 
-    nucleationModel  *nucl = new soot::nucleationModel_MB();
-    growthModel      *grow = new soot::growthModel_MB();
-    oxidationModel   *oxid = new soot::oxidationModel_MB();
+    nucleationModel  *nucl = new soot::nucleationModel_AJ_RED();
+    growthModel      *grow = new soot::growthModel_HACA();
+    oxidationModel   *oxid = new soot::oxidationModel_AJ_RED();
     coagulationModel *coag = new soot::coagulationModel_FM();
     tarModel         *tar  = new soot::tarModel_NONE();
 
     size_t nsoot = 2;  // 3; etc.
+    size_t Ntar  = 1;
 
-    sootModel_QMOM SM(nsoot, nucl, grow, oxid, coag, tar);
+    sootModel_MONO SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);
     //sootModel_LOGN SM(nsoot, nucl, grow, oxid, coag);
 
     SM.coag->set_FM_multiplier(9.0/2.0/2.2);
@@ -31,16 +32,16 @@ int main(int argc, char** argv) {
     double P      = 101325;  // pressure in Pa
     double rhoGas = 0.1;     // gas density in kg/m^3
     double muGas  = 1E-5;    // gas viscosity in Pa*s
-    double Ntar   = 1.0;       // tar variable
 
     vector<double> yGas{0.05, 0.001, 0.002, 3E-4, 0.003, 0.07, 0.1, 0.002};  // gas species mass fractions [O2, O, H2, H, OH, H2O, CO, C2H2]
     vector<double> yPAH{0, 0, 0, 0, 0, 0};                                   // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
     vector<double> yTar{0 ,0, 0, 0};                                         // Tar species mass fractions
     vector<double> yBio{0, 0, 0, 0, 0};                                      // Biomass species mass fractions
     vector<double> Msoot{0.003, 1.5E-5, 1E-7, 1E-10};                        // soot moment values [M0, M1, M2, M3]
+    vector<double> Mtar{0.01};                                               // tar moment values
 
 
-    S.setState(T, P, rhoGas, muGas, Ntar, yGas, yPAH, yTar, yBio, Msoot, nsoot);
+    S.setState(T, P, rhoGas, muGas, yGas, yPAH, yTar, yBio, Msoot, Mtar, nsoot, Ntar);
 
     //---------- calculate source terms
 
