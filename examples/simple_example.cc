@@ -10,9 +10,9 @@ int main(int argc, char** argv) {
 
     //---------- set up and create a soot model
 
-    nucleationModel  *nucl = new soot::nucleationModel_AJ_RED();
-    growthModel      *grow = new soot::growthModel_HACA();
-    oxidationModel   *oxid = new soot::oxidationModel_AJ_RED();
+    nucleationModel  *nucl = new soot::nucleationModel_LL();
+    growthModel      *grow = new soot::growthModel_LL();
+    oxidationModel   *oxid = new soot::oxidationModel_LL();
     coagulationModel *coag = new soot::coagulationModel_FM();
     tarModel         *tar  = new soot::tarModel_NONE();
 
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 
     //---------- set up thermodynamic state variables
 
-    state S = state(nsoot);
+    state S = state(nsoot, Ntar);
 
     double T      = 2100;    // temperature in K
     double P      = 101325;  // pressure in Pa

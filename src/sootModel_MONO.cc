@@ -146,6 +146,7 @@ void sootModel_MONO::setSourceTerms(state &state) {
     double T0 = 0;                               // tar equation 1 #/m3*s 
     double T1 = 0;                               // tar terms in soot mass equation kg_soot/m3*s
 
+
     if (tar->mechType != tarMech::NONE) {
         
         double incp   = tar->getInceptionTarRate(state);
@@ -187,7 +188,7 @@ void sootModel_MONO::setSourceTerms(state &state) {
     }
 
 
-    else {
+    if (tar->mechType == tarMech::NONE) {                        // jansenpb TODO: else statement?
         //---------- combine to make soot source terms
 
         sources.sootSources[0] = N0 + Cnd0 + G0 + X0 + C0;      // #/m3*s

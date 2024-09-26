@@ -26,7 +26,6 @@ const double twothird = 2.0/3.0;
 const double root2    = sqrt(2.0);
 const double mmin     = 2E-26;      ///< mass of a carbon atom (kg)
 
-//double mtar; // average molecular mass TODO: jansenpb
 
 //////////////////// mechanism types
 

@@ -153,13 +153,22 @@ sootModel::sootModel(size_t          nsoot_,
         default: throw domain_error("Invalid coagulation model requested");
     }
 
+    //---------- set tar model
+
+    switch (Tmech) {
+        case tarMech::NONE   : tar = new tarModel_NONE();    break;
+        case tarMech::AJ_RED : tar = new tarModel_AJ_RED();  break;
+
+        default: throw domain_error("Invalid tar model requested");
+    }
+
     //----------- 
 
     nucl->SM = this;
     grow->SM = this;
     oxid->SM = this;
     coag->SM = this;
-    tar-> SM = this;
+    tar->SM = this;
 
     //----------- 
 
@@ -174,7 +183,7 @@ sootModel::sootModel(size_t          nsoot_,
 
 void sootModel::checkSpec() {
 
-    if((grow->mechType==growthMech::HACA    && oxid->mechType!=oxidationMech::HACA or oxid->mechType!=oxidationMech::AJ_RED) ||
+    if((grow->mechType==growthMech::HACA    && oxid->mechType!=oxidationMech::HACA) ||
        (oxid->mechType==oxidationMech::HACA && grow->mechType!=growthMech::HACA))
         cerr << endl
              << "**********************************************************************" << endl

@@ -36,7 +36,7 @@ class state {
         double              cMin = 100;    ///< soot min num carbon atoms (dynamic for PAH nucleation)
         
         bool                doTar = false; ///< set true for tar transport equation and models
-        int                 Ntar;          ///< \# of tar variables
+        int                 Ntar;          ///< \# of tar variables   jansenpb: do I need this?
         std::vector<double> tarVar;        ///> tar variables 
         std::vector<double> yTar;          ///< gas tar species mass fractions
         std::vector<double> yBio;          ///< biomass components from CPDbio
