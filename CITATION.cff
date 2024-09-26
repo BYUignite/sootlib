@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Lignell
+    given-names: David
+    orcid: https://orcid.org/0000-0002-2129-1375
+  - family-names: Stephens
+    given-names: Victoria
+title: "SootLib, library of soot chemical mechanisms and size distribution models"
+version: 1.01
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.12536980
+date-released: 2024-06-25
+url: https://github.com/BYUignite/sootlib
+preferred-citation:
+  type: article
+  authors:
+  - family-names: Stephens
+    given-names: Victoria B
+  - family-names: Bedwell
+    given-names: Joshua
+  - family-names: Josephson
+    given-names: Alex J
+  - family-names: Oldham
+    given-names: Keturah
+  - family-names: Lignell
+    given-names: David O
+    orcid: https://orcid.org/0000-0002-2129-1375
+  doi: 10.5281/zenodo.12536980
+  journal: "SoftwareX"
+  start: 101375 # First page number
+  title: "SootLib: A soot model library for combustion simulation"
+  volume: 22
+  year: 2023
