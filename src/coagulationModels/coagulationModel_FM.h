@@ -7,7 +7,7 @@ namespace soot {
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
-/// Coagulation: Continuum Regime
+/// Coagulation: Free Molecular Regime
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -19,11 +19,7 @@ class coagulationModel_FM : virtual public coagulationModel {
 
 public:
 
-     double getCoagulationSootRate(const state& state, double m1, double m2) const override;
-
-     double getKfm(const state& state) const override {
-         return FM_multiplier * eps_c * sqrt(0.5*M_PI*kb*state.T)*pow(6./(M_PI*rhoSoot), twothird);
-     }
+    double getCoagulationSootRate(const state& state, double m1, double m2) const override;
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
@@ -32,5 +28,6 @@ public:
         mechType = coagulationMech::FM; 
     }
     ~coagulationModel_FM() override = default;
+
 };
 } // namespace soot

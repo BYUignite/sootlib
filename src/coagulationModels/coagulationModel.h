@@ -31,17 +31,17 @@ public:
 
     virtual double getCoagulationSootRate(const state& state, double m1, double m2) const = 0;
 
-    virtual double getKfm(const state& state) const {
-        throw std::runtime_error("ERROR: coagulationModel::getKfm should not be called, but child coagulationModel_FM::getKfm is fine");
-        return -1.0;}
+    double getKfm(const state& state) const {
+        return FM_multiplier * eps_c * sqrt(0.5*M_PI*kb*state.T)*pow(6./(M_PI*rhoSoot), twothird);
+    }
 
-    virtual double getKc(const state& state) const {
-        throw std::runtime_error("ERROR: coagulationModel::getKc should not be called, but child coagulationModel_CONTINUUM::getKc is fine");
-        return -1.0;}
+    double getKc(const state& state) const {
+        return 2.*kb*state.T/(3./state.muGas);
+    }
 
-    virtual double getKcp(const state& state) const {
-        throw std::runtime_error("ERROR: coagulationModel::getKcp should not be called, but child coagulationModel_CONTINUUM::getKcp is fine");
-        return -1.0;}
+    double getKcp(const state& state) const {
+        return 2.*1.657*state.getGasMeanFreePath()*pow(M_PI*rhoSoot/6., onethird);
+    }
 
     void set_FM_multiplier(double FM_multiplier_) {
         FM_multiplier = FM_multiplier_;

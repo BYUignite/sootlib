@@ -12,7 +12,7 @@ namespace soot {
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-class coagulationModel_HM : public coagulationModel_FM, public coagulationModel_CONTINUUM {
+class coagulationModel_HM : public coagulationModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
@@ -21,6 +21,7 @@ class coagulationModel_HM : public coagulationModel_FM, public coagulationModel_
 public:
 
      double getCoagulationSootRate(const state& state, double m1, double m2) const override;
+
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
