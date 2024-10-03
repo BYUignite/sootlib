@@ -2,7 +2,7 @@ program simple_example_fort
 
     use soot_module
 
-    use, intrinsic :: ISO_C_Binding, only: C_ptr
+    use, intrinsic :: ISO_C_Binding, only: C_ptr, C_double
 
     implicit none
 
@@ -21,7 +21,7 @@ program simple_example_fort
 
     integer(4), PARAMETER  :: nsoot = 2
     integer(4), PARAMETER  :: Ntar  = 1
-    
+    real(C_double)         :: T_value
     !--------------- set state parameters
     double precision               :: T      = 2100.0;
     double precision               :: P      = 101325.0;
@@ -58,8 +58,11 @@ program simple_example_fort
 
     call setState(S, T, P, rhoGas, muGas, yGas, yPAH, yTar, yBio, Msoot, Mtar, nsoot, Ntar, cMin)
 
+    call get_T(S)
+
     print *, "State was set"
-    !
+
+    
     !call setSourceTerms(SM, S, nsoot)
     call setSourceTerms(SM, S)
 

@@ -1,6 +1,6 @@
 module soot_module
 
-    use, intrinsic :: ISO_C_Binding, only: C_int, C_double, C_ptr, C_NULL_ptr
+    use, intrinsic :: ISO_C_Binding, only: C_int, C_double, C_ptr, C_NULL_ptr, C_char
 
     implicit none
 
@@ -27,25 +27,6 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine getNucleationSootRate_C_interface(nucl_ptr, state) &
-                bind(C, name="getNucleationSootRate_C_interface")
-            import
-            type(C_ptr), value     :: nucl_ptr
-            type(C_ptr), value     :: state
-        end subroutine getNucleationSootRate_C_interface
-
-        !------------------------------------------------------------------------
-
-        subroutine getNucleationGasRates_C_interface(nucl_ptr, msootDotNucl, gasSourcesNucl) &
-                bind(C, name="getNucleationGasRates_C_interface")
-            import
-            type(C_ptr), value           :: nucl_ptr
-            real(C_double)               :: msootDotNucl
-            real(C_double), dimension(*) :: gasSourcesNucl
-        end subroutine getNucleationGasRates_C_interface
-
-        !------------------------------------------------------------------------
-
         subroutine nucleation_delete_C_interface(nucl_ptr) bind(C, name="nucleation_delete_C_interface")
             import
             type(C_ptr), value :: nucl_ptr
@@ -67,25 +48,6 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine getGrowthSootRate_C_interface(grow_ptr, state) &
-                bind(C, name="getGrowthSootRate_C_interface")
-            import
-            type(C_ptr), value :: grow_ptr
-            type(C_ptr), value :: state
-        end subroutine getGrowthSootRate_C_interface
-
-        !------------------------------------------------------------------------
-
-        subroutine getGrowthGasRates_C_interface(grow_ptr, msootDotGrow, gasSourcesGrow) &
-                bind(C, name="getGrowthGasRates_C_interface")
-            import
-            type(C_ptr), value           :: grow_ptr
-            real(C_double), value        :: msootDotGrow
-            real(C_double), dimension(*) :: gasSourcesGrow
-        end subroutine getGrowthGasRates_C_interface
-
-        !------------------------------------------------------------------------
-
         subroutine growth_delete_C_interface(grow_ptr) bind(C, name="growth_delete_C_interface")
             import
             type(C_ptr), value :: grow_ptr
@@ -100,25 +62,6 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine getOxidationSootRate_C_interface(oxid_ptr, state) &
-                bind(C, name="getOxidationSootRate_C_interface")
-            import
-            type(C_ptr), value :: oxid_ptr
-            type(C_ptr), value :: state
-        end subroutine getOxidationSootRate_C_interface
-
-        !------------------------------------------------------------------------
-
-        subroutine getOxidationGasRates_C_interface(oxid_ptr, msootDotOxid, gasSourcesOxid) &
-                bind(C, name="getOxidationGasRates_C_interface")
-            import
-            type(C_ptr), value           :: oxid_ptr
-            real(C_double)               :: msootDotOxid
-            real(C_double), dimension(*) :: gasSourcesOxid
-        end subroutine getOxidationGasRates_C_interface
-
-        !------------------------------------------------------------------------
-
         subroutine oxid_delete_C_interface(oxid_ptr) bind(C, name="oxid_delete_C_interface")
             import
             type(C_ptr), value :: oxid_ptr
@@ -130,17 +73,6 @@ module soot_module
             import
             type(C_ptr) :: coag_ptr
         end function coagulationModel_FM_C_interface
-
-        !------------------------------------------------------------------------
-
-        subroutine getCoagulationSootRate_C_interface(coag_ptr, state, m1, m2) &
-                bind(C, name="getCoagulationSootRate_C_interface")
-            import
-            type(C_ptr), value :: coag_ptr
-            type(C_ptr), value :: state
-            real(C_double)     :: m1
-            real(C_double)     :: m2
-        end subroutine getCoagulationSootRate_C_interface
 
         !------------------------------------------------------------------------
 
@@ -215,22 +147,15 @@ module soot_module
             type(C_ptr), value :: tar_ptr
         end subroutine sootModel_delete_C_interface
 
-        !------------------------------------------------------------------------
-
-        !subroutine setSourceTerms_C_interface(SM_ptr, state_ptr, nsoot_) bind(C, name="setSourceTerms_C_interface")
-        !    import
-        !    type(C_ptr) :: SM_ptr
-        !    type(C_ptr), value :: state_ptr
-        !    integer(C_int), value :: nsoot_
-        !end subroutine setSourceTerms_C_interface
-
         !-------------------- State ---------------------------------------------
 
         subroutine setSourceTerms_C_interface(SM_ptr, state_ptr) bind(C, name="setSourceTerms_C_interface")
             import
-            type(C_ptr)        :: SM_ptr
+            type(C_ptr), value :: SM_ptr
             type(C_ptr), value :: state_ptr
         end subroutine setSourceTerms_C_interface
+        
+        !------------------------------------------------------------------------
 
         function state_C_interface(nsoot_, Ntar_) result(state_ptr) bind(C, name="state_C_interface")
             import
@@ -317,16 +242,77 @@ module soot_module
             real(C_double), dimension(*) :: sootScales_
         end subroutine setSootScales_C_interface
 
+        !------------------------------------------------------------------------
+
+        subroutine get_T_interface(state_ptr) bind(C, name="get_T_interface")
+            import
+            type(C_ptr), value :: state_ptr
+        end subroutine get_T_interface
+
+        !------------------------------------------------------------------------
+
+        subroutine get_rhoGas_interface(state_ptr) bind(C, name="get_rhoGas_interface")
+            import
+            type(C_ptr), value :: state_ptr
+        end subroutine get_rhoGas_interface
+
+        !------------------------------------------------------------------------
+
+        subroutine get_yGas_interface(state_ptr, sp) bind(C, name="get_yGas_interface")
+            import
+            type(C_ptr), value :: state_ptr
+            character(C_char)  :: sp 
+        end subroutine get_yGas_interface
+
+        !------------------------------------------------------------------------
+        
+        subroutine get_yPAH_interface(state_ptr, sp) bind(C, name="get_yPAH_interface")
+            import
+            type(C_ptr), value :: state_ptr
+            character(C_char)  :: sp 
+        end subroutine get_yPAH_interface
+
+        !------------------------------------------------------------------------
+    
+        subroutine get_yTar_interface(state_ptr, sp) bind(C, name="get_yTar_interface")
+            import
+            type(C_ptr), value :: state_ptr
+            character(C_char)  :: sp 
+        end subroutine get_yTar_interface
+
+        !------------------------------------------------------------------------
+
+        subroutine get_yBio_interface(state_ptr, sp) bind(C, name="get_yBio_interface")
+            import
+            type(C_ptr), value :: state_ptr
+            character(C_char)  :: sp 
+        end subroutine get_yBio_interface
+    
+        !------------------------------------------------------------------------
+
+        subroutine get_SootVar_interface(state_ptr, i) bind(C, name="get_SootVar_interface")
+            import
+            type(C_ptr)   , value :: state_ptr
+            integer(C_int), value :: i 
+        end subroutine get_SootVar_interface
+    
+        !------------------------------------------------------------------------
+
+        subroutine get_TarVar_interface(state_ptr, i) bind(C, name="get_TarVar_interface")
+            import
+            type(C_ptr)   , value :: state_ptr
+            integer(C_int), value :: i 
+        end subroutine get_TarVar_interface
+    
     end interface
 
         !-------------------- Continue as needed for interface functions --------
 
-    public :: nucleationModel_LL, nucleationModel_LIN, getNucleationSootRate, getNucleationGasRates, &
-        growthModel_LL, growthModel_LIN, getGrowthSootRate, nucleation_delete, getGrowthGasRates, &
-        growth_delete, oxidationModel_LL, getOxidationSootRate, getOxidationGasRates, oxid_delete, &
-        coagulationModel_FM, getCoagulationSootRate, set_FM_multiplier, coag_delete, tarModel_NONE, tar_delete, &
+    public :: nucleationModel_LL, nucleationModel_LIN, growthModel_LL, growthModel_LIN, nucleation_delete, &
+        growth_delete, oxidationModel_LL, oxid_delete, coagulationModel_FM, set_FM_multiplier, coag_delete, tarModel_NONE, tar_delete, &
         sootModel_MONO, sootModel_delete, sootModel_QMOM, setSourceTerms, state, state_delete, setState, &
-        getGasSpC, getGasSpP, getGasMeanFreePath, get_pahSpC, get_pahSpP, setSootScales 
+        getGasSpC, getGasSpP, getGasMeanFreePath, get_pahSpC, get_pahSpP, setSootScales, get_T, get_rhoGas, &
+        get_yGas, get_yPAH, get_yTar, get_yBio, get_SootVar, get_TarVar
 
     !============================================================================
     ! set fortran wrapper routines to the C interface functions
@@ -346,25 +332,6 @@ module soot_module
             type(C_ptr), intent(out) :: nucl_ptr
             nucl_ptr = nucleationModel_LIN_C_interface()
         end subroutine nucleationModel_LIN
-
-        !------------------------------------------------------------------------
-
-        subroutine getNucleationSootRate(nucl_ptr, state)
-            type(C_ptr), intent(in) :: nucl_ptr
-            type(C_ptr), intent(in) :: state
-
-            call getNucleationSootRate_C_interface(nucl_ptr, state)
-        end subroutine getNucleationSootRate
-
-        !------------------------------------------------------------------------
-
-        subroutine getNucleationGasRates(nucl_ptr, msootDotNucl, gasSourcesNucl)
-            type(C_ptr)     , intent(in)               :: nucl_ptr
-            double precision, intent(in)               :: msootDotNucl
-            double precision, intent(in), dimension(:) :: gasSourcesNucl
-
-            call getNucleationGasRates_C_interface(nucl_ptr, msootDotNucl, gasSourcesNucl)
-        end subroutine getNucleationGasRates
 
         !------------------------------------------------------------------------
 
@@ -390,25 +357,6 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine getGrowthSootRate(grow_ptr, state)
-            type(C_ptr), intent(in) :: grow_ptr
-            type(C_ptr), intent(in) :: state
-
-            call getGrowthSootRate_C_interface(grow_ptr, state)
-        end subroutine getGrowthSootRate
-
-        !------------------------------------------------------------------------
-
-        subroutine getGrowthGasRates(grow_ptr, msootDotGrow, gasSourcesGrow)
-            type(C_ptr)     , intent(in)               :: grow_ptr
-            double precision, intent(in)               :: msootDotGrow
-            double precision, intent(in), dimension(:) :: gasSourcesGrow
-
-            call getGrowthGasRates_C_interface(grow_ptr, msootDotGrow, gasSourcesGrow)
-        end subroutine getGrowthGasRates
-
-        !------------------------------------------------------------------------
-
         subroutine growth_delete(grow_ptr)
             type(C_ptr), intent(inout) :: grow_ptr
             call growth_delete_C_interface(grow_ptr)
@@ -424,25 +372,6 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine getOxidationSootRate(oxid_ptr, state)
-            type(C_ptr), intent(in) :: oxid_ptr
-            type(C_ptr), intent(in) :: state
-
-            call getOxidationSootRate_C_interface(oxid_ptr, state)
-        end subroutine getOxidationSootRate
-
-        !------------------------------------------------------------------------
-
-        subroutine getOxidationGasRates(oxid_ptr, msootDotOxid, gasSourcesOxid)
-            type(C_ptr)     , intent(in)               :: oxid_ptr
-            double precision, intent(in)               :: msootDotOxid
-            double precision, intent(in), dimension(:) :: gasSourcesOxid
-
-            call getOxidationGasRates_C_interface(oxid_ptr, msootDotOxid, gasSourcesOxid)
-        end subroutine getOxidationGasRates
-
-        !------------------------------------------------------------------------
-
         subroutine oxid_delete(oxid_ptr)
             type(C_ptr), intent(inout) :: oxid_ptr
             call oxid_delete_C_interface(oxid_ptr)
@@ -455,17 +384,6 @@ module soot_module
             type(C_ptr), intent(out)   :: coag_ptr
             coag_ptr = coagulationModel_FM_C_interface()
         end subroutine coagulationModel_FM
-
-        !------------------------------------------------------------------------
-
-        subroutine getCoagulationSootRate(coag_ptr, state, m1, m2)
-            type(C_ptr)     , intent(in) :: coag_ptr
-            type(C_ptr)     , intent(in) :: state
-            double precision, intent(in) :: m1
-            double precision, intent(in) :: m2
-
-            call getCoagulationSootRate_C_interface(coag_ptr, state, m1, m2)
-        end subroutine getCoagulationSootRate
 
         !------------------------------------------------------------------------
 
@@ -534,13 +452,6 @@ module soot_module
 
         end subroutine sootModel_delete
 
-        !subroutine sootModel_delete(SM_ptr)
-        !    type(C_ptr), intent(inout) :: SM_ptr
-            
-        !    call sootModel_delete_C_interface(SM_ptr)
-        !    SM_ptr   = C_NULL_ptr
-
-        !end subroutine sootModel_delete
         !------------------------------------------------------------------------
 
         subroutine sootModel_QMOM(SM_ptr, nsoot_, Ntar_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr)
@@ -557,26 +468,7 @@ module soot_module
         end subroutine sootModel_QMOM
 
         !------------------------------------------------------------------------
-
-        !subroutine setSourceTerms(SM_ptr, state_ptr, nsoot_)
-        !    type(C_ptr), intent(out)    :: SM_ptr
-        !    type(C_ptr), intent(in)     :: state_ptr
-        !    integer    , intent(in)     :: nsoot_
-
-        !    call setSourceTerms_C_interface(SM_ptr, state_ptr, nsoot_)
-        !end subroutine setSourceTerms
-
-        !------------------------------------------------------------------------
-
-        subroutine setSourceTerms(SM_ptr, state_ptr)
-            type(C_ptr), intent(out) :: SM_ptr
-            type(C_ptr), intent(in)  :: state_ptr
-
-            call setSourceTerms_C_interface(SM_ptr, state_ptr)
-        end subroutine setSourceTerms
-
-        !------------------------------------------------------------------------
-
+        
         subroutine state(state_ptr, nsoot_, Ntar_)
             type(C_ptr), intent(out)   :: state_ptr
             integer    , intent(in)    :: nsoot_
@@ -597,17 +489,17 @@ module soot_module
 
         subroutine setState(state_ptr, T_, P_, rhoGas_, muGas_, yGas_, yPAH_, &
                             yTar_, yBio_, sootVar_, tarVar_, nsoot_, Ntar_, cMin_)
-            type(C_ptr)     , intent(inout)               :: state_ptr
-            double precision, intent(inout)               :: T_
-            double precision, intent(inout)               :: P_
-            double precision, intent(inout)               :: rhoGas_
-            double precision, intent(inout)               :: muGas_
-            double precision, intent(inout), dimension(:) :: yGas_
-            double precision, intent(inout), dimension(:) :: yPAH_
-            double precision, intent(inout), dimension(:) :: yTar_
-            double precision, intent(inout), dimension(:) :: yBio_
-            double precision, intent(inout), dimension(:) :: sootVar_
-            double precision, intent(inout), dimension(:) :: tarVar_
+            type(C_ptr)     , intent(in)               :: state_ptr
+            double precision, intent(in)               :: T_
+            double precision, intent(in)               :: P_
+            double precision, intent(in)               :: rhoGas_
+            double precision, intent(in)               :: muGas_
+            double precision, intent(in), dimension(:) :: yGas_
+            double precision, intent(in), dimension(:) :: yPAH_
+            double precision, intent(in), dimension(:) :: yTar_
+            double precision, intent(in), dimension(:) :: yBio_
+            double precision, intent(in), dimension(:) :: sootVar_
+            double precision, intent(in), dimension(:) :: tarVar_
             integer         , intent(in)               :: nsoot_
             integer         , intent(in)               :: Ntar_
             double precision, intent(in)               :: cMin_
@@ -616,6 +508,15 @@ module soot_module
                                       yTar_, yBio_, sootVar_, tarVar_, nsoot_, Ntar_, cMin_)
         end subroutine setState
 
+        !------------------------------------------------------------------------
+
+        subroutine setSourceTerms(SM_ptr, state_ptr)
+            type(C_ptr), intent(out) :: SM_ptr
+            type(C_ptr), intent(in)  :: state_ptr
+
+            call setSourceTerms_C_interface(SM_ptr, state_ptr)
+        end subroutine setSourceTerms
+        
         !------------------------------------------------------------------------
 
         subroutine getGasSpC(state_ptr, sp)
@@ -664,6 +565,68 @@ module soot_module
             double precision, intent(in) , dimension(:) :: sootScales_
             call setSootScales_C_interface(state_ptr, sootScales_)
         end subroutine setSootScales
+
+        !------------------------------------------------------------------------
+
+        subroutine get_T(state_ptr)
+            type(C_ptr), intent(in) :: state_ptr
+            call get_T_interface(state_ptr)
+        end subroutine get_T
+
+        !------------------------------------------------------------------------
+
+        subroutine get_rhoGas(state_ptr)
+            type(C_ptr), intent(in) :: state_ptr
+            call get_rhoGas_interface(state_ptr)
+        end subroutine get_rhoGas
+
+        !------------------------------------------------------------------------
+
+        subroutine get_yGas(state_ptr, sp)
+            type(C_ptr), intent(in) :: state_ptr
+            character, intent(in) :: sp 
+            call get_yGas_interface(state_ptr, sp)
+        end subroutine get_yGas
+
+        !------------------------------------------------------------------------
+
+        subroutine get_yPAH(state_ptr, sp)
+            type(C_ptr), intent(in) :: state_ptr
+            character, intent(in) :: sp 
+            call get_yPAH_interface(state_ptr, sp)
+        end subroutine get_yPAH
+
+        !------------------------------------------------------------------------
+
+        subroutine get_yTar(state_ptr, sp)
+            type(C_ptr), intent(in) :: state_ptr
+            character, intent(in) :: sp 
+            call get_yTar_interface(state_ptr, sp)
+        end subroutine get_yTar
+
+        !------------------------------------------------------------------------
+
+        subroutine get_yBio(state_ptr, sp)
+            type(C_ptr), intent(in) :: state_ptr
+            character, intent(in) :: sp 
+            call get_yBio_interface(state_ptr, sp)
+        end subroutine get_yBio
+
+        !------------------------------------------------------------------------
+
+        subroutine get_SootVar(state_ptr, i)
+            type(C_ptr), intent(in) :: state_ptr
+            integer    , intent(in) :: i
+            call get_SootVar_interface(state_ptr, i)
+        end subroutine get_SootVar
+
+        !------------------------------------------------------------------------
+
+        subroutine get_TarVar(state_ptr, i)
+            type(C_ptr), intent(in) :: state_ptr
+            integer    , intent(in) :: i
+            call get_TarVar_interface(state_ptr, i)
+        end subroutine get_TarVar
 
     !============================================================================
 
