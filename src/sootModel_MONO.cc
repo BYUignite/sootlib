@@ -82,17 +82,19 @@ void sootModel_MONO::setSourceTerms(state &state) {
     double M1    = state.sootVar[1];
     double Ntar0 = state.tarVar[0];
 
-    cout << "Defined M0, M1, Ntar0" << M0 << endl;  // debug jansenpb
+    cout << "Defined M0, M1, Ntar0 " << M0 << endl;  // debug jansenpb
     //---------- set weights and abscissas
 
     if (M0 > 0) {
         state.wts[0] = M0;
         state.absc[0] = M1 / M0;
     }
+    cout << "Got wts & absc " << endl;
 
     //---------- get chemical rates
 
     double jNuc = nucl->getNucleationSootRate(state);        // #/m3*s
+    cout << "Got jNuc " << endl;           // debug jansenpb
     double kGrw = grow->getGrowthSootRate(state);
     double kOxi = oxid->getOxidationSootRate(state);
     double coa  = coag->getCoagulationSootRate(state, state.absc[0], state.absc[0]);

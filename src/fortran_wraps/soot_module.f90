@@ -149,10 +149,11 @@ module soot_module
 
         !-------------------- State ---------------------------------------------
 
-        subroutine setSourceTerms_C_interface(SM_ptr, state_ptr) bind(C, name="setSourceTerms_C_interface")
+        subroutine setSourceTerms_C_interface(SM_ptr, state_ptr, nucl_ptr) bind(C, name="setSourceTerms_C_interface")
             import
             type(C_ptr), value :: SM_ptr
             type(C_ptr), value :: state_ptr
+            type(C_ptr), value :: nucl_ptr
         end subroutine setSourceTerms_C_interface
         
         !------------------------------------------------------------------------
@@ -510,11 +511,12 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine setSourceTerms(SM_ptr, state_ptr)
+        subroutine setSourceTerms(SM_ptr, state_ptr, nucl_ptr)
             type(C_ptr), intent(out) :: SM_ptr
             type(C_ptr), intent(in)  :: state_ptr
+            type(C_ptr), intent(in)  :: nucl_ptr
 
-            call setSourceTerms_C_interface(SM_ptr, state_ptr)
+            call setSourceTerms_C_interface(SM_ptr, state_ptr, nucl_ptr)
         end subroutine setSourceTerms
         
         !------------------------------------------------------------------------

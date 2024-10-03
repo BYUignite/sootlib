@@ -64,7 +64,7 @@ program simple_example_fort
 
     
     !call setSourceTerms(SM, S, nsoot)
-    call setSourceTerms(SM, S)
+    call setSourceTerms(SM, S, nucl)
 
     print *, "Source terms set"
 
