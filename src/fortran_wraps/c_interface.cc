@@ -143,7 +143,6 @@ extern "C" {
 
     void setSourceTerms_C_interface(soot::sootModel *SM_ptr, soot::state *state_ptr) {
         cout << "Made it to setSourceTerms_C_interface" << endl;
-        //cout << SM_ptr->sources.sootSources[0] << endl;
         //cout << state_ptr->T << endl;
         SM_ptr->setSourceTerms(*state_ptr);
     }
@@ -200,7 +199,6 @@ extern "C" {
     }
 
     double get_T_interface(soot::state *state_ptr) {
-        cout << state_ptr->T << endl;
         return state_ptr->T;
     }
 
