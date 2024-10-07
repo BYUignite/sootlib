@@ -141,9 +141,7 @@ extern "C" {
         return soot::sourceTerms(nsoot_, Ntar_);
     }*/
 
-    void setSourceTerms_C_interface(soot::sootModel *SM_ptr, soot::state *state_ptr, soot::nucleationModel *nucl_ptr) {
-        cout << "Made it to setSourceTerms_C_interface" << endl;
-        //cout << state_ptr->T << endl;
+    void setSourceTerms_C_interface(soot::sootModel *SM_ptr, soot::state *state_ptr) {
         SM_ptr->setSourceTerms(*state_ptr);
     }
 

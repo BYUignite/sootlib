@@ -82,7 +82,7 @@ void sootModel_MONO::setSourceTerms(state &state) {
     double M1    = state.sootVar[1];
     double Ntar0 = state.tarVar[0];
 
-    cout << "Defined M0, M1, Ntar0 " << M0 << endl;  // debug jansenpb
+
     //---------- set weights and abscissas
 
     if (M0 > 0) {
