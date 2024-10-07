@@ -86,12 +86,16 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
     //----------- NOTE: this must be consistent with sootModel_XXXX::setSourceTerms func for condensation
 
     double beta_DD = preFac*pow(mDimer, 1.0/6.0);       // dimer self-collision rate coefficient
+    
+    //------------ populate mDimer in Dimer structure before calculating I_beta_DS
+
+    DIMER.mDimer = mDimer;
 
     double I_beta_DS = 0.0;                             // sum of dimer-soot collision rates
     if (SM->psdMechType == psdMech::LOGN  || 
         SM->psdMechType == psdMech::MOMIC || 
         SM->psdMechType == psdMech::SECT )
-        I_beta_DS = SM->pahSootCollisionRatePerDimer(mDimer);
+        I_beta_DS = SM->pahSootCollisionRatePerDimer(state, mDimer);
     else
         for (int i = 0; i < state.absc.size(); i++)     // loop over soot "particles" (abscissas)
             I_beta_DS += abs(state.wts[i]) * SM->coag->getCoagulationSootRate(state, mDimer, state.absc[i]);
@@ -103,9 +107,8 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
     if (nDotD > 0 && mDimer > 0)     // nDimer initialized to 0 above
         nDimer = 2.0*nDotD/(I_beta_DS + sqrt(I_beta_DS*I_beta_DS + 4.*beta_DD*nDotD));   // #/m3
 
-    //----------- populate DIMER structure with updated values
+    //----------- populate remaining DIMER structure with updated values
 
-    DIMER.mDimer = mDimer;
     DIMER.nDimer = nDimer;
     DIMER.nDotD  = nDotD;
 

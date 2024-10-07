@@ -402,8 +402,6 @@ double sootModel_MOMIC::g_grid(int y) {
 
     double g0, g1, g2, g3;
 
-    set_mDimerPowers();  // fixes issue in simple_example of different output with each run jansenpb
-    //----------- 
 
     g0 =            mD16   * Mq6[yi+0] +
                  2.*mDn16  * Mq6[yi+1] + 
