@@ -74,7 +74,6 @@ sootModel_MONO::sootModel_MONO(size_t          nsoot_,
 
 void sootModel_MONO::setSourceTerms(state &state) {
 
-    cout << "Made it to start of setSourceTerms" << endl;  // debug jansenpb
 
     //---------- get moments
 
@@ -89,17 +88,14 @@ void sootModel_MONO::setSourceTerms(state &state) {
         state.wts[0] = M0;
         state.absc[0] = M1 / M0;
     }
-    cout << "Got wts & absc " << endl;
 
     //---------- get chemical rates
 
     double jNuc = nucl->getNucleationSootRate(state);        // #/m3*s
-    cout << "Got jNuc " << endl;           // debug jansenpb
     double kGrw = grow->getGrowthSootRate(state);
     double kOxi = oxid->getOxidationSootRate(state);
     double coa  = coag->getCoagulationSootRate(state, state.absc[0], state.absc[0]);
 
-    cout << "Got chemical rates" << endl;  // debug jansenpb
     //---------- nucleation terms
 
     double N0 = 0;

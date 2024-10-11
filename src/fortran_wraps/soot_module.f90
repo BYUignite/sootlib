@@ -112,11 +112,11 @@ module soot_module
             type(C_ptr)           :: SM_ptr
             integer(C_int), value :: nsoot_
             integer(C_int), value :: Ntar_
-            type(C_ptr)           :: nucl_ptr
-            type(C_ptr)           :: grow_ptr
-            type(C_ptr)           :: oxid_ptr
-            type(C_ptr)           :: coag_ptr
-            type(C_ptr)           :: tar_ptr
+            type(C_ptr), value           :: nucl_ptr
+            type(C_ptr), value           :: grow_ptr
+            type(C_ptr), value           :: oxid_ptr
+            type(C_ptr), value           :: coag_ptr
+            type(C_ptr), value           :: tar_ptr
         end function sootModel_MONO_C_interface
 
         !------------------------------------------------------------------------
@@ -127,11 +127,11 @@ module soot_module
             type(C_ptr)           :: SM_ptr
             integer(C_int), value :: nsoot_
             integer(C_int), value :: Ntar_
-            type(C_ptr)           :: nucl_ptr
-            type(C_ptr)           :: grow_ptr
-            type(C_ptr)           :: oxid_ptr
-            type(C_ptr)           :: coag_ptr
-            type(C_ptr)           :: tar_ptr
+            type(C_ptr), value           :: nucl_ptr
+            type(C_ptr), value           :: grow_ptr
+            type(C_ptr), value           :: oxid_ptr
+            type(C_ptr), value           :: coag_ptr
+            type(C_ptr), value           :: tar_ptr
         end function sootModel_QMOM_C_interface
 
         !------------------------------------------------------------------------
@@ -303,6 +303,14 @@ module soot_module
             type(C_ptr)   , value :: state_ptr
             integer(C_int), value :: i 
         end subroutine get_TarVar_interface
+
+        !------------------------------------------------------------------------
+
+        subroutine getSootSources_interface(SM_ptr, i) bind(C, name="getSootSources_interface")
+            import
+            type(C_ptr)   , value :: SM_ptr
+            integer(C_int), value :: i
+        end subroutine getSootSources_interface
     
     end interface
 
@@ -312,7 +320,7 @@ module soot_module
         growth_delete, oxidationModel_LL, oxid_delete, coagulationModel_FM, set_FM_multiplier, coag_delete, tarModel_NONE, tar_delete, &
         sootModel_MONO, sootModel_delete, sootModel_QMOM, setSourceTerms, state, state_delete, setState, &
         getGasSpC, getGasSpP, getGasMeanFreePath, get_pahSpC, get_pahSpP, setSootScales, get_T, get_rhoGas, &
-        get_yGas, get_yPAH, get_yTar, get_yBio, get_SootVar, get_TarVar
+        get_yGas, get_yPAH, get_yTar, get_yBio, get_SootVar, get_TarVar, getSootSources
 
     !============================================================================
     ! set fortran wrapper routines to the C interface functions
@@ -511,7 +519,7 @@ module soot_module
         !------------------------------------------------------------------------
 
         subroutine setSourceTerms(SM_ptr, state_ptr)
-            type(C_ptr), intent(inout) :: SM_ptr
+            type(C_ptr), intent(out) :: SM_ptr
             type(C_ptr), intent(in)    :: state_ptr
 
             call setSourceTerms_C_interface(SM_ptr, state_ptr)
@@ -627,6 +635,14 @@ module soot_module
             integer    , intent(in) :: i
             call get_TarVar_interface(state_ptr, i)
         end subroutine get_TarVar
+
+        !------------------------------------------------------------------------
+
+        subroutine getSootSources(SM_ptr, i)
+            type(C_ptr), intent(in) :: SM_ptr
+            integer    , intent(in) :: i
+            call getSootSources_interface(SM_ptr, i)
+        end subroutine getSootSources
 
     !============================================================================
 

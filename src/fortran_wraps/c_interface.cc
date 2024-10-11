@@ -228,6 +228,10 @@ extern "C" {
         return state_ptr->tarVar[i];
     }
 
+    void getSootSources_interface(soot::sootModel *SM_ptr, int i) {
+        cout<< SM_ptr->sources.sootSources[i-1] << endl;;
+    }
+
 
 }
 
