@@ -317,8 +317,8 @@ module soot_module
         !-------------------- Continue as needed for interface functions --------
 
     public :: nucleationModel_LL, nucleationModel_LIN, growthModel_LL, growthModel_LIN, nucleation_delete, &
-        growth_delete, oxidationModel_LL, oxid_delete, coagulationModel_FM, set_FM_multiplier, coag_delete, tarModel_NONE, tar_delete, &
-        sootModel_MONO, sootModel_delete, sootModel_QMOM, setSourceTerms, state, state_delete, setState, &
+        growth_delete, oxidationModel_LL, oxid_delete, coagulationModel_FM, set_FM_multiplier, coag_delete, tarModel_NONE, &
+        tar_delete, sootModel_MONO, sootModel_delete, sootModel_QMOM, setSourceTerms, state, state_delete, setState, &
         getGasSpC, getGasSpP, getGasMeanFreePath, get_pahSpC, get_pahSpP, setSootScales, get_T, get_rhoGas, &
         get_yGas, get_yPAH, get_yTar, get_yBio, get_SootVar, get_TarVar, getSootSources
 
