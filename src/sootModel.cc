@@ -155,12 +155,12 @@ sootModel::sootModel(size_t          nsoot_,
 
     //---------- set tar model
 
-    /*switch (Tmech) {
+    switch (Tmech) {
         case tarMech::NONE   : tar = new tarModel_NONE();    break;
         case tarMech::AJ_RED : tar = new tarModel_AJ_RED();  break;
 
         default: throw domain_error("Invalid tar model requested");
-    }*/
+    }
 
     //----------- 
 

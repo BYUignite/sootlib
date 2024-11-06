@@ -36,6 +36,7 @@ program simple_example_fort
     double precision, dimension(5)     :: yBio   = (/0.0, 0.0, 0.0, 0.0, 0.0/);
     double precision, dimension(nsoot) :: Msoot  = (/0.003, 1.5e-5/);
     double precision, dimension(Ntar)  :: Mtar   = (/0.002/);
+    double precision, dimension(nsoot) :: sootS  = (/0.0,0.0/);
 
     character(len=100) :: fmt1, fmt2
 
@@ -72,9 +73,10 @@ program simple_example_fort
         print *, trim(keys(i)) 
         write(*,fmt2) yGas(i)
     enddo
-
-    do i = 1, nsoot
-        call getSootSources(SM, i)
+    
+    call getSootSources(sootS, SM, nsoot)
+    do i = 1, 2 
+        write(*,*) sootS(i)
     enddo
 
 
