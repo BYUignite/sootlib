@@ -84,7 +84,7 @@ sootModel_LOGN::sootModel_LOGN(size_t          nsoot_,
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-double sootModel_LOGN::pahSootCollisionRatePerDimer(const state &state, const double mDimer) const {
+double sootModel_LOGN::pahSootCollisionRatePerDimer(const state &state, const double mDimer) {
 
     if (nucl->mechType != nucleationMech::PAH)
         return 0.0;

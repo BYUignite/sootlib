@@ -1,7 +1,7 @@
 #pragma once
 
 #include "state.h"
-#include "../sootDefs.h"
+#include "sootDefs.h"
 
 #include <vector>
 

@@ -56,8 +56,8 @@ double tarModel_AJ_RED::getInceptionTarRate(state &state) {
     ytar_sw_hc = (7.05E4 - 1.29E-5*Pl + Tg*(144.4 + Tg*(0.233 - 7.41E-5*Tg)))/ \
                  (3.69E5 - 3.22E5*Pl + Tg*(91.0 + Tg*(0.725 - 2.08E-4*Tg)));
 
-    mtar_sw_hc = Pl*(Tg*(50.0 + 26.0*Pl) + Pl*(-6.41E4 + 1.56E4*Pl))/ \
-                 (Pl*(Tg*(0.126 + 0.072*Pl) + Pl*(-1.65E3 + 41.3*Pl)));
+    mtar_sw_hc = (Tg*(50.0 + 26.0*Pl) + Pl*(-6.41E4 + 1.56E4*Pl))/ \
+                 ((Tg*(0.126 + 0.072*Pl) + Pl*(-1.65E3 + 41.3*Pl)));
 
     ytar_hw_lig = (9.04E4 - 3.43E4*Pl + Tg*(-76.2 + 36.6*Pl + Tg*(6.03E-3 - 0.011*Pl + 7.69E-6*Tg)))/ \
                   (1.37E5 - 3.66E4*Pl + Tg*(-117.5 + 39.3*Pl + Tg*(0.012 + 1.00E-5*Tg - 0.012*Pl)));
@@ -125,12 +125,14 @@ double tarModel_AJ_RED::getCrackingTarRate(state &state) {
 double tarModel_AJ_RED::getDepositionTarRate(state &state) {
 
     double N0 = state.tarVar[0];
-    double eps = 2.2; // same steric factor from soot nucleation for this model
-    double Bts; // frequency of collision between soot and tar molecules
-    double muTS = state.mtar*state.sootVar[1]/(state.mtar + state.sootVar[1]);
+    double eps = 2.2;                  // same steric factor from soot nucleation for this model
+    double Bts;                        // frequency of collision between soot and tar molecules
     
-    double dsoot = pow(6*state.sootVar[1]/(M_PI*rhoSoot), onethird);
-    double dtar  = 6.06E-9 * sqrt(2*state.mtar/(3*12.011));
+    double muTS = state.mtar*state.sootVar[1]/(state.mtar + state.sootVar[1]);
+
+    double d_a  = sqrt(1.395E-10 * 3);                                // diameter of a single aromatic ring
+    double dsoot = pow(6*state.sootVar[1]/(M_PI*rhoSoot), onethird);  // diameter of average soot particle
+    double dtar  = d_a * sqrt(2*state.mtar/(3*12.011));               // diameter of average tar particle
 
     Bts = pow((dsoot + dtar), 2) * sqrt(M_PI*kb*state.T/(2*muTS));
 

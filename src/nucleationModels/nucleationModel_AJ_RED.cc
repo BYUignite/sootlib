@@ -8,9 +8,9 @@ using namespace soot;
 
 nucleationModel_AJ_RED::nucleationModel_AJ_RED() : nucleationModel () {
 
-    nucleationRxnRatios[(int)gasSp::C6H6] = -1;   // C6H6 --> 6C(soot) + 3H2
-    nucleationRxnRatios[(int)gasSp::H2]   =  3;
-    nucleationRxnRatios[(int)gasSp::C]    =  6;
+    nucleationRxnRatios[(int)gasSp::C2H2] = -1;   // C2H2 --> 2C(soot) + H2
+    nucleationRxnRatios[(int)gasSp::H2]   =  1;
+    nucleationRxnRatios[(int)gasSp::C]    =  2;
 
     mechType = nucleationMech::AJ_RED;
 }
@@ -34,7 +34,7 @@ double nucleationModel_AJ_RED::getNucleationSootRate(state &state) {
     double eps = 2.2; // steric factor, the van der Waals enhancement factor
     double Bt; // frequency of collisions between tars
     double dtar; // effective tar diameter
-    double da = 6.06E-9; // m // TODO: jansenpb --- what is da? using diameter of benzene for now
+    double da = 1.395E-10 * sqrt(3); // diameter of single aromatic ring
 
     dtar = da * sqrt(2*state.mtar/(3*12.011));
 

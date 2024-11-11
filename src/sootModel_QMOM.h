@@ -21,6 +21,7 @@ class sootModel_QMOM : public sootModel {
 public:
 
     virtual void setSourceTerms(state &state);
+    virtual double pahSootCollisionRatePerDimer(const state &state, const double mDimer) {return 0;}
 
 private:
 

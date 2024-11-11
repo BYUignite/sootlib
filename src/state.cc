@@ -112,6 +112,40 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_,
 
     yPah = yPah_;
 
+    //------------ Tar mass fractions
+
+    if (yTar_.size() != (yTar.size()))
+        throw domain_error("Invalid input vector size: Tar species mass fractions");
+
+    for (double y : yTar_)
+        if (y < 0 || y > 1)
+            throw domain_error("Unphysical state value input: Tar species mass fraction(s)");
+
+    double yTar_sum = 0;
+    for(double y : yTar_)
+        yTar_sum += y;
+    if (yTar_sum > 1.0)
+        throw domain_error("Unphysical state value input: sum of Tar species mass fractions greater than one");
+
+    yTar = yTar_;
+
+    //------------ Biomass mass fractions
+
+    if (yBio_.size() != (yBio.size()))
+        throw domain_error("Invalid input vector size: Biomass species mass fractions");
+
+    for (double y : yBio_)
+        if (y < 0 || y > 1)
+            throw domain_error("Unphysical state value input: Biomass species mass fraction(s)");
+
+    double yBio_sum = 0;
+    for (double y :yBio_)
+        yBio_sum += y;
+    if (yBio_sum > 1.0)
+        throw domain_error("Unphysical state value input: sum of biomass species mass fraction greater than one");
+
+    yBio = yBio_;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////

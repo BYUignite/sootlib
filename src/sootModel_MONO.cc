@@ -89,70 +89,69 @@ void sootModel_MONO::setSourceTerms(state &state) {
         state.absc[0] = M1 / M0;
     }
 
-    //---------- get chemical rates
-
-    double jNuc = nucl->getNucleationSootRate(state);        // #/m3*s
-    double kGrw = grow->getGrowthSootRate(state);
-    double kOxi = oxid->getOxidationSootRate(state);
-    double coa  = coag->getCoagulationSootRate(state, state.absc[0], state.absc[0]);
-
-    //---------- nucleation terms
-
-    double N0 = 0;
-    double N1 = 0;
-
-    if (nucl->mechType != nucleationMech::NONE) {
-        N0 = jNuc;                                              // #/m3*s
-        N1 = jNuc * state.cMin * gasSpMW[(int)gasSp::C] / Na;   // kg_soot/m3*s (as carbon)
-    }
-
-    //---------- PAH condensation terms
-
-    double Cnd0 = 0;
-    double Cnd1 = 0;
-
-    if (nucl->mechType == nucleationMech::PAH)
-        Cnd1 = coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, state.absc[0]) * 
-               state.wts[0] * nucl->DIMER.nDimer * nucl->DIMER.mDimer;
-
-    //---------- growth terms
-
-    double G0 = 0;
-    double G1 = 0;
-
-    double Am2m3 = M0 > 0 ? M_PI*pow(6./(M_PI*rhoSoot)*M1/M0, twothird)*M0 : 0;
-
-    if (grow->mechType != growthMech::NONE)
-        G1 = kGrw * Am2m3;
-
-    //---------- oxidation terms
-
-    double X0 = 0;
-    double X1 = 0;
-
-    if (oxid->mechType != oxidationMech::NONE)
-        X1 = -kOxi * Am2m3;
-
-    //---------- coagulation terms
-
-    double C0 = 0;
-    double C1 = 0;
-
-    if (coag->mechType != coagulationMech::NONE)
-        C0 = -0.5*coa*state.wts[0]*state.wts[0];
-
-    //---------- tar terms
-
-    double T0 = 0;                               // tar equation 1 #/m3*s 
-    double T1 = 0;                               // tar terms in soot mass equation kg_soot/m3*s
-
-
     if (tar->mechType != tarMech::NONE) {
         
         double incp   = tar->getInceptionTarRate(state);
         double crack  = tar->getCrackingTarRate(state);
         double gasify = tar->getSurfaceTarRate(state);
         double depo   = tar->getDepositionTarRate(state);
+        //---------- get chemical rates
+
+        double jNuc = nucl->getNucleationSootRate(state);        // #/m3*s
+        double kGrw = grow->getGrowthSootRate(state);
+        double kOxi = oxid->getOxidationSootRate(state);
+        double coa  = coag->getCoagulationSootRate(state, state.absc[0], state.absc[0]);
+
+        //---------- nucleation terms
+
+        double N0 = 0;
+        double N1 = 0;
+
+        if (nucl->mechType != nucleationMech::NONE) {
+            N0 = jNuc;                                              // #/m3*s
+            N1 = jNuc * state.cMin * gasSpMW[(int)gasSp::C] / Na;   // kg_soot/m3*s (as carbon)
+        }
+
+        //---------- PAH condensation terms
+
+        double Cnd0 = 0;
+        double Cnd1 = 0;
+
+        if (nucl->mechType == nucleationMech::PAH)
+            Cnd1 = coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, state.absc[0]) * 
+                state.wts[0] * nucl->DIMER.nDimer * nucl->DIMER.mDimer;
+
+        //---------- growth terms
+
+        double G0 = 0;
+        double G1 = 0;
+
+        double Am2m3 = M0 > 0 ? M_PI*pow(6./(M_PI*rhoSoot)*M1/M0, twothird)*M0 : 0;
+
+        if (grow->mechType != growthMech::NONE)
+            G1 = kGrw * Am2m3;
+
+        //---------- oxidation terms
+
+        double X0 = 0;
+        double X1 = 0;
+
+        if (oxid->mechType != oxidationMech::NONE)
+            X1 = -kOxi * Am2m3;
+
+        //---------- coagulation terms
+
+        double C0 = 0;
+        double C1 = 0;
+
+        if (coag->mechType != coagulationMech::NONE)
+            C0 = -0.5*coa*state.wts[0]*state.wts[0];
+
+        //---------- tar terms
+
+        double T0 = 0;                               // tar equation 1 #/m3*s 
+        double T1 = 0;                               // tar terms in soot mass equation kg_soot/m3*s
+
         
 
         T0 = incp - depo - crack + 2508 * Ntar0 * (G1 - X1 - gasify);
@@ -161,7 +160,7 @@ void sootModel_MONO::setSourceTerms(state &state) {
         // combine to make soot source terms 
 
         sources.sootSources[0] = N0 + C0;
-        sources.sootSources[1] = 2*state.mtar*N1 + T1;
+        sources.sootSources[1] = 2*state.mtar*N1 + T1 + Cnd1;
 
         // combine to make tar source term 
 
@@ -189,6 +188,63 @@ void sootModel_MONO::setSourceTerms(state &state) {
 
 
     if (tar->mechType == tarMech::NONE) {                        // jansenpb TODO: else statement?
+                                                                 //---------- get chemical rates
+
+        double jNuc = nucl->getNucleationSootRate(state);        // #/m3*s
+        double kGrw = grow->getGrowthSootRate(state);
+        double kOxi = oxid->getOxidationSootRate(state);
+        double coa  = coag->getCoagulationSootRate(state, state.absc[0], state.absc[0]);
+
+        //---------- nucleation terms
+
+        double N0 = 0;
+        double N1 = 0;
+
+        if (nucl->mechType != nucleationMech::NONE) {
+            N0 = jNuc;                                              // #/m3*s
+            N1 = jNuc * state.cMin * gasSpMW[(int)gasSp::C] / Na;   // kg_soot/m3*s (as carbon)
+        }
+
+        //---------- PAH condensation terms
+
+        double Cnd0 = 0;
+        double Cnd1 = 0;
+
+        if (nucl->mechType == nucleationMech::PAH)
+            Cnd1 = coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, state.absc[0]) * 
+                state.wts[0] * nucl->DIMER.nDimer * nucl->DIMER.mDimer;
+
+        //---------- growth terms
+
+        double G0 = 0;
+        double G1 = 0;
+
+        double Am2m3 = M0 > 0 ? M_PI*pow(6./(M_PI*rhoSoot)*M1/M0, twothird)*M0 : 0;
+
+        if (grow->mechType != growthMech::NONE)
+            G1 = kGrw * Am2m3;
+
+        //---------- oxidation terms
+
+        double X0 = 0;
+        double X1 = 0;
+
+        if (oxid->mechType != oxidationMech::NONE)
+            X1 = -kOxi * Am2m3;
+
+        //---------- coagulation terms
+
+        double C0 = 0;
+        double C1 = 0;
+
+        if (coag->mechType != coagulationMech::NONE)
+            C0 = -0.5*coa*state.wts[0]*state.wts[0];
+
+        //---------- tar terms
+
+        double T0 = 0;                               // tar equation 1 #/m3*s 
+        double T1 = 0;                               // tar terms in soot mass equation kg_soot/m3*s
+
         //---------- combine to make soot source terms
 
         sources.sootSources[0] = N0 + Cnd0 + G0 + X0 + C0;      // #/m3*s

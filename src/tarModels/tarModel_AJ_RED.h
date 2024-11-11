@@ -15,9 +15,11 @@ class tarModel_AJ_RED : public tarModel {
 
 //////////////// DATA MEMBERS /////////////////////
 
-public:
+private:
 
 //////////////// MEMBER FUNCTIONS /////////////////
+
+public:
 
     double getInceptionTarRate(state &state) override;
     double getCrackingTarRate(state &state) override;
@@ -26,7 +28,9 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    tarModel_AJ_RED();
+    tarModel_AJ_RED() {
+        mechType = tarMech::AJ_RED;
+    }
     ~tarModel_AJ_RED() override = default;
 
 };

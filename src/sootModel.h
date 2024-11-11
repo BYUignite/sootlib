@@ -52,7 +52,7 @@ public:
 
     //----------- for the LOGN model interface
 
-    virtual double pahSootCollisionRatePerDimer(const double mDimer) const {return 0;}
+    virtual double pahSootCollisionRatePerDimer(const state &state, const double mDimer) = 0;
 
     //----------- for the SECT model interface
 

@@ -679,12 +679,12 @@ double sootModel_MOMIC::Mr(const double r) {
 
 void sootModel_MOMIC::set_fractional_moments_Mp6_Mq6() {
 
-    double p;
-    for(size_t i=0, p=-4; i<np[Nmom]; i++, p+=2)
+    double p = -4;
+    for(size_t i=0; i<np[Nmom]; i++, p+=2)
         Mp6[i] = Mr(p/6.0);
 
-    double q;
-    for(size_t i=0, q=-3; i<nq[Nmom]; i++, q+=2)
+    double q = -3;
+    for(size_t i=0; i<nq[Nmom]; i++, q+=2)
         Mq6[i] = Mr(q/6.0);
 
 }

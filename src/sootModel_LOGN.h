@@ -24,7 +24,7 @@ public:
 
     double Mr(double k, double M0, double M1, double M2) const;
 
-    virtual double pahSootCollisionRatePerDimer(const state &state, const double mDimer) const;
+    virtual double pahSootCollisionRatePerDimer(const state &state, const double mDimer);
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
