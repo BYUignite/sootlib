@@ -41,13 +41,14 @@ class state {
         std::vector<double> yTar;          ///< gas tar species mass fractions
         std::vector<double> yBio;          ///< biomass components from CPDbio
         double              mtar;          ///< average tar molecular size jansenpb TODO: does this go here?
+        double              ytar;          ///< average tar mass fraction
 
 
     //////////////// MEMBER FUNCTIONS /////////////////
 
         void setState(double T_, double P_, double rhoGas_, double muGas_, 
                       std::vector<double> yGas_, std::vector<double> yPAH_,
-                      std::vector<double> yTar_, std::vector<double> yBio_, 
+                      std::vector<double> yTar_, 
                       std::vector<double> sootVar_, std::vector<double> tarVar_,
                       int nsoot_, int Ntar_, double cMin_ = 100 );
 
@@ -72,6 +73,13 @@ class state {
         /** tar species concentration (kmol/m3) */
         double getTarSpC(tarSp sp)  const {return rhoGas * yTar[(int)sp] / tarSpMW[(int)sp]; }
 
+        /** set bio species mass fractions */ 
+        void getyBio(std::vector<double> &yBio_) { yBio = yBio_; }
+
+        /** get mtar and ytar */ 
+        void get_mtar_ytar();
+
+
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     state(size_t nsoot_=0, size_t Ntar_ =0) :
@@ -84,8 +92,7 @@ class state {
         wts(std::vector<double>(       nsoot_/2,         0.0)),
         yGas(std::vector<double>(      (int)gasSp::size, 0.0)),
         yPah(std::vector<double>(      (int)pahSp::size, 0.0)),  
-        yTar(std::vector<double>(      (int)tarSp::size, 0.0)), 
-        yBio(std::vector<double>(      (int)bioSp::size, 0.0)) { }
+        yTar(std::vector<double>(      (int)tarSp::size, 0.0)) { }
     ~state() = default;
 
 };

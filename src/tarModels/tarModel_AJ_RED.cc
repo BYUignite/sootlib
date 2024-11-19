@@ -21,71 +21,12 @@ using namespace soot;
 
 double tarModel_AJ_RED::getInceptionTarRate(state &state) {
     
-    double Tg = state.T;                // K
-    double Pl = log10 (state.P/101325); // atm
-    double mtar = state.mtar;
-
-    double N0 = state.tarVar[0]; // \#/m3
-
-    ////// Declare the mass fractions of tar and average molecular size based on constituents /////////
-
-    double ytar_cell;
-    double mtar_cell;
-    double ytar_hw_hc;
-    double mtar_hw_hc;
-    double ytar_sw_hc;
-    double mtar_sw_hc;
-    double ytar_hw_lig;
-    double mtar_hw_lig;
-    double ytar_sw_lig;
-    double mtar_sw_lig;
-
-    /////////////////////// Tar constituent mass fraction equations ///////////////////////////////////
-
-    ytar_cell = (-1.57E5 + Tg*(290.6 - 0.022*Tg + 8.0*Pl + Tg*(3.6E-5*Tg - 0.036*Pl)))/ \
-                (-2.03E5 + Tg*(382.9 + 11.2*Pl + Tg*(4.53E-5*Tg - 0.042*Pl)));
-
-    mtar_cell = (-3.06E4 + 242.2*Tg + Pl*(1.05E4 - 83.1*Tg + Pl*(-1.84E3 + 461.8*Pl)))/ \
-                (0.635*Tg - Pl*(0.145*Tg - Pl*(0.021*Tg - 2.78*Pl)));
-
-    ytar_hw_hc = (-5.21E5 + Tg*(3.12E3 - 1.08E3*Pl + Tg*(-0.382 + 0.207*Pl)))/ \
-                 (Tg*(5.75E3 - 2.65E3*Pl - Tg*(1.45E-4*Tg + 0.518*Pl)));
-
-    mtar_hw_hc = (236.7*Tg - 5.92E4*Pl) / (0.608*Tg - 109.4*Pl);
-
-    ytar_sw_hc = (7.05E4 - 1.29E-5*Pl + Tg*(144.4 + Tg*(0.233 - 7.41E-5*Tg)))/ \
-                 (3.69E5 - 3.22E5*Pl + Tg*(91.0 + Tg*(0.725 - 2.08E-4*Tg)));
-
-    mtar_sw_hc = (Tg*(50.0 + 26.0*Pl) + Pl*(-6.41E4 + 1.56E4*Pl))/ \
-                 ((Tg*(0.126 + 0.072*Pl) + Pl*(-1.65E3 + 41.3*Pl)));
-
-    ytar_hw_lig = (9.04E4 - 3.43E4*Pl + Tg*(-76.2 + 36.6*Pl + Tg*(6.03E-3 - 0.011*Pl + 7.69E-6*Tg)))/ \
-                  (1.37E5 - 3.66E4*Pl + Tg*(-117.5 + 39.3*Pl + Tg*(0.012 + 1.00E-5*Tg - 0.012*Pl)));
-
-    mtar_hw_lig = (4.78E6 + Tg*(-8.4E3 + Tg*(7.36 - 1.23E-3*Tg)) + Pl*(-573.1*Tg + Pl*(3.39E6 + 340.1*Tg - 4.85E5*Pl)))/ \
-                  (8.13*Tg + Pl*Pl*(1.47E4 - 2.64*Tg + 997.9*Pl));
-
-    ytar_sw_lig = (470.5 - 165.4*Pl + Tg*(-0.303 + 0.124*Pl + Tg*(3.22E-5 + 6.46E-9*Tg - 2.37E-5*Pl)))/ \
-                  (735.3 - 176.0*Pl + Tg*(-0.55 + 0.133*Pl + Tg*(1.05E-4 - 2.56E-5*Pl)));
-
-    mtar_sw_lig = (115.8 +Tg*(0.117 - 3.86E-5*Tg + 3.46E-3*Pl) + Pl*(-29.7 - 2.16*Pl))/ \
-                  (0.887 -2.19E-4*Tg + Pl*(0.106 - 4.0E-5*Tg));
-
-    /////////////////// Tar mass fraction and average molecular size ////////////////////// 
-    
-    double ytar = ytar_cell*state.yBio[0] + ytar_hw_hc*state.yBio[1] + ytar_sw_hc*state.yBio[2] + ytar_hw_lig*state.yBio[3] + ytar_sw_lig*state.yBio[4];
-    
-    mtar = mtar_cell*state.yBio[0] + mtar_hw_hc*state.yBio[1] + mtar_sw_hc*state.yBio[2] + mtar_hw_lig*state.yBio[3] + mtar_sw_lig*state.yBio[4];
-    
-    ////////////////// Primary pyrolysis rate rv ///////////////////////////////////////// 
-
-    state.mtar = mtar;
 
     double rv;
 
     rv = 2.0; // jansenpb TODO: implement a primary pyrolysis model 
 
-    return ytar * rv / mtar;  // #/m3-s
+    return state.ytar * rv / state.mtar;  // #/m3-s
 }
 
 double tarModel_AJ_RED::getCrackingTarRate(state &state) {

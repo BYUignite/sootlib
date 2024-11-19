@@ -123,7 +123,7 @@ int main(int argc, char** argv) {
         yGas = {LI_yO2(z), LI_yO(z), LI_yH2(z), LI_yH(z), LI_yOH(z), LI_yH2O(z), LI_yCO(z), LI_yC2H2(z)};
         for(int i=0; i<nsoot; i++)
             M[i] = Mhat[i]*LI_rho(z);
-        S.setState(LI_T(z), P, LI_rho(z), LI_mu(z), yGas, yPAH, yTar, yBio, M, TV, nsoot, Ntar);
+        S.setState(LI_T(z), P, LI_rho(z), LI_mu(z), yGas, yPAH, yTar, M, TV, nsoot, Ntar);
         SM.setSourceTerms(S);
 
         for(int k=0; k<nsoot; k++)
@@ -133,7 +133,7 @@ int main(int argc, char** argv) {
         yGas = {LI_yH(zh), LI_yH2(zh), LI_yO(zh), LI_yO2(zh), LI_yOH(zh), LI_yH2O(zh), LI_yCO(zh), LI_yC2H2(zh)};
         for(int i=0; i<nsoot; i++)
             M[i] = Mhath[i]*LI_rho(z);
-        S.setState(LI_T(zh), P, LI_rho(zh), LI_mu(zh), yGas, yPAH, yTar, yBio, M, TV, nsoot, Ntar);
+        S.setState(LI_T(zh), P, LI_rho(zh), LI_mu(zh), yGas, yPAH, yTar, M, TV, nsoot, Ntar);
         SM.setSourceTerms(S);
 
         for(int k=0; k<nsoot; k++)

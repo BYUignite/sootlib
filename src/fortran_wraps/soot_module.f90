@@ -387,7 +387,7 @@ module soot_module
         !------------------------------------------------------------------------
 
         subroutine setState_C_interface(state_ptr, T_, P_, rhoGas_, muGas_, yGas_, yPAH_, &
-                                        yTar_, yBio_, sootVar_, tarVar_, nsoot_, Ntar_, cMin_) &
+                                        yTar_, sootVar_, tarVar_, nsoot_, Ntar_, cMin_) &
                                         bind(C, name="setState_C_interface")
             import
             type(C_ptr),    value        :: state_ptr
@@ -398,7 +398,6 @@ module soot_module
             real(C_double), dimension(*) :: yGas_
             real(C_double), dimension(*) :: yPAH_
             real(C_double), dimension(*) :: yTar_
-            real(C_double), dimension(*) :: yBio_
             real(C_double), dimension(*) :: sootVar_
             real(C_double), dimension(*) :: tarVar_
             integer(C_int), value        :: nsoot_
@@ -457,6 +456,21 @@ module soot_module
 
         !------------------------------------------------------------------------
 
+        subroutine getyBio_interface(state_ptr, yBio_) bind(C, name="getyBio_interface")
+            import
+            type(C_ptr), value           :: state_ptr
+            real(C_double), dimension(*) :: yBio_
+        end subroutine getyBio_interface
+
+        !------------------------------------------------------------------------
+        
+        subroutine get_mtar_ytar_interface(state_ptr) bind(C, name="get_mtar_ytar_interface")
+            import
+            type(C_ptr), value :: state_ptr
+        end subroutine get_mtar_ytar_interface
+
+        !------------------------------------------------------------------------
+        
         subroutine get_T_interface(state_ptr) bind(C, name="get_T_interface")
             import
             type(C_ptr), value :: state_ptr
@@ -495,14 +509,6 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine get_yBio_interface(state_ptr, sp) bind(C, name="get_yBio_interface")
-            import
-            type(C_ptr), value :: state_ptr
-            character(C_char)  :: sp 
-        end subroutine get_yBio_interface
-    
-        !------------------------------------------------------------------------
-
         subroutine get_SootVar_interface(state_ptr, i) bind(C, name="get_SootVar_interface")
             import
             type(C_ptr)   , value :: state_ptr
@@ -534,12 +540,12 @@ module soot_module
         growth_delete, oxidationModel_LL, oxid_delete, coagulationModel_FM, set_FM_multiplier, coag_delete, tarModel_NONE, &
         tar_delete, sootModel_MONO, sootModel_delete, sootModel_QMOM, setSourceTerms, state, state_delete, setState, &
         getGasSpC, getGasSpP, getGasMeanFreePath, get_pahSpC, get_pahSpP, setSootScales, get_T, get_rhoGas, &
-        get_yGas, get_yPAH, get_yTar, get_yBio, get_SootVar, get_TarVar, getSootSources, nucleationModel_LINA1, &
+        get_yGas, get_yPAH, get_yTar, getyBio, get_SootVar, get_TarVar, getSootSources, nucleationModel_LINA1, &
         nucleationModel_MB, nucleationModel_PAH, nucleationModel_FAIR, nucleationModel_AJ_RED, nucleationModel_NONE, &
         growthModel_HACA, growthModel_MB, growthModel_FAIR, growthModel_NONE, oxidationModel_LEE_NEOH, oxidationModel_NSC_NEOH, &
         oxidationModel_HACA, oxidationModel_OPTJ, oxidationModel_OPTG, oxidationModel_MB, oxidationModel_FAIR, &
         oxidationModel_AJ_RED, oxidationModel_NONE, coagulationModel_CONTINUUM, coagulationModel_HM, coagulationModel_FUCHS, &
-        coagulationModel_NONE, sootModel_LOGN, sootModel_MOMIC, sootModel_SECT
+        coagulationModel_NONE, sootModel_LOGN, sootModel_MOMIC, sootModel_SECT, get_mtar_ytar
 
     !============================================================================
     ! set fortran wrapper routines to the C interface functions
@@ -928,7 +934,7 @@ module soot_module
         !------------------------------------------------------------------------
 
         subroutine setState(state_ptr, T_, P_, rhoGas_, muGas_, yGas_, yPAH_, &
-                            yTar_, yBio_, sootVar_, tarVar_, nsoot_, Ntar_, cMin_)
+                            yTar_,  sootVar_, tarVar_, nsoot_, Ntar_, cMin_)
             type(C_ptr)     , intent(in)               :: state_ptr
             double precision, intent(in)               :: T_
             double precision, intent(in)               :: P_
@@ -937,7 +943,6 @@ module soot_module
             double precision, intent(in), dimension(:) :: yGas_
             double precision, intent(in), dimension(:) :: yPAH_
             double precision, intent(in), dimension(:) :: yTar_
-            double precision, intent(in), dimension(:) :: yBio_
             double precision, intent(in), dimension(:) :: sootVar_
             double precision, intent(in), dimension(:) :: tarVar_
             integer         , intent(in)               :: nsoot_
@@ -945,14 +950,22 @@ module soot_module
             double precision, intent(in)               :: cMin_
 
             call setState_C_interface(state_ptr, T_, P_, rhoGas_, muGas_, yGas_, yPAH_, &
-                                      yTar_, yBio_, sootVar_, tarVar_, nsoot_, Ntar_, cMin_)
+                                      yTar_, sootVar_, tarVar_, nsoot_, Ntar_, cMin_)
         end subroutine setState
+
+        !------------------------------------------------------------------------
+
+        subroutine get_mtar_ytar(state_ptr)
+            type(C_ptr), intent(out) :: state_ptr
+
+            call get_mtar_ytar_interface(state_ptr)
+        end subroutine get_mtar_ytar
 
         !------------------------------------------------------------------------
 
         subroutine setSourceTerms(SM_ptr, state_ptr)
             type(C_ptr), intent(out) :: SM_ptr
-            type(C_ptr), intent(in)    :: state_ptr
+            type(C_ptr), intent(in)  :: state_ptr
 
             call setSourceTerms_C_interface(SM_ptr, state_ptr)
         end subroutine setSourceTerms
@@ -1046,11 +1059,11 @@ module soot_module
 
         !------------------------------------------------------------------------
 
-        subroutine get_yBio(state_ptr, sp)
-            type(C_ptr), intent(in) :: state_ptr
-            character, intent(in) :: sp 
-            call get_yBio_interface(state_ptr, sp)
-        end subroutine get_yBio
+        subroutine getyBio(state_ptr, yBio_)
+            type(C_ptr)     , intent(out)               :: state_ptr
+            double precision, intent(in), dimension(:) :: yBio_ 
+            call getyBio_interface(state_ptr, yBio_)
+        end subroutine getyBio
 
         !------------------------------------------------------------------------
 

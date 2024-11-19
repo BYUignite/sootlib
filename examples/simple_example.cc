@@ -40,8 +40,10 @@ int main(int argc, char** argv) {
     vector<double> Msoot{0.003, 1.5E-5, 1E-7, 1E-10};                        // soot moment values [M0, M1, M2, M3]
     vector<double> Mtar{0.0001};                                             // tar moment values
 
+    S.getyBio(yBio);
+    S.get_mtar_ytar();
 
-    S.setState(T, P, rhoGas, muGas, yGas, yPAH, yTar, yBio, Msoot, Mtar, nsoot, Ntar);
+    S.setState(T, P, rhoGas, muGas, yGas, yPAH, yTar, Msoot, Mtar, nsoot, Ntar);
 
     //---------- calculate source terms
 

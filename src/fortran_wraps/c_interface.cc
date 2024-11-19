@@ -288,16 +288,15 @@ extern "C" {
     void setState_C_interface(soot::state *state_ptr, double T_, double P_, 
                               double rhoGas_, double muGas_,
                               const double* yGas_, const double* yPAH_,
-                              const double* yTar_, const double* yBio_, const double* sootVar_, 
+                              const double* yTar_, const double* sootVar_, 
                               const double* tarVar_, int nsoot_, int Ntar_, double cMin_ = 100.0){
         std::vector<double> yGas(yGas_, yGas_ + 10);
         std::vector<double> yPAH(yPAH_, yPAH_ + 6);
         std::vector<double> yTar(yTar_, yTar_ + 4);
-        std::vector<double> yBio(yBio_, yBio_ + 5);
         std::vector<double> sootVar(sootVar_, sootVar_ + nsoot_);
         std::vector<double> tarVar(tarVar_, tarVar_ + Ntar_);
         state_ptr->setState(T_, P_, rhoGas_, muGas_, 
-                            yGas, yPAH, yTar, yBio, sootVar, tarVar, nsoot_, Ntar_);
+                            yGas, yPAH, yTar, sootVar, tarVar, nsoot_, Ntar_);
     }
     double getGasSpC_C_interface(soot::state *state_ptr, soot::gasSp sp){
         return state_ptr->getGasSpC(soot::gasSp(sp));
@@ -323,6 +322,15 @@ extern "C" {
         state_ptr->setSootScales(sootScales_);
     }
 
+    void getyBio_interface(soot::state *state_ptr, const double* yBio_) {
+        std::vector<double> yBio(yBio_, yBio_ + 5);
+        state_ptr->getyBio(yBio);
+    }
+
+    void get_mtar_ytar_interface(soot::state *state_ptr) {
+        state_ptr->get_mtar_ytar();
+    }
+
     double get_T_interface(soot::state *state_ptr) {
         return state_ptr->T;
     }
@@ -341,10 +349,6 @@ extern "C" {
     
     double get_yTar_interface(soot::state *state_ptr, soot::tarSp sp) {
         return state_ptr->yTar[(int)sp];
-    }
-
-    double get_yBio_interface(soot::state *state_ptr, soot::bioSp sp) {
-        return state_ptr->yBio[(int)sp];
     }
 
     double get_SootVar_interface(soot::state *state_ptr, int i) {
