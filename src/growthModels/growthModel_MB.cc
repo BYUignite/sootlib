@@ -23,7 +23,7 @@ growthModel_MB::growthModel_MB() {
 /// Rate from Moss-Brookes (1999) Predictions of Soot and Thermal Radiation Properties...
 /// Returns chemical surface growth rate in kg/m2*s.
 ///
-/// Using model params n = 1, a = 54, m = 1/4, and b = 6.90
+/// Using model params n = 1, a = 54, m = 2/3, and b = 430.0
 /// C2H2 + nC(s) --> (n+2)C(s) + H2 
 ///
 /// @param state       \input gas and soot state, set by user.
@@ -48,10 +48,12 @@ double growthModel_MB::getGrowthSootRate(const state &state) const {
     }
 
     if (M0 > 0)
-        Am2m3 = pow( pow(M_PI * M0, 1.0/3.0) * pow(6 * M1 / rhoSoot, 2.0/3.0), 1.0); // power 1.0 = n
+        //Am2m3 = pow( pow(M_PI * M0, 1.0/3.0) * pow(6 * M1 / rhoSoot, 2.0/3.0), 1.0); //power 1.0 = n
+        
+        Am2m3 = pow(M_PI, 1.0/3.0) * pow(6 / (M_PI * rhoSoot) * M1 / M0, 2.0/3.0) * M0;
 
     if (Am2m3 > 0)
-        rSoot = 6.90 * pow(state.getGasSpC(gasSp::C2H2), 1.0/4.0) * exp(-12100 / state.T) * Am2m3;
+        rSoot = 430.0 * pow(state.getGasSpC(gasSp::C2H2), 2.0/3.0) * exp(-12100 / state.T);
 
     return rSoot;
 }

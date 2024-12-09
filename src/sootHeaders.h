@@ -9,6 +9,7 @@
 #include "nucleationModels/nucleationModel_LINA1.h"
 #include "nucleationModels/nucleationModel_PAH.h"
 #include "nucleationModels/nucleationModel_MB.h"
+#include "nucleationModels/nucleationModel_FAIR.h"
 #include "nucleationModels/nucleationModel_NONE.h"
 
 #include "growthModels/growthModel.h"
@@ -16,6 +17,7 @@
 #include "growthModels/growthModel_LIN.h"
 #include "growthModels/growthModel_HACA.h"
 #include "growthModels/growthModel_MB.h"
+#include "growthModels/growthModel_FAIR.h"
 #include "growthModels/growthModel_NONE.h"
 
 #include "oxidationModels/oxidationModel.h"
@@ -26,6 +28,7 @@
 #include "oxidationModels/oxidationModel_OPTJ.h"
 #include "oxidationModels/oxidationModel_OPTG.h"
 #include "oxidationModels/oxidationModel_MB.h"
+#include "oxidationModels/oxidationModel_FAIR.h"
 #include "oxidationModels/oxidationModel_NONE.h"
 
 #include "coagulationModels/coagulationModel.h"

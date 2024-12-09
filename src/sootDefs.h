@@ -26,17 +26,18 @@ const double twothird = 2.0/3.0;
 const double root2    = sqrt(2.0);
 const double mmin     = 2E-26;      ///< mass of a carbon atom (kg)
 
+
 //////////////////// mechanism types
 
-enum class nucleationMech { NONE, LL,   LIN, LINA1, PAH,   MB,                              size };
-enum class growthMech     { NONE, LL,   LIN,        HACA,  MB,                              size };
-enum class oxidationMech  { NONE, LL,   LEE_NEOH,          MB, NSC_NEOH, HACA, OPTJ, OPTG,  size };
+enum class nucleationMech { NONE, LL,   LIN, LINA1, PAH,   MB, FAIR,                      size };
+enum class growthMech     { NONE, LL,   LIN,        HACA,  MB, FAIR,                              size };
+enum class oxidationMech  { NONE, LL,   LEE_NEOH, MB, FAIR, NSC_NEOH, HACA, OPTJ, OPTG,  size };
 enum class coagulationMech{ NONE, FM,   CONTINUUM,  HM,       FUCHS,                        size };
 enum class psdMech        { NONE, MONO, LOGN, QMOM, MOMIC,    SECT,                         size };
 
 //////////////////// gas species list and properties
 
-enum class gasSp{ O2, O, H2, H, OH, H2O, CO, C2H2, C6H6, C, size };
+enum class gasSp{ O2, O, H2, H, OH, H2O, CO, C2H2, C6H6, C, CO2, size };
 
 static std::map<std::string, gasSp> gasSpMapSE{{"O2",  gasSp::O2},     ///< map String to Enumeration
                                               {"O" ,  gasSp::O},
@@ -47,7 +48,8 @@ static std::map<std::string, gasSp> gasSpMapSE{{"O2",  gasSp::O2},     ///< map 
                                               {"CO",  gasSp::CO},
                                               {"C2H2",gasSp::C2H2},
                                               {"C6H6",gasSp::C6H6},
-                                              {"C",   gasSp::C}};
+                                              {"C",   gasSp::C},
+                                              {"CO2", gasSp::CO2}};
 
 static std::map<gasSp, std::string> gasSpMapES{{gasSp::O2,  "O2"},     ///< map Enumeration to String
                                               {gasSp::O,   "O" },
@@ -58,7 +60,8 @@ static std::map<gasSp, std::string> gasSpMapES{{gasSp::O2,  "O2"},     ///< map 
                                               {gasSp::CO,  "CO"},
                                               {gasSp::C2H2,"C2H2"},
                                               {gasSp::C6H6,"C6H6"},
-                                              {gasSp::C,   "C"}};
+                                              {gasSp::C,   "C"},
+                                              {gasSp::CO2, "CO2"}};
 
 static std::map<int, std::string> gasSpMapIS{{0,  "O2"},               //< map Int to String
                                             {1,   "O" },
@@ -69,7 +72,8 @@ static std::map<int, std::string> gasSpMapIS{{0,  "O2"},               //< map I
                                             {6,  "CO"},
                                             {7,"C2H2"},
                                             {8,"C6H6"},
-                                            {9,   "C"}};
+                                            {9,   "C"},
+                                            {10, "CO2"}};
 
 const std::vector<double> gasSpMW{      ///< (kg/kmol); make sure the order corresponds to the gasSp enum
     31.998,    // O2                    ///< same as in cantera Elements.cpp
@@ -81,7 +85,9 @@ const std::vector<double> gasSpMW{      ///< (kg/kmol); make sure the order corr
     28.010,    // CO
     26.038,    // C2H2
     78.114,    // C6H6
-    12.011     // C
+    12.011,    // C
+    44.009     // CO2
+
 };
 
 //////////////////// PAH species list and properties for PAH nucleation and condensation
@@ -142,9 +148,9 @@ struct sourceTerms {
     std::vector<double> gasSources;      ///< kg/m3*s
     std::vector<double> pahSources;      ///< kg/m3*s
 
-    sourceTerms(size_t nsoot) : sootSources(std::vector<double>(nsoot, 0.0)), 
-                                gasSources( std::vector<double>((size_t)gasSp::size, 0.0)),
-                                pahSources( std::vector<double>((size_t)pahSp::size, 0.0)) {}
+    sourceTerms(size_t nsoot) : sootSources(   std::vector<double>(nsoot, 0.0)), 
+                                gasSources(    std::vector<double>((size_t)gasSp::size, 0.0)),
+                                pahSources(    std::vector<double>((size_t)pahSp::size, 0.0)) {}
 };
 
 }  // namespace soot

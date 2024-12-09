@@ -16,3 +16,4 @@ add_executable(burner_flame burner_flame/burner_flame.cc)
 target_include_directories(burner_flame PRIVATE "${PROJECT_SOURCE_DIR}/src")
 target_link_libraries(burner_flame PRIVATE sootlib)
 install(TARGETS burner_flame DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/burner_flame")
+

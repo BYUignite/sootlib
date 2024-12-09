@@ -7,12 +7,14 @@
 #include "nucleationModels/nucleationModel_LINA1.h"
 #include "nucleationModels/nucleationModel_PAH.h"
 #include "nucleationModels/nucleationModel_MB.h"
+#include "nucleationModels/nucleationModel_FAIR.h"
 
 #include "growthModels/growthModel_NONE.h"
 #include "growthModels/growthModel_LL.h"
 #include "growthModels/growthModel_LIN.h"
 #include "growthModels/growthModel_HACA.h"
 #include "growthModels/growthModel_MB.h"
+#include "growthModels/growthModel_FAIR.h"
 
 #include "oxidationModels/oxidationModel_NONE.h"
 #include "oxidationModels/oxidationModel_LL.h"
@@ -22,12 +24,14 @@
 #include "oxidationModels/oxidationModel_OPTJ.h"
 #include "oxidationModels/oxidationModel_OPTG.h"
 #include "oxidationModels/oxidationModel_MB.h"
+#include "oxidationModels/oxidationModel_FAIR.h"
 
 #include "coagulationModels/coagulationModel_NONE.h"
 #include "coagulationModels/coagulationModel_FM.h"
 #include "coagulationModels/coagulationModel_CONTINUUM.h"
 #include "coagulationModels/coagulationModel_HM.h"
 #include "coagulationModels/coagulationModel_FUCHS.h"
+
 
 using namespace std;
 using namespace soot;
@@ -77,19 +81,20 @@ sootModel::sootModel(size_t          nsoot_,
                      nucleationMech  Nmech,
                      growthMech      Gmech,
                      oxidationMech   Omech,
-                     coagulationMech Cmech) : nsoot(nsoot_), 
+                     coagulationMech Cmech) : nsoot(nsoot_),
                                               mechsNewedHere(true),
                                               sources(nsoot_) {
 
     //---------- set nucleation model
 
     switch (Nmech) {
-        case nucleationMech::NONE  : nucl = new nucleationModel_NONE();   break;
-        case nucleationMech::LL    : nucl = new nucleationModel_LL();     break;
-        case nucleationMech::LIN   : nucl = new nucleationModel_LIN();    break;
-        case nucleationMech::LINA1 : nucl = new nucleationModel_LINA1();  break;
-        case nucleationMech::PAH   : nucl = new nucleationModel_PAH();    break;
-        case nucleationMech::MB    : nucl = new nucleationModel_MB();     break;
+        case nucleationMech::NONE   : nucl = new nucleationModel_NONE();   break;
+        case nucleationMech::LL     : nucl = new nucleationModel_LL();     break;
+        case nucleationMech::LIN    : nucl = new nucleationModel_LIN();    break;
+        case nucleationMech::LINA1  : nucl = new nucleationModel_LINA1();  break;
+        case nucleationMech::PAH    : nucl = new nucleationModel_PAH();    break;
+        case nucleationMech::MB     : nucl = new nucleationModel_MB();     break;
+        case nucleationMech::FAIR   : nucl = new nucleationModel_FAIR();   break;
                                     
         default: throw domain_error("Invalid nucleation model requested");
     }
@@ -102,6 +107,8 @@ sootModel::sootModel(size_t          nsoot_,
         case growthMech::LIN  : grow = new growthModel_LIN();  break;
         case growthMech::HACA : grow = new growthModel_HACA(); break;
         case growthMech::MB   : grow = new growthModel_MB();   break;
+        case growthMech::FAIR : grow = new growthModel_FAIR(); break;
+        
         default: throw domain_error("Invalid growth model requested");
     }
 
@@ -116,6 +123,8 @@ sootModel::sootModel(size_t          nsoot_,
         case oxidationMech::OPTJ     : oxid = new oxidationModel_OPTJ();     break;
         case oxidationMech::OPTG     : oxid = new oxidationModel_OPTG();     break;
         case oxidationMech::MB       : oxid = new oxidationModel_MB();       break;
+        case oxidationMech::FAIR     : oxid = new oxidationModel_FAIR();     break;
+        
         default: throw domain_error("Invalid oxidation model requested");
     }
 
@@ -127,6 +136,7 @@ sootModel::sootModel(size_t          nsoot_,
         case coagulationMech::CONTINUUM : coag = new coagulationModel_CONTINUUM(); break;
         case coagulationMech::HM        : coag = new coagulationModel_HM();        break;
         case coagulationMech::FUCHS     : coag = new coagulationModel_FUCHS();     break;
+        
         default: throw domain_error("Invalid coagulation model requested");
     }
 

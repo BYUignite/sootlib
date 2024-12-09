@@ -8,4 +8,5 @@ target_sources(sootlib PRIVATE
     oxidationModel_OPTJ.cc
     oxidationModel_OPTG.cc
     oxidationModel_MB.cc
+    oxidationModel_FAIR.cc
 )

@@ -31,6 +31,6 @@ nucleationModel_MB::nucleationModel_MB() : nucleationModel () {
 double nucleationModel_MB::getNucleationSootRate(state &state) {
 
     // #/m3*s 
-    return 54. * Na * state.getGasSpC(gasSp::C2H2) * exp(-21100. / state.T);
+    return 54. * Na * state.getGasSpC(gasSp::C2H2) * exp(-21000. / state.T);
 }
 

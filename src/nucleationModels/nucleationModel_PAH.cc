@@ -91,6 +91,10 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
 
     DIMER.mDimer = mDimer;
 
+    //------------ populate mDimer in Dimer structure before calculating I_beta_DS
+    
+    DIMER.mDimer = mDimer;
+
     double I_beta_DS = 0.0;                             // sum of dimer-soot collision rates
     if (SM->psdMechType == psdMech::LOGN  || 
         SM->psdMechType == psdMech::MOMIC || 

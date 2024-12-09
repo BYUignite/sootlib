@@ -65,13 +65,13 @@ int main(int argc, char** argv) {
 
     //---------- set up and create a soot model
 
-    nucleationModel  *nucl = new soot::nucleationModel_LIN();
-    growthModel      *grow = new soot::growthModel_LIN();
+    nucleationModel  *nucl = new soot::nucleationModel_LL();
+    growthModel      *grow = new soot::growthModel_LL();
     oxidationModel   *oxid = new soot::oxidationModel_LL();
     coagulationModel *coag = new soot::coagulationModel_FM();
 
     size_t nsoot = 2;
-    //size_t nsoot = 40;                             
+    //size_t nsoot = 40;
 
     sootModel_MONO SM(nsoot, nucl, grow, oxid, coag);
     //sootModel_LOGN SM(nsoot, nucl, grow, oxid, coag);
@@ -86,6 +86,7 @@ int main(int argc, char** argv) {
 
     vector<double> yGas(size_t(gasSp::size), 0.0);   // y_O2, O, H2, H, OH, H2O, CO, C2H2
     vector<double> yPAH(size_t(pahSp::size), 0.0);
+
     vector<double> Mhat(nsoot, 0.0);                 // M/rho; main variable solved
     vector<double> Mhath(nsoot, 0.0);                // M/rho at half step for midpoint method
     vector<double> M(nsoot, 0.0);                    // M = Mhat * rho

@@ -38,7 +38,7 @@ public:
                    nucleationModel  *nucl_,
                    growthModel      *grow_,
                    oxidationModel   *oxid_,
-                   coagulationModel *coag_, 
+                   coagulationModel *coag_,
                    double            binGrowthFactor_=2.0,
                    int               cMin_=100);
 

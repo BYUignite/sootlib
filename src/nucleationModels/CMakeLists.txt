@@ -6,4 +6,5 @@ target_sources(sootlib PRIVATE
     nucleationModel_LINA1.cc
     nucleationModel_LL.cc
     nucleationModel_MB.cc
+    nucleationModel_FAIR.cc
 )

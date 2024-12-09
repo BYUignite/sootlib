@@ -34,7 +34,8 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 
 void state::setState(double T_, double P_, double rhoGas_, double muGas_,
-                     vector<double> yGas_, vector<double> yPah_, vector<double> sootVar_, int nsoot_, double cMin_) {
+                     vector<double> yGas_, vector<double> yPah_, 
+                     vector<double> sootVar_, int nsoot_, double cMin_) {
 
     //------------ scalar variable values
 
@@ -49,6 +50,7 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_,
 
     if (muGas_ <= 0) throw domain_error("Unphysical state value input: muGas");
     else muGas = muGas_;
+
 
     if (cMin_ <= 0) throw domain_error("Unphysical state value input: cMin");
     else cMin = cMin_;
@@ -69,7 +71,7 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_,
             throw domain_error("Unphysical state value input: negative soot moment(s)");
 
     sootVar = sootVar_;
-
+    
     //------------ gas species mass fractions
 
     for (double y : yGas_) {
@@ -104,7 +106,6 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_,
         throw domain_error("Unphysical state value input: sum of PAH species mass fractions greater than one");
 
     yPah = yPah_;
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////

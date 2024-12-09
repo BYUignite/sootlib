@@ -35,12 +35,11 @@ class state {
         std::vector<double> sootScales;    ///< soot scales for external numerical solvers
         double              cMin = 100;    ///< soot min num carbon atoms (dynamic for PAH nucleation)
 
-
     //////////////// MEMBER FUNCTIONS /////////////////
 
-        void setState(double T_, double P_, double rhoGas_, double muGas_,
-                      std::vector<double> yGas_, std::vector<double> yPAH_, 
-                      std::vector<double> sootVar_, int nsoot_, double cMin_ = 100);
+        void setState(double T_, double P_, double rhoGas_, double muGas_, 
+                      std::vector<double> yGas_, std::vector<double> yPAH_,
+                      std::vector<double> sootVar_, int nsoot_, double cMin_ = 100 );
 
         /** gas species concentration (kmol/m3) */
         double getGasSpC(gasSp sp)  const { return rhoGas * yGas[(int)sp] / gasSpMW[(int)sp]; }
@@ -60,10 +59,11 @@ class state {
         /** sets variable sootScales */
         void setSootScales(std::vector<double> &sootScales_) { sootScales = sootScales_; }
 
+
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     state(size_t nsoot_=0) :
-        nsoot(nsoot_), 
+        nsoot(nsoot_),
         sootVar(std::vector<double>(   nsoot_,           0.0)),
         sootScales(std::vector<double>(nsoot_,           1.0)),
         absc(std::vector<double>(      nsoot_/2,         0.0)),

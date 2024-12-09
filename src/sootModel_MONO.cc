@@ -68,10 +68,12 @@ sootModel_MONO::sootModel_MONO(size_t          nsoot_,
 
 void sootModel_MONO::setSourceTerms(state &state) {
 
+
     //---------- get moments
 
-    double M0 = state.sootVar[0];
-    double M1 = state.sootVar[1];
+    double M0    = state.sootVar[0];
+    double M1    = state.sootVar[1];
+
 
     //---------- set weights and abscissas
 
@@ -80,7 +82,7 @@ void sootModel_MONO::setSourceTerms(state &state) {
         state.absc[0] = M1 / M0;
     }
 
-    //---------- get chemical rates
+
 
     double jNuc = nucl->getNucleationSootRate(state);        // #/m3*s
     double kGrw = grow->getGrowthSootRate(state);
@@ -104,7 +106,7 @@ void sootModel_MONO::setSourceTerms(state &state) {
 
     if (nucl->mechType == nucleationMech::PAH)
         Cnd1 = coag->getCoagulationSootRate(state, nucl->DIMER.mDimer, state.absc[0]) * 
-               state.wts[0] * nucl->DIMER.nDimer * nucl->DIMER.mDimer;
+            state.wts[0] * nucl->DIMER.nDimer * nucl->DIMER.mDimer;
 
     //---------- growth terms
 
@@ -131,6 +133,11 @@ void sootModel_MONO::setSourceTerms(state &state) {
 
     if (coag->mechType != coagulationMech::NONE)
         C0 = -0.5*coa*state.wts[0]*state.wts[0];
+
+    //---------- tar terms
+
+    double T0 = 0;                               // tar equation 1 #/m3*s 
+    double T1 = 0;                               // tar terms in soot mass equation kg_soot/m3*s
 
     //---------- combine to make soot source terms
 
