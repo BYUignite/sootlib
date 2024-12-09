@@ -29,20 +29,16 @@ public:
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     sootModel_LOGN(size_t            nsoot_,
-                   size_t            Ntar_,
                    nucleationModel  *nucl_,
                    growthModel      *grow_,
                    oxidationModel   *oxid_,
-                   coagulationModel *coag_,
-                   tarModel         *tar_);
+                   coagulationModel *coag_);
 
     sootModel_LOGN(size_t           nsoot_,
-                   size_t           Ntar_,
                    nucleationMech   Nmech,
                    growthMech       Gmech,
                    oxidationMech    Omech,
-                   coagulationMech  Cmech,
-                   tarMech          Tmech);
+                   coagulationMech  Cmech);
 
     virtual ~sootModel_LOGN() {};
 

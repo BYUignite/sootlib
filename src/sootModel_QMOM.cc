@@ -23,13 +23,11 @@ extern "C" void dstev_(char *JOBZ, int *N, double *D, double *E, double *Z, int 
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_QMOM::sootModel_QMOM(size_t            nsoot_,
-                               size_t            Ntar_,
                                nucleationModel  *nucl_,
                                growthModel      *grow_,
                                oxidationModel   *oxid_,
-                               coagulationModel *coag_,
-                               tarModel         *tar_) :
-        sootModel(nsoot_, Ntar_, nucl_, grow_, oxid_, coag_, tar_) {
+                               coagulationModel *coag_) :
+        sootModel(nsoot_, nucl_, grow_, oxid_, coag_) {
 
     if (nsoot_%2 == 1 || nsoot_ < 1)
         throw runtime_error("Invalid number of soot moments requested: must be even number");
@@ -56,13 +54,11 @@ sootModel_QMOM::sootModel_QMOM(size_t            nsoot_,
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_QMOM::sootModel_QMOM(size_t          nsoot_,
-                               size_t          Ntar_,
                                nucleationMech  Nmech,
                                growthMech      Gmech,
                                oxidationMech   Omech,
-                               coagulationMech Cmech,
-                               tarMech         Tmech) :
-        sootModel(nsoot_, Ntar_, Nmech, Gmech, Omech, Cmech, Tmech) {
+                               coagulationMech Cmech) :
+        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech) {
 
     if (nsoot_%2 == 1 || nsoot_ < 1)
         throw runtime_error("Invalid number of soot moments requested: must be even number");

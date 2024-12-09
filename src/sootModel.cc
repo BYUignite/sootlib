@@ -8,7 +8,6 @@
 #include "nucleationModels/nucleationModel_PAH.h"
 #include "nucleationModels/nucleationModel_MB.h"
 #include "nucleationModels/nucleationModel_FAIR.h"
-#include "nucleationModels/nucleationModel_AJ_RED.h"
 
 #include "growthModels/growthModel_NONE.h"
 #include "growthModels/growthModel_LL.h"
@@ -26,7 +25,6 @@
 #include "oxidationModels/oxidationModel_OPTG.h"
 #include "oxidationModels/oxidationModel_MB.h"
 #include "oxidationModels/oxidationModel_FAIR.h"
-#include "oxidationModels/oxidationModel_AJ_RED.h"
 
 #include "coagulationModels/coagulationModel_NONE.h"
 #include "coagulationModels/coagulationModel_FM.h"
@@ -34,8 +32,6 @@
 #include "coagulationModels/coagulationModel_HM.h"
 #include "coagulationModels/coagulationModel_FUCHS.h"
 
-#include "tarModels/tarModel_NONE.h"
-#include "tarModels/tarModel_AJ_RED.h"
 
 using namespace std;
 using namespace soot;
@@ -50,25 +46,21 @@ using namespace soot;
 /// @param grow_  \input pointer to growth model.
 /// @param oxid_  \input pointer to oxidation model.
 /// @param coag_  \input pointer to coagulation model.
-/// @param tar_   \input pointer to tar model.
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel::sootModel(size_t            nsoot_,
-                     size_t            Ntar_,
                      nucleationModel  *nucl_,
                      growthModel      *grow_,
                      oxidationModel   *oxid_,
-                     coagulationModel *coag_,
-                     tarModel         *tar_) :
-        nsoot(nsoot_), Ntar(Ntar_), nucl(nucl_), grow(grow_), oxid(oxid_), coag(coag_), tar(tar_), 
-        mechsNewedHere(false), sources(nsoot_, Ntar_) {
+                     coagulationModel *coag_) :
+        nsoot(nsoot_), nucl(nucl_), grow(grow_), oxid(oxid_), coag(coag_), 
+        mechsNewedHere(false), sources(nsoot_) {
         checkSpec();
         nucl->SM = this;
         grow->SM = this;
         oxid->SM = this;
         coag->SM = this;
-        tar->SM  = this;
 }
 
 
@@ -82,19 +74,16 @@ sootModel::sootModel(size_t            nsoot_,
 /// @param Gmech  \input one of enum class growthMech in sootDefs.h
 /// @param Omech  \input one of enum class oxidationMech in sootDefs.h
 /// @param Cmech  \input one of enum class coagulationMech in sootDefs.h
-/// @param Tmech  \input one of enum class tarMech in sootDefs.h
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel::sootModel(size_t          nsoot_,
-                     size_t          Ntar_,
                      nucleationMech  Nmech,
                      growthMech      Gmech,
                      oxidationMech   Omech,
-                     coagulationMech Cmech,
-                     tarMech         Tmech) : nsoot(nsoot_), Ntar(Ntar_), 
+                     coagulationMech Cmech) : nsoot(nsoot_),
                                               mechsNewedHere(true),
-                                              sources(nsoot_, Ntar_) {
+                                              sources(nsoot_) {
 
     //---------- set nucleation model
 
@@ -106,7 +95,6 @@ sootModel::sootModel(size_t          nsoot_,
         case nucleationMech::PAH    : nucl = new nucleationModel_PAH();    break;
         case nucleationMech::MB     : nucl = new nucleationModel_MB();     break;
         case nucleationMech::FAIR   : nucl = new nucleationModel_FAIR();   break;
-        case nucleationMech::AJ_RED : nucl = new nucleationModel_AJ_RED(); break;
                                     
         default: throw domain_error("Invalid nucleation model requested");
     }
@@ -136,7 +124,6 @@ sootModel::sootModel(size_t          nsoot_,
         case oxidationMech::OPTG     : oxid = new oxidationModel_OPTG();     break;
         case oxidationMech::MB       : oxid = new oxidationModel_MB();       break;
         case oxidationMech::FAIR     : oxid = new oxidationModel_FAIR();     break;
-        case oxidationMech::AJ_RED   : oxid = new oxidationModel_AJ_RED();   break;
         
         default: throw domain_error("Invalid oxidation model requested");
     }
@@ -153,22 +140,12 @@ sootModel::sootModel(size_t          nsoot_,
         default: throw domain_error("Invalid coagulation model requested");
     }
 
-    //---------- set tar model
-
-    switch (Tmech) {
-        case tarMech::NONE   : tar = new tarModel_NONE();    break;
-        case tarMech::AJ_RED : tar = new tarModel_AJ_RED();  break;
-
-        default: throw domain_error("Invalid tar model requested");
-    }
-
     //----------- 
 
     nucl->SM = this;
     grow->SM = this;
     oxid->SM = this;
     coag->SM = this;
-    tar->SM = this;
 
     //----------- 
 

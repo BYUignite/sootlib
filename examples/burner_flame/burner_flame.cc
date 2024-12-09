@@ -65,21 +65,19 @@ int main(int argc, char** argv) {
 
     //---------- set up and create a soot model
 
-    nucleationModel  *nucl = new soot::nucleationModel_AJ_RED();
-    growthModel      *grow = new soot::growthModel_HACA();
-    oxidationModel   *oxid = new soot::oxidationModel_AJ_RED();
+    nucleationModel  *nucl = new soot::nucleationModel_LL();
+    growthModel      *grow = new soot::growthModel_LL();
+    oxidationModel   *oxid = new soot::oxidationModel_LL();
     coagulationModel *coag = new soot::coagulationModel_FM();
-    tarModel         *tar  = new soot::tarModel_AJ_RED();
 
     size_t nsoot = 2;
     //size_t nsoot = 40;
-    size_t Ntar  = 1;
 
-    sootModel_MONO SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);
-    //sootModel_LOGN SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);
-    //sootModel_QMOM SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);
-    //sootModel_MOMIC SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);
-    //sootModel_SECT SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);
+    sootModel_MONO SM(nsoot, nucl, grow, oxid, coag);
+    //sootModel_LOGN SM(nsoot, nucl, grow, oxid, coag);
+    //sootModel_QMOM SM(nsoot, nucl, grow, oxid, coag);
+    //sootModel_MOMIC SM(nsoot, nucl, grow, oxid, coag);
+    //sootModel_SECT SM(nsoot, nucl, grow, oxid, coag);
 
     //---------- set up thermodynamic state variables
 
@@ -88,18 +86,10 @@ int main(int argc, char** argv) {
 
     vector<double> yGas(size_t(gasSp::size), 0.0);   // y_O2, O, H2, H, OH, H2O, CO, C2H2
     vector<double> yPAH(size_t(pahSp::size), 0.0);
-    vector<double> yTar(size_t(tarSp::size), 0.0);
-    vector<double> yBio(size_t(bioSp::size), 0.0);
-    vector<double> bio_inputs{0.12, 0.1, 0.6, 0.09, 0.09};
 
     vector<double> Mhat(nsoot, 0.0);                 // M/rho; main variable solved
     vector<double> Mhath(nsoot, 0.0);                // M/rho at half step for midpoint method
     vector<double> M(nsoot, 0.0);                    // M = Mhat * rho
-    vector<double> TV(Ntar, 2.0);                    // Tar variables
-    for (int i=0; i<size_t(bioSp::size); i++)
-        yBio[i] = bio_inputs[i];
-
-    S.getyBio(yBio);
 
     double zstart = z_prof[0];
     double zend   = z_prof.back();
@@ -127,8 +117,7 @@ int main(int argc, char** argv) {
         yGas = {LI_yO2(z), LI_yO(z), LI_yH2(z), LI_yH(z), LI_yOH(z), LI_yH2O(z), LI_yCO(z), LI_yC2H2(z)};
         for(int i=0; i<nsoot; i++)
             M[i] = Mhat[i]*LI_rho(z);
-        S.setState(LI_T(z), P, LI_rho(z), LI_mu(z), yGas, yPAH, yTar, M, TV, nsoot, Ntar);
-        S.get_mtar_ytar();
+        S.setState(LI_T(z), P, LI_rho(z), LI_mu(z), yGas, yPAH, M, nsoot);
         SM.setSourceTerms(S);
 
         for(int k=0; k<nsoot; k++)
@@ -138,8 +127,7 @@ int main(int argc, char** argv) {
         yGas = {LI_yH(zh), LI_yH2(zh), LI_yO(zh), LI_yO2(zh), LI_yOH(zh), LI_yH2O(zh), LI_yCO(zh), LI_yC2H2(zh)};
         for(int i=0; i<nsoot; i++)
             M[i] = Mhath[i]*LI_rho(z);
-        S.setState(LI_T(zh), P, LI_rho(zh), LI_mu(zh), yGas, yPAH, yTar, M, TV, nsoot, Ntar);
-        S.get_mtar_ytar();
+        S.setState(LI_T(zh), P, LI_rho(zh), LI_mu(zh), yGas, yPAH, M, nsoot);
         SM.setSourceTerms(S);
 
         for(int k=0; k<nsoot; k++)
@@ -161,7 +149,6 @@ int main(int argc, char** argv) {
     delete(grow);
     delete(oxid);
     delete(coag);
-    delete(tar);
 
     return 0;
 }

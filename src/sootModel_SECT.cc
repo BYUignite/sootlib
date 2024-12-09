@@ -19,15 +19,13 @@ using namespace soot;
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_SECT::sootModel_SECT(size_t            nsoot_,
-                               size_t            Ntar_,
                                nucleationModel  *nucl_,
                                growthModel      *grow_,
                                oxidationModel   *oxid_,
                                coagulationModel *coag_,
-                               tarModel         *tar_,
                                double            binGrowthFactor_, 
                                int               cMin_) :
-        sootModel(nsoot_, Ntar_, nucl_, grow_, oxid_, coag_, tar_), 
+        sootModel(nsoot_, nucl_, grow_, oxid_, coag_), 
         binGrowthFactor(binGrowthFactor_) {
 
     if (nsoot_ < 2)
@@ -57,15 +55,13 @@ sootModel_SECT::sootModel_SECT(size_t            nsoot_,
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_SECT::sootModel_SECT(size_t          nsoot_,
-                               size_t          Ntar_,
                                nucleationMech  Nmech,
                                growthMech      Gmech,
                                oxidationMech   Omech,
                                coagulationMech Cmech,
-                               tarMech         Tmech,
                                double          binGrowthFactor_,
                                int             cMin_) :
-        sootModel(nsoot_, Ntar_, Nmech, Gmech, Omech, Cmech, Tmech), 
+        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech), 
         binGrowthFactor(binGrowthFactor_) {
 
     if (nsoot_ < 2)

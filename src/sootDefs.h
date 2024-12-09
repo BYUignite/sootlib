@@ -29,12 +29,11 @@ const double mmin     = 2E-26;      ///< mass of a carbon atom (kg)
 
 //////////////////// mechanism types
 
-enum class nucleationMech { NONE, LL,   LIN, LINA1, PAH,   MB, FAIR, AJ_RED,                      size };
+enum class nucleationMech { NONE, LL,   LIN, LINA1, PAH,   MB, FAIR,                      size };
 enum class growthMech     { NONE, LL,   LIN,        HACA,  MB, FAIR,                              size };
-enum class oxidationMech  { NONE, LL,   LEE_NEOH, MB, FAIR, NSC_NEOH, HACA, AJ_RED, OPTJ, OPTG,  size };
+enum class oxidationMech  { NONE, LL,   LEE_NEOH, MB, FAIR, NSC_NEOH, HACA, OPTJ, OPTG,  size };
 enum class coagulationMech{ NONE, FM,   CONTINUUM,  HM,       FUCHS,                        size };
 enum class psdMech        { NONE, MONO, LOGN, QMOM, MOMIC,    SECT,                         size };
-enum class tarMech        { NONE, AJ_RED, size                                                       };
 
 //////////////////// gas species list and properties
 
@@ -131,39 +130,7 @@ const std::vector<double> pahSpGamma = {   ///< unitless sticking coefficient
     0.0250,    // C16H10,
     0.0390     // C18H10,
 };
-/// Four basic tar types /// 
 
-enum class tarSp{ C6H6O, C10H8, C7H8, C6H6, size};
-
-const std::vector<double> tarSpMW = {
-    94.11,   // C6H6O
-    128.174, // C10H8
-    92.14,   // C7H8
-    78.114,  // C6H6
-
-};
-
-/// Four biomass components from CPDbio /// 
-
-enum class bioSp{ cell, hw_hc, sw_hc, hw_lig, sw_lig, size};
-
-static std::map<std::string, bioSp> bioMapSE{{"cell",   bioSp::cell },         // map string to enum
-                                             {"hw_hc",  bioSp::hw_hc},
-                                             {"sw_hc",  bioSp::sw_hc},
-                                             {"hw_lig", bioSp::hw_lig},
-                                             {"sw_lig", bioSp::sw_lig}};
-
-static std::map<bioSp, std::string> bioMapES{{bioSp::cell, "cell"},
-                                             {bioSp::hw_hc, "hw_hc"},
-                                             {bioSp::sw_hc, "sw_sc"},
-                                             {bioSp::hw_lig, "hw_lig"},
-                                             {bioSp::sw_lig, "sw_lig"}};
-
-static std::map<int, bioSp> bioMapIS{{0, bioSp::cell},
-                                     {1, bioSp::hw_hc},
-                                     {2, bioSp::sw_hc},
-                                     {3, bioSp::hw_lig},
-                                     {4, bioSp::sw_lig}};
 //////////////////// custom structures
 
 //----------------------
@@ -180,14 +147,10 @@ struct sourceTerms {
     std::vector<double> sootSources;     ///< kg^r/m3*s (moments), or \#/m3*s (sections)
     std::vector<double> gasSources;      ///< kg/m3*s
     std::vector<double> pahSources;      ///< kg/m3*s
-    std::vector<double> tarSources;      ///< kg/m3*s 
-    std::vector<double> tarGasSources;   ///< kg/m3*s
 
-    sourceTerms(size_t nsoot, size_t Ntar) : sootSources(   std::vector<double>(nsoot, 0.0)), 
-                                             gasSources(    std::vector<double>((size_t)gasSp::size, 0.0)),
-                                             pahSources(    std::vector<double>((size_t)pahSp::size, 0.0)),
-                                             tarSources(    std::vector<double>(Ntar, 0.0)), 
-                                             tarGasSources( std::vector<double>((size_t)tarSp::size, 0.0)) {}
+    sourceTerms(size_t nsoot) : sootSources(   std::vector<double>(nsoot, 0.0)), 
+                                gasSources(    std::vector<double>((size_t)gasSp::size, 0.0)),
+                                pahSources(    std::vector<double>((size_t)pahSp::size, 0.0)) {}
 };
 
 }  // namespace soot

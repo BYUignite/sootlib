@@ -2,7 +2,6 @@
 #include "../growthModels/growthModel.h"
 #include "../oxidationModels/oxidationModel.h"
 #include "../coagulationModels/coagulationModel.h"
-#include "../tarModels/tarModel.h"
 #include "../sootHeaders.h"
 #include "../sootDefs.h"
 #include "../../examples/burner_flame/interp_linear.h"
@@ -43,10 +42,6 @@ extern "C" {
     
     soot::nucleationModel *nucleationModel_FAIR_C_interface(){
         return new soot::nucleationModel_FAIR();
-    }
-    
-    soot::nucleationModel *nucleationModel_AJ_RED_C_interface(){
-        return new soot::nucleationModel_AJ_RED();
     }
     
     soot::nucleationModel *nucleationModel_NONE_C_interface(){
@@ -129,10 +124,6 @@ extern "C" {
         return new soot::oxidationModel_FAIR();
     }
 
-    soot::oxidationModel *oxidationModel_AJ_RED_C_interface(){
-        return new soot::oxidationModel_AJ_RED();
-    }
-
     soot::oxidationModel *oxidationModel_NONE_C_interface(){
         return new soot::oxidationModel_NONE();
     }
@@ -178,95 +169,59 @@ extern "C" {
 
     //------------------------------------------------------------------------------
     //---
-    //--- Interface for tar models 
-    //---
-    //---------------------------------:w------------------------------------------------------------------------------------------
-
-    soot::tarModel *tarModel_NONE_C_interface(){
-        return new soot::tarModel_NONE();
-    }
-
-    soot::tarModel *tarModel_AJ_RED_C_interface(){
-        return new soot::tarModel_AJ_RED();
-    }
-
-    void tar_delete_C_interface(soot::tarModel *tar_ptr) {
-        delete tar_ptr;
-    }
-
-    //------------------------------------------------------------------------------
-    //---
     //--- Interface for soot models
     //---
     //------------------------------------------------------------------------------
 
     soot::sootModel *sootModel_MONO_C_interface(size_t                 nsoot_,
-                                                size_t                 Ntar_,
                                                 soot::nucleationModel  *nucl_ptr,
                                                 soot::growthModel      *grow_ptr,
                                                 soot::oxidationModel   *oxid_ptr,
-                                                soot::coagulationModel *coag_ptr,
-                                                soot::tarModel         *tar_ptr){
-        return new soot::sootModel_MONO(nsoot_, Ntar_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr);
+                                                soot::coagulationModel *coag_ptr) {
+        return new soot::sootModel_MONO(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr);
     }
 
-    //void sootModel_delete_C_interface(soot::sootModel *SM_ptr){
-    //    delete SM_ptr;
-    //}
 
     void sootModel_delete_C_interface(soot::sootModel *SM_ptr, soot::nucleationModel *nucl_ptr, soot::growthModel *grow_ptr,
-                                 soot::oxidationModel *oxid_ptr, soot::coagulationModel *coag_ptr, soot::tarModel *tar_ptr){
+                                 soot::oxidationModel *oxid_ptr, soot::coagulationModel *coag_ptr){
         delete SM_ptr;
         delete nucl_ptr;
         delete grow_ptr;
         delete oxid_ptr;
         delete coag_ptr;
-        delete tar_ptr;
     }
     
     soot::sootModel *sootModel_QMOM_C_interface(size_t                 nsoot_,
-                                                size_t                 Ntar_,
                                                 soot::nucleationModel  *nucl_ptr,
                                                 soot::growthModel      *grow_ptr,
                                                 soot::oxidationModel   *oxid_ptr,
-                                                soot::coagulationModel *coag_ptr,
-                                                soot::tarModel         *tar_ptr) {
-        return new soot::sootModel_QMOM(nsoot_, Ntar_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr);
+                                                soot::coagulationModel *coag_ptr) {
+        return new soot::sootModel_QMOM(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr);
     }
 
     soot::sootModel *sootModel_LOGN_C_interface(size_t                 nsoot_,
-                                                size_t                 Ntar_,
                                                 soot::nucleationModel  *nucl_ptr,
                                                 soot::growthModel      *grow_ptr,
                                                 soot::oxidationModel   *oxid_ptr,
-                                                soot::coagulationModel *coag_ptr,
-                                                soot::tarModel         *tar_ptr) {
-        return new soot::sootModel_LOGN(nsoot_, Ntar_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr);
+                                                soot::coagulationModel *coag_ptr) {
+        return new soot::sootModel_LOGN(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr);
     }
 
     soot::sootModel *sootModel_MOMIC_C_interface(size_t                 nsoot_,
-                                                size_t                 Ntar_,
                                                 soot::nucleationModel  *nucl_ptr,
                                                 soot::growthModel      *grow_ptr,
                                                 soot::oxidationModel   *oxid_ptr,
-                                                soot::coagulationModel *coag_ptr,
-                                                soot::tarModel         *tar_ptr) {
-        return new soot::sootModel_MOMIC(nsoot_, Ntar_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr);
+                                                soot::coagulationModel *coag_ptr) {
+        return new soot::sootModel_MOMIC(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr);
     }
 
     soot::sootModel *sootModel_SECT_C_interface(size_t                 nsoot_,
-                                                size_t                 Ntar_,
                                                 soot::nucleationModel  *nucl_ptr,
                                                 soot::growthModel      *grow_ptr,
                                                 soot::oxidationModel   *oxid_ptr,
-                                                soot::coagulationModel *coag_ptr,
-                                                soot::tarModel         *tar_ptr) {
-        return new soot::sootModel_SECT(nsoot_, Ntar_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr);
+                                                soot::coagulationModel *coag_ptr) {
+        return new soot::sootModel_SECT(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr);
     }
-
-    /*soot::sourceTerms sourceTerms_C_interface(size_t nsoot_, size_t Ntar_) {
-        return soot::sourceTerms(nsoot_, Ntar_);
-    }*/
 
     void setSourceTerms_C_interface(soot::sootModel *SM_ptr, soot::state *state_ptr) {
         SM_ptr->setSourceTerms(*state_ptr);
@@ -277,8 +232,8 @@ extern "C" {
     //--- Interface for state functions
     //---
     //----------------------------------------------------------------------------
-    soot::state *state_C_interface(size_t nsoot_, size_t Ntar_){
-        return new soot::state(nsoot_, Ntar_);
+    soot::state *state_C_interface(size_t nsoot_){
+        return new soot::state(nsoot_);
     }
 
     void state_delete_C_interface(soot::state *state_ptr){
@@ -288,15 +243,13 @@ extern "C" {
     void setState_C_interface(soot::state *state_ptr, double T_, double P_, 
                               double rhoGas_, double muGas_,
                               const double* yGas_, const double* yPAH_,
-                              const double* yTar_, const double* sootVar_, 
-                              const double* tarVar_, int nsoot_, int Ntar_, double cMin_ = 100.0){
+                              const double* sootVar_, 
+                              int nsoot_, double cMin_ = 100.0){
         std::vector<double> yGas(yGas_, yGas_ + 10);
         std::vector<double> yPAH(yPAH_, yPAH_ + 6);
-        std::vector<double> yTar(yTar_, yTar_ + 4);
         std::vector<double> sootVar(sootVar_, sootVar_ + nsoot_);
-        std::vector<double> tarVar(tarVar_, tarVar_ + Ntar_);
         state_ptr->setState(T_, P_, rhoGas_, muGas_, 
-                            yGas, yPAH, yTar, sootVar, tarVar, nsoot_, Ntar_);
+                            yGas, yPAH, sootVar, nsoot_);
     }
     double getGasSpC_C_interface(soot::state *state_ptr, soot::gasSp sp){
         return state_ptr->getGasSpC(soot::gasSp(sp));
@@ -322,15 +275,6 @@ extern "C" {
         state_ptr->setSootScales(sootScales_);
     }
 
-    void getyBio_interface(soot::state *state_ptr, const double* yBio_) {
-        std::vector<double> yBio(yBio_, yBio_ + 5);
-        state_ptr->getyBio(yBio);
-    }
-
-    void get_mtar_ytar_interface(soot::state *state_ptr) {
-        state_ptr->get_mtar_ytar();
-    }
-
     double get_T_interface(soot::state *state_ptr) {
         return state_ptr->T;
     }
@@ -347,16 +291,8 @@ extern "C" {
         return state_ptr->yPah[(int)sp];
     }
     
-    double get_yTar_interface(soot::state *state_ptr, soot::tarSp sp) {
-        return state_ptr->yTar[(int)sp];
-    }
-
     double get_SootVar_interface(soot::state *state_ptr, int i) {
         return state_ptr->sootVar[i];
-    }
-
-    double get_TarVar_interface(soot::state *state_ptr, int i) {
-        return state_ptr->tarVar[i];
     }
 
     void getSootSources_interface(double *source, soot::sootModel *SM_ptr, int nsoot_) {
@@ -366,13 +302,6 @@ extern "C" {
         }
         //cout<< SM_ptr->sources.sootSources[i-1] << endl;
     }
-
-    /*Linear_interp *LI_interface(vector<double> z_prof, vector<double> v_prof) {
-        return Linear_interp(z_prof, v_prof);
-    }*/
-
-
-
 
 }
 
