@@ -77,6 +77,8 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_,
     for (double s : tarVar_)
         if (s < 0)
             throw domain_error("Unphysical state value input: negative tar moment(s)");
+
+    tarVar = tarVar_;
     //------------ gas species mass fractions
 
     for (double y : yGas_) {

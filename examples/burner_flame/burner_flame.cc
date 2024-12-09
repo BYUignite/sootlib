@@ -65,11 +65,11 @@ int main(int argc, char** argv) {
 
     //---------- set up and create a soot model
 
-    nucleationModel  *nucl = new soot::nucleationModel_FAIR();
-    growthModel      *grow = new soot::growthModel_FAIR();
-    oxidationModel   *oxid = new soot::oxidationModel_FAIR();
+    nucleationModel  *nucl = new soot::nucleationModel_AJ_RED();
+    growthModel      *grow = new soot::growthModel_HACA();
+    oxidationModel   *oxid = new soot::oxidationModel_AJ_RED();
     coagulationModel *coag = new soot::coagulationModel_FM();
-    tarModel         *tar  = new soot::tarModel_NONE();
+    tarModel         *tar  = new soot::tarModel_AJ_RED();
 
     size_t nsoot = 2;
     //size_t nsoot = 40;
@@ -90,12 +90,16 @@ int main(int argc, char** argv) {
     vector<double> yPAH(size_t(pahSp::size), 0.0);
     vector<double> yTar(size_t(tarSp::size), 0.0);
     vector<double> yBio(size_t(bioSp::size), 0.0);
+    vector<double> bio_inputs{0.12, 0.1, 0.6, 0.09, 0.09};
 
     vector<double> Mhat(nsoot, 0.0);                 // M/rho; main variable solved
     vector<double> Mhath(nsoot, 0.0);                // M/rho at half step for midpoint method
     vector<double> M(nsoot, 0.0);                    // M = Mhat * rho
-    vector<double> TV(Ntar, 0.0);                    // Tar variables
-    
+    vector<double> TV(Ntar, 2.0);                    // Tar variables
+    for (int i=0; i<size_t(bioSp::size); i++)
+        yBio[i] = bio_inputs[i];
+
+    S.getyBio(yBio);
 
     double zstart = z_prof[0];
     double zend   = z_prof.back();
@@ -124,6 +128,7 @@ int main(int argc, char** argv) {
         for(int i=0; i<nsoot; i++)
             M[i] = Mhat[i]*LI_rho(z);
         S.setState(LI_T(z), P, LI_rho(z), LI_mu(z), yGas, yPAH, yTar, M, TV, nsoot, Ntar);
+        S.get_mtar_ytar();
         SM.setSourceTerms(S);
 
         for(int k=0; k<nsoot; k++)
@@ -134,6 +139,7 @@ int main(int argc, char** argv) {
         for(int i=0; i<nsoot; i++)
             M[i] = Mhath[i]*LI_rho(z);
         S.setState(LI_T(zh), P, LI_rho(zh), LI_mu(zh), yGas, yPAH, yTar, M, TV, nsoot, Ntar);
+        S.get_mtar_ytar();
         SM.setSourceTerms(S);
 
         for(int k=0; k<nsoot; k++)

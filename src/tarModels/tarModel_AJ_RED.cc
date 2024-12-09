@@ -39,11 +39,11 @@ double tarModel_AJ_RED::getCrackingTarRate(state &state) {
 
     //////////////////// Rate constant calculations ///////////////////////////////////// 
 
-    k1 = 1.0E7*exp(-1.0E5/(Rg*state.T));
-    k2 = 1.0E8*exp(-1.0E5/(Rg*state.T));
-    k3 = 1.58E12*exp(-3.24E5/(Rg*state.T));
-    k4 = 1.04E12*exp(-2.47E5/(Rg*state.T));
-    k5 = 4.40E8*exp(-2.2E5/(Rg*state.T));
+    k1 = 1.0E7*exp(-1.0E8/(Rg*state.T));
+    k2 = 1.0E8*exp(-1.0E8/(Rg*state.T));
+    k3 = 1.58E12*exp(-3.24E8/(Rg*state.T));
+    k4 = 1.04E12*exp(-2.47E8/(Rg*state.T));
+    k5 = 4.40E8*exp(-2.2E8/(Rg*state.T));
 
     /////////////////// Empirical model for surrogate tar mole fractions //////////////// 
     
@@ -85,8 +85,8 @@ double tarModel_AJ_RED::getSurfaceTarRate(state &state) {
 
     ////////////////////// This is only the gasification part. See oxidationModel_AJ_RED and growthModel_HACA //////////// jansenpb
     
-    double term1 = 1.92E-3 * sqrt(state.getGasSpP(gasSp::CO2))*state.T*state.T*exp(-5.55E3/(Rg*state.T));
-    double term2 = 1.92E-3 * pow(state.getGasSpP(gasSp::H2O), 1.21) / sqrt(state.T) * exp(-4.17E5/(Rg*state.T));
+    double term1 = 1.92E-3 * sqrt(state.getGasSpP(gasSp::CO2))*state.T*state.T*exp(-5.55E6/(Rg*state.T));
+    double term2 = 1.92E-3 * pow(state.getGasSpP(gasSp::H2O), 1.21) / sqrt(state.T) * exp(-4.17E8/(Rg*state.T));
 
     return term1 + term2;
 }

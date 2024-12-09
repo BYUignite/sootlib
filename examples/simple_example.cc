@@ -36,14 +36,14 @@ int main(int argc, char** argv) {
     vector<double> yGas{0.05, 0.001, 0.002, 3E-4, 0.003, 0.07, 0.1, 0.002, .18};  // gas species mass fractions [O2, O, H2, H, OH, H2O, CO, C2H2, CO2]
     vector<double> yPAH{0, 0, 0, 0, 0, 0};                                   // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
     vector<double> yTar{0.001 ,0.02, 0.04, 0.0002};                                     // Tar species mass fractions
-    vector<double> yBio{0.12, 0.1, 0.6, 0.09, 0.09};                                      // Biomass species mass fractions
-    vector<double> Msoot{0.003, 1.5E-5, 1E-7, 1E-10};                        // soot moment values [M0, M1, M2, M3]
+    vector<double> yBios{0.12, 0.1, 0.6, 0.09, 0.09};                                      // Biomass species mass fractions
+    vector<double> Msoot{0.003, 1.5E-5};                        // soot moment values [M0, M1, M2, M3]
     vector<double> Mtar{0.0001};                                             // tar moment values
 
-    S.getyBio(yBio);
-    S.get_mtar_ytar();
-
     S.setState(T, P, rhoGas, muGas, yGas, yPAH, yTar, Msoot, Mtar, nsoot, Ntar);
+
+    S.getyBio(yBios);
+    S.get_mtar_ytar();
 
     //---------- calculate source terms
 
@@ -67,8 +67,8 @@ int main(int argc, char** argv) {
     cout << endl << "Soot source terms" << endl;
     cout << endl << "M0 = " << setw(14) << SM.sources.sootSources[0];
     cout << endl << "M1 = " << setw(14) << SM.sources.sootSources[1];
-    cout << endl << "M2 = " << setw(14) << SM.sources.sootSources[2];
-    cout << endl << "M3 = " << setw(14) << SM.sources.sootSources[3];
+    //cout << endl << "M2 = " << setw(14) << SM.sources.sootSources[2];
+    //cout << endl << "M3 = " << setw(14) << SM.sources.sootSources[3];
     cout << endl;
 
     cout << endl << "Gas source terms" << endl;

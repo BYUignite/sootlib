@@ -90,13 +90,8 @@ void sootModel_MONO::setSourceTerms(state &state) {
     }
 
     if (tar->mechType != tarMech::NONE) {
-        
-        double incp   = tar->getInceptionTarRate(state);
-        double crack  = tar->getCrackingTarRate(state);
-        double gasify = tar->getSurfaceTarRate(state);
-        double depo   = tar->getDepositionTarRate(state);
-        //---------- get chemical rates
 
+        //---------- get chemical rates
         double jNuc = nucl->getNucleationSootRate(state);        // #/m3*s
         double kGrw = grow->getGrowthSootRate(state);
         double kOxi = oxid->getOxidationSootRate(state);
@@ -151,8 +146,11 @@ void sootModel_MONO::setSourceTerms(state &state) {
 
         double T0 = 0;                               // tar equation 1 #/m3*s 
         double T1 = 0;                               // tar terms in soot mass equation kg_soot/m3*s
-
         
+        double incp   = tar->getInceptionTarRate(state);
+        double crack  = tar->getCrackingTarRate(state);
+        double gasify = tar->getSurfaceTarRate(state);
+        double depo   = tar->getDepositionTarRate(state);
 
         T0 = incp - depo - crack + 2508 * Ntar0 * (G1 - X1 - gasify);
         T1 = state.mtar * depo + Am2m3 * (G1 - X1 - gasify);
