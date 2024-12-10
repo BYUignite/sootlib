@@ -451,6 +451,14 @@ module soot_module
             type(C_ptr)   , value        :: SM_ptr
             integer(C_int), value        :: nsoot_
         end subroutine getSootSources_interface
+
+        !------------------------------------------------------------------------
+
+        subroutine getGasSources_interface(source, SM_ptr) bind(C, name="getGasSources_interface")
+            import
+            real(C_double), dimension(*) :: source
+            type(C_ptr)   , value        :: SM_ptr
+        end subroutine getGasSources_interface
     
     end interface
 
@@ -465,7 +473,7 @@ module soot_module
         growthModel_HACA, growthModel_MB, growthModel_FAIR, growthModel_NONE, oxidationModel_LEE_NEOH, oxidationModel_NSC_NEOH, &
         oxidationModel_HACA, oxidationModel_OPTJ, oxidationModel_OPTG, oxidationModel_MB, oxidationModel_FAIR, &
         oxidationModel_NONE, coagulationModel_CONTINUUM, coagulationModel_HM, coagulationModel_FUCHS, &
-        coagulationModel_NONE, sootModel_LOGN, sootModel_MOMIC, sootModel_SECT
+        coagulationModel_NONE, sootModel_LOGN, sootModel_MOMIC, sootModel_SECT, getGasSources
 
     !============================================================================
     ! set fortran wrapper routines to the C interface functions
@@ -928,6 +936,15 @@ module soot_module
             !source = getSootSources_interface(SM_ptr, nsoot_)
             call getSootSources_interface(source, SM_ptr, nsoot_)
         end subroutine getSootSources
+
+        !------------------------------------------------------------------------
+
+        subroutine getGasSources(source, SM_ptr)
+            double precision, intent(out), dimension(:) :: source
+            type(C_ptr)     , intent(in)                :: SM_ptr
+
+            call getGasSources_interface(source, SM_ptr)
+        end subroutine getGasSources
 
     !============================================================================
 

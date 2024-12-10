@@ -27,11 +27,13 @@ program simple_example_fort
     double precision               :: muGas  = 0.00001;
     double precision               :: cMin   = 100.0;
 
-    double precision, dimension(11)    :: yGas   = (/0.05, 0.001, 0.002, 0.0003, 0.003, 0.07, 0.1, 0.002, 0.0, 0.0, 0.0/);
+    double precision, dimension(11)    :: yGas   = (/0.05, 0.001, 0.002, 0.0003, 0.003, 0.07, 0.1, 0.002, 0.18, 0.0, 0.0/);
     character(4), dimension(11)   :: keys   = (/"O2  ","O   ","H2  ","H   ","OH  ","H2O ","CO  ","C2H2","C6H6","C   ","CO2 "/);
+    character(2), dimension(2)    :: keys2  = (/"M0", "M1"/)
     double precision, dimension(6)     :: yPAH   = (/0.0, 0.0, 0.0, 0.0, 0.0, 0.0/);
     double precision, dimension(nsoot) :: Msoot  = (/0.003, 1.5e-5/);
     double precision, dimension(nsoot) :: sootS  = (/0.0,0.0/);
+    double precision, dimension(11)    :: gasS   = 0.0
 
     character(len=100) :: fmt1, fmt2
 
@@ -56,28 +58,32 @@ program simple_example_fort
     !call setSourceTerms(SM, S, nsoot)
     call setSourceTerms(SM, S)
 
-    fmt1 = "(A9, F14.3)"
-    fmt2 = "(2F14.8)"
+    fmt1 = "(A9, 2ES14.6)"
+    fmt2 = "(A9, 2ES14.8)"
 
     write(*,*)
     write(*,fmt1) " T (K)  = ", T
     write(*,fmt1) " P (Pa) = ", P 
-    write(*,*) "   yGas   "
+    write(*,fmt1) "            Gas Source Terms   "
+    
+    call getGasSources(gasS, SM)
+
     do i = 1, 11 
-        print *, trim(keys(i)) 
-        write(*,fmt2) yGas(i)
+        !print *, trim(keys(i)) 
+        write(*,fmt1) trim(keys(i)), gasS(i)
     enddo
     
+    write(*,*)
+
     call getSootSources(sootS, SM, nsoot)
-    do i = 1, 2 
-        write(*,*) sootS(i)
-    enddo
 
+    write(*,fmt2) " M0 = ", sootS(1)
+    write(*,fmt2) " M1 = ", sootS(2)
 
-    !call nucleation_delete(nucl)
-    !call growth_delete(grow)
-    !call oxid_delete(oxid)
-    !call coag_delete(coag)
+    call nucleation_delete(nucl)
+    call growth_delete(grow)
+    call oxid_delete(oxid)
+    call coag_delete(coag)
 
 
 

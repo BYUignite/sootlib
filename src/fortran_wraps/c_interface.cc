@@ -303,5 +303,10 @@ extern "C" {
         //cout<< SM_ptr->sources.sootSources[i-1] << endl;
     }
 
+    void getGasSources_interface(double *source, soot::sootModel *SM_ptr) {
+        for (size_t i=0; i<static_cast<int>(soot::gasSp::size); i++)
+            source[i] = SM_ptr->sources.gasSources[i];
+    }
+
 }
 

@@ -10,12 +10,12 @@ int main(int argc, char** argv) {
 
     //---------- set up and create a soot model
 
-    nucleationModel  *nucl = new soot::nucleationModel_PAH();
-    growthModel      *grow = new soot::growthModel_HACA();
-    oxidationModel   *oxid = new soot::oxidationModel_HACA();
+    nucleationModel  *nucl = new soot::nucleationModel_LL();
+    growthModel      *grow = new soot::growthModel_LL();
+    oxidationModel   *oxid = new soot::oxidationModel_LL();
     coagulationModel *coag = new soot::coagulationModel_FM();
 
-    size_t nsoot = 3;  // 3; etc.
+    size_t nsoot = 2;  // 3; etc.
 
     sootModel_MONO SM(nsoot, nucl, grow, oxid, coag);
     //sootModel_LOGN SM(nsoot, nucl, grow, oxid, coag);
@@ -26,10 +26,10 @@ int main(int argc, char** argv) {
 
     state S = state(nsoot);
 
-    double T      = 2000;    // temperature in K
-    double P      = 100325;  // pressure in Pa
-    double rhoGas = 0.176629;     // gas density in kg/m^3
-    double muGas  = 6.55237E-5;    // gas viscosity in Pa*s
+    double T      = 2100;    // temperature in K
+    double P      = 101325;  // pressure in Pa
+    double rhoGas = 0.1;     // gas density in kg/m^3
+    double muGas  = 0.00001;    // gas viscosity in Pa*s
 
     vector<double> yGas{0.05, 0.001, 0.002, 3E-4, 0.003, 0.07, 0.1, 0.002, .18};  // gas species mass fractions [O2, O, H2, H, OH, H2O, CO, C2H2]
     vector<double> yPAH{1.77687E-6, 4.31847E-5, 0, 1.55773E-4, 7.77085E-3, 0};                                   // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
