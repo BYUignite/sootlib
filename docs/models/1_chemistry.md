@@ -84,7 +84,7 @@ Most soot surface growth models rely on acetylene (\f$\text{C}_2\text{H}_2\f$) a
 
 ### Leung & Lindstedt (LL)
 The Leung and Lindstedt mechanism for soot surface growth (LL) \cite Leung_1991 depends on both the gaseous concentration of acetylene and the particle surface area available for surface reactions. The overall rate of soot surface growth is computed as
-$$R_{grw} = 0.6\times 10^4 e^{-21100/T} f(A_s) [\text{C}_2\text{H}_2].$$
+$$R_{grw} = 0.6\times 10^4 e^{-12100/T} f(A_s) [\text{C}_2\text{H}_2].$$
 \f$f(A_s)\f$ is a function of the available particle surface area given by
 $$f(A_s) = \sqrt{\pi \left( \frac{6MW_C}{\pi \rho_{s}} \right) ^{2/3}} \left[ \frac{\rho Y_{s}}{MW_C} \right]^{1/3} [\rho N]^{1/6},$$
 where \f$MW_{\text{C}}\f$ is the molar mass of carbon, \f$\rho\f$ is the gas density, \f$\rho_{s}\f$ is the solid density of soot, \f$Y_{s}\f$ is the mass fraction of soot, and \f$N\f$ is the soot particle number density. Results showed that the normal square dependence of the rate on available surface sites does not accurately predict the soot number density throughout the flame \cite Leung_1991, and later models explored alternative methods.
