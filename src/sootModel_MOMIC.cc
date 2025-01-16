@@ -19,13 +19,13 @@ using namespace soot;
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_MOMIC::sootModel_MOMIC(size_t            nsoot_,
-                                 size_t            Ntar_,
                                  nucleationModel  *nucl_,
                                  growthModel      *grow_,
                                  oxidationModel   *oxid_,
                                  coagulationModel *coag_,
+                                 size_t            Ntar_,
                                  tarModel         *tar_) :
-        sootModel(nsoot_, Ntar_, nucl_, grow_, oxid_, coag_, tar_) {
+        sootModel(nsoot_, nucl_, grow_, oxid_, coag_, Ntar_, tar_) {
 
     if (nsoot_ < 3 || nsoot_ > 8)
         throw runtime_error("MOMIC requires 3-8 moments");
@@ -64,13 +64,13 @@ sootModel_MOMIC::sootModel_MOMIC(size_t            nsoot_,
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_MOMIC::sootModel_MOMIC(size_t          nsoot_,
-                                 size_t          Ntar_,
                                  nucleationMech  Nmech,
                                  growthMech      Gmech,
                                  oxidationMech   Omech,
                                  coagulationMech Cmech,
+                                 size_t          Ntar_,
                                  tarMech         Tmech) :
-        sootModel(nsoot_, Ntar_, Nmech, Gmech, Omech, Cmech, Tmech) {
+        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech, Ntar_, Tmech) {
 
     if (nsoot_ < 3 || nsoot_ > 8)
         throw runtime_error("MOMIC requires 3-8 moments");

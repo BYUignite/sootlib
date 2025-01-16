@@ -11,6 +11,7 @@
 #include "nucleationModels/nucleationModel_MB.h"
 #include "nucleationModels/nucleationModel_FAIR.h"
 #include "nucleationModels/nucleationModel_AJ_RED.h"
+#include "nucleationModels/nucleationModel_BROWN.h"
 #include "nucleationModels/nucleationModel_NONE.h"
 
 #include "growthModels/growthModel.h"
@@ -31,6 +32,7 @@
 #include "oxidationModels/oxidationModel_MB.h"
 #include "oxidationModels/oxidationModel_FAIR.h"
 #include "oxidationModels/oxidationModel_AJ_RED.h"
+#include "oxidationModels/oxidationModel_BROWN.h"
 #include "oxidationModels/oxidationModel_NONE.h"
 
 #include "coagulationModels/coagulationModel.h"
@@ -43,6 +45,7 @@
 #include "tarModels/tarModel.h"
 #include "tarModels/tarModel_NONE.h"
 #include "tarModels/tarModel_AJ_RED.h"
+#include "tarModels/tarModel_BROWN.h"
 
 #include "sootModel_MONO.h"
 #include "sootModel_LOGN.h"

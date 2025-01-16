@@ -21,7 +21,7 @@ private:
 
 public:
 
-    double getInceptionTarRate(state &state) override;
+    //double getInceptionTarRate(state &state) override;
     double getCrackingTarRate(state &state) override;
     double getDepositionTarRate(state &state) override;
     double getSurfaceTarRate(state &state) override;

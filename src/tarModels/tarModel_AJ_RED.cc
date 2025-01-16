@@ -11,7 +11,6 @@ using namespace soot;
 /// Tar inception, thermal cracking, deposition, and surface reactions (2019)
 ///
 /// Rates from Alexander Josephson "Reduction of a detailed soot model for simulations of pyrolysing solid fuels"
-/// Returns chemical nucleation rate in #/m3*s.
 ///
 ///
 /// @param state \input  gas, soot, and tar state, set by user.
@@ -19,15 +18,20 @@ using namespace soot;
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-double tarModel_AJ_RED::getInceptionTarRate(state &state) {
+// TAR INCEPTION IS NOT IN SOOTLIB; ADD IN SEPARATELY TO THE RATES
+/*double tarModel_AJ_RED::getInceptionTarRate(state &state) {
+    
+    double A_devol = 1.972E7;       // 1/s 
+    double E_devol = 6.552E7;       // J/kmol
+    double Vinf    = 0.8596;        // volatile matter content
+    double rv = A_devol*exp(-E_devol/(Rg*state.T))*(Vinf - state.V)*650;     // 650 is fuel density
+
+    rv = 1.1E-6;
     
 
-    double rv;
-
-    rv = 2.0; // jansenpb TODO: implement a primary pyrolysis model 
-
     return state.ytar * rv / state.mtar;  // #/m3-s
-}
+}*/ 
+
 
 double tarModel_AJ_RED::getCrackingTarRate(state &state) {
     
@@ -67,15 +71,18 @@ double tarModel_AJ_RED::getDepositionTarRate(state &state) {
 
     double N0 = state.tarVar[0];
     double eps = 2.2;                  // same steric factor from soot nucleation for this model
-    double Bts;                        // frequency of collision between soot and tar molecules
-    
-    double muTS = state.mtar*state.sootVar[1]/(state.mtar + state.sootVar[1]);
+    double Bts = 0;                        // frequency of collision between soot and tar molecules
+    double muTS = 0;
+    double msoot = state.sootVar[1]/state.sootVar[0];
 
     double d_a  = sqrt(1.395E-10 * 3);                                // diameter of a single aromatic ring
-    double dsoot = pow(6*state.sootVar[1]/(M_PI*rhoSoot), onethird);  // diameter of average soot particle
+    double dsoot = pow(6*msoot/(M_PI*rhoSoot), onethird);  // diameter of average soot particle
     double dtar  = d_a * sqrt(2*state.mtar/(3*12.011));               // diameter of average tar particle
 
-    Bts = pow((dsoot + dtar), 2) * sqrt(M_PI*kb*state.T/(2*muTS));
+    if (state.sootVar[1] > 0) {
+        muTS = state.mtar*msoot/(state.mtar + msoot);
+        Bts  = pow((dsoot + dtar), 2) * sqrt(M_PI*kb*state.T/(2*muTS));
+    }
 
     return eps*Bts*N0*state.sootVar[0];
 

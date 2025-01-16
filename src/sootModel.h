@@ -8,6 +8,7 @@
 #include "oxidationModels/oxidationModel.h"
 #include "coagulationModels/coagulationModel.h"
 #include "tarModels/tarModel.h"
+#include "tarModels/tarModel_NONE.h"
 
 #include <vector>
 
@@ -76,20 +77,20 @@ public:
     //////////////// CONSTRUCTOR //////////////////////
 
     sootModel(size_t            nsoot_,
-              size_t            Ntar_,
               nucleationModel  *nucl_,
               growthModel      *grow_,
               oxidationModel   *oxid_,
               coagulationModel *coag_,
-              tarModel         *tar_);
+              size_t            Ntar_ = 0,
+              tarModel         *tar_ = new tarModel_NONE );
 
     sootModel(size_t          nsoot_,
-              size_t          Ntar_,
               nucleationMech  Nmech,
               growthMech      Gmech,
               oxidationMech   Omech,
               coagulationMech Cmech,
-              tarMech         Tmech);
+              size_t          Ntar_ = 0,
+              tarMech         Tmech = tarMech::NONE);
 
     virtual ~sootModel() {
         if(mechsNewedHere){

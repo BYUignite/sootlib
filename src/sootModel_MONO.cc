@@ -1,4 +1,5 @@
 #include "sootModel_MONO.h"
+#include "sootDefs.h"
 
 using namespace std;
 using namespace soot;
@@ -18,13 +19,13 @@ using namespace soot;
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_MONO::sootModel_MONO(size_t            nsoot_,
-                               size_t            Ntar_,
                                nucleationModel  *nucl_,
                                growthModel      *grow_,
                                oxidationModel   *oxid_,
                                coagulationModel *coag_,
+                               size_t            Ntar_,
                                tarModel         *tar_) :
-        sootModel(nsoot_, Ntar_, nucl_, grow_, oxid_, coag_, tar_) {
+        sootModel(nsoot_, nucl_, grow_, oxid_, coag_, Ntar_, tar_) {
 
     if (nsoot_ != 2)
         throw runtime_error("MONO requires nsoot=2");
@@ -46,13 +47,13 @@ sootModel_MONO::sootModel_MONO(size_t            nsoot_,
 ////////////////////////////////////////////////////////////////////////////////
 
 sootModel_MONO::sootModel_MONO(size_t          nsoot_,
-                               size_t          Ntar_,
                                nucleationMech  Nmech,
                                growthMech      Gmech,
                                oxidationMech   Omech,
                                coagulationMech Cmech,
+                               size_t          Ntar_,
                                tarMech         Tmech) :
-        sootModel(nsoot_, Ntar_, Nmech, Gmech, Omech, Cmech, Tmech) {
+        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech, Ntar_, Tmech) {
 
     if (nsoot_ != 2)
         throw runtime_error("MONO requires nsoot=2");
@@ -79,7 +80,6 @@ void sootModel_MONO::setSourceTerms(state &state) {
 
     double M0    = state.sootVar[0];
     double M1    = state.sootVar[1];
-    double Ntar0 = state.tarVar[0];
 
 
     //---------- set weights and abscissas
@@ -91,6 +91,7 @@ void sootModel_MONO::setSourceTerms(state &state) {
 
     if (tar->mechType != tarMech::NONE) {
 
+        double Ntar0 = state.tarVar[0];
         //---------- get chemical rates
         double jNuc = nucl->getNucleationSootRate(state);        // #/m3*s
         double kGrw = grow->getGrowthSootRate(state);
@@ -105,6 +106,8 @@ void sootModel_MONO::setSourceTerms(state &state) {
         if (nucl->mechType != nucleationMech::NONE) {
             N0 = jNuc;                                              // #/m3*s
             N1 = jNuc * state.cMin * gasSpMW[(int)gasSp::C] / Na;   // kg_soot/m3*s (as carbon)
+
+            //cout << "N0 = " << N0 << endl;
         }
 
         //---------- PAH condensation terms
@@ -139,30 +142,44 @@ void sootModel_MONO::setSourceTerms(state &state) {
         double C0 = 0;
         double C1 = 0;
 
-        if (coag->mechType != coagulationMech::NONE)
+        if (coag->mechType != coagulationMech::NONE) 
             C0 = -0.5*coa*state.wts[0]*state.wts[0];
 
-        //---------- tar terms
+        //---------- source terms placeholders
 
-        double T0 = 0;                               // tar equation 1 #/m3*s 
-        double T1 = 0;                               // tar terms in soot mass equation kg_soot/m3*s
+        double T0 = 0;                              // tars 
+        double T1 = 0;                              // M0 
+        double T2 = 0;                              // M1
         
-        double incp   = tar->getInceptionTarRate(state);
-        double crack  = tar->getCrackingTarRate(state);
-        double gasify = tar->getSurfaceTarRate(state);
-        double depo   = tar->getDepositionTarRate(state);
+        if (tar->mechType == tarMech::AJ_RED) {
+            double crack  = tar->getCrackingTarRate(state);
+            double gasify = tar->getSurfaceTarRate(state);
+            double depo   = tar->getDepositionTarRate(state);
 
-        T0 = incp - depo - crack + 2508 * Ntar0 * (G1 - X1 - gasify);
-        T1 = state.mtar * depo + Am2m3 * (G1 - X1 - gasify);
+            T0 = -depo - crack + 2508 * Ntar0 * (G1 + X1 - gasify) - 2*N0;
+            T1 = N0 + C0;
+            T2 = (state.mtar * depo + Am2m3 * (G1 + X1 - gasify)) + Cnd1 + 2*state.mtar*N0;
 
-        // combine to make soot source terms 
+        }
 
-        sources.sootSources[0] = N0 + C0;
-        sources.sootSources[1] = 2*state.mtar*N1 + T1 + Cnd1;
+        else if (tar->mechType == tarMech::BROWN) {
+            double CA     = 3.0; // collision frequency constant
+            double oxid   = tar->getCrackingTarRate(state);
+            double gasify = tar->getSurfaceTarRate(state);
+            double rAN    = 2*CA*pow(6*gasSpMW[(int)gasSp::C]/(M_PI*rhoSoot), 1.0/6.0)*sqrt(6*kb*state.T/rhoSoot)*pow(M1/gasSpMW[(int)gasSp::C], 1.0/6.0)*pow(M0, 11.0/6.0); // soot aggregation #/m3*s
 
-        // combine to make tar source term 
 
-        sources.tarSources[0]  = T0 - 2*N0;
+            T0 = -N1 - gasify - oxid; // tar formation is added externally
+            T1 = N0 - rAN;
+            T2 = N1 + X1;
+        }
+
+        // soot source terms 
+        sources.sootSources[0] = T1; //> #/m3*s
+        sources.sootSources[1] = T2; //> kg/m3*s
+
+        // tar source term
+        sources.tarSources[0]  = T0; //> depends on tar model (#/m3*s or kg/m3*s)
 
         // set gas source terms
 
@@ -185,7 +202,7 @@ void sootModel_MONO::setSourceTerms(state &state) {
     }
 
 
-    if (tar->mechType == tarMech::NONE) {                        // jansenpb TODO: else statement?
+    else if (tar->mechType == tarMech::NONE) {                        
                                                                  //---------- get chemical rates
 
         double jNuc = nucl->getNucleationSootRate(state);        // #/m3*s

@@ -35,22 +35,22 @@ public:
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     sootModel_SECT(size_t            nsoot_,
-                   size_t            Ntar_,
                    nucleationModel  *nucl_,
                    growthModel      *grow_,
                    oxidationModel   *oxid_,
                    coagulationModel *coag_,
-                   tarModel         *tar_,
+                   size_t            Ntar_ = 0,
+                   tarModel         *tar_  = new tarModel_NONE,
                    double            binGrowthFactor_=2.0,
                    int               cMin_=100);
 
     sootModel_SECT(size_t           nsoot_,
-                   size_t           Ntar_,
                    nucleationMech   Nmech,
                    growthMech       Gmech,
                    oxidationMech    Omech,
                    coagulationMech  Cmech,
-                   tarMech          Tmech,
+                   size_t           Ntar_ = 0,
+                   tarMech          Tmech = tarMech::NONE,
                    double           binGrowthFactor_=2.0,
                    int              cMin_=100);
 

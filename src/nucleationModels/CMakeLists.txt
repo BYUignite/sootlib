@@ -8,4 +8,5 @@ target_sources(sootlib PRIVATE
     nucleationModel_MB.cc
     nucleationModel_FAIR.cc
     nucleationModel_AJ_RED.cc
+    nucleationModel_BROWN.cc
 )

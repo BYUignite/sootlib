@@ -56,20 +56,20 @@ private:
 public:
 
     sootModel_MOMIC(size_t            nsoot_,
-                    size_t            Ntar_,
                     nucleationModel  *nucl_,
                     growthModel      *grow_,
                     oxidationModel   *oxid_,
                     coagulationModel *coag_,
-                    tarModel         *tar_);
+                    size_t            Ntar_ = 0,
+                    tarModel         *tar_  = new tarModel_NONE);
 
     sootModel_MOMIC(size_t           nsoot_,
-                    size_t           Ntar_,
                     nucleationMech   Nmech,
                     growthMech       Gmech,
                     oxidationMech    Omech,
                     coagulationMech  Cmech,
-                    tarMech          Tmech);
+                    size_t            Ntar_ = 0,
+                    tarMech          Tmech = tarMech::NONE);
 
     virtual ~sootModel_MOMIC() {};
 

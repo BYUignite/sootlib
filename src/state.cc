@@ -34,9 +34,9 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 
 void state::setState(double T_, double P_, double rhoGas_, double muGas_,
-                     vector<double> yGas_, vector<double> yPah_, vector<double> yTar_, 
-                     vector<double> sootVar_, vector<double> tarVar_, 
-                     int nsoot_, int Ntar_, double cMin_) {
+                     vector<double> yGas_, vector<double> yPah_, 
+                     vector<double> sootVar_, int nsoot_ , 
+                     vector<double> tarVar_, int Ntar_, double cMin_) {
 
     //------------ scalar variable values
 
@@ -72,6 +72,10 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_,
             throw domain_error("Unphysical state value input: negative soot moment(s)");
 
     sootVar = sootVar_;
+
+    for(int i=0; i<Ntar; i++)
+        if(tarVar_[i] < 0)
+            tarVar_[i] = 0.0;
     
     Ntar = Ntar_;
     for (double s : tarVar_)
@@ -116,7 +120,7 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_,
 
     //------------ Tar mass fractions
 
-    if (yTar_.size() != (yTar.size()))
+    /*if (yTar_.size() != (yTar.size()))
         throw domain_error("Invalid input vector size: Tar species mass fractions");
 
     for (double y : yTar_)
@@ -129,9 +133,8 @@ void state::setState(double T_, double P_, double rhoGas_, double muGas_,
     if (yTar_sum > 1.0)
         throw domain_error("Unphysical state value input: sum of Tar species mass fractions greater than one");
 
-    yTar = yTar_;
+    yTar = yTar_;*/
 
-    //------------ Biomass mass fractions
 
 
 }
@@ -191,5 +194,32 @@ void state::get_mtar_ytar() {
     
     mtar = mtar_cell*yBio[0] + mtar_hw_hc*yBio[1] + mtar_sw_hc*yBio[2] + mtar_hw_lig*yBio[3] + mtar_sw_lig*yBio[4];
 }
+
+void state::get_coal(double OC_, double HC_, double V_) {
+    OC = OC_;
+    HC = HC_;
+    V  = V_;
+}
+
+void state::get_mtar_ytar_coal() {
+    
+    double Tg = T;
+    double Pl = log10(P/101325);
+
+    double num, denom;
+
+    num   = -124.2 + 35.7*Pl + 93.5*OC - 223.9*OC*OC + 284.8*HC -107.3*HC*HC +5.48*V +0.014*V*V - 58.2*Pl*HC - 0.521*Pl*V - 5.32*HC*V;
+    denom = -303.8 + 52.4*Pl +1.55E3*OC - 2.46E3*OC*OC + 656.9*HC - 266.3*HC*HC + 15.9*V + 0.025*V*V - 90.0*Pl*HC - 462.5*OC*HC +4.8*OC*V - 17.8*HC*V;
+    ytar = num/denom;
+    
+    num = 0.0;
+    denom = 0.0;
+
+    num   = 3.12E5 + 16.4*Tg + 4.34E5*OC - 8.48E5*HC + 6.38E5*HC*HC - 361.3*V - 0.221*Tg*V - 6.39E5*OC*HC + 1.91E3*HC*V;
+    denom = 753.6 + 0.042*Tg + 83.9*OC - 1.77E3*HC + 1.2E3*HC*HC + 5.09E-3*Tg*Pl - 0.024*Tg*HC - 5.27E-4*Tg*V + 0.513*Pl*V - 361.0*OC*HC + 3.83*HC*V;
+
+    mtar = num/denom;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 

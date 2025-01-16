@@ -25,7 +25,11 @@ public:
 
 //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-     growthModel_NONE() : growthModel() {};
+     growthModel_NONE() : growthModel() {
+         growthRxnRatios[(int)gasSp::C] = 1.0; // to avoid NAN when using growthModel::NONE for gas sources
+         mechType = growthMech::NONE;
+
+     };
     ~growthModel_NONE() override = default;
 
 };

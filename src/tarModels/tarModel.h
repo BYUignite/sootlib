@@ -24,8 +24,6 @@ public:
     sootModel *SM;
     tarMech mechType;
 
-    std::vector<double> inceptionRxnRatios;
-    std::vector<double> inceptionPahRxnRates;
     std::vector<double> crackingRxnRatios;
     std::vector<double> crackingPahRxnRates;
     std::vector<double> depositionRxnRatios;
@@ -35,16 +33,13 @@ public:
 
     ///////////////// MEMBER FUNCTIONS ////////////////////////////////////////
 
-    virtual double getInceptionTarRate(state &state)  = 0;
     virtual double getCrackingTarRate(state &state)   = 0;
     virtual double getDepositionTarRate(state &state) = 0;
     virtual double getSurfaceTarRate(state &state)    = 0;
 
     ///////////////// CONSTRUCTOR ///////////////////////////////////////////// 
 
-    tarModel() : inceptionPahRxnRates(std::vector<double>((int)pahSp::size, 0.0)),
-                 inceptionRxnRatios(std::vector<double>((int)gasSp::size, 0.0)),
-                 crackingPahRxnRates(std::vector<double>((int)pahSp::size, 0.0)),
+    tarModel() : crackingPahRxnRates(std::vector<double>((int)pahSp::size, 0.0)),
                  crackingRxnRatios(std::vector<double>((int)gasSp::size, 0.0)),
                  depositionPahRxnRates(std::vector<double>((int)pahSp::size, 0.0)),
                  depositionRxnRatios(std::vector<double>((int)gasSp::size, 0.0)),

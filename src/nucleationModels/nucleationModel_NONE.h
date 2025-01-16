@@ -26,7 +26,8 @@ public:
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
     nucleationModel_NONE() : nucleationModel() {
-        mechType = soot::nucleationMech::NONE;
+        nucleationRxnRatios[(int)gasSp::C]    =  1;  // to avoid NAN in case of nucleationMech::NONE
+        mechType = nucleationMech::NONE;
     };
     ~nucleationModel_NONE() override = default;
 

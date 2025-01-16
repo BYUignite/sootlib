@@ -10,23 +10,23 @@ int main(int argc, char** argv) {
 
     //---------- set up and create a soot model
 
-    nucleationModel  *nucl = new soot::nucleationModel_AJ_RED();
-    growthModel      *grow = new soot::growthModel_HACA();
-    oxidationModel   *oxid = new soot::oxidationModel_AJ_RED();
+    nucleationModel  *nucl = new soot::nucleationModel_LL();
+    growthModel      *grow = new soot::growthModel_LL();
+    oxidationModel   *oxid = new soot::oxidationModel_LL();
     coagulationModel *coag = new soot::coagulationModel_FM();
-    tarModel         *tar  = new soot::tarModel_AJ_RED();
+    tarModel         *tar  = new soot::tarModel_NONE();
 
     size_t nsoot = 2;  // 3; etc.
-    size_t Ntar  = 1;
+    //size_t Ntar  = 0;
 
-    sootModel_MONO SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);
+    sootModel_MONO SM(nsoot, nucl, grow, oxid, coag);
     //sootModel_LOGN SM(nsoot, nucl, grow, oxid, coag);
 
     SM.coag->set_FM_multiplier(9.0/2.0/2.2);
 
     //---------- set up thermodynamic state variables
 
-    state S = state(nsoot, Ntar);
+    state S = state(nsoot);
 
     double T      = 2100;    // temperature in K
     double P      = 101325;  // pressure in Pa
@@ -35,20 +35,22 @@ int main(int argc, char** argv) {
 
     vector<double> yGas{0.05, 0.001, 0.002, 3E-4, 0.003, 0.07, 0.1, 0.002, .18};  // gas species mass fractions [O2, O, H2, H, OH, H2O, CO, C2H2, CO2]
     vector<double> yPAH{0, 0, 0, 0, 0, 0};                                   // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-    vector<double> yTar{0.001 ,0.02, 0.04, 0.0002};                                     // Tar species mass fractions
-    vector<double> yBios{0.12, 0.1, 0.6, 0.09, 0.09};                                      // Biomass species mass fractions
+    //vector<double> yTar{0.001 ,0.02, 0.04, 0.0002};                                     // Tar species mass fractions
     vector<double> Msoot{0.003, 1.5E-5};                        // soot moment values [M0, M1, M2, M3]
     vector<double> Mtar{0.0001};                                             // tar moment values
+    S.setState(T, P, rhoGas, muGas, yGas, yPAH, Msoot, nsoot);
+    // For biomass fuels
+    //vector<double> yBios{0.12, 0.1, 0.6, 0.09, 0.09};                                      // Biomass species mass fractions
+    //S.getyBio(yBios);
+    //S.get_mtar_ytar();
 
-    S.setState(T, P, rhoGas, muGas, yGas, yPAH, yTar, Msoot, Mtar, nsoot, Ntar);
-
-    S.getyBio(yBios);
-    S.get_mtar_ytar();
+    // For coal 
+    //S.get_coal(.1, .7, 68.2);
+    //S.get_mtar_ytar_coal();
 
     //---------- calculate source terms
 
     SM.setSourceTerms(S);
-
     //---------- output results
 
     cout << setprecision(2) << fixed;
@@ -60,7 +62,7 @@ int main(int argc, char** argv) {
 
     cout << endl << "M0     = " << setw(14) << Msoot[0];
     cout << endl << "M1     = " << setw(14) << Msoot[1];
-    cout << endl << "M2     = " << setw(14) << Msoot[2];
+    //cout << endl << "M2     = " << setw(14) << Msoot[2];
     //cout << endl << "M3     = " << setw(14) << Msoot[3];
     cout << endl;
 

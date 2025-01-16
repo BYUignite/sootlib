@@ -10,4 +10,5 @@ target_sources(sootlib PRIVATE
     oxidationModel_MB.cc
     oxidationModel_FAIR.cc
     oxidationModel_AJ_RED.cc
+    oxidationModel_BROWN.cc
 )
