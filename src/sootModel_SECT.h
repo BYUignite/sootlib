@@ -39,6 +39,8 @@ public:
                    growthModel      *grow_,
                    oxidationModel   *oxid_,
                    coagulationModel *coag_,
+                   size_t            Ntar_ = 0,
+                   tarModel         *tar_  = new tarModel_NONE,
                    double            binGrowthFactor_=2.0,
                    int               cMin_=100);
 
@@ -47,6 +49,8 @@ public:
                    growthMech       Gmech,
                    oxidationMech    Omech,
                    coagulationMech  Cmech,
+                   size_t           Ntar_ = 0,
+                   tarMech          Tmech = tarMech::NONE,
                    double           binGrowthFactor_=2.0,
                    int              cMin_=100);
 

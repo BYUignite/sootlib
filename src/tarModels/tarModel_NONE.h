@@ -1,17 +1,18 @@
+
 #pragma once
 
-#include "nucleationModels/nucleationModel.h"
+#include "tarModels/tarModel.h"
 #include "state.h"
 
 namespace soot {
 
 ////////////////////////////////////////////////////////////////////////////////
 ///
-/// Nucleation: no model
+/// Tar: no model
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
-class nucleationModel_NONE : public nucleationModel {
+class tarModel_NONE : public tarModel {
 
     //////////////// DATA MEMBERS /////////////////////
 
@@ -21,15 +22,16 @@ private:
 
 public:
 
-    double getNucleationSootRate(state &state) override { return 0; };
+    double getCrackingTarRate(state &state) override { return 0; };
+    double getDepositionTarRate(state &state) override { return 0; };
+    double getSurfaceTarRate(state &state) override { return 0; };
 
     //////////////// CONSTRUCTOR FUNCTIONS ////////////
 
-    nucleationModel_NONE() : nucleationModel() {
-        nucleationRxnRatios[(int)gasSp::C]    =  1;  // to avoid NAN in case of nucleationMech::NONE
-        mechType = nucleationMech::NONE;
+    tarModel_NONE() : tarModel() {
+        mechType = soot::tarMech::NONE;
     };
-    ~nucleationModel_NONE() override = default;
+    ~tarModel_NONE() override = default;
 
 };
 } // namespace soot

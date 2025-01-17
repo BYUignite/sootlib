@@ -33,6 +33,8 @@ target_sources(sootlib
                   nucleationModels/nucleationModel_PAH.h
                   nucleationModels/nucleationModel_MB.h
                   nucleationModels/nucleationModel_FAIR.h
+                  nucleationModels/nucleationModel_AJ_RED.h
+                  nucleationModels/nucleationModel_BROWN.h
                   nucleationModels/nucleationModel_NONE.h
                   growthModels/growthModel.h
                   growthModels/growthModel_LL.h
@@ -50,6 +52,8 @@ target_sources(sootlib
                   oxidationModels/oxidationModel_OPTG.h
                   oxidationModels/oxidationModel_MB.h
                   oxidationModels/oxidationModel_FAIR.h
+                  oxidationModels/oxidationModel_AJ_RED.h
+                  oxidationModels/oxidationModel_BROWN.h
                   oxidationModels/oxidationModel_NONE.h
                   coagulationModels/coagulationModel.h
                   coagulationModels/coagulationModel_FM.h
@@ -57,12 +61,17 @@ target_sources(sootlib
                   coagulationModels/coagulationModel_HM.h
                   coagulationModels/coagulationModel_FUCHS.h
                   coagulationModels/coagulationModel_NONE.h
+                  tarModels/tarModel.h 
+                  tarModels/tarModel_AJ_RED.h
+                  tarModels/tarModel_BROWN.h
+                  tarModels/tarModel_NONE.h
 )
 
 add_subdirectory(nucleationModels)
 add_subdirectory(growthModels)
 add_subdirectory(oxidationModels)
 add_subdirectory(coagulationModels)
+add_subdirectory(tarModels)
 
 ############################ Build library
 

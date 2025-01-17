@@ -29,11 +29,12 @@ const double mmin     = 2E-26;      ///< mass of a carbon atom (kg)
 
 //////////////////// mechanism types
 
-enum class nucleationMech { NONE, LL,   LIN, LINA1, PAH,   MB, FAIR,                      size };
-enum class growthMech     { NONE, LL,   LIN,        HACA,  MB, FAIR,                              size };
-enum class oxidationMech  { NONE, LL,   LEE_NEOH, MB, FAIR, NSC_NEOH, HACA, OPTJ, OPTG,  size };
-enum class coagulationMech{ NONE, FM,   CONTINUUM,  HM,       FUCHS,                        size };
-enum class psdMech        { NONE, MONO, LOGN, QMOM, MOMIC,    SECT,                         size };
+enum class nucleationMech { NONE, LL,   LIN, LINA1, PAH,   MB, FAIR, AJ_RED, BROWN,                    size };
+enum class growthMech     { NONE, LL,   LIN,        HACA,  MB, FAIR,                                   size };
+enum class oxidationMech  { NONE, LL,   LEE_NEOH, MB, FAIR, NSC_NEOH, HACA, AJ_RED, BROWN, OPTJ, OPTG, size };
+enum class coagulationMech{ NONE, FM,   CONTINUUM,  HM,       FUCHS,                                   size };
+enum class psdMech        { NONE, MONO, LOGN, QMOM, MOMIC,    SECT,                                    size };
+enum class tarMech        { NONE, AJ_RED, BROWN,                                                       size };
 
 //////////////////// gas species list and properties
 

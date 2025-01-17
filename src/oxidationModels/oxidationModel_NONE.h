@@ -27,7 +27,10 @@ public:
 
 public:
 
-     oxidationModel_NONE() : oxidationModel() {};
+     oxidationModel_NONE() : oxidationModel() {
+        oxidationRxnRatios[(int)gasSp::C]  = 1;      // to avoid NAN in case of oxidationMech::NONE
+        mechType = oxidationMech::NONE;
+     };
     ~oxidationModel_NONE() override = default;
 };
 } // namespace soot

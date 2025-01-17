@@ -14,8 +14,10 @@ int main(int argc, char** argv) {
     growthModel      *grow = new soot::growthModel_LL();
     oxidationModel   *oxid = new soot::oxidationModel_LL();
     coagulationModel *coag = new soot::coagulationModel_FM();
+    tarModel         *tar  = new soot::tarModel_NONE();
 
     size_t nsoot = 2;  // 3; etc.
+    //size_t Ntar  = 0;
 
     sootModel_MONO SM(nsoot, nucl, grow, oxid, coag);
     //sootModel_LOGN SM(nsoot, nucl, grow, oxid, coag);
@@ -31,16 +33,24 @@ int main(int argc, char** argv) {
     double rhoGas = 0.1;     // gas density in kg/m^3
     double muGas  = 0.00001;    // gas viscosity in Pa*s
 
-    vector<double> yGas{0.05, 0.001, 0.002, 3E-4, 0.003, 0.07, 0.1, 0.002, .18};  // gas species mass fractions [O2, O, H2, H, OH, H2O, CO, C2H2]
-    vector<double> yPAH{1.77687E-6, 4.31847E-5, 0, 1.55773E-4, 7.77085E-3, 0};                                   // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
-    vector<double> Msoot{0.003, 1.5E-5, 1E-7, 1E-10};                        // soot moment values [M0, M1, M2, M3]
-
+    vector<double> yGas{0.05, 0.001, 0.002, 3E-4, 0.003, 0.07, 0.1, 0.002, .18};  // gas species mass fractions [O2, O, H2, H, OH, H2O, CO, C2H2, CO2]
+    vector<double> yPAH{0, 0, 0, 0, 0, 0};                                   // PAH species mass fractions [C10H8, C12H8, C12H10, C14H10, C16H10, C18H10]
+    //vector<double> yTar{0.001 ,0.02, 0.04, 0.0002};                                     // Tar species mass fractions
+    vector<double> Msoot{0.003, 1.5E-5};                        // soot moment values [M0, M1, M2, M3]
+    vector<double> Mtar{0.0001};                                             // tar moment values
     S.setState(T, P, rhoGas, muGas, yGas, yPAH, Msoot, nsoot);
+    // For biomass fuels
+    //vector<double> yBios{0.12, 0.1, 0.6, 0.09, 0.09};                                      // Biomass species mass fractions
+    //S.getyBio(yBios);
+    //S.get_mtar_ytar();
+
+    // For coal 
+    //S.get_coal(.1, .7, 68.2);
+    //S.get_mtar_ytar_coal();
 
     //---------- calculate source terms
 
     SM.setSourceTerms(S);
-
     //---------- output results
 
     cout << setprecision(2) << fixed;
@@ -52,7 +62,7 @@ int main(int argc, char** argv) {
 
     cout << endl << "M0     = " << setw(14) << Msoot[0];
     cout << endl << "M1     = " << setw(14) << Msoot[1];
-    cout << endl << "M2     = " << setw(14) << Msoot[2];
+    //cout << endl << "M2     = " << setw(14) << Msoot[2];
     //cout << endl << "M3     = " << setw(14) << Msoot[3];
     cout << endl;
 
@@ -86,13 +96,25 @@ int main(int argc, char** argv) {
         cout << endl << "xC18H10 = " << setw(14) << SM.sources.pahSources[(size_t)pahSp::C18H10];
         cout << endl;
     }
-
+    
+    if (tar->mechType != tarMech::NONE) { 
+        cout << endl << "Tar source terms" << endl; 
+        cout << endl << "Ntar = " << setw(14) << SM.sources.tarSources[0] << endl;
+        
+        cout << endl << "Tar gas source terms " << endl;
+        cout << endl << "xC6H6O = " << setw(14) << SM.sources.tarGasSources[(size_t)tarSp::C6H6O];
+        cout << endl << "xC10H8 = " << setw(14) << SM.sources.tarGasSources[(size_t)tarSp::C10H8];
+        cout << endl << "xC7H8  = " << setw(14) << SM.sources.tarGasSources[(size_t)tarSp::C7H8];
+        cout << endl << "xC6H6  = " << setw(14) << SM.sources.tarGasSources[(size_t)tarSp::C6H6];
+        cout << endl;
+    }
     //-----------------
 
     delete(nucl);
     delete(grow);
     delete(oxid);
     delete(coag);
+    delete(tar);
 
     return 0;
 }

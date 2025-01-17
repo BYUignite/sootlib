@@ -26,8 +26,10 @@ sootModel_QMOM::sootModel_QMOM(size_t            nsoot_,
                                nucleationModel  *nucl_,
                                growthModel      *grow_,
                                oxidationModel   *oxid_,
-                               coagulationModel *coag_) :
-        sootModel(nsoot_, nucl_, grow_, oxid_, coag_) {
+                               coagulationModel *coag_,
+                               size_t            Ntar_,
+                               tarModel         *tar_) :
+        sootModel(nsoot_, nucl_, grow_, oxid_, coag_, Ntar_, tar_) {
 
     if (nsoot_%2 == 1 || nsoot_ < 1)
         throw runtime_error("Invalid number of soot moments requested: must be even number");
@@ -57,8 +59,10 @@ sootModel_QMOM::sootModel_QMOM(size_t          nsoot_,
                                nucleationMech  Nmech,
                                growthMech      Gmech,
                                oxidationMech   Omech,
-                               coagulationMech Cmech) :
-        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech) {
+                               coagulationMech Cmech,
+                               size_t          Ntar_,
+                               tarMech         Tmech) :
+        sootModel(nsoot_, Nmech, Gmech, Omech, Cmech, Ntar_, Tmech) {
 
     if (nsoot_%2 == 1 || nsoot_ < 1)
         throw runtime_error("Invalid number of soot moments requested: must be even number");

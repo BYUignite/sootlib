@@ -7,6 +7,8 @@
 #include "growthModels/growthModel.h"
 #include "oxidationModels/oxidationModel.h"
 #include "coagulationModels/coagulationModel.h"
+#include "tarModels/tarModel.h"
+#include "tarModels/tarModel_NONE.h"
 
 #include <vector>
 
@@ -26,11 +28,13 @@ class sootModel {
 public:
 
     size_t            nsoot;    ///< \# of soot variables: moments or sections
+    size_t            Ntar;
 
     nucleationModel  *nucl;     ///< pointer to nucleation mechanism
     growthModel      *grow;     ///< pointer to growth mechanism
     oxidationModel   *oxid;     ///< pointer to oxidation mechanism
     coagulationModel *coag;     ///< pointer to coagulation mechanism
+    tarModel         *tar;      ///< pointer to tar mechanism
 
     bool    mechsNewedHere;     ///< flag to delete "new" objects
 
@@ -76,13 +80,17 @@ public:
               nucleationModel  *nucl_,
               growthModel      *grow_,
               oxidationModel   *oxid_,
-              coagulationModel *coag_);
+              coagulationModel *coag_,
+              size_t            Ntar_ = 0,
+              tarModel         *tar_ = new tarModel_NONE );
 
     sootModel(size_t          nsoot_,
               nucleationMech  Nmech,
               growthMech      Gmech,
               oxidationMech   Omech,
-              coagulationMech Cmech);
+              coagulationMech Cmech,
+              size_t          Ntar_ = 0,
+              tarMech         Tmech = tarMech::NONE);
 
     virtual ~sootModel() {
         if(mechsNewedHere){
@@ -90,6 +98,7 @@ public:
             delete(grow);
             delete(oxid);
             delete(coag);
+            delete(tar);
         }
     }
 

@@ -3,6 +3,7 @@
 #include "sootModel.h"
 #include "sootDefs.h"
 #include "state.h"
+#include "tarModels/tarModel_NONE.h"
 
 namespace soot {
 
@@ -30,13 +31,17 @@ public:
                    nucleationModel  *nucl_,
                    growthModel      *grow_,
                    oxidationModel   *oxid_,
-                   coagulationModel *coag_);
+                   coagulationModel *coag_,
+                   size_t            Ntar_ = 0,
+                   tarModel         *tar_ = new tarModel_NONE );
 
     sootModel_MONO(size_t           nsoot_,
                    nucleationMech   Nmech,
                    growthMech       Gmech,
                    oxidationMech    Omech,
-                   coagulationMech  Cmech);
+                   coagulationMech  Cmech,
+                   size_t            Ntar_ = 0,
+                   tarMech          Tmech = tarMech::NONE );
 
     virtual ~sootModel_MONO() {};
 
