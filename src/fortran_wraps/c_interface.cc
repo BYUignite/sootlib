@@ -327,6 +327,15 @@ extern "C" {
         state_ptr->setSootScales(sootScales_);
     }
 
+    void getyBio_interface(soot::state *state_ptr, const double* yBio_) {
+        std::vector<double> yBio(yBio_, yBio_ + 5);
+        state_ptr->getyBio(yBio);
+    }
+
+    void get_mtar_ytar_interface(soot::state *state_ptr) {
+        state_ptr->get_mtar_ytar();
+    }
+
     double get_T_interface(soot::state *state_ptr) {
         return state_ptr->T;
     }
@@ -351,6 +360,10 @@ extern "C" {
         return state_ptr->sootVar[i];
     }
 
+    double get_TarVar_interface(soot::state *state_ptr, int i) {
+        return state_ptr->tarVar[i];
+    }
+
     void getSootSources_interface(double *source, soot::sootModel *SM_ptr, int nsoot_) {
         //vector<double> source(nsoot_, 0.0);
         for (int i=0; i<nsoot_; i++) {
@@ -358,6 +371,9 @@ extern "C" {
         }
         //cout<< SM_ptr->sources.sootSources[i-1] << endl;
     }
-
+    void getGasSources_interface(double *source, soot::sootModel *SM_ptr) {
+        for (size_t i=0; i<static_cast<int>(soot::gasSp::size); i++)
+            source[i] = SM_ptr->sources.gasSources[i];
+    }
 }
 

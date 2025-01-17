@@ -73,6 +73,7 @@ int main(int argc, char** argv) {
 
     size_t nsoot = 2;
     //size_t nsoot = 40;
+    size_t Ntar  = 1;
 
     sootModel_MONO SM(nsoot, nucl, grow, oxid, coag, Ntar, tar);
     //sootModel_LOGN SM(nsoot, Ntar, nucl, grow, oxid, coag, tar);

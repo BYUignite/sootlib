@@ -95,7 +95,7 @@ sootModel::sootModel(size_t          nsoot_,
                      size_t          Ntar_,
                      tarMech         Tmech) : nsoot(nsoot_), Ntar(Ntar_), 
                                               mechsNewedHere(true),
-                                              sources(nsoot_) {
+                                              sources(nsoot_, Ntar_) {
 
     //---------- set nucleation model
 

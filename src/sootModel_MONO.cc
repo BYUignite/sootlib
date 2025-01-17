@@ -278,4 +278,6 @@ void sootModel_MONO::setSourceTerms(state &state) {
 
         if(nucl->mechType == nucleationMech::PAH)
             sources.pahSources = nucl->nucleationPahRxnRates;        // includes both nucleation and condensation
+
+}
 }
