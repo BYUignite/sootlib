@@ -36,7 +36,7 @@ public:
     }
 
     double getKc(const state& state) const {
-        return 2.*kb*state.T/(3./state.muGas);
+        return 2.*kb*state.T/(3.*state.muGas);
     }
 
     double getKcp(const state& state) const {
