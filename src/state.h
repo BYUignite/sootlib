@@ -36,7 +36,7 @@ class state {
         double              cMin = 100;    ///< soot min num carbon atoms (dynamic for PAH nucleation)
         
         int                 Ntar;          ///< \# of tar variables   jansenpb: do I need this?
-        std::vector<double> tarVar;        ///> tar variables 
+        std::vector<double> tarVar;        ///< tar variables 
         std::vector<double> yBio;          ///< biomass components from CPDbio
         double              mtar = 0.0;    ///< average tar molecular size jansenpb TODO: does this go here?
         double              ytar = 0.0;    ///< average tar mass fraction
