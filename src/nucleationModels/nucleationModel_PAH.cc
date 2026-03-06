@@ -88,10 +88,6 @@ double nucleationModel_PAH::getNucleationSootRate(state& state) {
     double beta_DD = preFac*pow(mDimer, 1.0/6.0);       // dimer self-collision rate coefficient
     
     //------------ populate mDimer in Dimer structure before calculating I_beta_DS
-
-    DIMER.mDimer = mDimer;
-
-    //------------ populate mDimer in Dimer structure before calculating I_beta_DS
     
     DIMER.mDimer = mDimer;
 
