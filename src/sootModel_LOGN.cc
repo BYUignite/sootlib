@@ -291,8 +291,8 @@ void sootModel_LOGN::setSourceTerms(state &state) {
             C2 = C2_c;
         }
         else {      // harmonic mean
-            C0 = (C0_fm > 0 || C0_c > 0) ? C0_fm*C0_c/(C0_fm + C0_c) : 0.0;
-            C2 = (C2_fm > 0 || C2_c > 0) ? C2_fm*C2_c/(C2_fm + C2_c) : 0.0;
+            C0 = (C0_fm + C0_c != 0.0) ? C0_fm*C0_c/(C0_fm + C0_c) : 0.0;
+            C2 = (C2_fm + C2_c != 0.0) ? C2_fm*C2_c/(C2_fm + C2_c) : 0.0;
         }
     }
 
