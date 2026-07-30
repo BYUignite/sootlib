@@ -30,5 +30,6 @@ double nucleationModel_BROWN::getNucleationSootRate(state &state) {
     double E_FC = 1.989E8;          //< J/kmol
 
     const double Rnuc = state.tarVar[0] * A_FC * exp(-E_FC/(Rg*state.T)); // kg/m3*s 
-    return Rnuc * 2 / gasSpMW[(int)gasSp::C] * Na / state.cMin; // #/m3*s
+    //return Rnuc * 2 / gasSpMW[(int)gasSp::C] * Na / state.cMin; // #/m3*s
+    return Rnuc / gasSpMW[(int)gasSp::C] * Na / state.cMin; // #/m3*s // don't need the * 2 here? jansenpb
 }

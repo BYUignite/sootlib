@@ -39,7 +39,7 @@ double tarModel_AJ_RED::getCrackingTarRate(state &state) {
     double k1, k2, k3, k4, k5; // reaction rate constants
     double xphe, xnapth, xtol, xben; // mole fractions of surrogate tars
     double Cl = 0.0;
-    if (N0 > 0) double Cl   = log10 (N0);
+    if (N0 > 0) Cl   = log10 (N0);
 
     //////////////////// Rate constant calculations ///////////////////////////////////// 
 
@@ -80,7 +80,8 @@ double tarModel_AJ_RED::getDepositionTarRate(state &state) {
     double dtar  = d_a * sqrt(2*state.mtar/(3*12.011));               // diameter of average tar particle
 
     if (state.sootVar[1] > 0) {
-        muTS = state.mtar*msoot/(state.mtar + msoot);
+        //muTS = state.mtar*msoot/(state.mtar + msoot);
+        muTS = state.mtar/Na*msoot/(state.mtar/Na + msoot); // divide by Na to obtain mass of a single tar molecule
         Bts  = pow((dsoot + dtar), 2) * sqrt(M_PI*kb*state.T/(2*muTS));
     }
 

@@ -326,7 +326,7 @@ void sootModel_SECT::setSourceTerms(state &state) {
 
 double sootModel_SECT::get_M0_sectional(const state &state) {
 
-    double M0;
+    double M0 = 0;
     for (size_t k=0; k<nsoot; k++)
         M0 += state.sootVar[k];
     return M0;
@@ -340,7 +340,7 @@ double sootModel_SECT::get_M0_sectional(const state &state) {
 
 double sootModel_SECT::get_M1_sectional(const state &state) {
 
-    double M1;
+    double M1 = 0;
     for (size_t k=0; k<nsoot; k++)
         M1 += state.sootVar[k] * mBins[k];
     return M1;

@@ -299,8 +299,10 @@ void sootModel_LOGN::setSourceTerms(state &state) {
     //---------- combine to make soot source terms
 
     sources.sootSources[0] = (N0 + G0 + Cnd0 - X0 + C0);    // #/m3*s
-	sources.sootSources[1] = (N1 + G1 + Cnd1 - X1 + C1);    // kg/m3*s
-	sources.sootSources[2] = (N2 + G2 + Cnd2 - X2 + C2);
+	sources.sootSources[1] = (N1 + G1 + Cnd1 + X1 + C1);    // kg/m3*s // X1 and X2 already negative so need to add here? jansenpb
+	sources.sootSources[2] = (N2 + G2 + Cnd2 + X2 + C2);
+	//sources.sootSources[1] = (N1 + G1 + Cnd1 - X1 + C1);    // kg/m3*s
+	//sources.sootSources[2] = (N2 + G2 + Cnd2 - X2 + C2);
 
 	//---------- set gas source terms
 

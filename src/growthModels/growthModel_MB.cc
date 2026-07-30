@@ -50,7 +50,8 @@ double growthModel_MB::getGrowthSootRate(const state &state) const {
     if (M0 > 0)
         //Am2m3 = pow( pow(M_PI * M0, 1.0/3.0) * pow(6 * M1 / rhoSoot, 2.0/3.0), 1.0); //power 1.0 = n
         
-        Am2m3 = pow(M_PI, 1.0/3.0) * pow(6 / (M_PI * rhoSoot) * M1 / M0, 2.0/3.0) * M0;
+        //Am2m3 = pow(M_PI, 1.0/3.0) * pow(6 / (M_PI * rhoSoot) * M1 / M0, 2.0/3.0) * M0;
+        Am2m3 = M_PI * pow(6 / (M_PI * rhoSoot) * M1 / M0, 2.0/3.0) * M0; // pi shouldn't be a power, like in growthModel_LL
 
     if (Am2m3 > 0)
         rSoot = 430.0 * pow(state.getGasSpC(gasSp::C2H2), 2.0/3.0) * exp(-12100 / state.T);

@@ -52,3 +52,4 @@
 #include "sootModel_QMOM.h"
 #include "sootModel_MOMIC.h"
 #include "sootModel_SECT.h"
+#include "sootModel_HMOM.h"

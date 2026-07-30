@@ -38,7 +38,7 @@ double nucleationModel_AJ_RED::getNucleationSootRate(state &state) {
 
     dtar = da * sqrt(2*state.mtar/(3*12.011));
 
-    Bt   = dtar*dtar * sqrt(8*M_PI*kb*state.T/state.mtar);
+    Bt   = dtar*dtar * sqrt(8*M_PI*kb*state.T/state.mtar/Na);
 
 
     const double Rnuc = eps*Bt*state.tarVar[0]*state.tarVar[0];    // kmol/m3*s

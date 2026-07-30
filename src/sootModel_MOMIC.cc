@@ -15,6 +15,8 @@ using namespace soot;
 /// @param grow_  \input pointer to growth model.
 /// @param oxid_  \input pointer to oxidation model.
 /// @param coag_  \input pointer to coagulation model.
+/// @param Ntar_  \input number of tar variables (0-1).
+/// @param tar_   \input pointer to tar model.
 ///
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -62,6 +64,8 @@ sootModel_MOMIC::sootModel_MOMIC(size_t            nsoot_,
 /// @param Gmech  \input one of enum class growthMech in sootDefs.h
 /// @param Omech  \input one of enum class oxidationMech in sootDefs.h
 /// @param Cmech  \input one of enum class coagulationMech in sootDefs.h
+/// @param Ntar_  \input number of tar variables (0-1).
+/// @param Tmech  \input one of enum class tarMech in sootDefs.h
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////

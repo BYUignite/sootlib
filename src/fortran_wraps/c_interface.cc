@@ -274,6 +274,16 @@ extern "C" {
         return new soot::sootModel_SECT(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, Ntar_, tar_ptr);
     }
 
+    soot::sootModel *sootModel_HMOM_C_interface(size_t                 nsoot_,
+                                                soot::nucleationModel  *nucl_ptr,
+                                                soot::growthModel      *grow_ptr,
+                                                soot::oxidationModel   *oxid_ptr,
+                                                soot::coagulationModel *coag_ptr,
+                                                size_t                    Ntar_ = 0,
+                                                soot::tarModel         *tar_ptr = new soot::tarModel_NONE) {
+        return new soot::sootModel_HMOM(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, Ntar_, tar_ptr);
+    }
+
     void setSourceTerms_C_interface(soot::sootModel *SM_ptr, soot::state *state_ptr) {
         SM_ptr->setSourceTerms(*state_ptr);
     }
@@ -374,6 +384,11 @@ extern "C" {
     void getGasSources_interface(double *source, soot::sootModel *SM_ptr) {
         for (size_t i=0; i<static_cast<int>(soot::gasSp::size); i++)
             source[i] = SM_ptr->sources.gasSources[i];
+    }
+    void getTarSources_interface(double *source, soot::sootModel *SM_ptr, int Ntar_) {
+        for (int i=0; i<Ntar_; i++) {
+            source[i] = SM_ptr->sources.tarSources[i];
+        }
     }
 }
 

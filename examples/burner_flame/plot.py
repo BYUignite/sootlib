@@ -8,13 +8,19 @@ import matplotlib.pyplot as plt
 
 rhosoot = 1850
 
-e   = np.loadtxt('experiments.dat')
-s   = np.loadtxt('burner.out')
+e    = np.loadtxt('experiments.dat')
+s1   = np.loadtxt('burner.out')
+s2   = np.loadtxt('burner_MOMIC.out')
+s3   = np.loadtxt('burner_HMOM.out')
 
 xe  = e[:, 0] * 100
-xs  = s[ :,0] * 100
+xs1  = s1[ :,0] * 100
+xs2  = s2[ :,0] * 100
+xs3  = s3[ :,0] * 100
 ye  = e[:,1] * 1E6
-ys  = s[ :,2] * 1E6 / rhosoot
+ys1  = s1[ :,2] * 1E6 / rhosoot
+ys2  = s2[ :,2] * 1E6 / rhosoot
+ys3  = s3[ :,2] * 1E6 / rhosoot
 
 ie1 = range(0,10)               # Xu and Faeth Laser indices
 ie2 = range(10,19)              # Xu and Faeth Sampling indices
@@ -29,7 +35,9 @@ plt.cla()
 
 #-------------- MAKE THE PLOT
 
-ax.plot(xs, ys,   '-',  color='black',  linewidth=2) 
+ax.plot(xs1, ys1,   '-',  color='black',  linewidth=2) 
+ax.plot(xs2, ys2,   '-',  color='blue',  linewidth=2) 
+ax.plot(xs3, ys3,   '-',  color='gray',  linewidth=2) 
 ax.plot(xe[ie1], ye[ie1],   'o',  color='black',  markersize=4) 
 ax.plot(xe[ie2], ye[ie2],   's',  color='black',  markersize=4) 
 ax.plot(xe[ie3], ye[ie3],   '^',  color='black',  markersize=4) 
@@ -42,7 +50,7 @@ ax.set_ylim([1E-4,10])
 
 ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
 
-ax.legend(['SootLib', 'Xu & Faeth Laser', 'Xu & Faeth Sampling', 'Menon Laser'], loc='lower right', frameon=False, fontsize=16)
+ax.legend(['SootLib1','MOMIC','HMOM', 'Xu & Faeth Laser', 'Xu & Faeth Sampling', 'Menon Laser'], loc='lower right', frameon=False, fontsize=16)
 
 #-------------- SAVE PLOT TO FILE
 

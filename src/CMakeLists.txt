@@ -13,6 +13,7 @@ target_sources(sootlib
         sootModel_QMOM.cc
         sootModel_MOMIC.cc
         sootModel_SECT.cc
+        sootModel_HMOM.cc
     PUBLIC    
     FILE_SET sootlib_headers
             TYPE HEADERS
@@ -26,6 +27,7 @@ target_sources(sootlib
                   sootModel_LOGN.h             
                   sootModel_QMOM.h
                   sootModel_SECT.h
+                  sootModel_HMOM.h
                   nucleationModels/nucleationModel.h
                   nucleationModels/nucleationModel_LL.h
                   nucleationModels/nucleationModel_LIN.h        

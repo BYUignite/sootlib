@@ -70,14 +70,9 @@ int main(int argc, char** argv) {
     oxidationModel   *oxid = new soot::oxidationModel_LL();
     coagulationModel *coag = new soot::coagulationModel_HM();
 
-    size_t nsoot = 6;
-    //size_t nsoot = 40;
+    size_t nsoot = 7;
 
-    //sootModel_MONO SM(nsoot, nucl, grow, oxid, coag);
-    //sootModel_LOGN SM(nsoot, nucl, grow, oxid, coag);
-    sootModel_QMOM SM(nsoot, nucl, grow, oxid, coag);
-    //sootModel_MOMIC SM(nsoot, nucl, grow, oxid, coag);
-    //sootModel_SECT SM(nsoot, nucl, grow, oxid, coag);
+    sootModel_MOMIC SM(nsoot, nucl, grow, oxid, coag);
 
     SM.coag->set_FM_multiplier(9.0/2.0/2.2);
 
@@ -98,15 +93,15 @@ int main(int argc, char** argv) {
     int    nsteps = 20000;
     double dz     = (zend-zstart)/nsteps;
 
-    ofstream ofile("burner.out");
+    ofstream ofile("burner_MOMIC.out");
 
     //---------- integrate: second order midpoint method
 
-    cout << endl << "********* Writing output to burner.out" << endl;
+    cout << endl << "********* Writing output to burner_MOMIC.out" << endl;
 
     ofile << setprecision(2) << fixed;
     ofile << setprecision(4) << scientific;
-    ofile << "# z(m), M0(#/m3), M1(kg/m3), ...";
+    ofile << "# z(m), M0(#/m3), M1(kg/m3), M2(kg^2/m3)";
 
     ofile << endl << setw(14) << zstart;
     for(int k=0; k<nsoot; k++)

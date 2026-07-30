@@ -370,6 +370,21 @@ module soot_module
 
         !------------------------------------------------------------------------
 
+        function sootModel_HMOM_C_interface(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, Ntar_, tar_ptr) result(SM_ptr) &
+                bind(C, name="sootModel_HMOM_C_interface")
+            import
+            type(C_ptr)                  :: SM_ptr
+            integer(C_int), value        :: nsoot_
+            type(C_ptr), value           :: nucl_ptr
+            type(C_ptr), value           :: grow_ptr
+            type(C_ptr), value           :: oxid_ptr
+            type(C_ptr), value           :: coag_ptr
+            integer(C_int), value        :: Ntar_
+            type(C_ptr), value           :: tar_ptr
+        end function sootModel_HMOM_C_interface
+
+        !------------------------------------------------------------------------
+
         subroutine sootModel_delete_C_interface(SM_ptr, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, tar_ptr) &
                 bind(C, name="sootModel_delete_C_interface")
             import
@@ -560,7 +575,13 @@ module soot_module
             type(C_ptr)   , value        :: SM_ptr
         end subroutine getGasSources_interface
     
-    end interface
+        subroutine getTarSources_interface(source, SM_ptr, Ntar_) bind(C, name="getTarSources_interface")
+            import
+            real(C_double), dimension(*) :: source
+            type(C_ptr)   , value        :: SM_ptr
+            integer(C_int), value        :: Ntar_
+        end subroutine getTarSources_interface
+     end interface
 
         !-------------------- Continue as needed for interface functions --------
 
@@ -573,8 +594,8 @@ module soot_module
         growthModel_HACA, growthModel_MB, growthModel_FAIR, growthModel_NONE, oxidationModel_LEE_NEOH, oxidationModel_NSC_NEOH, &
         oxidationModel_HACA, oxidationModel_OPTJ, oxidationModel_OPTG, oxidationModel_MB, oxidationModel_FAIR, &
         oxidationModel_AJ_RED, oxidationModel_NONE, coagulationModel_CONTINUUM, coagulationModel_HM, coagulationModel_FUCHS, &
-        coagulationModel_NONE, sootModel_LOGN, sootModel_MOMIC, sootModel_SECT, get_mtar_ytar, tarModel_BROWN, &
-        nucleationModel_BROWN, oxidationModel_BROWN, getGasSources
+        coagulationModel_NONE, sootModel_LOGN, sootModel_MOMIC, sootModel_SECT, sootModel_HMOM, get_mtar_ytar, tarModel_BROWN, &
+        nucleationModel_BROWN, oxidationModel_BROWN, getGasSources, getTarSources
 
     !============================================================================
     ! set fortran wrapper routines to the C interface functions
@@ -964,6 +985,21 @@ module soot_module
         end subroutine sootModel_SECT
 
         !------------------------------------------------------------------------
+
+        subroutine sootModel_HMOM(SM_ptr, nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, Ntar_, tar_ptr)
+            type(C_ptr), intent(out) :: SM_ptr
+            integer    , intent(in)  :: nsoot_
+            type(C_ptr), intent(in)  :: nucl_ptr
+            type(C_ptr), intent(in)  :: grow_ptr
+            type(C_ptr), intent(in)  :: oxid_ptr
+            type(C_ptr), intent(in)  :: coag_ptr
+            integer(4),  intent(in)  :: Ntar_
+            type(C_ptr), intent(in)  :: tar_ptr
+
+            SM_ptr = sootModel_HMOM_C_interface(nsoot_, nucl_ptr, grow_ptr, oxid_ptr, coag_ptr, Ntar_, tar_ptr)
+        end subroutine sootModel_HMOM
+
+        !------------------------------------------------------------------------
         
         subroutine state(state_ptr, nsoot_, Ntar_)
             type(C_ptr), intent(out)   :: state_ptr
@@ -1005,7 +1041,7 @@ module soot_module
         !------------------------------------------------------------------------
 
         subroutine get_mtar_ytar(state_ptr)
-            type(C_ptr), intent(out) :: state_ptr
+            type(C_ptr), intent(in) :: state_ptr
 
             call get_mtar_ytar_interface(state_ptr)
         end subroutine get_mtar_ytar
@@ -1109,7 +1145,7 @@ module soot_module
         !------------------------------------------------------------------------
 
         subroutine getyBio(state_ptr, yBio_)
-            type(C_ptr)     , intent(out)               :: state_ptr
+            type(C_ptr)     , intent(in)               :: state_ptr
             double precision, intent(in), dimension(:) :: yBio_ 
             call getyBio_interface(state_ptr, yBio_)
         end subroutine getyBio
@@ -1148,6 +1184,14 @@ module soot_module
 
             call getGasSources_interface(source, SM_ptr)
         end subroutine getGasSources
+
+        subroutine getTarSources(source, SM_ptr, Ntar_)
+            double precision, intent(out), dimension(:)        :: source
+            type(C_ptr)     , intent(in)                       :: SM_ptr
+            integer         , intent(in)                       :: Ntar_
+
+            call getTarSources_interface(source, SM_ptr, Ntar_)
+        end subroutine getTarSources
         
     !============================================================================
 
